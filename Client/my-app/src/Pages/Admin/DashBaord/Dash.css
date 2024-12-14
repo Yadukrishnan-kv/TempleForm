@@ -1,0 +1,19 @@
+.dashboard {
+    padding: 20px;
+  }
+  
+  .dashboard h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+  
+  .breadcrumb {
+    font-size: 16px;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+  }
+  
+  .calendar-container {
+    margin-top: 20px;
+  }
+  
