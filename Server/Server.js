@@ -13,7 +13,7 @@ app.use(express.json())
 const TempleRoutes = require('./Routes/TempleRoutes')
 app.use("/api/temples", TempleRoutes)
 
-const AdminLoginRoutes = require('./routes/AdminLoginRoutes')
+const AdminLoginRoutes = require('./Routes/AdminLoginRoutes')
 app.use("/api/adminlogin", AdminLoginRoutes)
 
 app.listen(4000, (err) => {
