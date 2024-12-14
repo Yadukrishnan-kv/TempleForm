@@ -6,11 +6,14 @@ import './Formdetails.css'
 
 function Formdetails() {
     const [temples, setTemples] = useState([]);
+    const ip = process.env.REACT_APP_BACKEND_IP
+    console.log(ip,"ip")
 
     useEffect(() => {
-        axios.get("http://localhost:4000/api/temples/all")
+        axios.get(`${ip}/api/temples/all`)
             .then((res) => {
                 setTemples(res.data);
+                
             })
             .catch((err) => {
                 console.error("Error fetching all temples:", err);

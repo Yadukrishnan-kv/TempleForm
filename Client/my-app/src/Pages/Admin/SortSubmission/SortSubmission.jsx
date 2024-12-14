@@ -5,6 +5,7 @@ import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 
 function SortSubmission() {
+  const ip = process.env.REACT_APP_BACKEND_IP
     const [temples, setTemples] = useState([]);
     const [filters, setFilters] = useState({
       state: '',
@@ -118,7 +119,7 @@ function SortSubmission() {
   
     const fetchTemples = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/temples/sort', {
+            const response = await axios.get(`${ip}/api/temples/sort`, {
                 params: filters
             });
             setTemples(response.data);

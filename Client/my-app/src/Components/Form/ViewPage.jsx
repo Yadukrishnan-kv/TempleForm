@@ -3,10 +3,11 @@ import axios from 'axios';
 import './Form.css';
 
 function ViewPage() {
+  const ip = process.env.REACT_APP_BACKEND_IP
   const [temples, setTemples] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:4000/api/temples/all")
+    axios.get(`${ip}/api/temples/all`)
       .then((res) => {
         setTemples(res.data);
       })

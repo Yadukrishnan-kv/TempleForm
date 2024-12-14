@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './SignupPage.css';
 
 function SignupPage() {
+  const ip = process.env.REACT_APP_BACKEND_IP
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
@@ -19,7 +20,7 @@ function SignupPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/api/adminlogin/register', formData);
+      const response = await axios.post(`${ip}/api/adminlogin/register`, formData);
       console.log(response.data);
       navigate('/AdminLogin');
     } catch (error) {

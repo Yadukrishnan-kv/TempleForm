@@ -127,7 +127,7 @@ function Form() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4000/api/temples/register", formData, {
+      const response = await axios.post("http:///api/temples/register", formData, {
         headers: {
           'Content-Type': 'application/json',
         }
