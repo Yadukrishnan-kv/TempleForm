@@ -2,7 +2,7 @@ const express = require("express")
 const app = express()
 const cors = require("cors")
 
-require("./config/db")
+require("./Config/db")
 
 app.use(cors({
     origin: "http://localhost:3000",
