@@ -15,8 +15,10 @@ const registerTemple = async (req, res) => {
 // Get all temples
 const getAllTemples = async (req, res) => {
   try {
+console.log("in Try")
     const temples = await TempleCollection.find();
-    res.status(200).send(temples);
+    console.log(temples)
+res.status(200).send(temples);
   } catch (error) {
     res.status(400).send(error);
   }

@@ -6,6 +6,8 @@ import './Form.css';
 function Form() {
   const navigate = useNavigate();
 
+  const ip = process.env.REACT_APP_BACKEND_IP
+
   const [formData, setFormData] = useState({
     name: '',
     whatsapp: '',
@@ -127,7 +129,7 @@ function Form() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http:///api/temples/register", formData, {
+      const response = await axios.post(`${ip}/api/temples/register`, formData, {
         headers: {
           'Content-Type': 'application/json',
         }
