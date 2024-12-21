@@ -4,7 +4,7 @@ import './Dash.css';
 function Dash() {
   return (
     <div className="dashboard">
-      <h1>Dashboard</h1>
+      <h1>Welcome to the Admin Dashboard</h1>
       <p className="breadcrumb">Home &gt; Dashboard</p>
       <div className="calendar-container">
        

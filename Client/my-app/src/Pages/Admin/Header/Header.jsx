@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import './Header.css';
-import { CiCalendar, CiSearch } from "react-icons/ci";
-import { PiNotePencil } from "react-icons/pi";
-import { TbMessageCircle } from "react-icons/tb";
-import { BsBrightnessHigh } from "react-icons/bs";
-import { MdMarkEmailUnread } from "react-icons/md";
 import { IoIosNotificationsOutline } from "react-icons/io";
+import { FaUserCircle } from "react-icons/fa";
+import { Link } from 'react-router-dom';
+
 
 function Header() {
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/AdminLogin';
+  };
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 
   const toggleSearch = () => {
@@ -16,7 +19,7 @@ function Header() {
 
   return (
     <header className="header">
-      <div className="header-left">
+      {/* <div className="header-left">
         <div className='header-leftdiv'>
           <button className="icon-button"><CiCalendar /></button>
         </div>
@@ -30,24 +33,22 @@ function Header() {
           <input type="text" placeholder="Search..." />
           <button type="submit"><CiSearch /></button>
         </div>
-      </div>
+      </div> */}
 
       <div className="header-right">
-        <div className='header-leftdiv'>
-          <button className="icon-button"><BsBrightnessHigh /></button>
-        </div>
-        <div className='header-leftdiv'>
-          <button className="icon-button"><MdMarkEmailUnread /></button>
-        </div>
+       
         <div className='header-leftdiv'>
           <button className="icon-button"><IoIosNotificationsOutline /></button>
         </div>
-        <div className="user-menu">
-          {/* User avatar can be added here */}
+        <div className="user-menu" onClick={() => document.getElementById('dropdown').classList.toggle('show')}>
+        <button className="icon-button" style={{fontSize:"28px"}}><FaUserCircle /></button>
+        <div id="dropdown" className="dropdown">
+          <Link to="/admin/profile" className="dropdown-item"><span>Profile</span></Link>
+          <hr className='dropdownhr' />
+          <button onClick={handleLogout} className="dropdown-item logout">Logout</button>
         </div>
-        <button className="search-toggle" onClick={toggleSearch}>
-          <CiSearch />
-        </button>
+        </div>
+       
       </div>
     </header>
   );

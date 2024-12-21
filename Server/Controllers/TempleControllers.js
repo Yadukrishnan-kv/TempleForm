@@ -15,10 +15,8 @@ const registerTemple = async (req, res) => {
 // Get all temples
 const getAllTemples = async (req, res) => {
   try {
-console.log("in Try")
     const temples = await TempleCollection.find();
-    console.log(temples)
-res.status(200).send(temples);
+    res.status(200).send(temples);
   } catch (error) {
     res.status(400).send(error);
   }
@@ -42,11 +40,10 @@ const getTempleById = async (req, res) => {
 const updateTemple = async (req, res) => {
   const { templeId } = req.params;
   const updates = req.body;
+
   try {
     const temple = await TempleCollection.findByIdAndUpdate(templeId, updates, { new: true });
-    if (!temple) {
-      return res.status(404).send({ message: 'Temple not found' });
-    }
+    if (!temple) return res.status(404).send({ message: 'Temple not found' });
     res.status(200).send(temple);
   } catch (error) {
     res.status(400).send(error);
@@ -70,20 +67,46 @@ const deleteTemple = async (req, res) => {
 // Sort temples
 const sortTemples = async (req, res) => {
   try {
-      const { state, district, taluk } = req.query;
-      let query = {};
+    const { state, district, taluk } = req.query;
+    let query = {};
 
-      if (state) query.state = state;
-      if (district) query.district = district;
-      if (taluk) query.taluk = taluk;
+    if (state) query.state = state;
+    if (district) query.district = district;
+    if (taluk) query.taluk = taluk;
 
-      // Find temples matching the query
-      const temples = await TempleCollection.find(query);
-      res.status(200).send(temples);
+    // Find temples matching the query
+    const temples = await TempleCollection.find(query);
+    res.status(200).send(temples);
   } catch (error) {
-      res.status(400).send({ message: 'Error fetching filtered temples', error });
+    res.status(400).send({ message: 'Error fetching filtered temples', error });
   }
 };
+
+const verifyTemple = async (req, res) => {
+  const { templeId } = req.params;
+  const { isVerified, verifiedBy } = req.body;
+
+  try {
+    const temple = await TempleCollection.findByIdAndUpdate(
+      templeId,
+      {
+        isVerified,
+        verificationDate: isVerified ? new Date() : null,
+        verifiedBy: isVerified ? verifiedBy : null
+      },
+      { new: true }
+    );
+
+    if (!temple) {
+      return res.status(404).send({ message: 'Temple not found' });
+    }
+
+    res.status(200).send(temple);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
 
 module.exports = {
   registerTemple,
@@ -91,7 +114,9 @@ module.exports = {
   getTempleById,
   updateTemple,
   deleteTemple,
-  sortTemples
+  sortTemples,verifyTemple
 };
+
+
 
 

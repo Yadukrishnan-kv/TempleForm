@@ -1,235 +1,417 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './SortSubmission.css'
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
+import './SortSubmission.css';
+import { Link, useParams } from 'react-router-dom';
 
-function SortSubmission() {
-  const ip = process.env.REACT_APP_BACKEND_IP
-    const [temples, setTemples] = useState([]);
-    const [filters, setFilters] = useState({
-      state: '',
-      district: '',
-      taluk: ''
-    });
+const SortSubmission = () => {
+  const ip = process.env.REACT_APP_BACKEND_IP;
+ 
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [taluks, setTaluks] = useState([]);
+  const [selectedState, setSelectedState] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState('');
+  const [selectedTaluk, setSelectedTaluk] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [temples, setTemples] = useState([]);
+  const [expandedTemple, setExpandedTemple] = useState(null);
+  const [verifying, setVerifying] = useState(false);
   
-    const states = ['Kerala', 'Tamil Nadu'];
-    const districts = {
-      'Kerala': [
-        'Alappuzha', 'Ernakulam', 'Idukki', 'Kannur', 'Kasaragod', 'Kollam', 'Kottayam', 'Kozhikode',
-        'Malappuram', 'Palakkad', 'Pathanamthitta', 'Thiruvananthapuram', 'Thrissur', 'Wayanad'
-      ],
-      'Tamil Nadu': [
-        'Ariyalur', 'Chengalpattu', 'Chennai', 'Coimbatore', 'Cuddalore', 'Dharmapuri', 'Dindigul', 'Erode',
-        'Kallakurichi', 'Kanchipuram', 'Kanyakumari', 'Karur', 'Krishnagiri', 'Madurai', 'Nagapattinam',
-        'Namakkal', 'Nilgiris', 'Perambalur', 'Pudukkottai', 'Ramanathapuram', 'Ranipet', 'Salem', 'Sivaganga',
-        'Tenkasi', 'Thanjavur', 'Theni', 'Thoothukudi', 'Tiruchirappalli', 'Tirunelveli', 'Tirupathur',
-        'Tiruppur', 'Tiruvallur', 'Tiruvannamalai', 'Tiruvarur', 'Vellore', 'Viluppuram', 'Virudhunagar'
-      ]
-    };
-    const taluks = {
-      // Kerala
-      'Alappuzha': ['Ambalappuzha', 'Chengannur', 'Cherthala', 'Karthikappally', 'Kuttanad', 'Mavelikkara'],
-      'Ernakulam': ['Aluva', 'Kanayannur', 'Kochi', 'Kothamangalam', 'Kunnathunad', 'Muvattupuzha', 'North Paravur'],
-      'Idukki': ['Devikulam', 'Idukki', 'Peerumade', 'Thodupuzha', 'Udumbanchola'],
-      'Kannur': ['Kannur', 'Thalassery', 'Taliparamba', 'Iritty'],
-      'Kasaragod': ['Hosdurg', 'Kasaragod', 'Manjeshwar', 'Vellarikundu'],
-      'Kollam': ['Karunagappally', 'Kollam', 'Kottarakkara', 'Kunnattur', 'Pathanapuram'],
-      'Kottayam': ['Changanassery', 'Kanjirappally', 'Kottayam', 'Meenachil', 'Vaikom'],
-      'Kozhikode': ['Kozhikode', 'Quilandy', 'Vadakara', 'Koyilandy', 'Thamarassery'],
-      'Malappuram': ['Ernad', 'Nilambur', 'Perinthalmanna', 'Ponnani', 'Tirur', 'Tirurangadi'],
-      'Palakkad': ['Alathur', 'Chittur', 'Mannarkad', 'Ottappalam', 'Palakkad'],
-      'Pathanamthitta': ['Adoor', 'Konni', 'Kozhencherry', 'Mallappally', 'Ranni', 'Thiruvalla'],
-      'Thiruvananthapuram': ['Chirayinkeezhu', 'Nedumangad', 'Neyyattinkara', 'Thiruvananthapuram'],
-      'Thrissur': ['Chavakkad', 'Kodungallur', 'Mukundapuram', 'Talappilly', 'Thrissur'],
-      'Wayanad': ['Mananthavady', 'Sulthanbathery', 'Vythiri'],
-      
-      // Tamil Nadu (keeping the existing taluks)
-      'Chennai': ['Egmore', 'Mylapore', 'Ambattur'],
-      'Coimbatore': ['Coimbatore North', 'Coimbatore South', 'Pollachi'],
-      'Madurai': ['Madurai North', 'Madurai South', 'Melur'],
-      'Salem': ['Salem', 'Attur', 'Mettur']
-      // Add placeholders for other Tamil Nadu districts
-      // 'DistrictName': ['Taluk1', 'Taluk2', 'Taluk3'],
-    };
+  const initialFields = [
+    { key: 'name', label: 'ക്ഷേത്രത്തിന്റെ പേര്' },
+    { key: 'address', label: 'മേൽവിലാസം' },
+    { key: 'whatsapp', label: 'വാട്സ്ആപ്പ് നമ്പർ' },
+    { key: 'email', label: 'മെയിൽ ഐ.ഡി.' },
+    { key: 'isVerified', label: 'Verified' },
+  ];
 
-    const fields = [
-      { key: 'name', label: 'ക്ഷേത്രത്തിന്റെ പേര്' },
-      { key: 'whatsapp', label: 'വാട്സ്ആപ്പ് നമ്പർ' },
-      { key: 'email', label: 'മെയിൽ ഐ.ഡി.' },
-      { key: 'website', label: 'വെബ്സൈറ്റ്' },
-      { key: 'templeType', label: 'ദേശക്ഷേത്ര വിവരം' },
-      { key: 'locationSketch', label: 'ലൊക്കേഷൻ സ്കെച്ച്' },
-      { key: 'history', label: 'ക്ഷേത്ര ഐതിഹ്യം' },
-      { key: 'mainDeity', label: 'പ്രതിഷ്ഠ' },
-      { key: 'subDeities', label: 'ഉപദേവതാ' },
-      { key: 'otherShrines', label: 'മറ്റു പ്രതിഷ്ഠകൾ' },
-      { key: 'buildings', label: 'പ്രാസാദങ്ങൾ' },
-      { key: 'monthlyIncome', label: 'ദിവസ-മാസവരുമാനം' },
-      { key: 'employees', label: 'ക്ഷേത്രജീവനക്കാർ' },
-      { key: 'mainOfferings', label: 'പ്രധാന വഴിപാടുകൾ' },
-      { key: 'chiefPriest', label: 'തന്ത്രി' },
-      { key: 'mainFestival', label: 'മഹാനിവേദ്യം' },
-      { key: 'landOwnership', label: 'ഊരാഴ്മ' },
-      { key: 'managementType', label: 'ക്ഷേത്ര ഭരണസംവിധാനം' },
-      { key: 'registrationDetails', label: 'കമ്മിറ്റി രജിസ്ട്രേഷൻ നമ്പറും മേൽവിലാസവും' },
-      { key: 'billingSystem', label: 'ബില്ലിംഗ് സംവിധാനം' },
-      { key: 'hasInternet', label: 'ഇന്റർനെറ്റ് സംവിധാനം' },
-      { key: 'hasComputer', label: 'കമ്പ്യൂട്ടർ' },
-      { key: 'hasPrinter', label: 'പ്രിന്റർ' },
-      { key: 'hasCamera', label: 'ക്യാമറ' },
-      { key: 'hasDigitalBanking', label: 'ഡിജിറ്റൽ ബാങ്കിംഗ്' },
-      { key: 'managers', label: 'കൈകാര്യം ചെയ്യുന്നവർ' },
-      { key: 'bankDetails', label: 'ബാങ്ക് അക്കൗണ്ട് ഡീറ്റെയിൽസും ക്യുആർകോഡും' },
-      { key: 'presidentDetails', label: 'പ്രസിഡന്റ് പേരും അഡ്രസും ഫോൺ നമ്പറും' },
-      { key: 'secretaryDetails', label: 'സെക്രട്ടറി പേരും അഡ്രസും ഫോൺ നമ്പറും' },
-      { key: 'festivals', label: 'ഉത്സവം' },
-      { key: 'specialEvents', label: 'വിശേഷങ്ങൾ' },
-      { key: 'ayanaSpecialties', label: 'അയന വിശേഷം' },
-      { key: 'monthlySpecialties', label: 'മാസവിശേഷം' },
-      { key: 'chiefPriestDetails', label: 'മേൽ ശാന്തി' },
-      { key: 'kazhakamDetails', label: 'കഴകം' },
-      { key: 'emergencyDetails', label: 'അടിയന്തിരം' },
-      { key: 'sreekaaryamDetails', label: 'ശ്രീകാര്യം' },
-      { key: 'puramDetails', label: 'പുറം അടിച്ചുതളി' },
-      { key: 'securityDetails', label: 'സെക്യൂരിറ്റി' },
-      { key: 'templeAssets', label: 'ക്ഷേത്രം വക വസ്തുക്കൾ' },
-      { key: 'hasBuilding', label: 'കെട്ടിടം' },
-      { key: 'hasSafe', label: 'സേഫ് / ലോക്കർ' },
-      { key: 'declarationPlace', label: 'സത്യവാങ്മൂലം സ്ഥലം' },
-      { key: 'declarationDate', label: 'സത്യവാങ്മൂലം തീയതി' },
-      { key: 'applicantDetails', label: 'അപേക്ഷകന്റെ പേരും സ്ഥാനപ്പേരും ഒപ്പും' },
-      { key: 'committeeDecision', label: 'കമ്മിറ്റി തീരുമാനം' },
-      { key: 'membershipNumber', label: 'അംഗത്വ നമ്പർ' },
-      { key: 'decisionDate', label: 'തീരുമാന തീയതി' },
-      { key: 'presidentPermanent', label: 'പ്രസിഡന്റ് (സ്ഥിരം)' },
-      { key: 'presidentTemporary', label: 'പ്രസിഡന്റ് (അസ്ഥിരം)' },
-      { key: 'presidentPhone', label: 'പ്രസിഡന്റ് ഫോൺ' },
-      { key: 'secretaryPermanent', label: 'സെക്രട്ടറി (സ്ഥിരം)' },
-      { key: 'secretaryTemporary', label: 'സെക്രട്ടറി (അസ്ഥിരം)' },
-      { key: 'secretaryPhone', label: 'സെക്രട്ടറി ഫോൺ' },
-      { key: 'treasurerPermanent', label: 'ട്രഷറർ (സ്ഥിരം)' },
-      { key: 'treasurerTemporary', label: 'ട്രഷറർ (അസ്ഥിരം)' },
-      { key: 'treasurerPhone', label: 'ട്രഷറർ ഫോൺ' },
-    ];
-  
-    useEffect(() => {
-        fetchTemples();
-    }, [filters]);
-  
-    const fetchTemples = async () => {
-        try {
-            const response = await axios.get(`${ip}/api/temples/sort`, {
-                params: filters
-            });
-            setTemples(response.data);
-        } catch (error) {
-            console.error('Error fetching temples:', error);
-        }
-    };
+  const allFields = [
+    { key: 'darshanaTime', label: 'ദർശന സമയം' },
+    { key: 'website', label: 'വെബ്സൈറ്റ്' },
+    { key: 'templeType', label: 'ദേശക്ഷേത്ര വിവരം' },
+    { key: 'locationSketch', label: 'ലൊക്കേഷൻ സ്കെച്ച്' },
+    { key: 'history', label: 'ക്ഷേത്ര ഐതിഹ്യം' },
+    { key: 'mainDeity', label: 'പ്രതിഷ്ഠ' },
+    { key: 'subDeities', label: 'ഉപദേവതാ' },
+    { key: 'otherShrines', label: 'മറ്റു പ്രതിഷ്ഠകൾ' },
+    { key: 'buildings', label: 'പ്രാസാദങ്ങൾ' },
+    { key: 'monthlyIncome', label: 'ദിവസ-മാസവരുമാനം' },
+    { key: 'employees', label: 'ക്ഷേത്രജീവനക്കാർ' },
+    { key: 'mainOfferings', label: 'പ്രധാന വഴിപാടുകൾ' },
+    { key: 'chiefPriest', label: 'തന്ത്രി' },
+    { key: 'mainFestival', label: 'മഹാനിവേദ്യം' },
+    { key: 'landOwnership', label: 'ഊരാഴ്മ' },
+    { key: 'managementType', label: 'ക്ഷേത്ര ഭരണസംവിധാനം' },
+    { key: 'registrationDetails', label: 'കമ്മിറ്റി രജിസ്ട്രേഷൻ നമ്പറും മേൽവിലാസവും' },
+    { key: 'billingSystem', label: 'ബില്ലിംഗ് സംവിധാനം' },
+    { key: 'hasInternet', label: 'ഇന്റർനെറ്റ് സംവിധാനം' },
+    { key: 'hasComputer', label: 'കമ്പ്യൂട്ടർ' },
+    { key: 'hasPrinter', label: 'പ്രിന്റർ' },
+    { key: 'hasCamera', label: 'ക്യാമറ' },
+    { key: 'hasDigitalBanking', label: 'ഡിജിറ്റൽ ബാങ്കിംഗ്' },
+    { key: 'managers', label: 'കൈകാര്യം ചെയ്യുന്നവർ' },
+    { key: 'bankDetails', label: 'ബാങ്ക് അക്കൗണ്ട് ഡീറ്റെയിൽസും ക്യുആർകോഡും' },
+    { key: 'presidentDetails', label: 'പ്രസിഡന്റ് പേരും അഡ്രസും ഫോൺ നമ്പറും' },
+    { key: 'secretaryDetails', label: 'സെക്രട്ടറി പേരും അഡ്രസും ഫോൺ നമ്പറും' },
+    { key: 'festivals', label: 'ഉത്സവം' },
+    { key: 'specialEvents', label: 'വിശേഷങ്ങൾ' },
+    { key: 'ayanaSpecialties', label: 'അയന വിശേഷം' },
+    { key: 'monthlySpecialties', label: 'മാസവിശേഷം' },
+    { key: 'chiefPriestDetails', label: 'മേൽ ശാന്തി' },
+    { key: 'kazhakamDetails', label: 'കഴകം' },
+    { key: 'emergencyDetails', label: 'അടിയന്തിരം' },
+    { key: 'sreekaaryamDetails', label: 'ശ്രീകാര്യം' },
+    { key: 'puramDetails', label: 'പുറം അടിച്ചുതളി' },
+    { key: 'securityDetails', label: 'സെക്യൂരിറ്റി' },
+    { key: 'templeAssets', label: 'ക്ഷേത്രം വക വസ്തുക്കൾ' },
+    { key: 'hasBuilding', label: 'കെട്ടിടം' },
+    { key: 'hasSafe', label: 'സേഫ് / ലോക്കർ' },
+    { key: 'declarationPlace', label: 'സത്യവാങ്മൂലം സ്ഥലം' },
+    { key: 'declarationDate', label: 'സത്യവാങ്മൂലം തീയതി' },
+    { key: 'applicantDetails', label: 'അപേക്ഷകന്റെ പേരും സ്ഥാനപ്പേരും ഒപ്പും' },
+    { key: 'committeeDecision', label: 'കമ്മിറ്റി തീരുമാനം' },
+    { key: 'membershipNumber', label: 'അംഗത്വ നമ്പർ' },
+    { key: 'decisionDate', label: 'തീരുമാന തീയതി' },
+    { key: 'presidentPermanent', label: 'പ്രസിഡന്റ് (സ്ഥിരം)' },
+    { key: 'presidentTemporary', label: 'പ്രസിഡന്റ് (അസ്ഥിരം)' },
+    { key: 'presidentPhone', label: 'പ്രസിഡന്റ് ഫോൺ' },
+    { key: 'secretaryPermanent', label: 'സെക്രട്ടറി (സ്ഥിരം)' },
+    { key: 'secretaryTemporary', label: 'സെക്രട്ടറി (അസ്ഥിരം)' },
+    { key: 'secretaryPhone', label: 'സെക്രട്ടറി ഫോൺ' },
+    { key: 'treasurerPermanent', label: 'ട്രഷറർ (സ്ഥിരം)' },
+    { key: 'treasurerTemporary', label: 'ട്രഷറർ (അസ്ഥിരം)' },
+    { key: 'treasurerPhone', label: 'ട്രഷറർ ഫോൺ' },
+  ];
 
-    const handleFilterChange = (e) => {
-      const { name, value } = e.target;
-      setFilters(prev => {
-        const newFilters = { ...prev, [name]: value };
-        if (name === 'state') {
-          newFilters.district = '';
-          newFilters.taluk = '';
-        } else if (name === 'district') {
-          newFilters.taluk = '';
-        }
-        return newFilters;
+  // Fetch States
+  const fetchStates = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${ip}/api/states/getAllStates`);
+      setStates(response.data.states || []);
+    } catch (err) {
+      console.error("Error fetching states:", err);
+      setError('Failed to fetch states');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch Districts
+  const fetchDistricts = async (stateName) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${ip}/api/districts/getAllDistricts`);
+      const filteredDistricts = response.data.filter(
+        (district) => district.state.name === stateName
+      );
+      setDistricts(filteredDistricts || []);
+    } catch (err) {
+      console.error("Error fetching districts:", err);
+      setError('Failed to fetch districts');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch Taluks
+  const fetchTaluks = async (districtName) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${ip}/api/taluks/getAllTaluks`);
+      const filteredTaluks = response.data.filter(
+        (taluk) => taluk.district.name === districtName
+      );
+      setTaluks(filteredTaluks || []);
+    } catch (err) {
+      console.error("Error fetching taluks:", err);
+      setError('Failed to fetch taluks');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch Temples
+  const fetchTemples = async (filters = {}) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${ip}/api/temples/sort`, { 
+        params: {
+          state: filters.state,
+          district: filters.district,
+          taluk: filters.taluk
+        } 
       });
-    };
-  
-    return (
-      <div className="app-container">
-        <Header />
-        <div className="content-container">
-          <Sidebar />
-          <div className="submission-page">
-            <h1 className="page-title">ക്ഷേത്രേശ്രീ ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
-            <p className="page-subtitle">കാലടി - 683 574., ഫോൺ : 9847047963</p>
-            <p className="page-subtitle">ക്ഷേത്ര വിവരങ്ങൾ</p>
-            <div className="filters">
-              <select 
-                name="state" 
-                value={filters.state} 
-                onChange={handleFilterChange}
-                className="filter-select"
-              >
-                <option value="">All States</option>
-                {states.map(state => (
-                  <option key={state} value={state}>{state}</option>
-                ))}
-              </select>
-              
-              <select 
-                name="district" 
-                value={filters.district} 
-                onChange={handleFilterChange} 
-                disabled={!filters.state}
-                className="filter-select"
-              >
-                <option value="">All Districts</option>
-                {filters.state && districts[filters.state].map(district => (
-                  <option key={district} value={district}>{district}</option>
-                ))}
-              </select>
-              
-              <select 
-                name="taluk" 
-                value={filters.taluk} 
-                onChange={handleFilterChange} 
-                disabled={!filters.district || !taluks[filters.district]}
-                className="filter-select"
-              >
-                <option value="">All Taluks</option>
-                {filters.district && taluks[filters.district] && taluks[filters.district].map(taluk => (
-                  <option key={taluk} value={taluk}>{taluk}</option>
-                ))}
-              </select>
-            </div>
+      setTemples(response.data || []);
+    } catch (error) {
+      console.error("Error fetching temples:", error);
+      setError('Failed to fetch temples');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchStates();  // Fetch all states on initial load
+  }, []);
+
+  useEffect(() => {
+    if (selectedState) {
+      fetchDistricts(selectedState);
+    } else {
+      setDistricts([]);
+    }
+  }, [selectedState]);
+
+  useEffect(() => {
+    if (selectedDistrict) {
+      fetchTaluks(selectedDistrict);
+    } else {
+      setTaluks([]);
+    }
+  }, [selectedDistrict]);
+
+  useEffect(() => {
+    fetchTemples({ 
+      state: selectedState, 
+      district: selectedDistrict, 
+      taluk: selectedTaluk 
+    });
+  }, [selectedState, selectedDistrict, selectedTaluk]);
+
+  const handleStateChange = (e) => {
+    const stateName = e.target.value;
+    setSelectedState(stateName);
+    setSelectedDistrict(''); // Clear district selection
+    setSelectedTaluk(''); // Clear taluk selection
+  };
+
+  const handleDistrictChange = (e) => {
+    const districtName = e.target.value;
+    setSelectedDistrict(districtName);
+    setSelectedTaluk(''); // Clear taluk selection
+  };
+
+  const handleTalukChange = (e) => {
+    setSelectedTaluk(e.target.value);
+  };
+
+  const handleViewClick = (templeId) => {
+    setExpandedTemple(expandedTemple === templeId ? null : templeId);
+  };
+
+  const handleVerification = async (templeId, isVerified) => {
+    try {
+      setVerifying(true);
+      const username = localStorage.getItem('username') || 'Admin';
       
-            <div className="table-container">
-              <table className="temple-table">
-                <thead>
-                  <tr>
-                    <th>ക്രമ നമ്പർ</th>
-                    {fields.map((field) => (
-                      <th key={field.key}>{field.label}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {temples.length > 0 ? (
-                    temples.map((temple, index) => (
-                      <tr key={index} className="temple-row">
+      await axios.put(`${ip}/api/temples/${templeId}/verify`, {
+        isVerified,
+        verifiedBy: username
+      });
+  
+      // Refresh temples data
+      fetchTemples({
+        state: selectedState,
+        district: selectedDistrict,
+        taluk: selectedTaluk
+      });
+    } catch (error) {
+      console.error('Error verifying temple:', error);
+      setError('Failed to verify temple');
+    } finally {
+      setVerifying(false);
+    }
+  };
+
+  const renderFieldValue = (field, value) => {
+    if (typeof value === 'boolean') {
+      return value ? 'Yes' : 'No';
+    }
+    if (field.key === 'darshanaTime') {
+      return `Morning: ${value.morning.from} - ${value.morning.to}, Evening: ${value.evening.from} - ${value.evening.to}`;
+    }
+    if (field.key === 'declarationDate' || field.key === 'decisionDate') {
+      return new Date(value).toLocaleDateString();
+    }
+    return value || 'N/A';
+  };
+
+  const renderVerificationStatus = (temple) => {
+    if (temple.isVerified) {
+      return (
+        <div className="verification-status verified">
+          ✓ Verified
+          {temple.verificationDate && (
+            <span className="verification-date">
+              {new Date(temple.verificationDate).toLocaleDateString()}
+            </span>
+          )}
+        </div>
+      );
+    }
+    return <div className="verification-status">Not Verified</div>;
+  };
+
+  return (
+    <div className="app-container">
+      <Header />
+      <div className="content-container">
+        <Sidebar />
+        <div className="submission-page">
+          <h1 className="page-title">ക്ഷേത്രേശ്രീ ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
+          <p className="page-subtitle">കാലടി - 683 574., ഫോൺ : 9847047963</p>
+          <p className="page-subtitle">ക്ഷേത്ര വിവരങ്ങൾ</p>
+          <div className="filters">
+            <select
+              id="state"
+              value={selectedState}
+              onChange={handleStateChange}
+              disabled={loading}
+              className="filter-select"
+            >
+              <option value="">All States</option>
+              {states.map((state) => (
+                <option key={state._id} value={state.name}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
+
+            <select
+              name="district"
+              id="district"
+              value={selectedDistrict}
+              onChange={handleDistrictChange}
+              disabled={!selectedState || loading}
+              className="filter-select"
+            >
+              <option value="">All Districts</option>
+              {districts.map((district) => (
+                <option key={district._id} value={district.name}>
+                  {district.name}
+                </option>
+              ))}
+            </select>
+
+            <select
+              className="filter-select"
+              id="taluk"
+              value={selectedTaluk}
+              onChange={handleTalukChange}
+              disabled={!selectedDistrict || loading}
+            >
+              <option value="">All Taluks</option>
+              {taluks.map((taluk) => (
+                <option key={taluk._id} value={taluk.name}>
+                  {taluk.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="table-container">
+            <table className="temple-table">
+              <thead>
+                <tr>
+                  <th>Sl no</th>
+                  {initialFields.map((field) => (
+                    <th key={field.key}>{field.label}</th>
+                  ))}
+                  <th>Actions</th>
+                  <th>Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+                {temples.length > 0 ? (
+                  temples.map((temple, index) => (
+                    <React.Fragment key={temple._id}>
+                      <tr>
                         <td>{index + 1}</td>
-                        {fields.map((field) => (
+                        {initialFields.map((field) => (
                           <td key={field.key}>
-                            {typeof temple[field.key] === 'boolean'
-                              ? temple[field.key]
-                                ? 'ഉണ്ട്'
-                                : 'ഇല്ല'
-                              : temple[field.key] || '-'}
+                            {field.key === 'isVerified' 
+                              ? renderVerificationStatus(temple)
+                              : renderFieldValue(field, temple[field.key])}
                           </td>
                         ))}
+                        <td>
+                          <button 
+                            className='view-button' 
+                            onClick={() => handleViewClick(temple._id)}
+                          >
+                            {expandedTemple === temple._id ? 'Hide' : 'View'}
+                          </button>
+                        </td>
+                        <td>
+                          <Link to={`/edit/${temple._id}`}>
+                            <button className='edit-button'>Edit</button>
+                          </Link>
+                        </td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={fields.length + 1} className="no-data">No submissions found for the selected filters.</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+                      {expandedTemple === temple._id && (
+                        <tr>
+                          <td colSpan={initialFields.length + 3}>
+                            <div className="verification-controls">
+                              <div className="verification-radio-group">
+                                <label>
+                                  <input
+                                    type="radio"
+                                    name={`verify-${temple._id}`}
+                                    checked={temple.isVerified === true}
+                                    onChange={() => handleVerification(temple._id, true)}
+                                    disabled={verifying}
+                                  />
+                                  Verify
+                                </label>
+                                <label>
+                                  <input
+                                    type="radio"
+                                    name={`verify-${temple._id}`}
+                                    checked={temple.isVerified === false}
+                                    onChange={() => handleVerification(temple._id, false)}
+                                    disabled={verifying}
+                                  />
+                                  Reject
+                                </label>
+                              </div>
+                              {temple.verifiedBy && (
+                                <div className="verified-by">
+                                  Verified by: {temple.verifiedBy}
+                                </div>
+                              )}
+                            </div>
+                            <table className="expanded-table">
+                              <tbody>
+                                {allFields.map((field) => (
+                                  <tr key={field.key}>
+                                    <td>{field.label}</td>
+                                    <td>{renderFieldValue(field, temple[field.key])}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={initialFields.length + 3}>No temples found</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    )
-}
+    </div>
+  );
+};
 
-export default SortSubmission
+export default SortSubmission;
 

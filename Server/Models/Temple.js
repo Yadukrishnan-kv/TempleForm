@@ -6,6 +6,18 @@ const TempleSchema = new Schema({
   district: { type: String, required: true },
   taluk: { type: String, required: true },
   name: { type: String, required: true },
+  address: { type: String, required: true },
+  phone: { type: String, required: true },
+  darshanaTime: {
+    morning: {
+      from: String,
+      to: String
+    },
+    evening: {
+      from: String,
+      to: String
+    }
+  },
   whatsapp: String,
   email: String,
   website: String,
@@ -69,7 +81,17 @@ const TempleSchema = new Schema({
   secretaryPhone: String,
   treasurerPermanent: String,
   treasurerTemporary: String,
-  treasurerPhone: String
+  treasurerPhone: String,
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  verificationDate: {
+    type: Date
+  },
+  verifiedBy: {
+    type: String
+  }
 }, { timestamps: true });
 
 const TempleCollection = model("Temple", TempleSchema);

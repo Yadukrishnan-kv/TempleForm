@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './Form.css';
+import './Addform.css';
+import Header from '../Header/Header';
+import Sidebar from '../Sidebar/Sidebar';
 
-function Form() {
+function Addform() {
   const navigate = useNavigate();
 
   const ip = process.env.REACT_APP_BACKEND_IP;
@@ -17,12 +19,6 @@ function Form() {
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
-    address: '',
-    phone: '',
-    darshanaTime: {
-      morning: { from: '', to: '' },
-      evening: { from: '', to: '' }
-    },
     whatsapp: '',
     email: '',
     website: '',
@@ -128,18 +124,10 @@ function Form() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    let updatedFormData = {...formData};
-    if(name.includes('.')){
-        const parts = name.split('.');
-        let currentLevel = updatedFormData;
-        for(let i = 0; i < parts.length -1; i++){
-            currentLevel = currentLevel[parts[i]];
-        }
-        currentLevel[parts[parts.length -1]] = value;
-    } else {
-        updatedFormData[name] = value;
-    }
-    setFormData(updatedFormData);
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
 
     if (name === 'state') {
       setFormData(prevState => ({ ...prevState, district: '', taluk: '' }));
@@ -209,6 +197,10 @@ function Form() {
   };
 
   return (
+    <div className="app-container">
+      <Header />
+      <div className="content-container">
+        <Sidebar />
     <div className="form-container">
       <h1 className="form-title">ക്ഷേത്രേശ്രീ   ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
       <p className="form-group">കാലടി - 683 574., ഫോൺ : 9847047963</p>
@@ -282,73 +274,16 @@ function Form() {
           />
         </div>
         <div>
-          <label className="form-label">ക്ഷേത്രത്തിന്റെ  മേൽവിലാസവും ഫോൺ നമ്പറും</label>
-          <textarea 
-            className="form-textarea" 
-            rows={3}
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-          ></textarea>
-        </div>
         <div>
-          <label className="form-label">ഫോൺ നമ്പർ</label>
+          <label className="form-label">ക്ഷേത്രത്തിന്റെ  മേൽവിലാസവും ഫോൺ നമ്പറും</label>
           <input 
-            type="tel" 
-            className="form-input"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
+            type="text" 
+            className="form-input" 
+            name="name" 
+            value={formData.name} 
+            onChange={handleChange} 
           />
         </div>
-        <div>
-          <label className="form-label">ദർശന സമയം</label>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="form-label">രാവിലെ</label>
-              <div className="flex items-center">
-                <input 
-                  type="time" 
-                  className="form-input"
-                  name="darshanaTime.morning.from"
-                  value={formData.darshanaTime.morning.from}
-                  onChange={handleChange}
-                />
-                <span className="mx-2">മുതൽ</span>
-                <input 
-                  type="time" 
-                  className="form-input"
-                  name="darshanaTime.morning.to"
-                  value={formData.darshanaTime.morning.to}
-                  onChange={handleChange}
-                />
-                <span className="ml-2">വരെ</span>
-              </div>
-            </div>
-            <div>
-              <label className="form-label">വൈകിട്ട്</label>
-              <div className="flex items-center">
-                <input 
-                  type="time" 
-                  className="form-input"
-                  name="darshanaTime.evening.from"
-                  value={formData.darshanaTime.evening.from}
-                  onChange={handleChange}
-                />
-                <span className="mx-2">മുതൽ</span>
-                <input 
-                  type="time" 
-                  className="form-input"
-                  name="darshanaTime.evening.to"
-                  value={formData.darshanaTime.evening.to}
-                  onChange={handleChange}
-                />
-                <span className="ml-2">വരെ</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div>
           <label className="form-label">വാട്സ്ആപ്പ് നമ്പർ</label>
           <input 
             type="tel" 
@@ -559,9 +494,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasInternet" 
-                  value={true}
-                  checked={formData.hasInternet}
-                  onChange={handleChange}
+                  value="true"
+                  checked={formData.hasInternet === true}
+                  onChange={() => setFormData({...formData, hasInternet: true})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -570,9 +505,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasInternet" 
-                  value={false}
-                  checked={!formData.hasInternet}
-                  onChange={handleChange}
+                  value="false"
+                  checked={formData.hasInternet === false}
+                  onChange={() => setFormData({...formData, hasInternet: false})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -586,9 +521,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasComputer" 
-                  value={true}
-                  checked={formData.hasComputer}
-                  onChange={handleChange}
+                  value="true"
+                  checked={formData.hasComputer === true}
+                  onChange={() => setFormData({...formData, hasComputer: true})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -597,9 +532,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasComputer" 
-                  value={false}
-                  checked={!formData.hasComputer}
-                  onChange={handleChange}
+                  value="false"
+                  checked={formData.hasComputer === false}
+                  onChange={() => setFormData({...formData, hasComputer: false})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -613,9 +548,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasPrinter" 
-                  value={true}
-                  checked={formData.hasPrinter}
-                  onChange={handleChange}
+                  value="true"
+                  checked={formData.hasPrinter === true}
+                  onChange={() => setFormData({...formData, hasPrinter: true})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -624,9 +559,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasPrinter" 
-                  value={false}
-                  checked={!formData.hasPrinter}
-                  onChange={handleChange}
+                  value="false"
+                  checked={formData.hasPrinter === false}
+                  onChange={() => setFormData({...formData, hasPrinter: false})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -641,9 +576,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasCamera" 
-                  value={true}
-                  checked={formData.hasCamera}
-                  onChange={handleChange}
+                  value="true"
+                  checked={formData.hasCamera === true}
+                  onChange={() => setFormData({...formData, hasCamera: true})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -652,9 +587,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasCamera" 
-                  value={false}
-                  checked={!formData.hasCamera}
-                  onChange={handleChange}
+                  value="false"
+                  checked={formData.hasCamera === false}
+                  onChange={() => setFormData({...formData, hasCamera: false})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -668,9 +603,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasDigitalBanking" 
-                  value={true}
-                  checked={formData.hasDigitalBanking}
-                  onChange={handleChange}
+                  value="true"
+                  checked={formData.hasDigitalBanking === true}
+                  onChange={() => setFormData({...formData, hasDigitalBanking: true})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -679,9 +614,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasDigitalBanking" 
-                  value={false}
-                  checked={!formData.hasDigitalBanking}
-                  onChange={handleChange}
+                  value="false"
+                  checked={formData.hasDigitalBanking === false}
+                  onChange={() => setFormData({...formData, hasDigitalBanking: false})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -847,9 +782,9 @@ function Form() {
               <input 
                 type="radio" 
                 name="hasBuilding" 
-                value={true}
-                checked={formData.hasBuilding}
-                onChange={handleChange}
+                value="true"
+                checked={formData.hasBuilding === true}
+                onChange={() => setFormData({...formData, hasBuilding: true})}
                 className="form-radio" 
               />
               <span className="ml-2">ഉണ്ട്</span>
@@ -858,9 +793,9 @@ function Form() {
               <input 
                 type="radio" 
                 name="hasBuilding" 
-                value={false}
-                checked={!formData.hasBuilding}
-                onChange={handleChange}
+                value="false"
+                checked={formData.hasBuilding === false}
+                onChange={() => setFormData({...formData, hasBuilding: false})}
                 className="form-radio" 
               />
               <span className="ml-2">ഇല്ല</span>
@@ -874,9 +809,9 @@ function Form() {
               <input 
                 type="radio" 
                 name="hasSafe" 
-                value={true}
-                checked={formData.hasSafe}
-                onChange={handleChange}
+                value="true"
+                checked={formData.hasSafe === true}
+                onChange={() => setFormData({...formData, hasSafe: true})}
                 className="form-radio" 
               />
               <span className="ml-2">ഉണ്ട്</span>
@@ -885,9 +820,9 @@ function Form() {
               <input 
                 type="radio" 
                 name="hasSafe" 
-                value={false}
-                checked={!formData.hasSafe}
-                onChange={handleChange}
+                value="false"
+                checked={formData.hasSafe === false}
+                onChange={() => setFormData({...formData, hasSafe: false})}
                 className="form-radio" 
               />
               <span className="ml-2">ഇല്ല</span>
@@ -1078,10 +1013,12 @@ function Form() {
         </button>
       </form>
     </div>
+    </div>
+    </div>
   );
 }
 
+export default Addform;
 
 
-export default Form;
 

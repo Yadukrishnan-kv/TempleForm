@@ -82,11 +82,7 @@
     border-bottom: none;
   }
   
-  .temple-table tbody tr:hover {
-    background-color: #f0f0f0;
-    transition: background-color 0.3s ease;
-  }
-  
+ 
   .no-data {
     text-align: center;
     padding: 2rem;
@@ -116,5 +112,83 @@
   }
   
   
+  .expanded-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-left: 50px;
+  }
+  
+  .expanded-table td {
+    
+    padding: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  
+
+  .view-button {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: backgroundcolor 0.3s ease;
+  }
+  .edit-button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+  }
+  .verification-controls {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+  }
+  
+  .verification-radio-group {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .verification-radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .verification-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+  }
+  
+  .verification-status.verified {
+    color: #10b981;
+    font-weight: 500;
+  }
+  
+  .verification-date {
+    font-size: 0.875rem;
+    color: #666;
+  }
+  
+  .verified-by {
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.5rem;
+  }
   
   

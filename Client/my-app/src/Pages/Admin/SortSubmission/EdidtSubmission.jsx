@@ -1,215 +1,243 @@
-import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import './Form.css';
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
+import Header from '../Header/Header';
+import Sidebar from '../Sidebar/Sidebar';
 
-function Form() {
-  const navigate = useNavigate();
 
-  const ip = process.env.REACT_APP_BACKEND_IP;
-  const [states, setStates] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [taluks, setTaluks] = useState([]);
-  const [selectedState, setSelectedState] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [selectedTaluk, setSelectedTaluk] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [formData, setFormData] = useState({
-    name: '',
-    address: '',
-    phone: '',
-    darshanaTime: {
-      morning: { from: '', to: '' },
-      evening: { from: '', to: '' }
-    },
-    whatsapp: '',
-    email: '',
-    website: '',
-    templeType: '', 
-    locationSketch: '',
-    history: '',
-    mainDeity: '', 
-    subDeities: '', 
-    otherShrines: '', 
-    buildings: '', 
-    monthlyIncome: '',
-    employees: '',
-    mainOfferings: '',
-    chiefPriest: '', 
-    mainFestival: '', 
-    landOwnership: '', 
-    managementType: '', 
-    registrationDetails: '',
-    billingSystem: '',
-    hasInternet: false,
-    hasComputer: false,
-    hasPrinter: false,
-    hasCamera: false,
-    hasDigitalBanking: false,
-    managers: '',
-    bankDetails: '',
-    presidentDetails: '',
-    secretaryDetails: '',
-    festivals: '',
-    specialEvents: '',
-    ayanaSpecialties: '', 
-    monthlySpecialties: '', 
-    chiefPriestDetails: '', 
-    kazhakamDetails: '', 
-    emergencyDetails: '',
-    sreekaaryamDetails: '', 
-    puramDetails: '', 
-    securityDetails: '', 
-    templeAssets: '',
-    hasBuilding: false,
-    hasSafe: false,
-    declarationPlace: '',
-    declarationDate: '',
-    applicantDetails: '',
-    committeeDecision: '',
-    membershipNumber: '',
-    decisionDate: '',
-    presidentPermanent: '',
-    presidentTemporary: '',
-    presidentPhone: '',
-    secretaryPermanent: '',
-    secretaryTemporary: '',
-    secretaryPhone: '',
-    treasurerPermanent: '',
-    treasurerTemporary: '',
-    treasurerPhone: '',
-    state: '',
-    district: '',
-    taluk: ''
-  });
-
-  const fetchStates = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`${ip}/api/states/getAllStates`);
-      setStates(response.data.states || []);
-    } catch (err) {
-      setError('Failed to fetch states');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchDistricts = async (stateId) => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`${ip}/api/districts/getAllDistricts`);
-      const filteredDistricts = response.data.filter(
-        (district) => district.state._id === stateId
-      );
-      setDistricts(filteredDistricts || []);
-    } catch (err) {
-      setError('Failed to fetch districts');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchTaluks = async (districtId) => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`${ip}/api/taluks/getAllTaluks`);
-      const filteredTaluks = response.data.filter(
-        (taluk) => taluk.district._id === districtId
-      );
-      setTaluks(filteredTaluks || []);
-    } catch (err) {
-      setError('Failed to fetch taluks');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    let updatedFormData = {...formData};
-    if(name.includes('.')){
+function EditSubmission() {
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const ip = process.env.REACT_APP_BACKEND_IP;
+   const [states, setStates] = useState([]);
+     const [districts, setDistricts] = useState([]);
+     const [taluks, setTaluks] = useState([]);
+     const [selectedState, setSelectedState] = useState('');
+     const [selectedDistrict, setSelectedDistrict] = useState('');
+     const [selectedTaluk, setSelectedTaluk] = useState('');
+     const [loading, setLoading] = useState(false);
+     const [error, setError] = useState('');
+    const [formData, setFormData] = useState({
+       name: '',
+       whatsapp: '',
+       email: '',
+       website: '',
+       templeType: '', 
+       locationSketch: '',
+       history: '',
+       mainDeity: '', 
+       subDeities: '', 
+       otherShrines: '', 
+       buildings: '', 
+       monthlyIncome: '',
+       employees: '',
+       mainOfferings: '',
+       chiefPriest: '', 
+       mainFestival: '', 
+       landOwnership: '', 
+       managementType: '', 
+       registrationDetails: '',
+       billingSystem: '',
+       hasInternet: false,
+       hasComputer: false,
+       hasPrinter: false,
+       hasCamera: false,
+       hasDigitalBanking: false,
+       managers: '',
+       bankDetails: '',
+       presidentDetails: '',
+       secretaryDetails: '',
+       festivals: '',
+       specialEvents: '',
+       ayanaSpecialties: '', 
+       monthlySpecialties: '', 
+       chiefPriestDetails: '', 
+       kazhakamDetails: '', 
+       emergencyDetails: '',
+       sreekaaryamDetails: '', 
+       puramDetails: '', 
+       securityDetails: '', 
+       templeAssets: '',
+       hasBuilding: false,
+       hasSafe: false,
+       declarationPlace: '',
+       declarationDate: '',
+       applicantDetails: '',
+       committeeDecision: '',
+       membershipNumber: '',
+       decisionDate: '',
+       presidentPermanent: '',
+       presidentTemporary: '',
+       presidentPhone: '',
+       secretaryPermanent: '',
+       secretaryTemporary: '',
+       secretaryPhone: '',
+       treasurerPermanent: '',
+       treasurerTemporary: '',
+       treasurerPhone: '',
+       state: '',
+       district: '',
+       taluk: '',
+       address: '',
+       phone: '',
+       darshanaTime: {
+        morning: { from: '', to: '' },
+        evening: { from: '', to: '' }
+      },
+     });
+    const token = localStorage.getItem('token');
+  
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      let updatedFormData = {...formData};
+      
+      if(name.includes('.')) {
         const parts = name.split('.');
         let currentLevel = updatedFormData;
-        for(let i = 0; i < parts.length -1; i++){
-            currentLevel = currentLevel[parts[i]];
+        for(let i = 0; i < parts.length - 1; i++) {
+          if (!currentLevel[parts[i]]) {
+            currentLevel[parts[i]] = {};
+          }
+          currentLevel = currentLevel[parts[i]];
         }
-        currentLevel[parts[parts.length -1]] = value;
-    } else {
-        updatedFormData[name] = value;
-    }
-    setFormData(updatedFormData);
-
-    if (name === 'state') {
-      setFormData(prevState => ({ ...prevState, district: '', taluk: '' }));
-    } else if (name === 'district') {
-      setFormData(prevState => ({ ...prevState, taluk: '' }));
-    }
-  };
-
-  useEffect(() => {
-    fetchStates();
-  }, []);
-
-  const handleStateChange = (e) => {
-    const stateId = e.target.value;
-    const stateName = states.find(state => state._id === stateId)?.name || '';
-    setSelectedState(stateId);
-    setFormData(prevState => ({
-      ...prevState,
-      state: stateName,
-      district: '',
-      taluk: ''
-    }));
-    fetchDistricts(stateId);
-    setSelectedDistrict('');
-    setSelectedTaluk('');
-    setTaluks([]);
-  };
-
-  const handleDistrictChange = (e) => {
-    const districtId = e.target.value;
-    const districtName = districts.find(district => district._id === districtId)?.name || '';
-    setSelectedDistrict(districtId);
-    setFormData(prevState => ({
-      ...prevState,
-      district: districtName,
-      taluk: ''
-    }));
-    fetchTaluks(districtId);
-    setSelectedTaluk('');
-  };
-
-  const handleTalukChange = (e) => {
-    const talukId = e.target.value;
-    const talukName = taluks.find(taluk => taluk._id === talukId)?.name || '';
-    setSelectedTaluk(talukId);
-    setFormData(prevState => ({
-      ...prevState,
-      taluk: talukName
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      console.log('Submitting form data:', formData);
-      const response = await axios.post(`${ip}/api/temples/register`, formData, {
-        headers: {
-          'Content-Type': 'application/json',
+        currentLevel[parts[parts.length - 1]] = value;
+      } else {
+        updatedFormData[name] = e.target.type === 'checkbox' ? e.target.checked : value;
+      }
+      
+      setFormData(updatedFormData);
+    };
+    
+      useEffect(() => {
+        const fetchTempleData = async () => {
+          setLoading(true);
+          try {
+            const response = await axios.get(`${ip}/api/temples/${id}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            setFormData(response.data);
+          } catch (err) {
+            console.error("Error fetching temple data:", err);
+            setError("Failed to fetch temple data");
+          } finally {
+            setLoading(false);
+          }
+        };
+  
+        fetchTempleData();
+      }, [id, token, ip]);
+    
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        try {
+          await axios.put(`${ip}/api/temples/update/${id}`, formData, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          navigate('/SortSubmission');
+        } catch (err) {
+          console.error("Error updating temple data:", err);
+          setError("Failed to update temple data");
+        } finally {
+          setLoading(false);
         }
-      });
-      console.log('Server response:', response);
-      navigate("/view");
-    } catch (error) {
-      console.error('Error registering temple:', error.response ? error.response.data : error.message);
-      setError('An error occurred while submitting the form. Please try again.');
-    }
-  };
+      };
+  
+
+      const fetchStates = async () => {
+        try {
+          setLoading(true);
+          const response = await axios.get(`${ip}/api/states/getAllStates`);
+          setStates(response.data.states || []);
+        } catch (err) {
+          setError('Failed to fetch states');
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      const fetchDistricts = async (stateId) => {
+        try {
+          setLoading(true);
+          const response = await axios.get(`${ip}/api/districts/getAllDistricts`);
+          const filteredDistricts = response.data.filter(
+            (district) => district.state._id === stateId
+          );
+          setDistricts(filteredDistricts || []);
+        } catch (err) {
+          setError('Failed to fetch districts');
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      const fetchTaluks = async (districtId) => {
+        try {
+          setLoading(true);
+          const response = await axios.get(`${ip}/api/taluks/getAllTaluks`);
+          const filteredTaluks = response.data.filter(
+            (taluk) => taluk.district._id === districtId
+          );
+          setTaluks(filteredTaluks || []);
+        } catch (err) {
+          setError('Failed to fetch taluks');
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      useEffect(() => {
+          fetchStates();
+        }, []);
+      
+        const handleStateChange = (e) => {
+          const stateId = e.target.value;
+          const stateName = states.find(state => state._id === stateId)?.name || '';
+          setSelectedState(stateId);
+          setFormData(prevState => ({
+            ...prevState,
+            state: stateName,
+            district: '',
+            taluk: ''
+          }));
+          fetchDistricts(stateId);
+          setSelectedDistrict('');
+          setSelectedTaluk('');
+          setTaluks([]);
+        };
+      
+        const handleDistrictChange = (e) => {
+          const districtId = e.target.value;
+          const districtName = districts.find(district => district._id === districtId)?.name || '';
+          setSelectedDistrict(districtId);
+          setFormData(prevState => ({
+            ...prevState,
+            district: districtName,
+            taluk: ''
+          }));
+          fetchTaluks(districtId);
+          setSelectedTaluk('');
+        };
+      
+        const handleTalukChange = (e) => {
+          const talukId = e.target.value;
+          const talukName = taluks.find(taluk => taluk._id === talukId)?.name || '';
+          setSelectedTaluk(talukId);
+          setFormData(prevState => ({
+            ...prevState,
+            taluk: talukName
+          }));
+        };
+      
+
 
   return (
-    <div className="form-container">
+    <div className="app-container">
+    <Header />
+    <div className="content-container">
+      <Sidebar />
+      <div className="form-container">
       <h1 className="form-title">ക്ഷേത്രേശ്രീ   ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
       <p className="form-group">കാലടി - 683 574., ഫോൺ : 9847047963</p>
       <p className="form-group">അപേക്ഷാഫോറം</p>
@@ -272,13 +300,13 @@ function Form() {
           </select>
         </div>
         <div>
-          <label className="form-label">ക്ഷേത്രത്തിന്റെ പേര്  </label>
+          <label className="form-label">ക്ഷേത്രത്തിന്റെ പേരും</label>
           <input 
             type="text" 
             className="form-input" 
             name="name" 
             value={formData.name} 
-            onChange={handleChange} 
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -288,7 +316,7 @@ function Form() {
             rows={3}
             name="address"
             value={formData.address}
-            onChange={handleChange}
+            onChange={handleInputChange}
           ></textarea>
         </div>
         <div>
@@ -298,7 +326,7 @@ function Form() {
             className="form-input"
             name="phone"
             value={formData.phone}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -311,16 +339,16 @@ function Form() {
                   type="time" 
                   className="form-input"
                   name="darshanaTime.morning.from"
-                  value={formData.darshanaTime.morning.from}
-                  onChange={handleChange}
+                  value={formData.darshanaTime?.morning?.from || ''}
+                  onChange={handleInputChange}
                 />
                 <span className="mx-2">മുതൽ</span>
                 <input 
                   type="time" 
                   className="form-input"
                   name="darshanaTime.morning.to"
-                  value={formData.darshanaTime.morning.to}
-                  onChange={handleChange}
+                  value={formData.darshanaTime?.morning?.to || ''}
+                  onChange={handleInputChange}
                 />
                 <span className="ml-2">വരെ</span>
               </div>
@@ -332,16 +360,16 @@ function Form() {
                   type="time" 
                   className="form-input"
                   name="darshanaTime.evening.from"
-                  value={formData.darshanaTime.evening.from}
-                  onChange={handleChange}
+                  value={formData.darshanaTime?.evening?.from || ''}
+                  onChange={handleInputChange}
                 />
                 <span className="mx-2">മുതൽ</span>
                 <input 
                   type="time" 
                   className="form-input"
                   name="darshanaTime.evening.to"
-                  value={formData.darshanaTime.evening.to}
-                  onChange={handleChange}
+                  value={formData.darshanaTime?.evening?.to || ''}
+                  onChange={handleInputChange}
                 />
                 <span className="ml-2">വരെ</span>
               </div>
@@ -355,7 +383,7 @@ function Form() {
             className="form-input" 
             name="whatsapp" 
             value={formData.whatsapp} 
-            onChange={handleChange} 
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -365,7 +393,7 @@ function Form() {
             className="form-input" 
             name="email" 
             value={formData.email} 
-            onChange={handleChange} 
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -375,7 +403,7 @@ function Form() {
             className="form-input" 
             name="website" 
             value={formData.website} 
-            onChange={handleChange} 
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -388,7 +416,7 @@ function Form() {
                   name="templeType" 
                   value={option} 
                   checked={formData.templeType === option}
-                  onChange={handleChange}
+                  onChange={handleInputChange}
                   className="form-radio" 
                 />
                 <span className="ml-2">{option}</span>
@@ -403,7 +431,7 @@ function Form() {
             rows={3}
             name="locationSketch"
             value={formData.locationSketch}
-            onChange={handleChange}
+            onChange={handleInputChange}
           ></textarea>
         </div>
         <div>
@@ -413,7 +441,7 @@ function Form() {
             rows={3}
             name="history"
             value={formData.history}
-            onChange={handleChange}
+            onChange={handleInputChange}
           ></textarea>
         </div>
         
@@ -424,7 +452,7 @@ function Form() {
             className="form-input"
             name="mainDeity"
             value={formData.mainDeity}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -434,7 +462,7 @@ function Form() {
             className="form-input"
             name="subDeities"
             value={formData.subDeities}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -444,7 +472,7 @@ function Form() {
             className="form-input"
             name="otherShrines"
             value={formData.otherShrines}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -454,7 +482,7 @@ function Form() {
             className="form-input"
             name="buildings"
             value={formData.buildings}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -464,7 +492,7 @@ function Form() {
             className="form-input"
             name="monthlyIncome"
             value={formData.monthlyIncome}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -474,7 +502,7 @@ function Form() {
             className="form-input"
             name="employees"
             value={formData.employees}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -484,7 +512,7 @@ function Form() {
             className="form-input"
             name="mainOfferings"
             value={formData.mainOfferings}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -494,7 +522,7 @@ function Form() {
             className="form-input"
             name="chiefPriest"
             value={formData.chiefPriest}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -504,7 +532,7 @@ function Form() {
             className="form-input"
             name="mainFestival"
             value={formData.mainFestival}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -514,7 +542,7 @@ function Form() {
             className="form-input"
             name="landOwnership"
             value={formData.landOwnership}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -523,7 +551,7 @@ function Form() {
             className="form-select"
             name="managementType"
             value={formData.managementType}
-            onChange={handleChange}
+            onChange={handleInputChange}
           >
             <option value="">തിരഞ്ഞെടുക്കുക</option>
             <option value="ട്രസ്റ്റ്">ട്രസ്റ്റ്</option>
@@ -538,7 +566,7 @@ function Form() {
             rows={3}
             name="registrationDetails"
             value={formData.registrationDetails}
-            onChange={handleChange}
+            onChange={handleInputChange}
           ></textarea>
         </div>
         <div>
@@ -548,7 +576,7 @@ function Form() {
             className="form-input"
             name="billingSystem"
             value={formData.billingSystem}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div style={{display: "flex", flexWrap: "wrap", gap: "20px"}}>
@@ -559,9 +587,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasInternet" 
-                  value={true}
-                  checked={formData.hasInternet}
-                  onChange={handleChange}
+                  value="true"
+                  checked={formData.hasInternet === true}
+                  onChange={(e) => setFormData({...formData, hasInternet: e.target.value === 'true'})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -570,9 +598,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasInternet" 
-                  value={false}
-                  checked={!formData.hasInternet}
-                  onChange={handleChange}
+                  value="false"
+                  checked={formData.hasInternet === false}
+                  onChange={(e) => setFormData({...formData, hasInternet: e.target.value === 'true'})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -586,9 +614,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasComputer" 
-                  value={true}
-                  checked={formData.hasComputer}
-                  onChange={handleChange}
+                  value="true"
+                  checked={formData.hasComputer === true}
+                  onChange={(e) => setFormData({...formData, hasComputer: e.target.value === 'true'})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -597,9 +625,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasComputer" 
-                  value={false}
-                  checked={!formData.hasComputer}
-                  onChange={handleChange}
+                  value="false"
+                  checked={formData.hasComputer === false}
+                  onChange={(e) => setFormData({...formData, hasComputer: e.target.value === 'true'})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -613,9 +641,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasPrinter" 
-                  value={true}
-                  checked={formData.hasPrinter}
-                  onChange={handleChange}
+                  value="true"
+                  checked={formData.hasPrinter === true}
+                  onChange={(e) => setFormData({...formData, hasPrinter: e.target.value === 'true'})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -624,9 +652,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasPrinter" 
-                  value={false}
-                  checked={!formData.hasPrinter}
-                  onChange={handleChange}
+                  value="false"
+                  checked={formData.hasPrinter === false}
+                  onChange={(e) => setFormData({...formData, hasPrinter: e.target.value === 'true'})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -641,9 +669,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasCamera" 
-                  value={true}
-                  checked={formData.hasCamera}
-                  onChange={handleChange}
+                  value="true"
+                  checked={formData.hasCamera === true}
+                  onChange={(e) => setFormData({...formData, hasCamera: e.target.value === 'true'})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -652,9 +680,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasCamera" 
-                  value={false}
-                  checked={!formData.hasCamera}
-                  onChange={handleChange}
+                  value="false"
+                  checked={formData.hasCamera === false}
+                  onChange={(e) => setFormData({...formData, hasCamera: e.target.value === 'true'})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -668,9 +696,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasDigitalBanking" 
-                  value={true}
-                  checked={formData.hasDigitalBanking}
-                  onChange={handleChange}
+                  value="true"
+                  checked={formData.hasDigitalBanking === true}
+                  onChange={(e) => setFormData({...formData, hasDigitalBanking: e.target.value === 'true'})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -679,9 +707,9 @@ function Form() {
                 <input 
                   type="radio" 
                   name="hasDigitalBanking" 
-                  value={false}
-                  checked={!formData.hasDigitalBanking}
-                  onChange={handleChange}
+                  value="false"
+                  checked={formData.hasDigitalBanking === false}
+                  onChange={(e) => setFormData({...formData, hasDigitalBanking: e.target.value === 'true'})}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -696,7 +724,7 @@ function Form() {
             className="form-input"
             name="managers"
             value={formData.managers}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -706,7 +734,7 @@ function Form() {
             rows={3}
             name="bankDetails"
             value={formData.bankDetails}
-            onChange={handleChange}
+            onChange={handleInputChange}
           ></textarea>
         </div>
         <div>
@@ -716,7 +744,7 @@ function Form() {
             rows={3}
             name="presidentDetails"
             value={formData.presidentDetails}
-            onChange={handleChange}
+            onChange={handleInputChange}
           ></textarea>
         </div>
         <div>
@@ -726,7 +754,7 @@ function Form() {
             rows={3}
             name="secretaryDetails"
             value={formData.secretaryDetails}
-            onChange={handleChange}
+            onChange={handleInputChange}
           ></textarea>
         </div>
         <div>
@@ -736,7 +764,7 @@ function Form() {
             rows={3}
             name="festivals"
             value={formData.festivals}
-            onChange={handleChange}
+            onChange={handleInputChange}
           ></textarea>
         </div>
         <div>
@@ -746,7 +774,7 @@ function Form() {
             rows={3}
             name="specialEvents"
             value={formData.specialEvents}
-            onChange={handleChange}
+            onChange={handleInputChange}
           ></textarea>
         </div>
         <div>
@@ -756,7 +784,7 @@ function Form() {
             className="form-input"
             name="ayanaSpecialties"
             value={formData.ayanaSpecialties}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -766,7 +794,7 @@ function Form() {
             className="form-input"
             name="monthlySpecialties"
             value={formData.monthlySpecialties}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -776,7 +804,7 @@ function Form() {
             className="form-input"
             name="chiefPriestDetails"
             value={formData.chiefPriestDetails}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -786,7 +814,7 @@ function Form() {
             className="form-input"
             name="kazhakamDetails"
             value={formData.kazhakamDetails}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -796,7 +824,7 @@ function Form() {
             className="form-input"
             name="emergencyDetails"
             value={formData.emergencyDetails}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -806,7 +834,7 @@ function Form() {
             className="form-input"
             name="sreekaaryamDetails"
             value={formData.sreekaaryamDetails}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -816,7 +844,7 @@ function Form() {
             className="form-input"
             name="puramDetails"
             value={formData.puramDetails}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -826,7 +854,7 @@ function Form() {
             className="form-input"
             name="securityDetails"
             value={formData.securityDetails}
-            onChange={handleChange}
+            onChange={handleInputChange}
           />
         </div>
         <div>
@@ -836,7 +864,7 @@ function Form() {
             rows={3}
             name="templeAssets"
             value={formData.templeAssets}
-            onChange={handleChange}
+            onChange={handleInputChange}
           ></textarea>
         </div>
         <div style={{display:"flex",gap:"20px"}}>
@@ -847,9 +875,9 @@ function Form() {
               <input 
                 type="radio" 
                 name="hasBuilding" 
-                value={true}
-                checked={formData.hasBuilding}
-                onChange={handleChange}
+                value="true"
+                checked={formData.hasBuilding === true}
+                onChange={(e) => setFormData({...formData, hasBuilding: e.target.value === 'true'})}
                 className="form-radio" 
               />
               <span className="ml-2">ഉണ്ട്</span>
@@ -858,9 +886,9 @@ function Form() {
               <input 
                 type="radio" 
                 name="hasBuilding" 
-                value={false}
-                checked={!formData.hasBuilding}
-                onChange={handleChange}
+                value="false"
+                checked={formData.hasBuilding === false}
+                onChange={(e) => setFormData({...formData, hasBuilding: e.target.value === 'true'})}
                 className="form-radio" 
               />
               <span className="ml-2">ഇല്ല</span>
@@ -874,9 +902,9 @@ function Form() {
               <input 
                 type="radio" 
                 name="hasSafe" 
-                value={true}
-                checked={formData.hasSafe}
-                onChange={handleChange}
+                value="true"
+                checked={formData.hasSafe === true}
+                onChange={(e) => setFormData({...formData, hasSafe: e.target.value === 'true'})}
                 className="form-radio" 
               />
               <span className="ml-2">ഉണ്ട്</span>
@@ -885,9 +913,9 @@ function Form() {
               <input 
                 type="radio" 
                 name="hasSafe" 
-                value={false}
-                checked={!formData.hasSafe}
-                onChange={handleChange}
+                value="false"
+                checked={formData.hasSafe === false}
+                onChange={(e) => setFormData({...formData, hasSafe: e.target.value === 'true'})}
                 className="form-radio" 
               />
               <span className="ml-2">ഇല്ല</span>
@@ -907,17 +935,18 @@ function Form() {
               className="form-input"
               name="declarationPlace"
               value={formData.declarationPlace}
-              onChange={handleChange}
+              onChange={handleInputChange}
             />
           </div>
           <div>
-            <label className="form-label">തീയതി</label>
+            <label className="form-<continuation_point>
+label">തീയതി</label>
             <input 
               type="date" 
               className="form-input"
               name="declarationDate"
-              value={formData.declarationDate}
-              onChange={handleChange}
+              value={formData.declarationDate ? new Date(formData.declarationDate).toISOString().split('T')[0] : ''}
+              onChange={handleInputChange}
             />
           </div>
         </div>
@@ -928,7 +957,7 @@ function Form() {
             rows={3}
             name="applicantDetails"
             value={formData.applicantDetails}
-            onChange={handleChange}
+            onChange={handleInputChange}
           ></textarea>
         </div>
         <div className="border-t pt-4 mt-4">
@@ -941,7 +970,7 @@ function Form() {
               placeholder="ടി അപേക്ഷകന് ശ്രീശുദ്ധി ക്ഷേത്രോദ്ധാരണപദ്ധതിയുടെ ..................................................തീയതിയിലെ ഭരണസമിതി തീരുമാനമനുസരിച്ച് അംഗത്വം കൊടുക്കുവാൻ തീരുമാനിച്ചിരിക്കുന്നു/നിരസിച്ചിരിക്കുന്നു."
               name="committeeDecision"
               value={formData.committeeDecision}
-              onChange={handleChange}
+              onChange={handleInputChange}
             ></textarea>
           </div>
           <div className="grid-container">
@@ -952,7 +981,7 @@ function Form() {
                 className="form-input"
                 name="membershipNumber"
                 value={formData.membershipNumber}
-                onChange={handleChange}
+                onChange={handleInputChange}
               />
             </div>
             <div>
@@ -961,8 +990,8 @@ function Form() {
                 type="date" 
                 className="form-input"
                 name="decisionDate"
-                value={formData.decisionDate}
-                onChange={handleChange}
+                value={formData.decisionDate ? new Date(formData.decisionDate).toISOString().split('T')[0] : ''}
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -982,7 +1011,7 @@ function Form() {
                 className="form-input"
                 name="presidentPermanent"
                 value={formData.presidentPermanent}
-                onChange={handleChange}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mt-2">
@@ -992,7 +1021,7 @@ function Form() {
                 className="form-input"
                 name="presidentTemporary"
                 value={formData.presidentTemporary}
-                onChange={handleChange}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mt-2">
@@ -1002,7 +1031,7 @@ function Form() {
                 className="form-input"
                 name="presidentPhone"
                 value={formData.presidentPhone}
-                onChange={handleChange}
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -1015,7 +1044,7 @@ function Form() {
                 className="form-input"
                 name="secretaryPermanent"
                 value={formData.secretaryPermanent}
-                onChange={handleChange}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mt-2">
@@ -1025,7 +1054,7 @@ function Form() {
                 className="form-input"
                 name="secretaryTemporary"
                 value={formData.secretaryTemporary}
-                onChange={handleChange}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mt-2">
@@ -1035,7 +1064,7 @@ function Form() {
                 className="form-input"
                 name="secretaryPhone"
                 value={formData.secretaryPhone}
-                onChange={handleChange}
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -1048,7 +1077,7 @@ function Form() {
                 className="form-input"
                 name="treasurerPermanent"
                 value={formData.treasurerPermanent}
-                onChange={handleChange}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mt-2">
@@ -1058,7 +1087,7 @@ function Form() {
                 className="form-input"
                 name="treasurerTemporary"
                 value={formData.treasurerTemporary}
-                onChange={handleChange}
+                onChange={handleInputChange}
               />
             </div>
             <div className="mt-2">
@@ -1068,20 +1097,24 @@ function Form() {
                 className="form-input"
                 name="treasurerPhone"
                 value={formData.treasurerPhone}
-                onChange={handleChange}
+                onChange={handleInputChange}
               />
             </div>
           </div>
         </div>
-        <button type="submit" className="form-submit">
-          സമർപ്പിക്കുക
+        {loading && <p>Loading...</p>}
+        {error && <p className="error-message">{error}</p>}
+        <button type="submit" className="form-submit" disabled={loading}>
+          {loading ? 'സമർപ്പിക്കുന്നു...' : 'സമർപ്പിക്കുക'}
         </button>
       </form>
     </div>
-  );
+      
+    </div>
+  </div>
+  )
 }
 
+export default EditSubmission
 
-
-export default Form;
 
