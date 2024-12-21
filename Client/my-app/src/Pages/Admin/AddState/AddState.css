@@ -192,7 +192,7 @@ h2 {
 }
 
 /* Pagination Controls Styling */
-.pagination-controls {
+/* .pagination-controls {
   display: flex;
   justify-content: center;
   margin-top: 20px;
@@ -206,7 +206,44 @@ h2 {
 
 .pagination-controls span {
   align-self: center;
+} */
+/* pagination.css */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
 }
+
+.pagination-controls button {
+  background-color: #007BFF; /* Primary button color */
+  color: #ffffff; /* Button text color */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.pagination-controls button:hover {
+  background-color: #0056b3; /* Hover color */
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.pagination-controls button:disabled {
+  background-color: #d6d6d6; /* Disabled button color */
+  color: #9e9e9e; /* Disabled text color */
+  cursor: not-allowed;
+}
+
+.pagination-controls button:focus {
+  outline: 2px solid #0056b3; /* Focus outline for accessibility */
+}
+
+
 
 /* Responsive Styles */
 @media (max-width: 1200px) {

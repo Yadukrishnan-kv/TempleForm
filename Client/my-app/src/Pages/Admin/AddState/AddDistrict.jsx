@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import axios from 'axios';
-import './AddState.css'; // Same CSS file for consistency
+import './AddState.css'; // Using original CSS
 
 function AddDistrict() {
   const ip = process.env.REACT_APP_BACKEND_IP;
@@ -14,70 +14,93 @@ function AddDistrict() {
   const [isEditing, setIsEditing] = useState(false);
   const [currentDistrictId, setCurrentDistrictId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Number of items to display per page
+  const [error, setError] = useState(null);
+  const itemsPerPage = 5;
 
   // Fetch all districts
-  useEffect(() => {
-    axios.get(`${ip}/api/districts/getAllDistricts`)
-      .then(response => setDistricts(response.data))
-      .catch(error => console.error(error));
-  }, [ip]);
-
-  
-
-  useEffect(() => {
-    axios.get(`${ip}/api/states/getAllStates`)
-      .then(response => {
-        console.log("States fetched successfully:", response.data);
-        // Access the `states` property of the response
-        setStates(response.data.states);
-      })
-      .catch(error => console.error("Error fetching states:", error));
-  }, [ip]);
-  
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const selectedState = states.find(s => s._id === state);
-    if (!selectedState) {
-      console.error("Selected state is invalid.");
-      return;
-    }
-  
-    const payload = { name, state };
-    console.log("Submitting payload:", payload);
-  
-    if (isEditing) {
-      axios.put(`${ip}/api/districts/updateDistrict/${currentDistrictId}`, payload)
-        .then(() => {
-          console.log("District updated successfully.");
-          setDistricts(districts.map(district =>
-            district._id === currentDistrictId ? { ...district, name, state: selectedState } : district
-          ));
-          resetForm();
-        })
-        .catch(error => console.error("Error updating district:", error));
-    } else {
-      axios.post(`${ip}/api/districts/createDistrict`, payload)
-        .then(response => {
-          console.log("District created successfully:", response.data);
-          setDistricts([...districts, { ...response.data, state: selectedState }]);
-          resetForm();
-        })
-        .catch(error => console.error("Error creating district:", error));
+  const fetchDistricts = async () => {
+    try {
+      const response = await axios.get(`${ip}/api/districts/getAllDistricts`);
+      console.log("Districts fetched:", response.data);
+      setDistricts(response.data);
+    } catch (error) {
+      console.error('Error fetching districts:', error);
+      setError('Failed to fetch districts');
     }
   };
-  
 
-  const handleDelete = (id) => {
-    axios.delete(`${ip}/api/districts/deleteDistrict/${id}`)
-      .then(() => {
-        setDistricts(districts.filter(district => district._id !== id));
-      })
-      .catch(error => console.error(error));
+  useEffect(() => {
+    fetchDistricts();
+  }, [ip]);
+
+  // Fetch all states
+  useEffect(() => {
+    const fetchStates = async () => {
+      try {
+        const response = await axios.get(`${ip}/api/states/getAllStates`);
+        console.log("States fetched:", response.data);
+        setStates(response.data.states || []);
+      } catch (error) {
+        console.error('Error fetching states:', error);
+        setError('Failed to fetch states');
+      }
+    };
+    fetchStates();
+  }, [ip]);
+
+  const toggleForm = () => {
+    console.log("Toggling form visibility. Current state:", isFormVisible);
+    setIsFormVisible(!isFormVisible);
+    if (isFormVisible) {
+      resetForm();
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Form submitted with:", { name, state });
+
+    if (!name || !state) {
+      console.error("Name and state are required");
+      setError("Please fill in all fields");
+      return;
+    }
+
+    try {
+      const payload = { name, state };
+      console.log("Sending payload:", payload);
+
+      if (isEditing && currentDistrictId) {
+        console.log("Updating district:", currentDistrictId);
+        const response = await axios.put(`${ip}/api/districts/updateDistrict/${currentDistrictId}`, payload);
+        console.log("Update response:", response.data);
+      } else {
+        console.log("Creating new district");
+        const response = await axios.post(`${ip}/api/districts/createDistrict`, payload);
+        console.log("Create response:", response.data);
+      }
+      
+      await fetchDistricts();
+      resetForm();
+      setIsFormVisible(false);
+    } catch (error) {
+      console.error('Error submitting district:', error.response?.data || error);
+      setError(error.response?.data?.message || 'Failed to submit district');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${ip}/api/districts/deleteDistrict/${id}`);
+      await fetchDistricts();
+    } catch (error) {
+      console.error('Error deleting district:', error);
+      setError('Failed to delete district');
+    }
   };
 
   const handleEdit = (district) => {
+    console.log("Editing district:", district);
     setIsEditing(true);
     setIsFormVisible(true);
     setName(district.name);
@@ -89,20 +112,24 @@ function AddDistrict() {
     setName('');
     setState('');
     setIsEditing(false);
-    setIsFormVisible(false);
     setCurrentDistrictId(null);
+    setError(null);
   };
 
-  // Pagination logic: slice the districts array for the current page
+  // Pagination logic
   const indexOfLastDistrict = currentPage * itemsPerPage;
   const indexOfFirstDistrict = indexOfLastDistrict - itemsPerPage;
   const currentDistricts = districts.slice(indexOfFirstDistrict, indexOfLastDistrict);
-
-  const totalPages = Math.ceil(districts.length / itemsPerPage); // Total pages
+  const totalPages = Math.max(1, Math.ceil(districts.length / itemsPerPage));
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    const validPage = Math.max(1, Math.min(page, totalPages));
+    setCurrentPage(validPage);
   };
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [districts.length]);
 
   return (
     <div className="app-container">
@@ -111,14 +138,18 @@ function AddDistrict() {
         <Sidebar />
         <div className="Statesubmission-page">
           <h2>Manage Districts</h2>
-          <button className="add-button" onClick={() => {
-            setIsFormVisible(!isFormVisible);
-            resetForm();
-          }}>
-            {isFormVisible ? "Cancel" : isEditing ? "Edit District" : "Add New District"}
+          
+          {/* Changed to use toggleForm function */}
+          <button 
+            type="button" 
+            className="add-button" 
+            onClick={toggleForm}
+          >
+            {isFormVisible ? "Cancel" : "Add New District"}
           </button>
 
-          {/* Add/Edit District Form */}
+          {error && <div style={{ color: 'red', margin: '10px 0' }}>{error}</div>}
+
           {isFormVisible && (
             <form className="state-form" onSubmit={handleSubmit}>
               <input
@@ -128,20 +159,24 @@ function AddDistrict() {
                 placeholder="District Name"
                 required
               />
-              <select value={state} onChange={(e) => setState(e.target.value)} required>
+              <select 
+                value={state} 
+                onChange={(e) => setState(e.target.value)} 
+                required
+              >
                 <option value="">Select State</option>
-                {Array.isArray(states) &&
-    states.map(state => (
-      <option key={state._id} value={state._id}>
-        {state.name}
-      </option>
-    ))}
+                {Array.isArray(states) && states.map(state => (
+                  <option key={state._id} value={state._id}>
+                    {state.name}
+                  </option>
+                ))}
               </select>
-              <button type="submit">{isEditing ? "Update District" : "Add District"}</button>
+              <button type="submit">
+                {isEditing ? "Update District" : "Add District"}
+              </button>
             </form>
           )}
 
-          {/* District List */}
           <div className="state-list">
             <h2>District List</h2>
             <table className="district-table">
@@ -156,10 +191,11 @@ function AddDistrict() {
               <tbody>
                 {currentDistricts.map(district => (
                   <tr key={district._id}>
-                    <td>{district.state.name}</td>
+                    <td>{district.state?.name || 'N/A'}</td>
                     <td>{district.name}</td>
                     <td>
                       <button
+                        type="button"
                         className="edit-link"
                         onClick={() => handleEdit(district)}
                       >
@@ -168,6 +204,7 @@ function AddDistrict() {
                     </td>
                     <td>
                       <button
+                        type="button"
                         className="delete-button"
                         onClick={() => handleDelete(district._id)}
                       >
@@ -179,21 +216,30 @@ function AddDistrict() {
               </tbody>
             </table>
 
-            {/* Pagination Controls */}
             <div className="pagination-controls">
-              <button
-                disabled={currentPage === 1}
-                onClick={() => handlePageChange(currentPage - 1)}
-              >
-                Previous
-              </button>
-              <span>Page {currentPage} of {totalPages}</span>
-              <button
-                disabled={currentPage === totalPages}
-                onClick={() => handlePageChange(currentPage + 1)}
-              >
-                Next
-              </button>
+              {districts.length > 0 ? (
+                <>
+                  <button
+                    type="button"
+                    disabled={currentPage === 1}
+                    onClick={() => handlePageChange(currentPage - 1)}
+                  >
+                    Previous
+                  </button>
+                  <span>
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <button
+                    type="button"
+                    disabled={currentPage === totalPages}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                  >
+                    Next
+                  </button>
+                </>
+              ) : (
+                <span>No districts to display</span>
+              )}
             </div>
           </div>
         </div>
@@ -203,3 +249,4 @@ function AddDistrict() {
 }
 
 export default AddDistrict;
+
