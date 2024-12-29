@@ -10,12 +10,17 @@ import AddDistrict from '../Pages/Admin/AddState/AddDistrict'
 import AddTaluk from '../Pages/Admin/AddState/AddTaluk'
 import EdidtSubmission from '../Pages/Admin/SortSubmission/EdidtSubmission'
 import Addform from '../Pages/Admin/Registration/Addform'
+import MainPage from '../Pages/MainPage/MainPage'
+import About from '../Components/AboutPage/About'
+import TemplePage from '../Components/TemplesPage/TemplesPage'
+import ContactPage from '../ContactPage/ContactPage'
+import GalleryPage from '../Pages/Admin/GalleryPage/GalleryPage'
 
 function Dom() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Form />} />
+        <Route path="/" element={<><MainPage/></>} />
 
         {/* <Route path="/AdminSignup" element={<><SignupPage/></>} /> */}
         <Route path="/AdminLogin" element={<><LoginPage/></>} />
@@ -23,10 +28,17 @@ function Dom() {
         <Route path="/admin/profile" element={<><AdminProfile/></>} />
         <Route path="/AddSubmission" element={<><Addform/></>} />
         <Route path="/SortSubmission" element={<><SortSubmission/></>} />
+        <Route path="/gallery/:templeId" element={<GalleryPage />} />
         <Route path="/addstate" element={<><AddState/></>} />
         <Route path="/adddistrict" element={<><AddDistrict/></>} />
         <Route path="/addtaluk" element={<><AddTaluk/></>} />
         <Route path="/edit/:id" element={<><EdidtSubmission/></>} />
+        <Route path="/about" element={<><About/></>} />
+        <Route path="/TemplePage" element={<><TemplePage/></>} />
+        <Route path="/contact" element={<><ContactPage/></>} />
+
+
+
 
 
 

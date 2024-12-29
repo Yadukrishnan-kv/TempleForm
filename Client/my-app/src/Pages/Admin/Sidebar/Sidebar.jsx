@@ -32,6 +32,7 @@ function Sidebar() {
             <Link to="/Dashboard" onClick={() => toggleMenu("dashboard")}>
               <RiHome3Fill style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
               <span className="menu-name">Dashboard</span>
+              
             </Link>
           </li>
           <li className={`menu-item has-submenu ${activeMenu === "sort" ? "active" : ""}`}>

@@ -1,0 +1,271 @@
+.places-container {
+    padding: 3rem 0;
+    position: relative;
+    overflow: hidden;
+    background-color: #f7f7f7;
+  }
+  
+  .places-inner-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .places-sidebar {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+  }
+  
+  .places-content {
+    flex: 1;
+  }
+  
+  .section-header {
+    text-align: left;
+    position: sticky;
+    top: 2rem;
+  }
+  
+  .subtitle {
+    font-family: 'Caveat', cursive;
+    font-size: 2.5rem;
+    font-weight: 500;
+    color: #f4a261;
+    margin-bottom: 0.5rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  
+  .description {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+  
+  .view-all-button {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: #f4a261;
+    color: white;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+  
+  .view-all-button:hover {
+    background-color: #e67e22;
+  }
+  
+  .place-card {
+    background: #fff;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 1.5rem;
+  }
+  
+  .place-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card-body {
+    display: flex;
+  }
+  
+  .card-image {
+    width: 40%;
+    height: 270px;
+    position: relative;
+  }
+  
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .card-content {
+    padding: 1.5rem;
+    flex: 1;
+    position: relative;
+  }
+  
+  .bookmark-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: white;
+    border: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: #666;
+    transition: all 0.3s ease;
+  }
+  
+  .bookmark-button:hover {
+    background: #f4a261;
+    color: white;
+  }
+  
+  .temple-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .verified-icon {
+    color: #2ecc71;
+  }
+  
+  .temple-description {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  
+  .contact-links {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: auto;
+  }
+  
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: #666;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .contact-link:hover {
+    color: #f4a261;
+  }
+  
+  .decoration {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(244, 162, 97, 0.1) 0%, rgba(244, 162, 97, 0) 70%);
+    border-radius: 50%;
+    z-index: -1;
+  }
+  
+  .decoration-top-right {
+    top: -150px;
+    right: -150px;
+  }
+  
+  .decoration-bottom-left {
+    bottom: -150px;
+    left: -150px;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 1200px) {
+    .places-inner-container {
+      max-width: 960px;
+    }
+    
+    .title {
+      font-size: 2.5rem;
+    }
+    
+    .subtitle {
+      font-size: 2rem;
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .places-inner-container {
+      flex-direction: column;
+    }
+    
+    .places-sidebar {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+    
+    .section-header {
+      position: static;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .card-body {
+      flex-direction: column;
+    }
+    
+    .card-image {
+      width: 100%;
+      height: 200px;
+    }
+    
+    .title {
+      font-size: 2rem;
+    }
+    
+    .subtitle {
+      font-size: 1.75rem;
+    }
+    
+    .description {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .places-container {
+      padding: 2rem 0;
+    }
+    
+    .places-inner-container {
+      padding: 1rem;
+    }
+    
+    .title {
+      font-size: 1.75rem;
+    }
+    
+    .subtitle {
+      font-size: 1.5rem;
+    }
+    
+    .temple-title {
+      font-size: 1.1rem;
+    }
+    
+    .contact-links {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .decoration {
+      display: none;
+    }
+  }
+  
+  

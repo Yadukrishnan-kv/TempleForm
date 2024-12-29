@@ -323,6 +323,7 @@ const SortSubmission = () => {
                   ))}
                   <th>Actions</th>
                   <th>Edit</th>
+                  <th>Gallery</th>
                 </tr>
               </thead>
               <tbody>
@@ -349,6 +350,11 @@ const SortSubmission = () => {
                         <td>
                           <Link to={`/edit/${temple._id}`}>
                             <button className='edit-button'>Edit</button>
+                          </Link>
+                        </td>
+                        <td>
+                          <Link to={`/gallery/${temple._id}`}>
+                            <button className='gallery-button'>Gallery</button>
                           </Link>
                         </td>
                       </tr>

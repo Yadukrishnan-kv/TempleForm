@@ -1,0 +1,100 @@
+
+
+
+/* Previous CSS styles remain the same */
+
+.verified-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.badge.bg-success {
+  background-color: #28a745;
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.25em 0.5em;
+  border-radius: 0.25rem;
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.temples_thumb {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card-image-hover:hover .temples_thumb {
+  transform: scale(1.05);
+}
+
+.bg-blur {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border: none;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.bg-blur:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.search-wrapper {
+  background: white;
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  gap: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-button {
+  background-color: #FFBD59;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #e5a840;
+}
+
+@media (max-width: 768px) {
+  .search-wrapper {
+    flex-direction: column;
+  }
+
+  .divider {
+    display: none;
+  }
+
+  .search-button {
+    width: 100%;
+  }
+
+  .col-sm-4 {
+    width: 100%;
+  }
+}
+

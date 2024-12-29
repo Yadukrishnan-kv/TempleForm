@@ -1,0 +1,230 @@
+/* Base styles */
+:root {
+    --primary-color: #FFBD59;
+    --text-dark: #191E25;
+    --text-light: #8d9193;
+    --white: #ffffff;
+  }
+  
+  
+  /* Hero Section */
+  .hero {
+    position: relative;
+    height: 400px;
+    background-color: var(--text-dark);
+  }
+  
+  .bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+   
+  }
+  
+  .dark-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  
+  .overlay-content {
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* Achievements Section */
+  .achievements-wrapper {
+    margin-top: -80px;
+    position: relative;
+    z-index: 3;
+    width: 1100px;
+  }
+  
+  .counter-content_about {
+    padding: 3rem;
+    background: var(--white);
+  }
+  
+  .numscroller {
+    color: var(--primary-color);
+  }
+  
+  /* About Content Section */
+  .about-image-wrap {
+    height: 250px;
+    overflow: hidden;
+  }
+  
+  .about-image-wrap img {
+    transition: transform 0.3s ease;
+  }
+  
+ 
+  /* Font Styles */
+  .font-caveat {
+    font-family: 'Caveat', cursive;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 991px) {
+    .navbar-brand img {
+      height: 50px;
+    }
+    
+    .achievements-wrapper {
+      margin-top: -30px;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .hero {
+      height: 300px;
+    }
+    
+    .about-image-wrap {
+      height: 200px;
+    }
+  }
+  
+ 
+  .timeline-subtitle {
+    font-family: 'Caveat', cursive;
+    color: #FFBD59;
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  
+  .timeline-title {
+    color: white;
+    font-size: 2rem;
+    font-weight: 200;
+    line-height: 1.4;
+    margin-bottom: 4rem;
+  }
+  .timeline-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+  
+  .timeline-container::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    background: var(--primary-color);
+    top: 0;
+    height: 560px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .timeline-item {
+    position: relative;
+    margin-bottom: 3rem;
+  }
+  
+  .timeline-item.start-circle .timeline-circle {
+    border: 1px solid var(--primary-color);
+    background: transparent;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+  
+  .timeline-content {
+    position: relative;
+    width: calc(50% - 40px);
+    padding: 15px;
+    color: white;
+  }
+  
+  .timeline-item.left .timeline-content {
+    left: 0;
+    text-align: right;
+  }
+  
+  .timeline-item.right .timeline-content {
+    left: calc(50% + 40px);
+    text-align: left;
+  }
+  
+  .timeline-circle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+  
+  .timeline-circle::before {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 189, 89, 0.2);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .custom-mx {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  
+  .card-fixed-height {
+    height: 70px; /* Set a uniform height */
+  }
+  .img-fixed-height{
+    height: 50px;
+  }
+  
+
+  @media (max-width: 768px) {
+    .timeline-container::after {
+      left: 31px;
+    }
+  
+    .timeline-content {
+      width: calc(100% - 80px);
+      padding-left: 70px;
+      text-align: left !important;
+    }
+  
+    .timeline-item.left .timeline-content,
+    .timeline-item.right .timeline-content {
+      left: 0;
+    }
+  
+    .timeline-circle {
+      left: 31px;
+    }
+  
+    .timeline-title {
+      font-size: 2rem;
+    }
+  
+    .timeline-subtitle {
+      font-size: 2rem;
+    }
+  }
+  
+  
+  
