@@ -35,8 +35,11 @@ function Sidebar() {
               
             </Link>
           </li>
+          
           <li className={`menu-item has-submenu ${activeMenu === "sort" ? "active" : ""}`}>
-            <button className="menu-toggle" onClick={() => toggleSubmenu("sort")}>
+            
+            <button className="menu-toggle1" onClick={() => toggleSubmenu("sort")}>
+              
               <MdOutlineAppRegistration style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
               <span className="menu-name">Registration</span>
               {openSubmenus.sort ? (
@@ -57,7 +60,7 @@ function Sidebar() {
             )}
           </li>
           <li className={`menu-item has-submenu ${activeMenu === "master" ? "active" : ""}`}>
-            <button className="menu-toggle" onClick={() => toggleSubmenu("master")}>
+            <button className="menu-toggle1" onClick={() => toggleSubmenu("master")}>
             <SlCursor 
             style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
               <span className="menu-name">master</span>
@@ -81,6 +84,7 @@ function Sidebar() {
               </ul>
             )}
           </li>
+          
         </ul>
       </nav>
     </div>
