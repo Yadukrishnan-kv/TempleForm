@@ -12,7 +12,7 @@
 # production
 /build
 
-/server/uploads/
+# /server/uploads/
 
 # misc
 .DS_Store
