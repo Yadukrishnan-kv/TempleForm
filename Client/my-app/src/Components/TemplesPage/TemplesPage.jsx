@@ -166,15 +166,16 @@ const TemplePage = () => {
                       <div className="card card-hover flex-fill overflow-hidden w-100 card-hover-bg no-border bg-light">
                         <Link to={`/temple/${temple._id}`} className="stretched-link"></Link>
                         <div className="card-img-wrap card-image-hover overflow-hidden">
-                          <img 
-                            src={temple.mainImage || '/placeholder.jpg'} 
-                            alt={temple.name} 
-                            className="temples_thumb"
-                            onError={(e) => {
-                              e.target.onerror = null;
-                              e.target.src = '/placeholder.jpg';
-                            }}
-                          />
+                        <img
+  src={temple.mainImage || '/placeholder.jpg'}
+  alt={temple.name}
+  className="temples_thumb"
+  onError={(e) => {
+    if (!e.target.src.includes('placeholder.jpg')) {
+      e.target.src = '/placeholder.jpg';
+    }
+  }}
+/>
                           <div className="d-flex end-0 gap-2 me-3 mt-3 position-absolute top-0 z-1">
                             <button 
                               className="align-items-center bg-blur btn-icon d-flex justify-content-center rounded-circle shadow-sm text-white"
