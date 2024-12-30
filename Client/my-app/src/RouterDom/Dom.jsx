@@ -22,7 +22,7 @@ function Dom() {
       <Routes>
         <Route path="/" element={<><MainPage/></>} />
 
-        {/* <Route path="/AdminSignup" element={<><SignupPage/></>} /> */}
+        <Route path="/form" element={<><Form/></>} />
         <Route path="/AdminLogin" element={<><LoginPage/></>} />
         <Route path="/Dashboard" element={<><DashBoard/></>} />
         <Route path="/admin/profile" element={<><AdminProfile/></>} />

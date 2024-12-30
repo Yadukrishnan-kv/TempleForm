@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom'; // Hook to get the current URL path
-import './HomePage.css';
-import logo1 from '../../assets/images/logo.png';
+import { useLocation } from 'react-router-dom';
 import { Heart, UserPlus } from 'lucide-react';
+import logo1 from '../../assets/images/logo.png';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState('');
-  const location = useLocation(); // Get the current path
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    // Update activeLink based on the current path
     const currentPath = location.pathname;
     if (currentPath.includes('about')) {
       setActiveLink('about');
@@ -21,7 +20,7 @@ function Navbar() {
     } else {
       setActiveLink('home');
     }
-  }, [location.pathname]); // Run this effect whenever the path changes
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +29,10 @@ function Navbar() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
     <nav className={`navbar navbar-expand-lg navbar-light sticky-top ${isScrolled ? 'shadow-sm' : ''}`}>
@@ -64,20 +67,25 @@ function Navbar() {
           <button
             className="navbar-toggler"
             type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
+            onClick={toggleMobileMenu}
+            aria-controls="navbarSupportedContent"
+            aria-expanded={isMobileMenuOpen}
+            aria-label="Toggle navigation"
           >
             <span className="navbar-toggler-icon"></span>
           </button>
         </div>
 
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <div className={`collapse navbar-collapse ${isMobileMenuOpen ? 'show' : ''}`} id="navbarSupportedContent">
           <ul className="navbar-nav mx-auto">
             <li className="nav-item">
               <a
                 className={`nav-link ${activeLink === 'home' ? 'active' : ''}`}
                 href="/"
-                onClick={() => setActiveLink('home')}
+                onClick={() => {
+                  setActiveLink('home');
+                  setIsMobileMenuOpen(false);
+                }}
               >
                 Home
               </a>
@@ -86,7 +94,10 @@ function Navbar() {
               <a
                 className={`nav-link ${activeLink === 'about' ? 'active' : ''}`}
                 href="/about"
-                onClick={() => setActiveLink('about')}
+                onClick={() => {
+                  setActiveLink('about');
+                  setIsMobileMenuOpen(false);
+                }}
               >
                 About Us
               </a>
@@ -95,7 +106,10 @@ function Navbar() {
               <a
                 className={`nav-link ${activeLink === 'temples' ? 'active' : ''}`}
                 href="/TemplePage"
-                onClick={() => setActiveLink('temples')}
+                onClick={() => {
+                  setActiveLink('temples');
+                  setIsMobileMenuOpen(false);
+                }}
               >
                 Temples
               </a>
@@ -104,7 +118,10 @@ function Navbar() {
               <a
                 className={`nav-link ${activeLink === 'contact' ? 'active' : ''}`}
                 href="/contact"
-                onClick={() => setActiveLink('contact')}
+                onClick={() => {
+                  setActiveLink('contact');
+                  setIsMobileMenuOpen(false);
+                }}
               >
                 Contact Us
               </a>
@@ -117,6 +134,8 @@ function Navbar() {
 }
 
 export default Navbar;
+
+
 
 
 
