@@ -72,37 +72,50 @@ const About = () => {
 
       {/* Achievements Section */}
       <div className="container">
-      <div className="achievements-wrapper ms-auto me-auto">
-        <div className="bg-center js-bg-image bg-cover bg-light counter-content_about position-relative rounded-4">
-          <div className="g-4 justify-content-center row">
-            <div className="col-sm-6 col-xl-3 text-center">
-              <div className="display-5 fw-semibold " style={{color:"#FFBD59"}}>
-                <CountUp start={1} end={3000} duration={3} />+
-              </div>
-              <h5 className="fs-18 mb-0 mt-3">Job posted</h5>
-            </div>
-            <div className="col-sm-6 col-xl-3 text-center">
-              <div className="display-5 fw-semibold " style={{color:"#FFBD59"}}>
-                <CountUp start={1} end={2500} duration={3} />+
-              </div>
-              <h5 className="fs-18 mb-0 mt-3">Successful hires</h5>
-            </div>
-            <div className="col-sm-6 col-xl-3 text-center">
-              <div className="display-5 fw-semibold " style={{color:"#FFBD59"}}>
-                <CountUp start={1} end={10} duration={3} suffix="M" />+
-              </div>
-              <h5 className="fs-18 mb-0 mt-3">Monthly visits</h5>
-            </div>
-            <div className="col-sm-6 col-xl-3 text-center">
-              <div className="display-5 fw-semibold " style={{color:"#FFBD59"}}>
-                <CountUp start={1} end={593} duration={3} />+
-              </div>
-              <h5 className="fs-18 mb-0 mt-3">Verified companies</h5>
-            </div>
+  <div className="achievements-wrapper mx-auto">
+    <div className="counter-content_about position-relative rounded-4">
+      <div className="row g-4 justify-content-center">
+        <div className="col-12 col-sm-6 col-lg-3 text-center">
+          <div
+            className="display-5 fw-semibold"
+            style={{ color: "#FFBD59" }}
+          >
+            <CountUp start={1} end={3000} duration={3} />+
           </div>
+          <h5 className="fs-18 mt-3">Job posted</h5>
+        </div>
+        <div className="col-12 col-sm-6 col-lg-3 text-center">
+          <div
+            className="display-5 fw-semibold"
+            style={{ color: "#FFBD59" }}
+          >
+            <CountUp start={1} end={2500} duration={3} />+
+          </div>
+          <h5 className="fs-18 mt-3">Successful hires</h5>
+        </div>
+        <div className="col-12 col-sm-6 col-lg-3 text-center">
+          <div
+            className="display-5 fw-semibold"
+            style={{ color: "#FFBD59" }}
+          >
+            <CountUp start={1} end={10} duration={3} suffix="M" />+
+          </div>
+          <h5 className="fs-18 mt-3">Monthly visits</h5>
+        </div>
+        <div className="col-12 col-sm-6 col-lg-3 text-center">
+          <div
+            className="display-5 fw-semibold"
+            style={{ color: "#FFBD59" }}
+          >
+            <CountUp start={1} end={593} duration={3} />+
+          </div>
+          <h5 className="fs-18 mt-3">Verified companies</h5>
         </div>
       </div>
     </div>
+  </div>
+</div>
+
       {/* About Content Section */}
       <div className="py-5">
         <div className="container py-4">

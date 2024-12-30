@@ -15,6 +15,7 @@ import About from '../Components/AboutPage/About'
 import TemplePage from '../Components/TemplesPage/TemplesPage'
 import ContactPage from '../ContactPage/ContactPage'
 import GalleryPage from '../Pages/Admin/GalleryPage/GalleryPage'
+import TempleDetails from '../Components/TempleDetails/TempleDetails'
 
 function Dom() {
   return (
@@ -36,6 +37,7 @@ function Dom() {
         <Route path="/about" element={<><About/></>} />
         <Route path="/TemplePage" element={<><TemplePage/></>} />
         <Route path="/contact" element={<><ContactPage/></>} />
+        <Route path="/TempleDetails" element={<><TempleDetails/></>} />
 
 
 

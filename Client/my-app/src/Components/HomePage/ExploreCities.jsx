@@ -9,6 +9,7 @@ import padmanabhaswamy_thumb from '../../assets/images/padmanabhaswamy_thumb.jpg
 import kadampuzha_thumb from '../../assets/images/kadampuzha_thumb.jpg';
 import vadakkumnathan_thumb from '../../assets/images/vadakkumnathan_thumb.jpg';
 import thirumandhamkunnu_thumb from '../../assets/images/thirumandhamkunnu_thumb.jpg';
+import { Link } from 'react-router-dom';
 // Ensure jQuery is available globally
 window.jQuery = window.$ = $;
 
@@ -84,11 +85,11 @@ const ExploreCities = () => {
                     <h2>{temple.name}</h2>
                     <p>{temple.location}</p>
                     <div className="explore-more">
-                      <span>EXPLORE MORE</span>
+                    <span>EXPLORE MORE</span> 
                       <button className="explore-button">
-                        <ArrowRight size={16} />
+                      <Link to={'/TempleDetails'} style={{textDecoration:"none",color:"white"}}> <ArrowRight size={16} /></Link>
                       </button>
-                    </div>
+                    </div> 
                   </div>
                 </div>
               </div>

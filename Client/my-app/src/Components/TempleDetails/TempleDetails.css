@@ -1,0 +1,187 @@
+.temple-details {
+    min-height: 100vh;
+    background-color: white;
+  }
+  
+  /* Header Section */
+  .header-section {
+    background-color: white;
+  }
+  
+  .temple-title {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+  }
+  
+  .temple-info {
+    gap: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+    flex-direction: column;
+  }
+  
+  .temple-info .icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 0.5rem;
+  }
+  
+  .separator {
+    color: #ccc;
+  }
+  
+  .save-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .bookmark-count {
+    font-size: 0.875rem;
+    color: #666;
+  }
+  
+  /* Gallery Section */
+  .gallery-section {
+    background-color: #fff;
+    overflow: hidden;
+  }
+  
+  .main-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .side-image {
+    width: 100%;
+    height: 196px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  /* Content Section */
+  .content-section {
+    margin-top: 2rem;
+  }
+  
+  .content-card {
+    
+    padding: 2rem;
+  }
+  
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #1a1a1a;
+  }
+  
+ 
+  
+  /* About Section */
+  .temple-description p {
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Pooja Section */
+  .pooja-card {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1.25rem;
+    height: 100%;
+  }
+  
+  .pooja-card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+  }
+  
+  .pooja-card p {
+    color: #666;
+    margin: 0;
+  }
+  
+  /* Facilities Section */
+  .facility-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    height: 100%;
+  }
+  
+  .facility-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #0d6efd;
+    border-radius: 50%;
+  }
+  
+  /* Contact Section */
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .contact-item .icon {
+    width: 24px;
+    height: 24px;
+    color: #0d6efd;
+  }
+  
+  .contact-item h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 0.25rem;
+  }
+  
+  .contact-item p {
+    color: #666;
+    margin: 0;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .temple-title {
+      font-size: 2rem;
+    }
+  
+    .temple-info {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  
+    .separator {
+      display: none;
+    }
+  
+    .content-card {
+      padding: 1.5rem;
+    }
+  }
+  
+  
