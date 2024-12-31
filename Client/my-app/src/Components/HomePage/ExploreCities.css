@@ -1,178 +1,180 @@
 .temple-carousel-section {
-    padding: 40px 0;
-    background: #fff;
-  }
-  
-  .container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 15px;
-  }
-  
-  .temple-carousel {
-    position: relative;
-    padding: 0 40px;
-    gap: 10px;
-  }
-  
-  .temple-card {
-    padding: 5px;
-  }
-  
-  .temple-card-image {
-    position: relative;
-    height: 450px;
-    width: 300px;
-    border-radius: 16px;
-    overflow: hidden;
-  }
-  
-  .temple-card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .temple-card-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    
+  padding: 40px 0;
+  background: #fff;
+}
 
-  }
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.temple-carousel {
+  position: relative;
+  padding: 0 40px;
+  gap: 10px;
+}
+
+.temple-card {
+  padding: 5px;
+}
+
+.temple-card-image {
+  position: relative;
+  height: 450px;
+  width: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.temple-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.temple-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   
-  .temple-card-content {
-    color: white;
+
+}
+
+.temple-card-content {
+  color: white;
+}
+
+.temple-card-content h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+  color: white;
+
+}
+
+.temple-card-content p {
+  font-size: 16px;
+  margin: 0 0 20px 0;
+  opacity: 0.9;
+  padding-bottom: 230px;
+
+}
+
+.explore-more {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.explore-more span {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.explore-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.explore-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Owl Carousel Navigation Styles */
+.owl-nav {
+  margin: 0;
+}
+
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 50% !important;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-button.prev {
+  left: -20px;
+}
+
+.nav-button.next {
+  right: -20px;
+}
+
+.nav-button svg {
+  width: 20px;
+  height: 20px;
+  color: #333;
+}
+
+.nav-button:hover {
+  background: #fff !important;
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .temple-card-image {
+      height: 450px;
+      width: 300px;
   }
   
   .temple-card-content h2 {
-    font-size: 24px;
-    font-weight: 600;
-    margin: 0 0 8px 0;
-    line-height: 1.2;
-    color: white;
+    font-size: 20px;
+  }
+}
 
+@media (max-width: 768px) {
+  .temple-carousel {
+    padding: 0 20px;
   }
   
-  .temple-card-content p {
-    font-size: 16px;
-    margin: 0 0 20px 0;
-    opacity: 0.9;
-    padding-bottom: 230px;
-
-  }
-  
-  .explore-more {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: auto;
-  }
-  
-  .explore-more span {
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-  }
-  
-  .explore-button {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(4px);
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .explore-button:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-  
-  /* Owl Carousel Navigation Styles */
-  .owl-nav {
-    margin: 0;
-  }
+  .temple-card-image {
+    height: 450px; 
+     }
   
   .nav-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 40px;
-    height: 40px;
-    background: rgba(255, 255, 255, 0.9) !important;
-    border-radius: 50% !important;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 36px;
+    height: 36px;
   }
   
   .nav-button.prev {
-    left: -20px;
+    left: -10px;
   }
   
   .nav-button.next {
-    right: -20px;
+    right: -10px;
   }
-  
-  .nav-button svg {
-    width: 20px;
-    height: 20px;
-    color: #333;
-  }
-  
-  .nav-button:hover {
-    background: #fff !important;
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 1200px) {
-    .temple-card-image {
-        height: 450px;
-        width: 300px;
-    }
-    
-    .temple-card-content h2 {
-      font-size: 20px;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .temple-carousel {
-      padding: 0 20px;
-    }
-    
-    .temple-card-image {
-      height: 450px; 
-       }
-    
-    .nav-button {
-      width: 36px;
-      height: 36px;
-    }
-    
-    .nav-button.prev {
-      left: -10px;
-    }
-    
-    .nav-button.next {
-      right: -10px;
-    }
-  }
+}
+
+
   
   

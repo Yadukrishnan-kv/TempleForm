@@ -14,7 +14,7 @@ function MainPage() {
       <Navbar />
       <HeroHeader />
       <Process />
-      <ExploreCities />
+      <ExploreCities/>
       <PlacesList />
       <Testimonial />
       <BlogSection />

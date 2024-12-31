@@ -92,17 +92,17 @@ const GalleryPage = () => {
     }
   };
 
-  const handleCaptionUpdate = async (photoId, newCaption) => {
-    try {
-      await axios.put(`${ip}/api/Gallery/${photoId}/caption`, {
-        caption: newCaption
-      });
-      fetchImages();
-    } catch (error) {
-      setError('Failed to update caption');
-      console.error('Error updating caption:', error);
-    }
-  };
+  // const handleCaptionUpdate = async (photoId, newCaption) => {
+  //   try {
+  //     await axios.put(`${ip}/api/Gallery/${photoId}/caption`, {
+  //       caption: newCaption
+  //     });
+  //     fetchImages();
+  //   } catch (error) {
+  //     setError('Failed to update caption');
+  //     console.error('Error updating caption:', error);
+  //   }
+  // };
 
   return (
     <div className="app-container">
@@ -111,12 +111,12 @@ const GalleryPage = () => {
         <Sidebar />
         <div className="gallery-page">
           <div className="gallery-header">
-            <h1>{temple?.name || 'Temple'} Gallery</h1>
+            <h1>{temple?.name} Gallery</h1>
             <p className="temple-details">{temple?.address}</p>
           </div>
 
           <div className="upload-section">
-            <div className="upload-instructions">
+            <div className="upload-instructions1">
               <h3>Add Images</h3>
               <p>Upload up to 4 images at once. Supported formats: JPG, PNG</p>
             </div>
@@ -151,13 +151,7 @@ const GalleryPage = () => {
                   />
                 </div>
                 <div className="gallery-item-controls">
-                  <input
-                    type="text"
-                    placeholder="Add caption..."
-                    defaultValue={image.caption}
-                    onBlur={(e) => handleCaptionUpdate(image._id, e.target.value)}
-                    className="caption-input"
-                  />
+                 
                   <button 
                     onClick={() => handleDelete(image._id)}
                     className="delete-button"

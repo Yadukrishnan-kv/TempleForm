@@ -43,12 +43,12 @@ const TemplePage = () => {
     try {
       setLoading(true);
       const response = await axios.get(`${ip}/api/temples/sort`);
-      // Filter verified temples on the client side
-      const verifiedTemples = response.data.filter(temple => temple.isVerified === true);
+      // Filter verified and enabled temples on the client side
+      const verifiedAndEnabledTemples = response.data.filter(temple => temple.isVerified === true && temple.enabled === true);
 
-      // Fetch gallery images for verified temples
+      // Fetch gallery images for verified and enabled temples
       const templesWithImages = await Promise.all(
-        verifiedTemples.map(async (temple) => {
+        verifiedAndEnabledTemples.map(async (temple) => {
           try {
             const galleryResponse = await axios.get(`${ip}/api/Gallery/temple/${temple._id}`);
             const images = galleryResponse.data;
@@ -205,6 +205,7 @@ const TemplePage = () => {
 };
 
 export default TemplePage;
+
 
 
 

@@ -1,6 +1,7 @@
 .gallery-page {
     padding: 24px;
     flex: 1;
+    
   }
   
   .gallery-header {
@@ -25,7 +26,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
   
-  .upload-instructions {
+  .upload-instructions1 {
     margin-bottom: 16px;
   }
   

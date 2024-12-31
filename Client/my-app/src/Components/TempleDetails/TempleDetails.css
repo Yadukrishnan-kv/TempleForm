@@ -1,187 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap');
+
+:root {
+  --bs-blue: #0c72c6;
+  --bs-primary: #FFBD59;
+  --bs-white: #ffffff;
+  --bs-primary-rgb: 255, 189, 89;
+  --footer-bg-color: #191e25;
+  --bs-light: #f8f4f3;
+  --bs-light-rgb: 248, 244, 243;
+  --bs-dark-rgb: 25, 30, 37;
+  --bs-warning: #eb6f0a;
+  --bs-warning-rgb: 255, 177, 79;
+  --bs-font-caveat: 'Caveat', cursive;
+  --bs-font-sans-serif: "Wix Madefor Display", sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --bs-gradient: linear-gradient(#f8f4f3, #fff);
+}
+
+
 .temple-details {
-    min-height: 100vh;
-    background-color: white;
+  min-height: 100vh;
+}
+
+.page-header-title {
+  font-size: 2rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 1rem;
+}
+
+.list-separator {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.list-separator .list-inline-item:not(:last-child)::after {
+  content: "/";
+  margin: 0 0.5rem;
+  opacity: 0.5;
+}
+
+.form-check-bookmark .form-check-input {
+  display: none;
+}
+
+.form-check-bookmark .form-check-label {
+  cursor: pointer;
+}
+
+.form-check-bookmark .form-check-bookmark-default {
+  display: inline-block;
+}
+
+.form-check-bookmark .form-check-bookmark-active {
+  display: none;
+}
+
+.form-check-bookmark .form-check-input:checked ~ .form-check-label .form-check-bookmark-default {
+  display: none;
+}
+
+.form-check-bookmark .form-check-input:checked ~ .form-check-label .form-check-bookmark-active {
+  display: inline-block;
+}
+
+.zoom-gallery img {
+  transition: transform 0.3s ease;
+}
+
+.zoom-gallery img:hover {
+  transform: scale(1.05);
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.cat-icon {
+  width: 52px;
+  height: 52px;
+  top: -25px;
+  right: 24px;
+  border: 2px solid #fff;
+}
+
+.owl-nav-bottom.owl-theme .owl-nav [class*=owl-] {
+  background-color: var(--bs-white);
+  color: var(--bs-dark);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.owl-nav-bottom.owl-theme .owl-nav [class*=owl-]:hover {
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
+}
+
+@media (min-width: 992px) {
+  .sidebar {
+    padding-left: 2rem;
   }
-  
-  /* Header Section */
-  .header-section {
-    background-color: white;
-  }
-  
-  .temple-title {
-    font-size: 2rem;
-    font-weight: 500;
-    color: #1a1a1a;
-    margin-bottom: 1rem;
-  }
-  
-  .temple-info {
-    gap: 1rem;
-    color: #666;
-    font-size: 0.9rem;
-    flex-direction: column;
-  }
-  
-  .temple-info .icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 0.5rem;
-  }
-  
-  .separator {
-    color: #ccc;
-  }
-  
-  .save-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .bookmark-count {
-    font-size: 0.875rem;
-    color: #666;
-  }
-  
-  /* Gallery Section */
-  .gallery-section {
-    background-color: #fff;
-    overflow: hidden;
-  }
-  
-  .main-image {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
-  .side-image {
-    width: 100%;
-    height: 196px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
-  /* Content Section */
-  .content-section {
+}
+
+@media (max-width: 991px) {
+  .sidebar {
     margin-top: 2rem;
   }
-  
-  .content-card {
-    
-    padding: 2rem;
-  }
-  
-  .section-title {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    color: #1a1a1a;
-  }
-  
- 
-  
-  /* About Section */
-  .temple-description p {
-    color: #666;
-    line-height: 1.7;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Pooja Section */
-  .pooja-card {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    padding: 1.25rem;
-    height: 100%;
-  }
-  
-  .pooja-card h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 0.5rem;
-  }
-  
-  .pooja-card p {
-    color: #666;
-    margin: 0;
-  }
-  
-  /* Facilities Section */
-  .facility-card {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    padding: 1rem;
-    height: 100%;
-  }
-  
-  .facility-dot {
-    width: 8px;
-    height: 8px;
-    background-color: #0d6efd;
-    border-radius: 50%;
-  }
-  
-  /* Contact Section */
-  .contact-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  .contact-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .contact-item .icon {
-    width: 24px;
-    height: 24px;
-    color: #0d6efd;
-  }
-  
-  .contact-item h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 0.25rem;
-  }
-  
-  .contact-item p {
-    color: #666;
-    margin: 0;
-  }
-  
-  /* Responsive Adjustments */
-  @media (max-width: 768px) {
-    .temple-title {
-      font-size: 2rem;
-    }
-  
-    .temple-info {
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-  
-    .separator {
-      display: none;
-    }
-  
-    .content-card {
-      padding: 1.5rem;
-    }
-  }
-  
-  
+}
+
+.book-form {
+  background: var(--bs-white);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.book-form h4 .font-caveat {
+  font-family: var(--bs-font-caveat);
+  color: var(--bs-primary);
+}
+
+.book-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.book-form .form-control {
+  margin-top: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+}
+
+.book-form label {
+  color: #333;
+  font-size: 14px;
+}
+
+.book-form label.required:after {
+  content: "*";
+  color: #dc3545;
+  margin-left: 4px;
+}
+
+.book-form textarea.form-control {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.book-form .required:after {
+  content: "*";
+  color: #dc3545;
+  margin-left: 4px;
+}
+
+.book-form .btn-primary {
+  background: var(--bs-primary);
+  border: none;
+  padding: 12px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.book-form .btn-primary:hover {
+  background: #e5a840;
+}
+
+.book-form .powered-by {
+  color: #6c757d;
+  font-size: 12px;
+  margin-top: 8px;
+  text-align: center;
+}
+
+
+

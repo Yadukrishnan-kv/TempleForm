@@ -84,7 +84,7 @@ const sortTemples = async (req, res) => {
 
 const verifyTemple = async (req, res) => {
   const { templeId } = req.params;
-  const { isVerified, verifiedBy } = req.body;
+  const { isVerified, verifiedBy, enabled, show } = req.body;
 
   try {
     const temple = await TempleCollection.findByIdAndUpdate(
@@ -92,7 +92,9 @@ const verifyTemple = async (req, res) => {
       {
         isVerified,
         verificationDate: isVerified ? new Date() : null,
-        verifiedBy: isVerified ? verifiedBy : null
+        verifiedBy: isVerified ? verifiedBy : null,
+        enabled,
+        show
       },
       { new: true }
     );
@@ -106,6 +108,7 @@ const verifyTemple = async (req, res) => {
     res.status(400).send(error);
   }
 };
+
 
 
 module.exports = {

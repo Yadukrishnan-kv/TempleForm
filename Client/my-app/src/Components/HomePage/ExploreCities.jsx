@@ -1,15 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import axios from 'axios';
 import $ from 'jquery';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import './ExploreCities.css';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import guruvayur from '../../assets/images/guruvayur_thumb.jpg';
-import chottanikkara_thumb from '../../assets/images/chottanikkara_thumb.jpg';
-import padmanabhaswamy_thumb from '../../assets/images/padmanabhaswamy_thumb.jpg';
-import kadampuzha_thumb from '../../assets/images/kadampuzha_thumb.jpg';
-import vadakkumnathan_thumb from '../../assets/images/vadakkumnathan_thumb.jpg';
-import thirumandhamkunnu_thumb from '../../assets/images/thirumandhamkunnu_thumb.jpg';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+
 // Ensure jQuery is available globally
 window.jQuery = window.$ = $;
 
@@ -18,51 +14,76 @@ require('owl.carousel');
 
 const ExploreCities = () => {
   const carouselRef = useRef(null);
+  const [temples, setTemples] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const temples = [
-    { name: 'Guruvayur', location: 'Thrissur', image: guruvayur },
-    { name: 'Chottanikkara Bhagavati Temple', location: 'Kochi', image: chottanikkara_thumb },
-    { name: 'Sree Padmanabhaswamy Temple', location: 'Trivandrum', image: padmanabhaswamy_thumb },
-    { name: 'Shri Kadampuzha Bhagavathy Temple', location: 'Malappuram', image: kadampuzha_thumb },
-    { name: 'Sree Vadakkumnathan Temple', location: 'Thrissur', image: vadakkumnathan_thumb },
-    { name: 'Sree Thirumandhamkunnu Bhagavathi Temple', location: 'Malappuram', image: thirumandhamkunnu_thumb },
-
-  ];
+  const ip = process.env.REACT_APP_BACKEND_IP;
 
   useEffect(() => {
-    $(document).ready(() => {
-      const $carousel = $(carouselRef.current);
-      if ($carousel.length) {
-        $carousel.owlCarousel({
-          loop: true,
-          margin: 20,
-          nav: true,
-          dots: false,
-          responsive: {
-            0: { 
-              items: 1,
-              margin: 10
+    fetchTemples();
+  }, []);
+
+  const fetchTemples = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${ip}/api/temples/sort`);
+      const filteredTemples = response.data.filter(temple =>
+        temple.isVerified && temple.enabled && temple.show
+      );
+
+      const templesWithImages = await Promise.all(
+        filteredTemples.map(async temple => {
+          try {
+            const galleryResponse = await axios.get(`${ip}/api/Gallery/temple/${temple._id}`);
+            const images = galleryResponse.data;
+            return {
+              ...temple,
+              mainImage: images.length > 0 ? `${ip}/${images[0].path}` : null,
+            };
+          } catch (error) {
+            console.error(`Error fetching images for temple ${temple._id}:`, error);
+            return {
+              ...temple,
+              mainImage: null,
+            };
+          }
+        })
+      );
+
+      setTemples(templesWithImages);
+    } catch (error) {
+      setError('Failed to fetch temples');
+      console.error('Error fetching temples:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (temples.length > 0) {
+      $(document).ready(() => {
+        const $carousel = $(carouselRef.current);
+        if ($carousel.length) {
+          $carousel.owlCarousel({
+            loop: true,
+            margin: 20,
+            nav: true,
+            dots: false,
+            responsive: {
+              0: { items: 1, margin: 10 },
+              576: { items: 2, margin: 15 },
+              992: { items: 3, margin: 20 },
+              1200: { items: 4, margin: 20 },
             },
-            576: { 
-              items: 2,
-              margin: 15
-            },
-            992: { 
-              items: 3,
-              margin: 20
-            },
-            1200: { 
-              items: 4,
-              margin: 20
-            }
-          },
-          navText: [
-            '<button class="nav-button prev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>',
-            '<button class="nav-button next"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>'
-          ]
-        });
-      }
-    });
+            navText: [
+              '<button class="nav-button prev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>',
+              '<button class="nav-button next"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>',
+            ],
+          });
+        }
+      });
+    }
 
     return () => {
       const $carousel = $(carouselRef.current);
@@ -70,26 +91,36 @@ const ExploreCities = () => {
         $carousel.owlCarousel('destroy');
       }
     };
-  }, []);
+  }, [temples]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="temple-carousel-section">
       <div className="container">
         <div ref={carouselRef} className="owl-carousel temple-carousel">
-          {temples.map((temple, index) => (
-            <div key={index} className="temple-card">
+          {temples.map(temple => (
+            <div key={temple._id} className="temple-card">
               <div className="temple-card-image">
-                <img src={temple.image} alt={temple.name} />
+                <img src={temple.mainImage} alt={temple.name} />
                 <div className="temple-card-overlay">
                   <div className="temple-card-content">
                     <h2>{temple.name}</h2>
-                    <p>{temple.location}</p>
+                    <p>{temple.district}</p>
                     <div className="explore-more">
-                    <span>EXPLORE MORE</span> 
+                      <span>EXPLORE MORE</span>
                       <button className="explore-button">
-                      <Link to={'/TempleDetails'} style={{textDecoration:"none",color:"white"}}> <ArrowRight size={16} /></Link>
+                        <Link to={`/TempleDetails/${temple._id}`} style={{ textDecoration: 'none', color: 'white' }}>
+                          <ArrowRight size={16} />
+                        </Link>
                       </button>
-                    </div> 
+                    </div>
                   </div>
                 </div>
               </div>
@@ -102,4 +133,3 @@ const ExploreCities = () => {
 };
 
 export default ExploreCities;
-

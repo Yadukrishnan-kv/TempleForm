@@ -28,7 +28,8 @@ const talukRoutes = require('./Routes/TalukRoutes');
 app.use('/api/taluks', talukRoutes);
 const GalleryRoutes = require('./Routes/GalleryRoutes');
 app.use('/api/Gallery', GalleryRoutes);
-
+const aboutTempleRoutes = require('./Routes/AboutTempleRoutes');
+app.use('/api/aboutTemple', aboutTempleRoutes);
 const port = 4000;
 console.log("port:", port);
 app.listen(port, (err) => {

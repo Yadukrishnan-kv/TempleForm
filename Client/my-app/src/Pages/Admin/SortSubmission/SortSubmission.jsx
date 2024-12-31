@@ -19,6 +19,7 @@ const SortSubmission = () => {
   const [temples, setTemples] = useState([]);
   const [expandedTemple, setExpandedTemple] = useState(null);
   const [verifying, setVerifying] = useState(false);
+  const [enabling, setEnabling] = useState(false); // Added enabling state
   
   const initialFields = [
     { key: 'name', label: 'ക്ഷേത്രത്തിന്റെ പേര്' },
@@ -203,14 +204,16 @@ const SortSubmission = () => {
     setExpandedTemple(expandedTemple === templeId ? null : templeId);
   };
 
-  const handleVerification = async (templeId, isVerified) => {
+  const handleVerification = async (templeId, isVerified, enabled, show) => { // Updated handleVerification function
     try {
       setVerifying(true);
       const username = localStorage.getItem('username') || 'Admin';
       
       await axios.put(`${ip}/api/temples/${templeId}/verify`, {
         isVerified,
-        verifiedBy: username
+        verifiedBy: username,
+        enabled,
+        show
       });
   
       // Refresh temples data
@@ -323,6 +326,7 @@ const SortSubmission = () => {
                   ))}
                   <th>Actions</th>
                   <th>Edit</th>
+                  <th>About</th>
                   <th>Gallery</th>
                 </tr>
               </thead>
@@ -353,6 +357,11 @@ const SortSubmission = () => {
                           </Link>
                         </td>
                         <td>
+                          <Link to={`/AboutTemple/${temple._id}`}>
+                            <button className='view-button'>About</button>
+                          </Link>
+                        </td>
+                        <td>
                           <Link to={`/gallery/${temple._id}`}>
                             <button className='gallery-button'>Gallery</button>
                           </Link>
@@ -368,7 +377,7 @@ const SortSubmission = () => {
                                     type="radio"
                                     name={`verify-${temple._id}`}
                                     checked={temple.isVerified === true}
-                                    onChange={() => handleVerification(temple._id, true)}
+                                    onChange={() => handleVerification(temple._id, true, temple.enabled, temple.show)} // Updated onChange handler
                                     disabled={verifying}
                                   />
                                   Verify
@@ -378,10 +387,54 @@ const SortSubmission = () => {
                                     type="radio"
                                     name={`verify-${temple._id}`}
                                     checked={temple.isVerified === false}
-                                    onChange={() => handleVerification(temple._id, false)}
+                                    onChange={() => handleVerification(temple._id, false, temple.enabled, temple.show)} // Updated onChange handler
                                     disabled={verifying}
                                   />
                                   Reject
+                                </label>
+                              </div>
+                              <div className="verification-radio-group"> {/* Added enable/disable radio buttons */}
+                                <label>
+                                  <input
+                                    type="radio"
+                                    name={`enable-${temple._id}`}
+                                    checked={temple.enabled === true}
+                                    onChange={() => handleVerification(temple._id, temple.isVerified, true, temple.show)}
+                                    disabled={verifying}
+                                  />
+                                  Enable
+                                </label>
+                                <label>
+                                  <input
+                                    type="radio"
+                                    name={`enable-${temple._id}`}
+                                    checked={temple.enabled === false}
+                                    onChange={() => handleVerification(temple._id, temple.isVerified, false, temple.show)}
+                                    disabled={verifying}
+                                  />
+                                  Disable
+                                </label>
+                              </div>
+                              <div className="verification-radio-group"> 
+                                <label>
+                                  <input
+                                    type="radio"
+                                    name={`show-${temple._id}`}
+                                    checked={temple.show === true}
+                                    onChange={() => handleVerification(temple._id, temple.isVerified, temple.enabled, true)}
+                                    disabled={verifying}
+                                  />
+                                  Show
+                                </label>
+                                <label>
+                                  <input
+                                    type="radio"
+                                    name={`show-${temple._id}`}
+                                    checked={temple.show === false}
+                                    onChange={() => handleVerification(temple._id, temple.isVerified, temple.enabled, false)}
+                                    disabled={verifying}
+                                  />
+                                  Not Show
                                 </label>
                               </div>
                               {temple.verifiedBy && (
@@ -420,4 +473,6 @@ const SortSubmission = () => {
 };
 
 export default SortSubmission;
+
+
 

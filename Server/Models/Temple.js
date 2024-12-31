@@ -91,6 +91,13 @@ const TempleSchema = new Schema({
   },
   verifiedBy: {
     type: String
+  },
+  enabled: {
+    type: Boolean,
+    default: true,
+  }, show: {
+    type: Boolean,
+    default: false,
   }
 }, { timestamps: true });
 
