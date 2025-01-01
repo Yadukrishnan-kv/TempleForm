@@ -1,4 +1,7 @@
 .env
 node_modules
 
-/Server/uploads/
+Server/uploads/temples/photos-*
+Server/uploads/temples/
+Server/uploads/
+
