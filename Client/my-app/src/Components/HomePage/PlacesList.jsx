@@ -1,12 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle, Heart, Phone, Compass } from 'lucide-react';
 import guruvayur from '../../assets/images/guruvayur_thumb.jpg';
 import chottanikkara_thumb from '../../assets/images/chottanikkara_thumb.jpg';
 import padmanabhaswamy_thumb from '../../assets/images/padmanabhaswamy_thumb.jpg';
 import './PlacesList.css';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 function PlacesList() {
+   useEffect(() => {
+      AOS.init({
+        duration: 300,
+        easing: 'ease-in-out',
+        once: true,
+      });
+      
+    }, []);
   const places = [
     {
       name: 'Guruvayur Temple',
@@ -31,7 +41,7 @@ function PlacesList() {
   return (
     <div className="places-container">
       <div className="places-inner-container">
-        <div className="places-sidebar">
+        <div className="places-sidebar" data-aos="fade-down">
           <div className="section-header">
             <div className="subtitle">Places</div>
             <h2 className="title">Discover Your Favourite <br/> Place</h2>

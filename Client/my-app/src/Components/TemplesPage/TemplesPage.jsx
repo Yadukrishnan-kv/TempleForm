@@ -54,7 +54,7 @@ const TemplePage = () => {
             const images = galleryResponse.data;
             return {
               ...temple,
-              mainImage: images.length > 0 ? `${ip}/${images[0].path}` : null
+              mainImage: images.length > 0 ? `${ip}/${images[2].path}` : null
             };
           } catch (error) {
             console.error(`Error fetching images for temple ${temple._id}:`, error);
@@ -164,14 +164,14 @@ const TemplePage = () => {
                   {filteredTemples.map((temple) => (
                     <div key={temple._id} className="col-sm-4 d-flex">
                       <div className="card card-hover flex-fill overflow-hidden w-100 card-hover-bg no-border bg-light">
-                        <Link to={`/temple/${temple._id}`} className="stretched-link"></Link>
+                        <Link to={`/TempleDetails/${temple._id}`} className="stretched-link">
                         <div className="card-img-wrap card-image-hover overflow-hidden">
                         <img
-  src={temple.mainImage }
-  alt={temple.name}
-  className="temples_thumb"
+                         src={temple.mainImage }
+                         alt={temple.name}
+                         className="temples_thumb"
  
-/>
+                         />
                           <div className="d-flex end-0 gap-2 me-3 mt-3 position-absolute top-0 z-1">
                             <button 
                               className="align-items-center bg-blur btn-icon d-flex justify-content-center rounded-circle shadow-sm text-white"
@@ -184,6 +184,7 @@ const TemplePage = () => {
                             </button>
                           </div>
                         </div>
+                        </Link>
                         <div className="d-flex flex-column position-relative p-3 h-24">
                           <h5 className="text-sm font-semibold mb-0">{temple.name}</h5>
                           <span className="text-xs">{temple.district}</span>

@@ -4,6 +4,11 @@ const AboutTempleSchema = new Schema({
         type: String,
         required: true,
     },
+    templeId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Temple',
+        required: true,
+    },
     createdAt: {
         type: Date,
         default: Date.now,

@@ -24,11 +24,13 @@ const TempleDetails = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [temple, setTemple] = useState(null);
+  const [descriptions, setDescriptions] = useState([]);
   const ip = process.env.REACT_APP_BACKEND_IP;
 
   useEffect(() => {
     fetchTempleDetails();
     fetchImages();
+    fetchDescriptions();
   }, [templeId]);
 
   const fetchTempleDetails = async () => {
@@ -39,7 +41,17 @@ const TempleDetails = () => {
       console.error('Error fetching temple details:', error);
     }
   };
+ 
+ 
 
+const fetchDescriptions = async () => {
+    try {
+        const res = await axios.get(`${ip}/api/aboutTemple/getAllaboutTemple/${templeId}`);
+        setDescriptions(res.data);
+    } catch (error) {
+        console.error('Error fetching descriptions', error);
+    }
+};
   const fetchImages = async () => {
     try {
       const response = await axios.get(`${ip}/api/Gallery/temple/${templeId}`);
@@ -110,7 +122,10 @@ const TempleDetails = () => {
                 </li>
               </ul>
               <ul className="fs-14 fw-medium list-inline list-separator mb-0 text-muted">
-                <li className="list-inline-item">3:00 AM - 12:30 PM, 4:30 PM - 9:15 PM, All days open</li>
+                <li className="list-inline-item">
+                  {temple?.darshanaTime?.morning?.from} AM - {temple?.darshanaTime?.morning?.to} PM, 
+                  {temple?.darshanaTime?.evening?.from} PM - {temple?.darshanaTime?.evening?.to} PM, All days open
+                </li>
               </ul>
             </div>
             <div className="col-lg-auto">
@@ -170,10 +185,10 @@ const TempleDetails = () => {
               </a>
             )}
             {images[0] && (
-              <a className="d-block position-relative" href={`${ip}/${images[0].path}`}>
+              <a className="d-block position-relative" href={`${ip}/${images[0].path}`} >
                 <img 
-                  className="img-fluid w-100" 
-                  src={`${ip}/${images[0].path}`} 
+                  className="img-fluid w-100" style={{ height: '265px' }}
+                  src={`${ip}/${images[0].path}` } 
                   alt={images[0].caption || "Gallery 3"} 
                 />
                 <div className="position-absolute bottom-0 end-0 mb-3 me-3">
@@ -194,18 +209,13 @@ const TempleDetails = () => {
             <div className="col-lg-8 content">
               {/* About Section */}
               <div className="mb-4">
-                <h4 className="fw-semibold fs-3 mb-4">About Guruvayur</h4>
-                <p>
-                  Guruvayur Temple is a Hindu temple dedicated to Guruvayurappan (four-armed form of the
-                  Vishnu), located in the town of Guruvayur in Kerala, India. Administrated by the Guruvayur
-                  Devaswom Board, it is one of the most important places of worship for Hindus in Kerala and
-                  Tamil Nadu and is often referred to as Bhuloka Vaikunta (Holy Abode of Vishnu on Earth).
+
+                <h4 className="fw-semibold fs-3 mb-4">About {temple?.name}</h4>
+                {descriptions.map((descs) => (
+                <p key={descs._id}>
+                  {descs.description}
                 </p>
-                <p>
-                  The temple is classified among the 108 Abhimana Kshethram of Vaishnavate tradition. The
-                  central icon is a four-armed standing Vishnu carrying the conch Panchajanya, the discus
-                  Sudarshana, the mace Kaumodaki, and a lotus with a tulasi garland.
-                </p>
+                ))}
               </div>
 
               {/* Nearest Section */}

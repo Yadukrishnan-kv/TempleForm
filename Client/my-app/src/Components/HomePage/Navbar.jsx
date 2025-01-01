@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Heart, UserPlus } from 'lucide-react';
 import logo1 from '../../assets/images/logo.png';
-
+import './HomePage.css'
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState('');

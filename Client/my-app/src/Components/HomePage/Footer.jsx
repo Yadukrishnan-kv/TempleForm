@@ -2,6 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './HomePage.css';
 import  logo from '../../assets/images/logo.png' 
+import { IoLogoGooglePlaystore } from "react-icons/io5";
+import { FaApple } from "react-icons/fa";
+
 
 import phone_mpckup from '../../assets/images/phone-mpckup.png'
 import { FaDribbble, FaEnvelope, FaFacebook, FaInstagram, FaPhone, FaTwitter, FaWhatsapp } from "react-icons/fa";
@@ -13,12 +16,12 @@ const Footer = () => {
       <div className="container pt-4">
         {/* App Download Section */}
         <div className="py-5">
-          <div className=" rounded-4" style={{backgroundColor:"#FFBD59"}}>
+          <div className=" rounded-4 " style={{backgroundColor:"#FFBD59"}} >
             <div className="col-xxl-10 col-md-11 col-10 d-flex flex-md-row flex-column-reverse align-items-md-end align-items-center mx-auto px-0 gap-4">
               <img 
                 className="app-image flex-shrink-0" 
                 src={phone_mpckup}
-                width="270" 
+                width="270"
                 alt="Mobile app"
                 style={{ marginTop: '-5rem' }}
               />
@@ -29,17 +32,19 @@ const Footer = () => {
                 </div>
                 <div className="d-flex flex-shrink-0 flex-wrap gap-3 justify-content-center">
                   <a className="align-items-center app-btn d-flex px-3 py-2 rounded-3 text-decoration-none text-white border" href="#">
-                    <i className="fa-apple fab fs-28 me-2"></i>
+                    <i className="fa-apple  me-2"><FaApple size={30}/>
+                    </i>
                     <div>
-                      <span className="fs-13 d-block">Available on the</span>
-                      <span className="fs-17 text-capitalize">App Store</span>
+                      <span className="fs-11 d-block">Available on the App Store</span>
+                      {/* <span className="fs-17 text-capitalize">App Store</span> */}
                     </div>
                   </a>
                   <a className="align-items-center app-btn d-flex fs-11 px-3 py-2 rounded-3 text-decoration-none text-white border" href="#">
-                    <i className="fab fa-google-play fs-25 me-2"></i>
+                    <i className="fab fa-google-play fs-25 me-2"><IoLogoGooglePlaystore size={30} />
+                    </i>
                     <div>
-                      <span className="fs-13 d-block">Get it on</span>
-                      <span className="fs-17 text-capitalize">Google Play</span>
+                      <span className="fs-11 d-block">Get it on Google Play</span>
+                      {/* <span className="fs-17 text-capitalize">Google Play</span> */}
                     </div>
                   </a>
                 </div>

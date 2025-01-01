@@ -40,16 +40,7 @@ function Dom() {
         <Route path="/contact" element={<><ContactPage/></>} />
         <Route path="/TempleDetails/:templeId" element={<><TempleDetails/></>} />
         <Route path="/AboutTemple/:templeId" element={<><AboutTemple/></>} />
-
-
-
-
-
-
-
-
-
-      </Routes>
+</Routes>
     </BrowserRouter>
   )
 }
