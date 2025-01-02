@@ -4,6 +4,8 @@ import './HomePage.css';
 import  logo from '../../assets/images/logo.png' 
 import { IoLogoGooglePlaystore } from "react-icons/io5";
 import { FaApple } from "react-icons/fa";
+import { IoIosArrowForward } from "react-icons/io";
+
 
 
 import phone_mpckup from '../../assets/images/phone-mpckup.png'
@@ -112,7 +114,8 @@ const Footer = () => {
                     backgroundColor: '#FFBD59'
                   }}
                 >
-                  <i className="fa-solid fa-angle-right"></i>
+                  <i className="fa-solid fa-angle-right"><IoIosArrowForward  style={{fontSize:"16px",color:'white'}}/>
+                  </i>
                 </button>
               </div>
               <div className="border-top my-4"></div>
@@ -156,8 +159,8 @@ const Footer = () => {
         <div className="align-items-center g-3 py-4 row">
           <div className="col-lg-auto">
             <ul className="list-unstyled list-separator mb-2 footer-nav">
-              <li className="list-inline-item"><Link to="#" className="text-[#8d9193]" style={{textDecoration:"none",color:"white"}}>Privacy  /  </Link></li>
-              <li className="list-inline-item"><Link to="#" className="text-[#8d9193]" style={{textDecoration:"none",color:"white"}}>Sitemap  /  </Link></li>
+              <li className="list-inline-item"><Link to="#" className="text-[#8d9193]" style={{textDecoration:"none",color:"white"}}>Privacy    </Link></li>
+              <li className="list-inline-item"><Link to="#" className="text-[#8d9193]" style={{textDecoration:"none",color:"white"}}>Sitemap    </Link></li>
               <li className="list-inline-item"><Link to="#" className="text-[#8d9193]" style={{textDecoration:"none",color:"white"}}>Cookies</Link></li>
             </ul>
           </div>

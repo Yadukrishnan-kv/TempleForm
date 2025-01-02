@@ -4,6 +4,10 @@ import { RiHome3Fill } from "react-icons/ri";
 import { MdOutlineAppRegistration } from "react-icons/md";
 import { AiOutlineRight, AiOutlineDown } from "react-icons/ai";
 import { SlCursor } from "react-icons/sl";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCalendarCheck } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+
 import "./Sidebar.css";
 
 function Sidebar() {
@@ -84,8 +88,51 @@ function Sidebar() {
               </ul>
             )}
           </li>
-          
+          <li className={`menu-item has-submenu ${activeMenu === "Enquiry" ? "active" : ""}`}>
+            
+            <button className="menu-toggle1" onClick={() => toggleSubmenu("Enquiry")}>
+              
+            <FontAwesomeIcon icon={faEnvelope} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+              <span className="menu-name">Enquiry</span>
+              {openSubmenus.Enquiry ? (
+                <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
+              ) : (
+                <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+              )}
+            </button>
+            {openSubmenus.Enquiry && (
+              <ul className="submenu">
+                 <li>
+                  <Link to="/EnquiryPage">List Enquiry</Link>
+                </li>
+               
+              </ul>
+            )}
+          </li>
+          <li className={`menu-item has-submenu ${activeMenu === "BookingsPage" ? "active" : ""}`}>
+            
+            <button className="menu-toggle1" onClick={() => toggleSubmenu("BookingsPage")}>
+              
+            <FontAwesomeIcon icon={faCalendarCheck} 
+            style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+              <span className="menu-name">Bookings</span>
+              {openSubmenus.BookingsPage ? (
+                <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
+              ) : (
+                <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+              )}
+            </button>
+            {openSubmenus.BookingsPage && (
+              <ul className="submenu">
+                 <li>
+                  <Link to="/BookingsPage">List Bookings</Link>
+                </li>
+               
+              </ul>
+            )}
+          </li>
         </ul>
+        
       </nav>
     </div>
   );

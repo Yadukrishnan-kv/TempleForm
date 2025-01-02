@@ -1,3 +1,27 @@
 .section-header1{
     padding-left: 100px;
 }
+@media (min-width: 468px) {
+    .contact {
+      padding-left: 120px;
+      
+    }
+    .Contact-btn{
+        width: 160px;
+    }
+  }
+  
+  @media (min-width: 268px) {
+    .contact {
+      padding-left: 50px;
+      
+    }
+    .section-header1{
+        padding-left: 40px;
+    }
+    .Contact-btn{
+        width: 160px;
+    }
+  }
+  
+ 

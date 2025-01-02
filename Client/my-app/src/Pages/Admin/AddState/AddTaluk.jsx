@@ -215,7 +215,7 @@ function AddTaluk() {
                       </button>
                     </td>
                     <td>
-                      <button className="delete-button" onClick={() => handleDelete(taluk._id)}>
+                      <button className="delete-button1" onClick={() => handleDelete(taluk._id)}>
                         Delete
                       </button>
                     </td>

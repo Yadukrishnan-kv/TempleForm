@@ -57,7 +57,7 @@ const About = () => {
         <div className="container overlay-content py-5">
           <div className="row justify-content-center">
             <div className="col-sm-10 col-md-10 col-lg-10">
-              <div className="section-header text-center" data-aos="fade-down">
+              <div className=" text-center" data-aos="fade-down">
                 <div className="d-inline-block fs-14 mb-3 px-4 py-2 rounded-5 sub-title" style={{backgroundColor:"#FFBD59"}}>
                   7+ YEARS EXPERIENCED IN FIELD
                 </div>
@@ -121,7 +121,7 @@ const About = () => {
         <div className="container py-4">
           <div className="row justify-content-center">
             <div className="col-sm-10 col-md-10 col-lg-8">
-              <div className="section-header text-center mb-5" data-aos="fade-down">
+              <div className=" text-center mb-5" data-aos="fade-down">
                 <div className="d-inline-block font-caveat fs-1 fw-medium section-header__subtitle text-capitalize " style={{color:"#FFBD59"}}>
                   About us
                 </div>
@@ -224,15 +224,14 @@ const About = () => {
             After The HIGH COURT And SUPREME COURT Decisions
             <br />
             The Spark Of Concept Of SREESHUDDHI Has Been
-            <br />
+           
             Ignited.
           </h2>
         </div>
 
         <div className="timeline-container">
   <div className="timeline-item start-circle">
-    <div className="timeline-circle"></div>
-  </div>
+  
   {timelineData.slice(0, 4).map((item, index) => (
     <div 
       key={index} 
@@ -244,6 +243,7 @@ const About = () => {
       <div className="timeline-circle"></div>
     </div>
   ))}
+</div>
 </div>
 
       </div>
@@ -257,7 +257,7 @@ const About = () => {
           <div className="row justify-content-center">
             <div className="col-sm-10 col-md-10 col-lg-8">
               {/* start section header */}
-              <div className="section-header text-center mb-5" data-aos="fade-down">
+              <div className=" text-center mb-5" data-aos="fade-down">
                 {/* start subtitle */}
                 <div className="d-inline-block font-caveat fs-1 fw-medium section-header__subtitle text-capitalize text-primary">Our Customers</div>
                 {/* end /. subtitle */}
@@ -271,38 +271,41 @@ const About = () => {
               {/* end /. section header */}
             </div>
           </div>
-          <div className="row align-items-center justify-content-center g-2 g-sm-3 g-md-4">
-  <div className="col-6 col-sm-4 col-lg-3 col-xxl-2">
-    <div className="border-0 card card-hover d-flex align-items-center justify-content-center header-cat-box px-3 py-3 rounded-4 text-center card-fixed-height">
-      <img src={brand_logo1} alt="" height="60" className="company-logo img-fluid" />
+          
+          <div className="custom-row">
+  <div className="custom-col">
+    <div className="custom-card">
+      <img src={brand_logo1} alt="" className="custom-img" />
     </div>
   </div>
-  <div className="col-6 col-sm-4 col-lg-3 col-xxl-2">
-    <div className="border-0 card card-hover d-flex align-items-center justify-content-center header-cat-box px-3 py-3 rounded-4 text-center card-fixed-height">
-      <img src={brand_logo2} alt="" height="60" className="img-fixed-height" />
+  <div className="custom-col">
+    <div className="custom-card">
+      <img src={brand_logo2} alt="" className="custom-img" />
     </div>
   </div>
-  <div className="col-6 col-sm-4 col-lg-3 col-xxl-2">
-    <div className="border-0 card card-hover d-flex align-items-center justify-content-center header-cat-box px-3 py-3 rounded-4 text-center card-fixed-height">
-      <img src={brand_logo3} alt="" height="60" className="img-fixed-height" />
+  <div className="custom-col">
+    <div className="custom-card">
+      <img src={brand_logo3} alt="" className="custom-img" />
     </div>
   </div>
-  <div className="col-6 col-sm-4 col-lg-3 col-xxl-2">
-    <div className="border-0 card card-hover d-flex align-items-center justify-content-center header-cat-box px-3 py-3 rounded-4 text-center card-fixed-height">
-      <img src={brand_logo4} alt="" height="60" className=" img-fixed-height" />
+  <div className="custom-col">
+    <div className="custom-card">
+      <img src={brand_logo4} alt="" className="custom-img" />
     </div>
   </div>
-  <div className="col-6 col-sm-4 col-lg-3 col-xxl-2">
-    <div className="border-0 card card-hover d-flex align-items-center justify-content-center header-cat-box px-3 py-3 rounded-4 text-center card-fixed-height">
-      <img src={brand_logo5} alt="" height="60" className="img-fixed-height" />
+  <div className="custom-col">
+    <div className="custom-card">
+      <img src={brand_logo5} alt="" className="custom-img" />
     </div>
   </div>
-  <div className="col-6 col-sm-4 col-lg-3 col-xxl-2">
-    <div className="border-0 card card-hover d-flex align-items-center justify-content-center header-cat-box px-3 py-3 rounded-4 text-center card-fixed-height">
-      <img src={brand_logo6} alt="" height="40" className="img-fixed-height" />
+  <div className="custom-col">
+    <div className="custom-card">
+      <img src={brand_logo6} alt="" className="custom-img" />
     </div>
   </div>
 </div>
+
+
 
         </div>
       </div>

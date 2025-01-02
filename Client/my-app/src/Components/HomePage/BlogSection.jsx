@@ -63,7 +63,7 @@ function BlogSection() {
       <div className="container py-4">
       <div className="row justify-content-center">
           <div className="col-12 col-md-10 col-lg-8 col-xl-7">
-            <div className="section-header text-center mb-4 mb-md-5 px-3" data-aos="fade-down">
+            <div className=" text-center mb-4 mb-md-5 px-3" data-aos="fade-down">
               <div className="d-inline-block font-caveat fs-3 fs-md-1 fw-medium text-primary">
                 Our Latest Articles
               </div>

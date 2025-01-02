@@ -136,7 +136,7 @@ const AddState = () => {
                       <button className="edit-link" onClick={() => handleEdit(state._id)}>Edit</button>
                     </td>
                     <td>
-                      <button className="delete-button" onClick={() => handleDelete(state._id)}>Delete</button>
+                      <button className="delete-button1" onClick={() => handleDelete(state._id)}>Delete</button>
                     </td>
                   </tr>
                 ))}

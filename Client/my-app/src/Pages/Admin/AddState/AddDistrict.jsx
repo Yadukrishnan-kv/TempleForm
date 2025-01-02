@@ -205,7 +205,7 @@ function AddDistrict() {
                     <td>
                       <button
                         type="button"
-                        className="delete-button"
+                        className="delete-button1"
                         onClick={() => handleDelete(district._id)}
                       >
                         Delete

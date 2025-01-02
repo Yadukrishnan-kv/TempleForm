@@ -64,8 +64,8 @@ const Testimonial = () => {
       <div className="container py-4 overlay-content">
         <div className="row justify-content-center">
           <div className="col-sm-10 col-md-10 col-lg-8 col-xl-7">
-            <div className="section-header text-center mb-5" data-aos="fade-down">
-              <div className="d-inline-block font-caveat fs-1 fw-medium section-header__subtitle text-capitalize text-primary">
+            <div className=" text-center mb-5" data-aos="fade-down">
+              <div className="d-inline-block font-caveat fs-1 fw-medium  text-capitalize text-primary">
                 Testimonial
               </div>
             </div>

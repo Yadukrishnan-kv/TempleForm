@@ -91,7 +91,7 @@ const TemplePage = () => {
         <div className="container overlay-content">
           <div className="row justify-content-center">
             <div className="col-sm-10 col-md-10 col-lg-8 col-xl-7">
-              <div className="section-header text-center mb-5" data-aos="fade-down">
+              <div className=" text-center mb-5" data-aos="fade-down">
                 <h2 className="display-4 fw-semibold mb-3 section-header__title text-capitalize">
                   <span style={{ color: 'white' }}>Find your</span>
                   <span className="font-caveat text-primary"> Temple </span>

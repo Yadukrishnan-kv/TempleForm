@@ -25,6 +25,13 @@ const TempleDetails = () => {
   const [error, setError] = useState('');
   const [temple, setTemple] = useState(null);
   const [descriptions, setDescriptions] = useState([]);
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    comment: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
   const ip = process.env.REACT_APP_BACKEND_IP;
 
   useEffect(() => {
@@ -62,6 +69,25 @@ const fetchDescriptions = async () => {
     }
   };
  
+
+
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+
+    try {
+      const response = await axios.post(`${ip}/api/Bookings/Bookingsubmit`, formData);
+      setFormData({ fullName: '', email: '', comment: '' });
+    } catch (error) {
+      setSubmitMessage('Error submitting booking. Please try again.');
+    } finally {
+    }
+  };
 
   const handleBookmark = () => {
     setIsBookmarked(!isBookmarked);
@@ -291,7 +317,8 @@ const fetchDescriptions = async () => {
                 <h4 className="fw-semibold mb-4">
                   Book <span className="font-caveat">online</span>
                 </h4>
-                <form className="row g-4" onSubmit={(e) => e.preventDefault()}>
+                <form className="row g-4" onSubmit={handleSubmit
+                }>
                   <div className="col-12">
                     <div >
                       <label className="required">Full Name</label>
@@ -299,6 +326,9 @@ const fetchDescriptions = async () => {
                         type="text" 
                         className="form-control" 
                         placeholder="Enter your name" 
+                        name="fullName"
+                        value={formData.fullName}
+                        onChange={handleChange}
                         required 
                       />
                     </div>
@@ -310,6 +340,9 @@ const fetchDescriptions = async () => {
                         type="email" 
                         className="form-control" 
                         placeholder="Enter your email address" 
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
                         required 
                       />
                     </div>
@@ -322,6 +355,9 @@ const fetchDescriptions = async () => {
                         rows="7" 
                         placeholder="Tell us what we can help you with!"
                         required
+                        name="comment"
+                        value={formData.comment}
+                        onChange={handleChange}
                       ></textarea>
                     </div>
                   </div>
@@ -362,7 +398,7 @@ const fetchDescriptions = async () => {
         <div className="container py-4">
           <div className="row justify-content-center">
             <div className="col-sm-10 col-md-10 col-lg-8 col-xl-7">
-              <div className="section-header text-center mb-5" data-aos="fade-down">
+              <div className=" text-center mb-5" data-aos="fade-down">
                 <h2 className="display-5 fw-semibold mb-3 section-header__title text-capitalize">Similar Results</h2>
               </div>
             </div>

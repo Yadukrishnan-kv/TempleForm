@@ -2,6 +2,6 @@
 node_modules
 
 Server/uploads/temples/photos-*
-Server/uploads/temples/
-Server/uploads/
+Server/uploads/temples
+Server/uploads
 

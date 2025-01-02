@@ -1,0 +1,82 @@
+/* Container Styles */
+.booking-container {
+    
+    width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .booking-title {
+    font-size: 2rem;
+    color: #2d3748;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  .table-wrapper {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .booking-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+  }
+  
+  .booking-table th,
+  .booking-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  
+  .booking-table th {
+    background: #f7fafc;
+    font-weight: 600;
+    color: #4a5568;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+  }
+  
+  .booking-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .booking-table tbody tr:hover {
+    background-color: #f8fafc;
+  }
+  
+  .booking-table td {
+    color: #4a5568;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .booking-container {
+      padding: 1rem;
+    }
+  
+    .booking-title {
+      font-size: 1.5rem;
+    }
+  
+    .table-wrapper {
+      overflow-x: auto;
+    }
+  
+    .booking-table {
+      min-width: 600px;
+    }
+  
+    .booking-table th,
+    .booking-table td {
+      padding: 0.75rem;
+    }
+  }
+  
+  

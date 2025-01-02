@@ -30,6 +30,10 @@ const GalleryRoutes = require('./Routes/GalleryRoutes');
 app.use('/api/Gallery', GalleryRoutes);
 const aboutTempleRoutes = require('./Routes/AboutTempleRoutes');
 app.use('/api/aboutTemple', aboutTempleRoutes);
+const ContactUsRoutes = require('./Routes/ContactUsRoutes');
+app.use('/api/ContactUs', ContactUsRoutes);
+const BookingRoutes = require('./Routes/BookingRoutes');
+app.use('/api/Bookings', BookingRoutes);
 const port = 4000;
 console.log("port:", port);
 app.listen(port, (err) => {

@@ -124,10 +124,11 @@
     width: 2px;
     background: var(--primary-color);
     top: 0;
-    height: 560px;
+    height: 380px;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+    margin-top: 50px;
   }
   
   .timeline-item {
@@ -147,10 +148,12 @@
   .timeline-content {
     position: relative;
     width: calc(50% - 40px);
-    padding: 15px;
     color: white;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    
   }
-  
   .timeline-item.left .timeline-content {
     left: 0;
     text-align: right;
@@ -201,13 +204,13 @@
 
   @media (max-width: 768px) {
     .timeline-container::after {
-      left: 31px;
+      display: none;
     }
   
     .timeline-content {
       width: calc(100% - 80px);
-      padding-left: 70px;
-      text-align: left !important;
+      padding-left: 40px;
+      
     }
   
     .timeline-item.left .timeline-content,
@@ -216,7 +219,7 @@
     }
   
     .timeline-circle {
-      left: 31px;
+      display: none;
     }
   
     .timeline-title {
@@ -288,3 +291,61 @@
       font-size: 0.875rem;
     }
   }
+  /* Row styling */
+.custom-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px; /* Equivalent to g-2 (8px x 2) */
+}
+
+/* Column styling */
+.custom-col {
+  flex: 0 0 calc(100% / 2 - 16px); /* Default for small screens (2 columns per row) */
+  max-width: calc(100% / 2 - 16px);
+}
+
+@media (min-width: 576px) {
+  .custom-col {
+    flex: 0 0 calc(100% / 3 - 16px); /* Equivalent to col-sm-4 */
+    max-width: calc(100% / 3 - 16px);
+  }
+}
+
+@media (min-width: 992px) {
+  .custom-col {
+    flex: 0 0 calc(100% / 4 - 16px); /* Equivalent to col-lg-3 */
+    max-width: calc(100% / 4 - 16px);
+  }
+}
+
+@media (min-width: 1400px) {
+  .custom-col {
+    flex: 0 0 calc(100% / 6 - 16px); /* Equivalent to col-xxl-2 */
+    max-width: calc(100% / 6 - 16px);
+  }
+}
+
+/* Card styling */
+.custom-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px; /* Fixed card height */
+  padding: 16px; /* px-3 py-3 */
+  border-radius: 16px; /* rounded-4 */
+  text-align: center;
+  background-color: white; /* Optional, can style as needed */
+  transition: transform 0.3s; /* Hover effect */
+}
+
+.custom-card:hover {
+  transform: scale(1.05);
+}
+
+/* Image styling */
+.custom-img {
+  height: 50px;
+  max-width: 100%;
+}
+

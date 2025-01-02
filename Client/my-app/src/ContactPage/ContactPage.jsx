@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios, {} from 'axios'
 import Navbar from '../Components/HomePage/Navbar';
 import Footer from '../Components/HomePage/Footer';
 import subbanner from '../assets/images/subbanner.jpg';
@@ -9,6 +10,36 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const ContactPage = () => {
+
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    comments: '',
+  });
+  const ip = process.env.REACT_APP_BACKEND_IP;
+
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!isAuthorized) {
+      alert('Please authorize the use of your personal data.');
+      return;
+    }
+    try {
+      const response = await axios.post(`${ip}/api/ContactUs/Contactsubmit`, formData);
+      alert(response.data.message);
+      setFormData({ fullName: '', email: '', phone: '', comments: '' });
+      setIsAuthorized(false);
+    } catch (error) {
+      alert('Error submitting form. Please try again.');
+    }
+  };
   useEffect(() => {
     AOS.init({
       duration: 600, 
@@ -26,7 +57,7 @@ const ContactPage = () => {
           <div className="row justify-content-between align-items-center">
             <div className="col-md-6 col-lg-6">
               <div className="section-header1" data-aos="fade-down" >
-                <div className="search-button d-inline-block fs-14 mb-3 px-4 py-2 rounded-5 sub-title text-uppercase">
+                <div className="search-button Contact-btn d-inline-block fs-14 mb-3 px-4 py-2 rounded-5 sub-title text-uppercase">
                   Contact us
                 </div>
                 <h2 className="display-4 fw-semibold mb-3 section-header__title text-capitalize text-white">
@@ -35,7 +66,7 @@ const ContactPage = () => {
                 </h2>
               </div>
             </div>
-            <div className="col-md-5 col-lg-4">
+            <div className="col-md-5 col-lg-4 contact" >
   <h5 className="fw-bold mb-4">General contact</h5>
   <div className="mb-5">
     <div>1123 Fictional St, San Francisco<br className="d-none d-xxl-block" />, CA 94103</div>
@@ -102,45 +133,87 @@ const ContactPage = () => {
       </section>
 
       <div className="py-5 bg-light mx-3 rounded-4 my-3">
-        <div className="container py-5">
+      <div className="container py-5">
+        <form onSubmit={handleSubmit}>
           <div className="row justify-content-between">
             <div className="col-md-6 col-xl-5">
               <h3 className="h1 mb-4 font-caveat text-primary">My contact data</h3>
               <div className="mb-4">
                 <label className="required fw-medium mb-2">Full Name</label>
-                <input type="text" className="form-control" id="firstName" placeholder="David Hall" required="" />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="fullName"
+                  placeholder="David Hall"
+                  required
+                  value={formData.fullName}
+                  onChange={handleChange}
+                />
               </div>
               <div className="mb-4">
                 <label className="required fw-medium mb-2">Your Email</label>
-                <input type="email" className="form-control" id="email" placeholder="hello@email.com" />
+                <input
+                  type="email"
+                  className="form-control"
+                  id="email"
+                  placeholder="hello@email.com"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                />
               </div>
               <div className="mb-4">
                 <label className="required fw-medium mb-2">Your Phone</label>
-                <input type="number" className="form-control" id="phone" />
+                <input
+                  type="tel"
+                  className="form-control"
+                  id="phone"
+                  required
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
               </div>
             </div>
             <div className="col-md-6 col-xl-5">
               <h3 className="h1 mb-4 font-caveat text-primary">My message</h3>
               <div className="mb-4">
                 <label className="required fw-medium mb-2">Your Comments</label>
-                <textarea className="form-control" rows={7} placeholder="Tell us what we can help you with!"></textarea>
+                <textarea
+                  className="form-control"
+                  rows={7}
+                  placeholder="Tell us what we can help you with!"
+                  id="comments"
+                  required
+                  value={formData.comments}
+                  onChange={handleChange}
+                ></textarea>
               </div>
               <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="flexCheckDefault"
+                  checked={isAuthorized}
+                  onChange={(e) => setIsAuthorized(e.target.checked)}
+                />
                 <label className="form-check-label" htmlFor="flexCheckDefault">
                   YES, I AUTHORIZE THE USE OF MY PERSONAL DATA IN ACCORDANCE WITH THE PRIVACY POLICY DESCRIBED ON THE WEBSITE.
                 </label>
               </div>
-              <button type="submit" className="btn  btn-lg d-inline-flex hstack gap-2 mt-4 text-white" style={{backgroundColor:"#FFBD59"}}>
+              <button
+                type="submit"
+                className="btn btn-lg d-inline-flex hstack gap-2 mt-4 text-white"
+                style={{ backgroundColor: "#FFBD59" }}
+              >
                 <span>Send message</span>
                 <span className="vr"></span>
-                <i className="fa fa-arrow-right fs-14">      <FaArrowRight size={18} />
-                </i>
+                <FaArrowRight size={18} />
               </button>
             </div>
           </div>
-        </div>
+        </form>
       </div>
+    </div>
 
      <Footer/>
     </>
