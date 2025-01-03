@@ -19,21 +19,7 @@ function Header() {
 
   return (
     <header className="header">
-      {/* <div className="header-left">
-        <div className='header-leftdiv'>
-          <button className="icon-button"><CiCalendar /></button>
-        </div>
-        <div className='header-leftdiv'>
-          <button className="icon-button"><PiNotePencil /></button>
-        </div>
-        <div className='header-leftdiv'>
-          <button className="icon-button"><TbMessageCircle /></button>
-        </div>
-        <div className={`search-bar ${isSearchVisible ? 'visible' : ''}`}>
-          <input type="text" placeholder="Search..." />
-          <button type="submit"><CiSearch /></button>
-        </div>
-      </div> */}
+      
 
       <div className="header-right">
        

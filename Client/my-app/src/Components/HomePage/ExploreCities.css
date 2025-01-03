@@ -1,6 +1,6 @@
 .temple-carousel-section {
   padding: 40px 0;
-  background: #fff;
+  background: #f7f7f7;
 }
 
 .container {
@@ -159,6 +159,7 @@
   
   .temple-card-image {
     height: 450px; 
+    
      }
   
   .nav-button {

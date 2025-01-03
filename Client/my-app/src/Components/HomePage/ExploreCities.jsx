@@ -8,8 +8,6 @@ import { Link } from 'react-router-dom';
 
 // Ensure jQuery is available globally
 window.jQuery = window.$ = $;
-
-// Import Owl Carousel after setting jQuery globally
 require('owl.carousel');
 
 const ExploreCities = () => {
@@ -67,14 +65,14 @@ const ExploreCities = () => {
         if ($carousel.length) {
           $carousel.owlCarousel({
             loop: true,
-            margin: 20,
+            margin: 24,
             nav: true,
             dots: false,
             responsive: {
-              0: { items: 1, margin: 10 },
-              576: { items: 2, margin: 15 },
-              992: { items: 3, margin: 20 },
-              1200: { items: 4, margin: 20 },
+              0: { items: 1, margin: 16 },
+              768: { items: 2, margin: 20 },
+              1024: { items: 3, margin: 10 },
+              1280: { items: 4 }
             },
             navText: [
               '<button class="nav-button prev"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>',
@@ -115,11 +113,12 @@ const ExploreCities = () => {
                     <p>{temple.district}</p>
                     <div className="explore-more">
                       <span>EXPLORE MORE</span>
-                      <button className="explore-button">
-                        <Link to={`/TempleDetails/${temple._id}`} style={{ textDecoration: 'none', color: 'white' }}>
-                          <ArrowRight size={16} />
-                        </Link>
-                      </button>
+                      <Link 
+                        to={`/TempleDetails/${temple._id}`} 
+                        className="explore-button"
+                      >
+                        <ArrowRight size={16} />
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -133,3 +132,4 @@ const ExploreCities = () => {
 };
 
 export default ExploreCities;
+

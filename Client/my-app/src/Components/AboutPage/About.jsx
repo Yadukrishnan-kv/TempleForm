@@ -33,16 +33,16 @@ const About = () => {
 
   const timelineData = [
     {
-      content: "Repeated meetings with Thantri Samaj and <br /> other key official gave birth to a larger vision and <br /> goal.",
+      content: "Repeated meetings with Thantri Samaj and  other key official gave birth to a larger vision and  goal.",
     },
     {
-      content: "The first milestone Sreeshuddhi has been <br /> officially launched on November 2023.",
+      content: "The first milestone Sreeshuddhi has been  officially launched on November 2023.",
     },
     {
-      content: "Product Sourcing and Various initiatives such as <br />conceptual framework, MVP plan, etc..."
+      content: "Product Sourcing and Various initiatives  such as conceptual framework, MVP plan, etc..."
     },
     {
-      content: "MVP Launch phase. Trademark registration,<br /> Digital Presence, startup registration, etc..",
+      content: "MVP Launch phase. Trademark registration, Digital Presence, startup registration, etc..",
     }
   ];
   

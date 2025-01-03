@@ -124,7 +124,7 @@
     width: 2px;
     background: var(--primary-color);
     top: 0;
-    height: 380px;
+    height: 368px;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -147,10 +147,10 @@
   
   .timeline-content {
     position: relative;
-    width: calc(50% - 40px);
+    width: calc(40% - 0px);
     color: white;
+    margin-left: 5px;
     padding-left: 15px;
-    padding-right: 15px;
     padding-bottom: 15px;
     
   }
@@ -208,8 +208,11 @@
     }
   
     .timeline-content {
-      width: calc(100% - 80px);
-      padding-left: 40px;
+      width: 100%; /* Make content span the full width */
+     /* Default text alignment */
+    padding: 15px; /* Ensure proper padding */
+    box-sizing: border-box; /* Include padding in width */
+    text-align: center;
       
     }
   
@@ -230,8 +233,16 @@
       font-size: 2rem;
     }
   }
-  
-  
+  @media (min-width: 769px) and (max-width: 860px) {
+    .timeline-container::after {
+      height: 430px;
+    }
+  }
+  @media (min-width: 834px) and (max-width: 900px) {
+    .timeline-container::after {
+      height: 410px;
+    }
+  }
   .achievements-wrapper {
     margin-top: -80px;
     position: relative;
@@ -254,10 +265,24 @@
     font-size: 1.125rem;
   }
   
+
+@media (max-width: 576px) {
+  .timeline-item {
+    margin-bottom: 1.5rem;
+  }
+
+  .timeline-content {
+    
+    padding: 10px; /* Adjust padding for smaller screens */
+  }
+}
+
+
   /* Responsive Styles */
   @media (max-width: 991px) {
     .achievements-wrapper {
-      margin-top: -30px;
+      margin-top: -80px;
+      width: 600px;
     }
   
     .counter-content_about {
@@ -276,7 +301,7 @@
   @media (max-width: 767px) {
     .achievements-wrapper {
       margin-top: -80px;
-      width: 250px;
+      width: 450px;
     }
   
     .counter-content_about {
@@ -290,6 +315,23 @@
     .fs-18 {
       font-size: 0.875rem;
     }
+  }
+  
+  @media (max-width: 575px) {
+    .achievements-wrapper {
+      margin-top: -80px;
+      width: 250px;
+    }
+  }
+  @media (max-width: 414px) and (max-width: 779px){
+    .timeline-content {
+      width: 100%; /* Full width for better readability */
+      left: 0 !important; /* Reset any alignment offsets */
+      padding: 10px; /* Maintain consistent padding */
+      text-align: unset; /* Remove forced text alignment */
+      box-sizing: border-box; /* Include padding within width */
+    }
+   
   }
   /* Row styling */
 .custom-row {

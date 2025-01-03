@@ -105,13 +105,13 @@ const Footer = () => {
                 />
                 <button 
                   type="button" 
-                  className="btn btn-[#FFBD59] search-btn position-absolute top-50 rounded-circle"
+                  className="btn btn-[#FFBD59] search-btn position-absolute top-50 rounded-circle btnhover"
                   style={{
                     right: '10px',
                     transform: 'translateY(-50%)',
                     height: '45px',
                     width: '45px',
-                    backgroundColor: '#FFBD59'
+                    
                   }}
                 >
                   <i className="fa-solid fa-angle-right"><IoIosArrowForward  style={{fontSize:"16px",color:'white'}}/>
