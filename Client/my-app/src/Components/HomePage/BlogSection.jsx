@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './HomePage.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import axios from 'axios';
 function BlogSection() {
 
    useEffect(() => {
@@ -13,6 +14,12 @@ function BlogSection() {
         });
       }, []);
   const [currentSlide, setCurrentSlide] = useState(0);
+    const [error, setError] = useState('');
+  
+  const ip = process.env.REACT_APP_BACKEND_IP;
+    const [blogs, setBlogs] = useState([]);
+  
+
   const [blogPosts] = useState([
     {
       image: '/assets/images/blog/01-lg.jpg',
@@ -48,6 +55,21 @@ function BlogSection() {
       }
     }
   ]);
+
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const fetchBlogs = async () => {
+    try {
+      const response = await axios.get(`${ip}/api/Blog/getblog`);
+      setBlogs(response.data);
+    } catch (error) {
+      setError('Failed to fetch blog posts');
+      console.error('Error fetching blog posts:', error);
+    }
+  };
 
 
   const nextSlide = () => {
@@ -86,8 +108,8 @@ function BlogSection() {
               className="row flex-nowrap transition-transform"
               style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
-              {blogPosts.map((post, index) => (
-                <div key={index} className="col-md-4">
+               {blogs.map((blog) => (
+                <div key={blog._id} className="col-md-4">
                   <article className=" h-100 border-light shadow-sm overflow-hidden">
                     <div className="position-relative overflow-hidden">
                       <Link to="/blog-details" className="stretched-link"></Link>
@@ -99,46 +121,51 @@ function BlogSection() {
                           <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
                         </svg>
                       </button>
-                      <img 
-                        src={post.image} 
-                        className="card-img-top image-zoom-hover"
-                        alt="Blog post"
-                      />
+                      {blog.image && (
+        <img 
+          src={`${ip}/${blog.image.path}`} 
+          alt={blog.title} 
+          style={{height:"300px",width:"500px"}}
+        />
+      )}
                     </div>
                     <div className="card-body">
                       <div className="d-flex align-items-center gap-3 mb-3 text-secondary small">
-                        <span>{post.date}</span>
+                        <span>{new Date(blog.date).toLocaleDateString()}</span>
                         <span className="opacity-25">|</span>
                         <Link
                           to="#"
                           className="badge border border-primary text-primary bg-white text-decoration-none"
                         >
-                          {post.category}
-                        </Link>
+                          Events
+                       </Link>
+
                       </div>
                       <h3 className="h5 fw-semibold mb-0 post-title">
-                        <Link to="/blog-details" className="text-dark text-decoration-none">
-                          {post.title}
-                        </Link>
+                        
                       </h3>
                     </div>
+                    <h3 className="h5 fw-semibold mb-0 post-title">
+                        <Link to="/blog-details" className="text-dark text-decoration-none">
+                        {blog.content}</Link>
+                      </h3>
                     <div className="py-3 ">
                       <div className="d-flex align-items-center">
                         <div className="flex-shrink-0">
-                          <img 
+                          {/* <img 
                             src={post.author.avatar} 
                             className="rounded-circle"
                             width="48" 
                             height="48" 
                             alt={`${post.author.name}'s avatar`}
-                          />
+                          /> */}
                         </div>
                         <div className="flex-grow-1 ms-3">
                           <Link to="#" className="text-decoration-none d-block">
                             <span className="text-secondary fst-italic">By </span>
-                            <span className="fw-medium text-dark">{post.author.name}</span>
+                            <span className="fw-medium text-dark">{blog.author.name} </span>
                           </Link>
-                          <small className="text-secondary">{post.author.role}</small>
+                          <small className="text-secondary">({blog.author.role})</small>
                         </div>
                       </div>
                     </div>
