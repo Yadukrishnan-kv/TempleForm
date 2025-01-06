@@ -9,6 +9,7 @@ TempleRoutes.get("/:templeId", TempleController.getTempleById);
 TempleRoutes.put("/update/:templeId", TempleController.updateTemple);
 TempleRoutes.delete("/delete/:templeId", TempleController.deleteTemple);
 TempleRoutes.put('/:templeId/verify',TempleController. verifyTemple);
+TempleRoutes.get('/byDistrict/:district', TempleController.getTemplesByDistrict);
 
 
 

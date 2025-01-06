@@ -25,6 +25,8 @@ const TempleDetails = () => {
   const [error, setError] = useState('');
   const [temple, setTemple] = useState(null);
   const [descriptions, setDescriptions] = useState([]);
+  const [otherTemples, setOtherTemples] = useState([]);
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -44,12 +46,21 @@ const TempleDetails = () => {
     try {
       const response = await axios.get(`${ip}/api/temples/${templeId}`);
       setTemple(response.data);
+      fetchOtherTemples(response.data.district);
     } catch (error) {
       console.error('Error fetching temple details:', error);
     }
   };
- 
- 
+
+  const fetchOtherTemples = async (district) => {
+    try {
+      const response = await axios.get(`${ip}/api/temples/byDistrict/${district}`);
+      const filteredTemples = response.data.filter(t => t._id !== templeId);
+      setOtherTemples(filteredTemples.slice(0, 4)); // Limit to 4 suggestions
+    } catch (error) {
+      console.error('Error fetching other temples:', error);
+    }
+  };
 
 const fetchDescriptions = async () => {
     try {
@@ -404,13 +415,18 @@ const fetchDescriptions = async () => {
             </div>
           </div>
           <OwlCarousel className="listings-carousel owl-theme" {...carouselOptions}>
-            {similarTemples.map((temple) => (
-              <div key={temple.id} className="card rounded-3 w-100 flex-fill overflow-hidden">
+          {otherTemples.map((temple) => (
+              <div  key={temple._id} className="card rounded-3 w-100 flex-fill overflow-hidden">
                 <a href="temple_details.html" className="stretched-link"></a>
                 <div className="card-img-wrap card-image-hover overflow-hidden">
-                  <img src={temple.image} alt={temple.name} className="img-fluid" />
-                  <div className="bg-primary card-badge d-inline-block text-white position-absolute">10% OFF</div>
-                  <div className="bg-primary card-badge d-inline-block text-white position-absolute">$100 off $399: eblwc</div>
+                <img 
+                      src={temple.image ? `${ip}/${temple.image}` : "/placeholder.svg"} 
+                      alt={temple.name} 
+                      className="img-fluid"
+                      style={{ height: '200px', objectFit: 'cover' }}
+                    />
+                  {/* <div className="bg-primary card-badge d-inline-block text-white position-absolute">{temple.name}</div> */}
+                  {/* <div className="bg-primary card-badge d-inline-block text-white position-absolute">$100 off $399: eblwc</div> */}
                   <div className="d-flex end-0 gap-2 me-3 mt-3 position-absolute top-0 z-1">
                     <a href="#" className="btn-icon shadow-sm d-flex align-items-center justify-content-center text-primary bg-light rounded-circle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Bookmark">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-heart" viewBox="0 0 16 16">
@@ -431,7 +447,7 @@ const fetchDescriptions = async () => {
                   <div className="align-items-center d-flex flex-wrap gap-1 text-primary card-start">
                     <i className="fa-solid fa-star"></i>
                     <span className="fw-medium text-primary">
-                      <span className="fs-5 fw-semibold me-1">({temple.rating})</span>{temple.reviews} reviews
+                      {/* <span className="fs-5 fw-semibold me-1">({temple.rating})</span>{temple.reviews} reviews */}
                     </span>
                   </div>
                   <h4 className="fs-5 fw-semibold mb-0">{temple.name}</h4>

@@ -1,4 +1,6 @@
 const TempleCollection = require('../Models/Temple');
+const Gallery = require('../Models/GalleryModel');
+
 
 // Register a new temple
 const registerTemple = async (req, res) => {
@@ -108,7 +110,25 @@ const verifyTemple = async (req, res) => {
     res.status(400).send(error);
   }
 };
+const getTemplesByDistrict = async (req, res) => {
+  const { district } = req.params;
+  try {
+    const temples = await TempleCollection.find({ district });
+    
+    // Fetch the first image for each temple
+    const templesWithImages = await Promise.all(temples.map(async (temple) => {
+      const images = await Gallery.find({ temple: temple._id }).limit(1);
+      return {
+        ...temple.toObject(),
+        image: images.length > 0 ? images[0].path : null
+      };
+    }));
 
+    res.status(200).send(templesWithImages);
+  } catch (error) {
+    res.status(400).send({ message: 'Error fetching temples by district', error });
+  }
+};
 
 
 module.exports = {
@@ -117,7 +137,7 @@ module.exports = {
   getTempleById,
   updateTemple,
   deleteTemple,
-  sortTemples,verifyTemple
+  sortTemples,verifyTemple,getTemplesByDistrict
 };
 
 

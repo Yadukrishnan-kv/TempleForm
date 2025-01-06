@@ -53,7 +53,7 @@ const deletePhoto = async (req, res) => {
         }
 
         // Delete file from filesystem
-        await fs.unlink(`api/${photo.path}`);
+        await fs.unlink(photo.path);
         
         // Delete from database
         await Photo.findByIdAndDelete(req.params.photoId);

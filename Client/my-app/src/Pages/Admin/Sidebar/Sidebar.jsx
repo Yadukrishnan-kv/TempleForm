@@ -131,6 +131,28 @@ function Sidebar() {
               </ul>
             )}
           </li>
+          <li className={`menu-item has-submenu ${activeMenu === "BlogPage" ? "active" : ""}`}>
+            
+            <button className="menu-toggle1" onClick={() => toggleSubmenu("BlogPage")}>
+              
+            <FontAwesomeIcon icon={faCalendarCheck} 
+            style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+              <span className="menu-name">BlogPage</span>
+              {openSubmenus.BlogPage ? (
+                <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
+              ) : (
+                <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+              )}
+            </button>
+            {openSubmenus.BlogPage && (
+              <ul className="submenu">
+                 <li>
+                  <Link to="/BlogPage">List Blogs</Link>
+                </li>
+               
+              </ul>
+            )}
+          </li>
         </ul>
         
       </nav>
