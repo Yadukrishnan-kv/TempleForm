@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate} from 'react-router-dom';
 import '../SignupPage/SignupPage.css';
+import { toast } from 'react-toastify';
 
 function LoginPage() {
   const ip = process.env.REACT_APP_BACKEND_IP;
@@ -25,6 +26,10 @@ function LoginPage() {
       const response = await axios.post(`${ip}/api/adminlogin/login`, formData);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
+       toast.success("Login successfully!", {
+              position: "top-right",
+              autoClose: 3000,
+            });
       navigate('/Dashboard');
     } catch (error) {
       console.error('Error logging in:', error.response ? error.response.data : error.message);

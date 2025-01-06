@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import './AboutTemple.css';
+import { toast } from 'react-toastify';
 
 function AboutTemple() {
     const [descriptions, setDescriptions] = useState([]);
@@ -34,8 +35,9 @@ function AboutTemple() {
             });
             setDescriptions(prevDescriptions => [...prevDescriptions, res.data.data]);
             setNewDescription('');
+            toast.success("Descriptions added successfully!");
         } catch (error) {
-            console.error('Error adding description', error);
+            toast.error('Error adding description');
         }
     };
 
@@ -50,8 +52,10 @@ function AboutTemple() {
             );
             setEditing(null);
             setEditedDescription('');
+            toast.success(" Edited successfully!");
+
         } catch (error) {
-            console.error('Error editing description', error);
+            toast.error('Error editing description');
         }
     };
 
@@ -59,8 +63,11 @@ function AboutTemple() {
         try {
             await axios.delete(`${ip}/api/aboutTemple/deleteaboutTemple/${id}`);
             setDescriptions(prevDescriptions => prevDescriptions.filter(desc => desc._id !== id));
+            toast.success("  successfully Deleted!");
+
+            
         } catch (error) {
-            console.error('Error deleting description', error);
+            toast.error('Error deleting description');
         }
     };
 

@@ -3,6 +3,7 @@ import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import axios from 'axios';
 import './AddState.css';
+import { toast } from 'react-toastify';
 
 const AddState = () => {
   const ip = process.env.REACT_APP_BACKEND_IP;
@@ -34,16 +35,24 @@ const AddState = () => {
           setEditStateId(null);
           setIsFormVisible(false);
           refreshStates(); // Reload the states
+         toast.success(" Edited successfully!");
+          
         })
         .catch(error => console.error(error));
+        toast.error("Error in editing");
+        
     } else {
       axios.post(`${ip}/api/states/createState`, { name })
         .then(() => {
           setName('');
           setIsFormVisible(false);
           refreshStates();
+          toast.success(" State Added successfully!");
+          
         })
         .catch(error => console.error(error));
+        toast.error(" error in adding state");
+
     }
   };
 
@@ -61,6 +70,7 @@ const AddState = () => {
   const handleDelete = (id) => {
     axios.delete(`${ip}/api/states/deleteState/${id}`)
       .then(() => setStates(states.filter(state => state._id !== id)))
+      
       .catch(error => console.error(error));
   };
 

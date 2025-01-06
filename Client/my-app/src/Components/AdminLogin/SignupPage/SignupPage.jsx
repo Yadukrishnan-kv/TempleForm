@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './SignupPage.css';
+import { toast } from 'react-toastify';
 
 function SignupPage() {
   const ip = process.env.REACT_APP_BACKEND_IP
@@ -22,10 +23,15 @@ function SignupPage() {
     try {
       const response = await axios.post(`${ip}/api/adminlogin/register`, formData);
       console.log(response.data);
+      toast.success(" successfully Signuped!", {
+              position: "top-right",
+              autoClose: 3000,
+            });
       navigate('/AdminLogin');
     } catch (error) {
       console.error('Error signing up:', error.response ? error.response.data : error.message);
-      alert('Error signing up. Please try again.');
+            toast.error("Error signing up. Please try again.!");
+      
     }
   };
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './Form.css';
+import { toast } from 'react-toastify';
 
 function Form() {
   const navigate = useNavigate();
@@ -201,10 +202,16 @@ function Form() {
         }
       });
       console.log('Server response:', response);
-      navigate("/view");
+      toast.success("Form submitted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+  
     } catch (error) {
       console.error('Error registering temple:', error.response ? error.response.data : error.message);
       setError('An error occurred while submitting the form. Please try again.');
+      toast.error("An error occurred while submitting the form. Please try again.!");
+
     }
   };
 

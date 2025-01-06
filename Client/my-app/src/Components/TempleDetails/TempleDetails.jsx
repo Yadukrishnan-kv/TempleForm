@@ -420,7 +420,7 @@ const fetchDescriptions = async () => {
                 <a href="temple_details.html" className="stretched-link"></a>
                 <div className="card-img-wrap card-image-hover overflow-hidden">
                 <img 
-                      src={temple.image ? `${ip}/${temple.image}` : "/placeholder.svg"} 
+                      src={`${ip}/${temple.image}`} 
                       alt={temple.name} 
                       className="img-fluid"
                       style={{ height: '200px', objectFit: 'cover' }}
