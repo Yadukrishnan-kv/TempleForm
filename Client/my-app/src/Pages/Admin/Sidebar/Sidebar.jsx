@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { RiHome3Fill } from "react-icons/ri";
 import { MdOutlineAppRegistration } from "react-icons/md";
@@ -9,10 +9,14 @@ import { faBlog, faCalendarCheck, faUsers } from "@fortawesome/free-solid-svg-ic
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 import "./Sidebar.css";
+import axios from "axios";
 
 function Sidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [openSubmenus, setOpenSubmenus] = useState({});
+  const [userPermissions, setUserPermissions] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const ip = process.env.REACT_APP_BACKEND_IP;
 
   const toggleMenu = (menuName) => {
     setActiveMenu((prevMenu) => (prevMenu === menuName ? null : menuName));
@@ -25,6 +29,27 @@ function Sidebar() {
     }));
   };
 
+  useEffect(() => {
+    const fetchUserPermissions = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${ip}/api/adminlogin/profile`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setUserPermissions(response.data.menuPermissions);
+      } catch (error) {
+        console.error('Error fetching permissions:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserPermissions();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="sidebar">
       <div className="logo">
@@ -32,6 +57,7 @@ function Sidebar() {
       </div>
       <nav>
         <ul>
+        {userPermissions?.dashboard && (
           <li className={`menu-item ${activeMenu === "dashboard" ? "active" : ""}`}>
             <Link to="/Dashboard" onClick={() => toggleMenu("dashboard")}>
               <RiHome3Fill style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
@@ -39,6 +65,9 @@ function Sidebar() {
               
             </Link>
           </li>
+          )}
+                  {userPermissions?.dashboard && (
+
           <li className={`menu-item has-submenu ${activeMenu === "Users" ? "active" : ""}`}>
             
             <button className="menu-toggle1" onClick={() => toggleSubmenu("Users")}>
@@ -62,6 +91,8 @@ function Sidebar() {
               </ul>
             )}
           </li>
+                    )}
+           {userPermissions?.dashboard && (
           <li className={`menu-item has-submenu ${activeMenu === "sort" ? "active" : ""}`}>
             
             <button className="menu-toggle1" onClick={() => toggleSubmenu("sort")}>
@@ -85,6 +116,10 @@ function Sidebar() {
               </ul>
             )}
           </li>
+               )}
+          {userPermissions?.dashboard && (
+
+
           <li className={`menu-item has-submenu ${activeMenu === "master" ? "active" : ""}`}>
             <button className="menu-toggle1" onClick={() => toggleSubmenu("master")}>
             <SlCursor 
@@ -110,6 +145,10 @@ function Sidebar() {
               </ul>
             )}
           </li>
+                         )}
+            {userPermissions?.dashboard && (
+
+
           <li className={`menu-item has-submenu ${activeMenu === "BlogPage" ? "active" : ""}`}>
             
             <button className="menu-toggle1" onClick={() => toggleSubmenu("BlogPage")}>
@@ -132,6 +171,9 @@ function Sidebar() {
               </ul>
             )}
           </li>
+                                   )}
+            {userPermissions?.dashboard && (
+
           <li className={`menu-item has-submenu ${activeMenu === "Enquiry" ? "active" : ""}`}>
             
             <button className="menu-toggle1" onClick={() => toggleSubmenu("Enquiry")}>
@@ -153,6 +195,10 @@ function Sidebar() {
               </ul>
             )}
           </li>
+              )}
+                          {userPermissions?.dashboard && (
+
+
           <li className={`menu-item has-submenu ${activeMenu === "BookingsPage" ? "active" : ""}`}>
             
             <button className="menu-toggle1" onClick={() => toggleSubmenu("BookingsPage")}>
@@ -175,7 +221,8 @@ function Sidebar() {
               </ul>
             )}
           </li>
-          
+                        )}
+
         </ul>
         
       </nav>

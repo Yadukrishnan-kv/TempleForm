@@ -22,7 +22,7 @@ import BookingsPage from '../Pages/Admin/Bookings/BookingsPage'
 import BlogPage from '../Pages/Admin/BlogPage/BlogPage'
 import ProtectedRoute from '../Pages/Admin/ProtectedRoute/ProtectedRoute'
 import AddUsers from '../Pages/Admin/Users/ListUsers/AddUsers'
-import Role from '../Pages/Admin/Users/ListRole/Role'
+import UserRole from '../Pages/Admin/Users/ListRole/UserRole'
 
 function Dom() {
   return (
@@ -52,7 +52,7 @@ function Dom() {
           <Route path="/AboutTemple/:templeId" element={<AboutTemple />} />
           <Route path="/BlogPage" element={<BlogPage />} />
           <Route path="/listusers" element={<AddUsers/>} />
-          <Route path="/usersrole" element={<Role/>} />
+          <Route path="/usersrole" element={<UserRole/>} />
 
           
 
