@@ -35,9 +35,9 @@ function AboutTemple() {
             });
             setDescriptions(prevDescriptions => [...prevDescriptions, res.data.data]);
             setNewDescription('');
-            toast.success("Descriptions added successfully!");
+            toast.success("Descriptions created successfully!");
         } catch (error) {
-            toast.error('Error adding description');
+            toast.error('Error creating description');
         }
     };
 
@@ -52,10 +52,10 @@ function AboutTemple() {
             );
             setEditing(null);
             setEditedDescription('');
-            toast.success(" Edited successfully!");
+            toast.success(" Description updated successfully!");
 
         } catch (error) {
-            toast.error('Error editing description');
+            toast.error('Error updating description');
         }
     };
 
@@ -63,7 +63,7 @@ function AboutTemple() {
         try {
             await axios.delete(`${ip}/api/aboutTemple/deleteaboutTemple/${id}`);
             setDescriptions(prevDescriptions => prevDescriptions.filter(desc => desc._id !== id));
-            toast.success("  successfully Deleted!");
+            toast.success("Description deleted successfully!");
 
             
         } catch (error) {

@@ -5,6 +5,7 @@ import axios from 'axios';
 import './GalleryPage.css';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
+import { toast } from 'react-toastify';
 
 const GalleryPage = () => {
   const { templeId } = useParams();
@@ -68,10 +69,13 @@ const GalleryPage = () => {
       });
       setSelectedFiles([]);
       fetchImages();
-      alert('Images uploaded successfully');
+      toast.success(" Image uploaded successfully!");
+      
     } catch (error) {
       setError('Failed to upload images');
       console.error('Error uploading images:', error);
+       toast.error('Error uploading images');
+      
     } finally {
       setLoading(false);
     }
@@ -85,10 +89,13 @@ const GalleryPage = () => {
     try {
       await axios.delete(`${ip}/api/Gallery/${photoId}`);
       fetchImages();
-      alert('Image deleted successfully');
+      toast.success("Image deleted successfully!");
+      
     } catch (error) {
       setError('Failed to delete image');
       console.error('Error deleting image:', error);
+              toast.error("Error deleting Image!"); 
+      
     }
   };
 

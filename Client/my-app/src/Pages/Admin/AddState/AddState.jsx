@@ -29,33 +29,34 @@ const AddState = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editStateId) {
-      axios.put(`${ip}/api/states/updateState/${editStateId}`, { name })
+      axios
+        .put(`${ip}/api/states/updateState/${editStateId}`, { name })
         .then(() => {
           setName('');
           setEditStateId(null);
           setIsFormVisible(false);
-          refreshStates(); // Reload the states
-         toast.success(" Edited successfully!");
-          
+          refreshStates();
+          toast.success('State updated successfully!'); 
         })
-        .catch(error => console.error(error));
-        toast.error("Error in editing");
-        
+        .catch((error) => {
+          console.error(error);
+          toast.error('Error updating state!'); 
+        });
     } else {
-      axios.post(`${ip}/api/states/createState`, { name })
+      axios
+        .post(`${ip}/api/states/createState`, { name })
         .then(() => {
           setName('');
           setIsFormVisible(false);
           refreshStates();
-          toast.success(" State Added successfully!");
-          
+          toast.success('State created successfully!');
         })
-        .catch(error => console.error(error));
-        toast.error(" error in adding state");
-
+        .catch((error) => {
+          console.error(error);
+          toast.error('Error creating state!'); 
+        });
     }
   };
-
   // Load states
   const refreshStates = () => {
     axios.get(`${ip}/api/states/getAllStates?page=${currentPage}&limit=${statesPerPage}`)
@@ -69,9 +70,14 @@ const AddState = () => {
   // Handle delete state
   const handleDelete = (id) => {
     axios.delete(`${ip}/api/states/deleteState/${id}`)
-      .then(() => setStates(states.filter(state => state._id !== id)))
-      
-      .catch(error => console.error(error));
+      .then(() => {
+        setStates(states.filter(state => state._id !== id));
+        toast.success("State deleted successfully!"); 
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("Error deleting state!"); 
+      });
   };
 
   // Handle edit button click

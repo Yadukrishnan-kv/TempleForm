@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './Addform.css';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
+import { toast } from 'react-toastify';
 
 function Addform() {
   const navigate = useNavigate();
@@ -189,10 +190,13 @@ function Addform() {
         }
       });
       console.log('Server response:', response);
+      toast.success("Form created successfully!"); 
       navigate("/view");
     } catch (error) {
       console.error('Error registering temple:', error.response ? error.response.data : error.message);
       setError('An error occurred while submitting the form. Please try again.');
+      toast.error("An error occurred while submitting the form!"); 
+
     }
   };
 

@@ -20,36 +20,47 @@ import AboutTemple from '../Pages/Admin/AboutTemple/AboutTemple'
 import EnquiryPage from '../Pages/Admin/Enquiries/EnquiryPage'
 import BookingsPage from '../Pages/Admin/Bookings/BookingsPage'
 import BlogPage from '../Pages/Admin/BlogPage/BlogPage'
+import ProtectedRoute from '../Pages/Admin/ProtectedRoute/ProtectedRoute'
+import AddUsers from '../Pages/Admin/Users/ListUsers/AddUsers'
+import Role from '../Pages/Admin/Users/ListRole/Role'
 
 function Dom() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<><MainPage/></>} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/form" element={<Form />} />
+        <Route path="/AdminLogin" element={<LoginPage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/TemplePage" element={<TemplePage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/TempleDetails/:templeId" element={<TempleDetails />} />
 
-        <Route path="/form" element={<><Form/></>} />
-        <Route path="/AdminLogin" element={<><LoginPage/></>} />
-        <Route path="/Dashboard" element={<><DashBoard/></>} />
-        <Route path="/admin/profile" element={<><AdminProfile/></>} />
-        <Route path="/AddSubmission" element={<><Addform/></>} />
-        <Route path="/SortSubmission" element={<><SortSubmission/></>} />
-        <Route path="/gallery/:templeId" element={<GalleryPage />} />
-        <Route path="/addstate" element={<><AddState/></>} />
-        <Route path="/adddistrict" element={<><AddDistrict/></>} />
-        <Route path="/addtaluk" element={<><AddTaluk/></>} />
-        <Route path="/edit/:id" element={<><EdidtSubmission/></>} />
-        <Route path="/about" element={<><About/></>} />
-        <Route path="/TemplePage" element={<><TemplePage/></>} />
-        <Route path="/contact" element={<><ContactPage/></>} />
-        <Route path="/EnquiryPage" element={<><EnquiryPage/></>} />
-        <Route path="/TempleDetails/:templeId" element={<><TempleDetails/></>} />
-        <Route path="/BookingsPage" element={<><BookingsPage/></>} />
-        <Route path="/AboutTemple/:templeId" element={<><AboutTemple/></>} />
-        <Route path="/BlogPage" element={<><BlogPage/></>} />
+        {/* Protected Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/Dashboard" element={<DashBoard />} />
+          <Route path="/admin/profile" element={<AdminProfile />} />
+          <Route path="/AddSubmission" element={<Addform />} />
+          <Route path="/SortSubmission" element={<SortSubmission />} />
+          <Route path="/gallery/:templeId" element={<GalleryPage />} />
+          <Route path="/addstate" element={<AddState />} />
+          <Route path="/adddistrict" element={<AddDistrict />} />
+          <Route path="/addtaluk" element={<AddTaluk />} />
+          <Route path="/edit/:id" element={<EdidtSubmission />} />
+          <Route path="/EnquiryPage" element={<EnquiryPage />} />
+          <Route path="/BookingsPage" element={<BookingsPage />} />
+          <Route path="/AboutTemple/:templeId" element={<AboutTemple />} />
+          <Route path="/BlogPage" element={<BlogPage />} />
+          <Route path="/listusers" element={<AddUsers/>} />
+          <Route path="/usersrole" element={<Role/>} />
 
-</Routes>
+          
+
+        </Route>
+      </Routes>
     </BrowserRouter>
   )
 }
 
 export default Dom
+

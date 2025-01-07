@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
+import { toast } from 'react-toastify';
 
 
 function EditSubmission() {
@@ -136,9 +137,13 @@ function EditSubmission() {
             headers: { Authorization: `Bearer ${token}` },
           });
           navigate('/SortSubmission');
+          toast.success('Form updated successfully!'); 
+
         } catch (err) {
           console.error("Error updating temple data:", err);
           setError("Failed to update temple data");
+          toast.error('Error updating form!'); 
+          
         } finally {
           setLoading(false);
         }

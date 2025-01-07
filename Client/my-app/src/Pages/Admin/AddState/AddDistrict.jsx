@@ -3,6 +3,7 @@ import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import axios from 'axios';
 import './AddState.css'; // Using original CSS
+import { toast } from 'react-toastify';
 
 function AddDistrict() {
   const ip = process.env.REACT_APP_BACKEND_IP;
@@ -73,10 +74,13 @@ function AddDistrict() {
       if (isEditing && currentDistrictId) {
         console.log("Updating district:", currentDistrictId);
         const response = await axios.put(`${ip}/api/districts/updateDistrict/${currentDistrictId}`, payload);
+        toast.success("District Updated successfully!")
+
         console.log("Update response:", response.data);
       } else {
         console.log("Creating new district");
         const response = await axios.post(`${ip}/api/districts/createDistrict`, payload);
+        toast.success("District added successfully!")
         console.log("Create response:", response.data);
       }
       
@@ -93,8 +97,11 @@ function AddDistrict() {
     try {
       await axios.delete(`${ip}/api/districts/deleteDistrict/${id}`);
       await fetchDistricts();
+      toast.success("District deleted successfully!")
+
     } catch (error) {
       console.error('Error deleting district:', error);
+      toast.error("Error deleting district!")
       setError('Failed to delete district');
     }
   };

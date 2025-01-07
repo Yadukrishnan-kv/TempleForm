@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate} from 'react-router-dom';
-import '../SignupPage/SignupPage.css';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import '../SignupPage/SignupPage.css';
 
 function LoginPage() {
   const ip = process.env.REACT_APP_BACKEND_IP;
@@ -13,6 +13,13 @@ function LoginPage() {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/Dashboard');
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,10 +33,10 @@ function LoginPage() {
       const response = await axios.post(`${ip}/api/adminlogin/login`, formData);
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
-       toast.success("Login successfully!", {
-              position: "top-right",
-              autoClose: 3000,
-            });
+      toast.success("Login successful!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       navigate('/Dashboard');
     } catch (error) {
       console.error('Error logging in:', error.response ? error.response.data : error.message);
@@ -70,7 +77,7 @@ function LoginPage() {
           {isLoading ? 'Logging in...' : 'Log In'}
         </button>
         <p className="auth-link">
-        Forgotten your password? 
+          Forgotten your password?
         </p>
       </form>
     </div>
@@ -78,4 +85,6 @@ function LoginPage() {
 }
 
 export default LoginPage;
+
+
 

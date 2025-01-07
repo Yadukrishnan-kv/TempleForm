@@ -3,6 +3,7 @@ import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import axios from 'axios';
 import './AddState.css'; // Reuse the same CSS file
+import { toast } from 'react-toastify';
 
 function AddTaluk() {
   const ip = process.env.REACT_APP_BACKEND_IP;
@@ -97,8 +98,12 @@ function AddTaluk() {
             )
           );
           resetForm();
+          toast.success('Taluk updated successfully!');
         })
-        .catch((error) => console.error(error));
+        .catch((error) => {
+          console.error(error);
+          toast.error('Error updating taluk!'); // Error toast for update
+        });
     } else {
       // Create Taluk
       axios.post(`${ip}/api/taluks/createTaluk`, { name, district, state })
@@ -109,9 +114,15 @@ function AddTaluk() {
             state: selectedState
           };
           setTaluks([...taluks, newTaluk]);
+          toast.success('Taluk created successfully!');
+
           resetForm();
         })
-        .catch((error) => console.error(error));
+        .catch((error) => {
+          console.error(error)
+                    toast.error('Error creating Taluk!'); 
+          
+    });
     }
   };
 
@@ -130,9 +141,13 @@ function AddTaluk() {
     axios.delete(`${ip}/api/taluks/deleteTaluk/${id}`)
       .then(() => {
         setTaluks(taluks.filter(taluk => taluk._id !== id));
+                toast.success("Taluk deleted successfully!"); 
+        
       })
-      .catch(error => console.error(error));
-  };
+        .catch((error) => {
+        console.error(error);
+        toast.error("Error deleting Taluk!"); 
+      });  };
 
   // Get current page taluks
   const indexOfLastTaluk = currentPage * itemsPerPage;

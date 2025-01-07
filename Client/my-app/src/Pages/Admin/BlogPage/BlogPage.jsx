@@ -4,6 +4,7 @@ import axios from 'axios';
 import './BlogPage.css';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
+import { toast } from 'react-toastify';
 
 const BlogPage = () => {
   const [blogs, setBlogs] = useState([]);
@@ -67,9 +68,13 @@ const BlogPage = () => {
       setNewBlog({ title: '', content: '', authorName: '', authorRole: '' });
       setSelectedImage(null);
       fetchBlogs();
+      toast.success("Blog created successfully!"); 
+      
     } catch (error) {
       setError('Failed to create blog post');
       console.error('Error creating blog post:', error);
+      toast.error('Error creating Blog!'); 
+      
     } finally {
       setLoading(false);
     }
@@ -83,9 +88,13 @@ const BlogPage = () => {
     try {
       await axios.delete(`${ip}/api/Blog/deleteblog/${blogId}`);
       fetchBlogs();
+      toast.success("Blog deleted successfully!"); 
+      
     } catch (error) {
       setError('Failed to delete blog post');
       console.error('Error deleting blog post:', error);
+      toast.error("Error deleting Blog!"); 
+      
     }
   };
 
