@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import './AddUsers.css'
-import Header from '../../Header/Header'
-import Sidebar from '../../Sidebar/Sidebar'
+import './AddUsers.css';
+import Sidebar from '../../Sidebar/Sidebar';
+import Header from '../../Header/Header';
+
 
 function AddUsers() {
   const ip = process.env.REACT_APP_BACKEND_IP;
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    role: ''
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +49,7 @@ function AddUsers() {
           autoClose: 3000,
         });
       }
-      setFormData({ name: '', email: '', password: '' });
+      setFormData({ name: '', email: '', password: '', role: '' });
       setEditingUser(null);
       setIsFormVisible(false);
       fetchUsers();
@@ -60,7 +63,7 @@ function AddUsers() {
 
   const handleEdit = (user) => {
     setEditingUser(user);
-    setFormData({ name: user.name, email: user.email, password: '' });
+    setFormData({ name: user.name, email: user.email, password: '', role: user.role });
     setIsFormVisible(true);
   };
 
@@ -87,6 +90,7 @@ function AddUsers() {
       const response = await axios.get(`${ip}/api/adminlogin/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      console.log('Fetched users:', response.data);
       setUsers(response.data);
     } catch (error) {
       console.error('Error fetching users:', error.response ? error.response.data : error.message);
@@ -94,9 +98,23 @@ function AddUsers() {
     }
   };
 
+  const fetchRoles = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get(`${ip}/api/adminlogin/roles`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setRoles(response.data);
+    } catch (error) {
+      console.error('Error fetching roles:', error.response ? error.response.data : error.message);
+      setError('Error fetching roles. Please try again.');
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
-  }, [ip]);
+    fetchRoles();
+  }, []);
 
   return (
     <div className="app-container">
@@ -108,7 +126,7 @@ function AddUsers() {
           <button className="add-button" onClick={() => {
             setIsFormVisible(!isFormVisible);
             setEditingUser(null);
-            setFormData({ name: '', email: '', password: '' });
+            setFormData({ name: '', email: '', password: '', role: '' });
           }}>
             {isFormVisible ? "Cancel" : "Add Subadmin"}
           </button>
@@ -150,6 +168,21 @@ function AddUsers() {
                     required={!editingUser}
                   />
                 </div>
+                <div className="form-group">
+                  <label htmlFor="role">Role</label>
+                  <select
+                    id="role"
+                    name="role"
+                    value={formData.role}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select a role</option>
+                    {roles.map((role) => (
+                      <option key={role} value={role}>{role}</option>
+                    ))}
+                  </select>
+                </div>
                 <button type="submit" className="add-subadmin-button" disabled={isLoading}>
                   {isLoading ? 'Submitting...' : (editingUser ? 'Update' : 'Submit')}
                 </button>
@@ -173,7 +206,7 @@ function AddUsers() {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map(user => (
+                  {users.filter(user => user.role !== 'admin').map(user => (
                     <tr key={user._id} className="user-item">
                       <td className="user-name">{user.name}</td>
                       <td className="user-email">{user.email}</td>
@@ -193,8 +226,8 @@ function AddUsers() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default AddUsers
+export default AddUsers;
 

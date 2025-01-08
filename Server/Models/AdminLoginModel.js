@@ -18,7 +18,7 @@ const Adminschema = new Schema({
     },
     role: {
         type: String,
-        enum: ['admin', 'subadmin'],
+        enum: ['admin', 'subadmin1', 'subadmin2', 'subadmin3', 'subadmin4', 'subadmin5'],
         default: 'admin'
     },
     menuPermissions: {

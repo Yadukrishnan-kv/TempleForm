@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 function UserRole() {
-  const [users, setUsers] = useState([]);
+  const [roles, setRoles] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -25,17 +25,23 @@ function UserRole() {
     }
   };
 
-  const fetchUsers = async () => {
+  const fetchRoles = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${ip}/api/adminlogin/users`, {
+      const response = await axios.get(`${ip}/api/adminlogin/roles-permissions`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setUsers(response.data);
+      
+      // Filter out admin role and null values
+      const filteredRoles = response.data.filter(role => {
+        return role && role._id && typeof role._id === 'string' && role._id.toLowerCase() !== 'admin';
+      });
+      
+      setRoles(filteredRoles);
     } catch (error) {
-      console.error('Error fetching users:', error);
-      setError('Error fetching users. Please try again.');
+      console.error('Error fetching roles:', error);
+      setError('Error fetching roles. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -43,44 +49,42 @@ function UserRole() {
 
   useEffect(() => {
     fetchCurrentUser();
-    fetchUsers();
+    fetchRoles();
   }, []);
 
-  const handlePermissionChange = async (userId, menuId, checked) => {
+  const handlePermissionChange = async (role, updatedPermissions) => {
     try {
       if (currentUser?.role !== 'admin') {
         setError('Only administrators can modify permissions');
         return;
       }
-
+  
       const token = localStorage.getItem('token');
       const response = await axios.put(
-        `${ip}/api/adminlogin/updateMenuPermissions`,
+        `${ip}/api/adminlogin/updateRolePermissions`,
         {
-          userId,
-          menuPermissions: {
-            [menuId]: checked
-          }
+          role,
+          menuPermissions: updatedPermissions, // Send all updated permissions at once
         },
         {
           headers: { 
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+            'Content-Type': 'application/json',
+          },
         }
       );
-
+  
       if (response.data.menuPermissions) {
-        setUsers(users.map(user => {
-          if (user._id === userId) {
+        setRoles(roles.map(r => {
+          if (r._id === role) {
             return {
-              ...user,
-              menuPermissions: response.data.menuPermissions
+              ...r,
+              menuPermissions: response.data.menuPermissions,
             };
           }
-          return user;
+          return r;
         }));
-
+  
         setSuccessMessage('Permissions updated successfully');
         setTimeout(() => setSuccessMessage(''), 3000);
       }
@@ -90,7 +94,27 @@ function UserRole() {
       setTimeout(() => setError(''), 3000);
     }
   };
-
+  const handleCheckboxChange = (roleId, permission, checked) => {
+    const updatedRoles = roles.map(role => {
+      if (role._id === roleId) {
+        return {
+          ...role,
+          menuPermissions: {
+            ...role.menuPermissions,
+            [permission]: checked,
+          },
+        };
+      }
+      return role;
+    });
+  
+    setRoles(updatedRoles);
+  
+    // Send updated permissions to the backend
+    const updatedPermissions = updatedRoles.find(role => role._id === roleId).menuPermissions;
+    handlePermissionChange(roleId, updatedPermissions);
+  };
+    
   if (loading) {
     return (
       <div className="app-container">
@@ -121,7 +145,7 @@ function UserRole() {
       <div className="content-container">
         <Sidebar />
         <div className="user-role-container">
-          <h2>User Role Management</h2>
+          <h2>Role Management</h2>
           {error && <div className="error-message">{error}</div>}
           {successMessage && <div className="success-message">{successMessage}</div>}
           
@@ -129,8 +153,7 @@ function UserRole() {
             <table>
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Email</th>
+                  <th>Role</th>
                   <th>Dashboard</th>
                   <th>Users</th>
                   <th>Registration</th>
@@ -141,69 +164,22 @@ function UserRole() {
                 </tr>
               </thead>
               <tbody>
-                {users.map(user => (
-                  <tr key={user._id}>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={user.menuPermissions?.dashboard || false}
-                        onChange={(e) => handlePermissionChange(user._id, 'dashboard', e.target.checked)}
-                        disabled={user.role === 'admin'}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={user.menuPermissions?.users || false}
-                        onChange={(e) => handlePermissionChange(user._id, 'users', e.target.checked)}
-                        disabled={user.role === 'admin'}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={user.menuPermissions?.registration || false}
-                        onChange={(e) => handlePermissionChange(user._id, 'registration', e.target.checked)}
-                        disabled={user.role === 'admin'}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={user.menuPermissions?.master || false}
-                        onChange={(e) => handlePermissionChange(user._id, 'master', e.target.checked)}
-                        disabled={user.role === 'admin'}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={user.menuPermissions?.blogPage || false}
-                        onChange={(e) => handlePermissionChange(user._id, 'blogPage', e.target.checked)}
-                        disabled={user.role === 'admin'}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={user.menuPermissions?.enquiry || false}
-                        onChange={(e) => handlePermissionChange(user._id, 'enquiry', e.target.checked)}
-                        disabled={user.role === 'admin'}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={user.menuPermissions?.bookings || false}
-                        onChange={(e) => handlePermissionChange(user._id, 'bookings', e.target.checked)}
-                        disabled={user.role === 'admin'}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+  {roles.map(role => (
+    <tr key={role._id}>
+      <td>{role._id}</td>
+      {['dashboard', 'users', 'registration', 'master', 'blogPage', 'enquiry', 'bookings'].map(permission => (
+        <td key={permission}>
+          <input
+            type="checkbox"
+            checked={role.menuPermissions?.[permission] || false}
+            onChange={(e) => handleCheckboxChange(role._id, permission, e.target.checked)}
+          />
+        </td>
+      ))}
+    </tr>
+  ))}
+</tbody>
+
             </table>
           </div>
         </div>
@@ -213,6 +189,4 @@ function UserRole() {
 }
 
 export default UserRole;
-
-
 

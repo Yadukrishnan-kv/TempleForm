@@ -102,7 +102,7 @@ const updateProfile = async (req, res) => {
 
 const addSubadmin = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
     
     const existingUser = await AdminCollection.findOne({ email });
     if (existingUser) {
@@ -114,7 +114,7 @@ const addSubadmin = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role: 'subadmin'
+      role: role || 'subadmin1'
     });
     
     if (response?._id) {
@@ -128,13 +128,24 @@ const addSubadmin = async (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-    const users = await AdminCollection.find({ role: 'subadmin' }).select('-password');
+    const users = await AdminCollection.find({ role: { $ne: 'admin' } }).select('-password');
     res.status(200).send(users);
   } catch (err) {
     console.log('Get users error:', err.message);
     return res.status(500).send({ message: "Internal server error" });
   }
 };
+
+const getRoles = async (req, res) => {
+  try {
+    const roles = AdminCollection.schema.path('role').enumValues.filter(role => role !== 'admin');
+    res.status(200).send(roles);
+  } catch (err) {
+    console.log('Get roles error:', err.message);
+    return res.status(500).send({ message: "Internal server error" });
+  }
+};
+
 
 const editSubadmin = async (req, res) => {
   try {
@@ -179,40 +190,44 @@ const deleteSubadmin = async (req, res) => {
 };
 
 // In your AdminController.js
-const updateMenuPermissions = async (req, res) => {
+const updateRolePermissions = async (req, res) => {
   try {
-    const { userId, menuPermissions } = req.body;
-    
-    // Get the admin user making the request
-    const adminUser = await AdminCollection.findById(req.user.id);
-    
-    if (!adminUser || adminUser.role !== 'admin') {
-      return res.status(403).send({ message: 'Unauthorized: Only admin can update permissions' });
+    const { role, menuPermissions } = req.body;
+
+    // Update all users with the specified role
+    const result = await AdminCollection.updateMany(
+      { role: role },
+      { $set: { menuPermissions: menuPermissions } }
+    );
+
+    if (result.modifiedCount > 0) {
+      res.status(200).json({ message: 'Role permissions updated successfully', menuPermissions });
+    } else {
+      res.status(404).json({ message: 'No users found with the specified role' });
     }
-
-    const subadmin = await AdminCollection.findById(userId);
-    if (!subadmin) {
-      return res.status(404).send({ message: 'User not found' });
-    }
-
-    // Update the menuPermissions
-    subadmin.menuPermissions = {
-      ...subadmin.menuPermissions,
-      ...menuPermissions
-    };
-
-    await subadmin.save();
-    
-    res.status(200).send({ 
-      message: "Menu permissions updated successfully",
-      menuPermissions: subadmin.menuPermissions 
-    });
-  } catch (err) {
-    console.log('Update menu permissions error:', err.message);
-    return res.status(500).send({ message: "Internal server error" });
+  } catch (error) {
+    console.error('Error updating role permissions:', error);
+    res.status(500).json({ message: 'Error updating role permissions' });
   }
 };
-
+const getRolesWithPermissions = async (req, res) => {
+  try {
+    const roles = await AdminCollection.aggregate([
+      { $match: { role: { $ne: 'admin' } } },
+      {
+        $group: {
+          _id: '$role',
+          menuPermissions: { $first: '$menuPermissions' }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]);
+    res.status(200).json(roles);
+  } catch (error) {
+    console.error('Error fetching roles with permissions:', error);
+    res.status(500).json({ message: 'Error fetching roles with permissions' });
+  }
+};
 
 
 module.exports = {
@@ -223,5 +238,6 @@ module.exports = {
   addSubadmin,
   getUsers,
   editSubadmin,
-  deleteSubadmin,updateMenuPermissions
+  deleteSubadmin,updateRolePermissions,  getRoles,getRolesWithPermissions
+
 };
