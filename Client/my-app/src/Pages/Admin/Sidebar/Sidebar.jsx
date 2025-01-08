@@ -7,14 +7,14 @@ import { SlCursor } from "react-icons/sl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBlog, faCalendarCheck, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-
-import "./Sidebar.css";
 import axios from "axios";
+import "./Sidebar.css";
 
 function Sidebar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [openSubmenus, setOpenSubmenus] = useState({});
   const [userPermissions, setUserPermissions] = useState(null);
+  const [userRole, setUserRole] = useState(null);
   const [loading, setLoading] = useState(true);
   const ip = process.env.REACT_APP_BACKEND_IP;
 
@@ -30,13 +30,14 @@ function Sidebar() {
   };
 
   useEffect(() => {
-    const fetchUserPermissions = async () => {
+    const fetchUserProfile = async () => {
       try {
         const token = localStorage.getItem('token');
         const response = await axios.get(`${ip}/api/adminlogin/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUserPermissions(response.data.menuPermissions);
+        setUserRole(response.data.role);
       } catch (error) {
         console.error('Error fetching permissions:', error);
       } finally {
@@ -44,12 +45,18 @@ function Sidebar() {
       }
     };
 
-    fetchUserPermissions();
+    fetchUserProfile();
   }, []);
+
+  const hasPermission = (menuId) => {
+    if (userRole === 'admin') return true;
+    return userPermissions?.[menuId] === true;
+  };
 
   if (loading) {
     return <div>Loading...</div>;
   }
+
   return (
     <div className="sidebar">
       <div className="logo">
@@ -57,178 +64,146 @@ function Sidebar() {
       </div>
       <nav>
         <ul>
-        {userPermissions?.dashboard && (
-          <li className={`menu-item ${activeMenu === "dashboard" ? "active" : ""}`}>
-            <Link to="/Dashboard" onClick={() => toggleMenu("dashboard")}>
-              <RiHome3Fill style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
-              <span className="menu-name">Dashboard</span>
-              
-            </Link>
-          </li>
+          {/* Dashboard Menu Item */}
+          {hasPermission('dashboard') && (
+            <li className={`menu-item ${activeMenu === "dashboard" ? "active" : ""}`}>
+              <Link to="/Dashboard" onClick={() => toggleMenu("dashboard")}>
+                <RiHome3Fill style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                <span className="menu-name">Dashboard</span>
+              </Link>
+            </li>
           )}
-                  {userPermissions?.dashboard && (
 
-          <li className={`menu-item has-submenu ${activeMenu === "Users" ? "active" : ""}`}>
-            
-            <button className="menu-toggle1" onClick={() => toggleSubmenu("Users")}>
-              
-              <FontAwesomeIcon icon= {faUsers}  style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
-              <span className="menu-name">Users</span>
-              {openSubmenus.Users ? (
-                <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
-              ) : (
-                <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+          {/* Users Menu Item */}
+          {hasPermission('users') && (
+            <li className={`menu-item has-submenu ${activeMenu === "users" ? "active" : ""}`}>
+              <button className="menu-toggle1" onClick={() => toggleSubmenu("users")}>
+                <FontAwesomeIcon icon={faUsers} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                <span className="menu-name">Users</span>
+                {openSubmenus.users ? (
+                  <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
+                ) : (
+                  <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+                )}
+              </button>
+              {openSubmenus.users && (
+                <ul className="submenu">
+                  <li><Link to="/listusers">List Users</Link></li>
+                  <li><Link to="/usersrole">Role</Link></li>
+                </ul>
               )}
-            </button>
-            {openSubmenus.Users && (
-              <ul className="submenu">
-                 <li>
-                  <Link to="/listusers">List Users</Link>
-                </li>
-                <li>
-                  <Link to="/usersrole">Role</Link>
-                </li>
-              </ul>
-            )}
-          </li>
-                    )}
-           {userPermissions?.dashboard && (
-          <li className={`menu-item has-submenu ${activeMenu === "sort" ? "active" : ""}`}>
-            
-            <button className="menu-toggle1" onClick={() => toggleSubmenu("sort")}>
-              
-              <MdOutlineAppRegistration style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
-              <span className="menu-name">Registration</span>
-              {openSubmenus.sort ? (
-                <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
-              ) : (
-                <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+            </li>
+          )}
+
+          {/* Registration Menu Item */}
+          {hasPermission('registration') && (
+            <li className={`menu-item has-submenu ${activeMenu === "registration" ? "active" : ""}`}>
+              <button className="menu-toggle1" onClick={() => toggleSubmenu("registration")}>
+                <MdOutlineAppRegistration style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                <span className="menu-name">Registration</span>
+                {openSubmenus.registration ? (
+                  <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
+                ) : (
+                  <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+                )}
+              </button>
+              {openSubmenus.registration && (
+                <ul className="submenu">
+                  <li><Link to="/AddSubmission">Add form</Link></li>
+                  <li><Link to="/SortSubmission">List Details</Link></li>
+                </ul>
               )}
-            </button>
-            {openSubmenus.sort && (
-              <ul className="submenu">
-                 <li>
-                  <Link to="/AddSubmission">Add form</Link>
-                </li>
-                <li>
-                  <Link to="/SortSubmission">List Details</Link>
-                </li>
-              </ul>
-            )}
-          </li>
-               )}
-          {userPermissions?.dashboard && (
+            </li>
+          )}
 
-
-          <li className={`menu-item has-submenu ${activeMenu === "master" ? "active" : ""}`}>
-            <button className="menu-toggle1" onClick={() => toggleSubmenu("master")}>
-            <SlCursor 
-            style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
-              <span className="menu-name">master</span>
-              {openSubmenus.master ? (
-                <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
-              ) : (
-                <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+          {/* Master Menu Item */}
+          {hasPermission('master') && (
+            <li className={`menu-item has-submenu ${activeMenu === "master" ? "active" : ""}`}>
+              <button className="menu-toggle1" onClick={() => toggleSubmenu("master")}>
+                <SlCursor style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                <span className="menu-name">Master</span>
+                {openSubmenus.master ? (
+                  <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
+                ) : (
+                  <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+                )}
+              </button>
+              {openSubmenus.master && (
+                <ul className="submenu">
+                  <li><Link to="/addstate">Manage States</Link></li>
+                  <li><Link to="/adddistrict">Manage Districts</Link></li>
+                  <li><Link to="/addtaluk">Manage Taluks</Link></li>
+                </ul>
               )}
-            </button>
-            {openSubmenus.master && (
-              <ul className="submenu">
-                <li>
-                  <Link to="/addstate">Manage States</Link>
-                </li>
-                <li>
-                  <Link to="/adddistrict">Manage Districts</Link>
-                </li>
-                <li>
-                  <Link to="/addtaluk">Manage Taluks</Link>
-                </li>
-              </ul>
-            )}
-          </li>
-                         )}
-            {userPermissions?.dashboard && (
+            </li>
+          )}
 
-
-          <li className={`menu-item has-submenu ${activeMenu === "BlogPage" ? "active" : ""}`}>
-            
-            <button className="menu-toggle1" onClick={() => toggleSubmenu("BlogPage")}>
-              
-            <FontAwesomeIcon icon={faBlog} 
-            style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
-              <span className="menu-name">BlogPage</span>
-              {openSubmenus.BlogPage ? (
-                <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
-              ) : (
-                <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+          {/* Blog Page Menu Item */}
+          {hasPermission('blogPage') && (
+            <li className={`menu-item has-submenu ${activeMenu === "blogPage" ? "active" : ""}`}>
+              <button className="menu-toggle1" onClick={() => toggleSubmenu("blogPage")}>
+                <FontAwesomeIcon icon={faBlog} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                <span className="menu-name">Blog Page</span>
+                {openSubmenus.blogPage ? (
+                  <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
+                ) : (
+                  <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+                )}
+              </button>
+              {openSubmenus.blogPage && (
+                <ul className="submenu">
+                  <li><Link to="/BlogPage">List Blogs</Link></li>
+                </ul>
               )}
-            </button>
-            {openSubmenus.BlogPage && (
-              <ul className="submenu">
-                 <li>
-                  <Link to="/BlogPage">List Blogs</Link>
-                </li>
-               
-              </ul>
-            )}
-          </li>
-                                   )}
-            {userPermissions?.dashboard && (
+            </li>
+          )}
 
-          <li className={`menu-item has-submenu ${activeMenu === "Enquiry" ? "active" : ""}`}>
-            
-            <button className="menu-toggle1" onClick={() => toggleSubmenu("Enquiry")}>
-              
-            <FontAwesomeIcon icon={faEnvelope} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
-              <span className="menu-name">Enquiry</span>
-              {openSubmenus.Enquiry ? (
-                <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
-              ) : (
-                <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+          {/* Enquiry Menu Item */}
+          {hasPermission('enquiry') && (
+            <li className={`menu-item has-submenu ${activeMenu === "enquiry" ? "active" : ""}`}>
+              <button className="menu-toggle1" onClick={() => toggleSubmenu("enquiry")}>
+                <FontAwesomeIcon icon={faEnvelope} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                <span className="menu-name">Enquiry</span>
+                {openSubmenus.enquiry ? (
+                  <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
+                ) : (
+                  <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+                )}
+              </button>
+              {openSubmenus.enquiry && (
+                <ul className="submenu">
+                  <li><Link to="/EnquiryPage">List Enquiry</Link></li>
+                </ul>
               )}
-            </button>
-            {openSubmenus.Enquiry && (
-              <ul className="submenu">
-                 <li>
-                  <Link to="/EnquiryPage">List Enquiry</Link>
-                </li>
-               
-              </ul>
-            )}
-          </li>
+            </li>
+          )}
+
+          {/* Bookings Menu Item */}
+          {hasPermission('bookings') && (
+            <li className={`menu-item has-submenu ${activeMenu === "bookings" ? "active" : ""}`}>
+              <button className="menu-toggle1" onClick={() => toggleSubmenu("bookings")}>
+                <FontAwesomeIcon icon={faCalendarCheck} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                <span className="menu-name">Bookings</span>
+                {openSubmenus.bookings ? (
+                  <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
+                ) : (
+                  <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+                )}
+              </button>
+              {openSubmenus.bookings && (
+                <ul className="submenu">
+                  <li><Link to="/BookingsPage">List Bookings</Link></li>
+                </ul>
               )}
-                          {userPermissions?.dashboard && (
-
-
-          <li className={`menu-item has-submenu ${activeMenu === "BookingsPage" ? "active" : ""}`}>
-            
-            <button className="menu-toggle1" onClick={() => toggleSubmenu("BookingsPage")}>
-              
-            <FontAwesomeIcon icon={faCalendarCheck} 
-            style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
-              <span className="menu-name">Bookings</span>
-              {openSubmenus.BookingsPage ? (
-                <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
-              ) : (
-                <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
-              )}
-            </button>
-            {openSubmenus.BookingsPage && (
-              <ul className="submenu">
-                 <li>
-                  <Link to="/BookingsPage">List Bookings</Link>
-                </li>
-               
-              </ul>
-            )}
-          </li>
-                        )}
-
+            </li>
+          )}
         </ul>
-        
       </nav>
     </div>
   );
 }
 
 export default Sidebar;
+
+
 
