@@ -161,32 +161,34 @@ function AddUsers() {
           <div className="user-list-container">
             <h2 className="user-list-title">Subadmins</h2>
             {error && <div className="error-message">{error}</div>}
-            <table className="user-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th>Edit</th>
-                  <th>Delete</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map(user => (
-                  <tr key={user._id} className="user-item">
-                    <td className="user-name">{user.name}</td>
-                    <td className="user-email">{user.email}</td>
-                    <td className="user-role">{user.role}</td>
-                    <td>
-                      <button className="edit-link" onClick={() => handleEdit(user)}>Edit</button>
-                    </td>
-                    <td>
-                      <button className="delete-button1" onClick={() => handleDelete(user._id)}>Delete</button>
-                    </td>
+            <div className="table-wrapper">
+              <table className="user-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {users.map(user => (
+                    <tr key={user._id} className="user-item">
+                      <td className="user-name">{user.name}</td>
+                      <td className="user-email">{user.email}</td>
+                      <td className="user-role">{user.role}</td>
+                      <td>
+                        <button className="edit-link" onClick={() => handleEdit(user)}>Edit</button>
+                      </td>
+                      <td>
+                        <button className="delete-button1" onClick={() => handleDelete(user._id)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -195,3 +197,4 @@ function AddUsers() {
 }
 
 export default AddUsers
+

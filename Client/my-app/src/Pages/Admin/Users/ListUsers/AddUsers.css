@@ -1,243 +1,264 @@
 /* Base styles */
 .app-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    
-  }
-  
-  .content-container {
-    display: flex;
-    flex: 1;
-  }
-  
-  .add-users-page {
-    flex: 1;
-    padding: 1rem;
-    max-width: 1200px;
-    margin-left: 40px;
-    margin-top: 20px;
-    margin-right: 20px;
-    background-color: #f4f7fb;
-
-  }
-  
-  /* Button styles */
-  .add-button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 0.625rem 1.25rem;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 1rem;
-    margin: 0.25rem 0;
-    cursor: pointer;
-    border-radius: 0.25rem;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-  }
-  
-  .add-button:hover {
-    background-color: #45a049;
-  }
-  
-  /* Form styles */
-  .add-subadmin-container {
-    background-color: white;
-    padding: 1.25rem;
-    border-radius: 0.5rem;
-    margin-top: 1.25rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
-  
-  .add-subadmin-title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .add-subadmin-form {
-    display: flex;
+
+.content-container {
+  display: flex;
+  flex: 1;
+}
+
+.add-users-page {
+  flex: 1;
+  padding: 1rem;
+  max-width: 1200px;
+  margin-left: 40px;
+  margin-top: 20px;
+  margin-right: 20px;
+  background-color: #f4f7fb;
+}
+
+/* Button styles */
+.add-button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 0.625rem 1.25rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 0.25rem 0;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.add-button:hover {
+  background-color: #45a049;
+}
+
+/* Form styles */
+.add-subadmin-container {
+  background-color: white;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  margin-top: 1.25rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.add-subadmin-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.add-subadmin-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.3125rem;
+  font-weight: bold;
+  text-align: start;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+}
+
+.add-subadmin-button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 0.625rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  width: 200px;
+}
+
+.add-subadmin-button:hover {
+  background-color: #45a049;
+}
+
+.add-subadmin-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #d32f2f;
+  margin-top: 0.625rem;
+  font-size: 0.875rem;
+}
+
+/* User list styles */
+.user-list-container {
+  margin-top: 1.875rem;
+  overflow: hidden;
+}
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  /* Custom scrollbar styles */
+  scrollbar-width: thin;
+  scrollbar-color:  #f4f7fb;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f4f7fb;
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+}
+
+.user-list-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.user-table {
+  width: 100%;
+  min-width: 750px;
+  border-collapse: collapse;
+  margin-bottom: 0;
+  background-color: white;
+}
+
+.user-table th,
+.user-table td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.user-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.user-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.user-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+/* Action buttons */
+.edit-link {
+  background-color: #2196F3;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.3s;
+}
+
+.edit-link:hover {
+  background-color: #1976D2;
+}
+
+.delete-button1 {
+  background-color: #f44336;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.3s;
+}
+
+.delete-button1:hover {
+  background-color: #d32f2f;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .content-container {
     flex-direction: column;
   }
-  
-  .form-group {
-    margin-bottom: 1rem;
+
+  .add-users-page {
+    margin-top: 20px;
+    margin-left: 0px;
+    padding: 1rem;
   }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 0.3125rem;
-    font-weight: bold;
-    text-align: start;
+
+  .add-subadmin-container {
+    margin: 1rem 0;
   }
-  
-  .form-group input {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 0.25rem;
-    font-size: 1rem;
-  }
-  
+
   .add-subadmin-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 0.625rem;
-    border: none;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
     width: 200px;
   }
-  
-  .add-subadmin-button:hover {
-    background-color: #45a049;
+
+  .table-wrapper {
+    margin: 0 -1rem;
+    padding: 0 1rem;
+    width: calc(100% + 2rem);
   }
-  
-  .add-subadmin-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-  
-  .error-message {
-    color: #d32f2f;
-    margin-top: 0.625rem;
-    font-size: 0.875rem;
-  }
-  
-  /* User list styles */
-  .user-list-container {
-    margin-top: 1.875rem;
-  }
-  
-  .user-list-title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .user-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1rem;
-  }
-  
+
   .user-table th,
   .user-table td {
-    border: 1px solid #ddd;
     padding: 0.5rem;
-    text-align: left;
   }
-  
-  .user-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
+}
+
+@media screen and (max-width: 480px) {
+  .add-users-page {
+    padding: 0.5rem;
   }
-  
-  .user-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+
+  .add-button {
+    width: 200px;
+    margin-bottom: 1rem;
   }
-  
-  .user-table tr:hover {
-    background-color: #f5f5f5;
+  .add-subadmin-button {
+    width: 200px;
   }
-  
-  /* Pagination styles */
-  .pagination-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1.25rem;
+  .table-wrapper {
+    margin: 0 -0.5rem;
+    padding: 0 0.5rem;
+    width: calc(100% + 1rem);
   }
-  
-  .prev-button,
-  .next-button {
-    background-color: #008CBA;
-    border: none;
-    color: white;
-    padding: 0.625rem 1.25rem;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 1rem;
-    margin: 0 0.125rem;
-    cursor: pointer;
-    border-radius: 0.25rem;
-    transition: background-color 0.3s ease;
+
+  .user-table th,
+  .user-table td {
+    padding: 0.4rem;
+    font-size: 0.875rem;
   }
-  
-  .prev-button:hover,
-  .next-button:hover {
-    background-color: #007099;
+
+  .edit-link,
+  .delete-button1 {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
   }
-  
-  .prev-button:disabled,
-  .next-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-  
-  /* Responsive styles */
-  @media screen and (max-width: 768px) {
-    .content-container {
-      flex-direction: column;
-    }
-  
-    .add-users-page {
-      padding: 0.75rem;
-    }
-  
-    .add-subadmin-container {
-      padding: 1rem;
-    }
-  
-    .user-table {
-      font-size: 0.875rem;
-    }
-  
-    .user-table th,
-    .user-table td {
-      padding: 0.375rem;
-    }
-  
-    .prev-button,
-    .next-button {
-      padding: 0.5rem 1rem;
-      font-size: 0.875rem;
-    }
-  }
-  
-  @media screen and (max-width: 480px) {
-    .add-users-page{
-      margin-left: 10px;
-      margin-right: 30px;
-      width: 500px;
-    }
-    .add-button,
-    .add-subadmin-button
-    {
-      width: 45%;
-      margin-bottom: 0.5rem;
-    }
-  
-    .pagination-controls {
-      flex-direction: column;
-    }
-  
-    .pagination-controls span {
-      margin: 0.5rem 0;
-    }
-  
-    .user-table {
-      font-size: 0.75rem;
-    }
-  
-    .user-table th,
-    .user-table td {
-      padding: 0.25rem;
-    }
-  }
-  
-  
+}
+

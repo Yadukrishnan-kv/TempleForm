@@ -125,17 +125,20 @@
 }
 
 .dropdown-item span {
-  font-size: 25px;
   color: #d9534f;
-  margin-left: 60px;
-  text-align: center;
+  width: 100px;
+  height: 40px;
+  padding-left: 20px;
+  padding-top: 10px;
+  font-size: 1rem;
   font-weight: 500;
   background-color: #fff;
   border: 1px solid transparent;
   border-radius: 6px;
   transition: all 0.3s ease;
   cursor: pointer;
-  display: inline-block;
+  margin-left: 40px;
+  
 }
 
 .dropdownhr {
@@ -145,8 +148,10 @@
 .dropdown-item.logout {
   color: #d9534f;
   margin-left: 60px;
-  padding: 12px 25px;
-  text-align: center;
+  width: 100px;
+  height: 40px;
+  padding-left: 20px;
+  
   font-size: 1rem;
   font-weight: 500;
   background-color: #fff;
@@ -154,11 +159,17 @@
   border-radius: 6px;
   transition: all 0.3s ease;
   cursor: pointer;
-  display: inline-block;
-  margin-top: 20px;
+  
 }
 
 .dropdown-item.logout:hover {
+  background-color: #fbe9e9;
+  color: #c9302c;
+  border: 1px solid #c9302c;
+  transform: scale(1.05);
+}
+
+.dropdown-item span:hover{
   background-color: #fbe9e9;
   color: #c9302c;
   border: 1px solid #c9302c;
