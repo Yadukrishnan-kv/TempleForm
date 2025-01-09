@@ -12,6 +12,27 @@ function UserRole() {
   const [currentUser, setCurrentUser] = useState(null);
   const ip = process.env.REACT_APP_BACKEND_IP;
 
+
+  // Function to log actions
+  const logAction = async (action, details) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        `${ip}/api/adminlogin/log-action`,
+        {
+          action,
+          module: 'Users',
+          subModule: 'Role',
+          details
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+    } catch (error) {
+      console.error('Error logging action:', error);
+    }
+  };
   const fetchCurrentUser = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -84,7 +105,8 @@ function UserRole() {
           }
           return r;
         }));
-  
+        await logAction('Update', `Update  role: ${role}`);
+
         setSuccessMessage('Permissions updated successfully');
         setTimeout(() => setSuccessMessage(''), 3000);
       }
@@ -107,7 +129,7 @@ function UserRole() {
       }
       return role;
     });
-  
+   
     setRoles(updatedRoles);
   
     // Send updated permissions to the backend
@@ -157,6 +179,7 @@ function UserRole() {
                   <th>Dashboard</th>
                   <th>Users</th>
                   <th>Registration</th>
+                  <th>Log</th>
                   <th>Master</th>
                   <th>Blog Page</th>
                   <th>Enquiry</th>
@@ -167,7 +190,7 @@ function UserRole() {
   {roles.map(role => (
     <tr key={role._id}>
       <td>{role._id}</td>
-      {['dashboard', 'users', 'registration', 'master', 'blogPage', 'enquiry', 'bookings'].map(permission => (
+      {['dashboard', 'users', 'registration','log', 'master', 'blogPage', 'enquiry', 'bookings'].map(permission => (
         <td key={permission}>
           <input
             type="checkbox"

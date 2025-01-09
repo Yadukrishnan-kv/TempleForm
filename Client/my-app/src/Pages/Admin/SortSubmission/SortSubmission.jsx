@@ -134,7 +134,25 @@ const SortSubmission = () => {
       setLoading(false);
     }
   };
-
+  const logAction = async (action, details) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        `${ip}/api/adminlogin/log-action`,
+        {
+          action,
+          module: 'Registration',
+          subModule: 'List Details-View',
+          details
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+    } catch (error) {
+      console.error('Error logging action:', error);
+    }
+  };
   // Fetch Temples
   const fetchTemples = async (filters = {}) => {
     try {
@@ -222,6 +240,8 @@ const SortSubmission = () => {
         district: selectedDistrict,
         taluk: selectedTaluk
       });
+      await logAction('Update', `Updated Verified: ${isVerified}`);
+
     } catch (error) {
       console.error('Error verifying temple:', error);
       setError('Failed to verify temple');

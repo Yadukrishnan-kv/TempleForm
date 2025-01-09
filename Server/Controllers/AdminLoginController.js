@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const AdminCollection = require("../Models/AdminLoginModel");
+const {AdminCollection,AdminLogCollection} = require("../Models/AdminLoginModel");
 
 const register = async (req, res) => {
   try {
@@ -29,6 +29,7 @@ const register = async (req, res) => {
   }
 };
 
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -43,8 +44,13 @@ const login = async (req, res) => {
     
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
+      // Log failed login attempt
+      await createLogEntry(user._id, 'Failed Login', 'Authentication', 'Login');
       return res.status(400).json({ message: "Invalid email or password" });
     }
+    
+    // Log successful login
+    await createLogEntry(user._id, 'Login', 'Authentication', 'Login');
     
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
@@ -59,6 +65,81 @@ const login = async (req, res) => {
   } catch (err) {
     console.error('Login error:', err.message);
     return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Add this new method to handle action logging
+const logAction = async (req, res) => {
+  try {
+    const { action, module, subModule, details } = req.body;
+    const userId = req.user.id;
+
+    await AdminLogCollection.create({
+      userId,
+      action,
+      module,
+      subModule,
+      details
+    });
+
+    res.status(200).json({ message: 'Action logged successfully' });
+  } catch (error) {
+    console.error('Error logging action:', error);
+    res.status(500).json({ message: 'Error logging action' });
+  }
+};
+
+// Update the existing logMenuAction
+const logMenuAction = async (req, res) => {
+  try {
+    const { module, subModule } = req.body;
+    const userId = req.user.id;
+
+    await AdminLogCollection.create({
+      userId,
+      action: 'Menu Click',
+      module,
+      subModule,
+      details: `Accessed ${subModule} under ${module}`
+    });
+
+    res.status(200).json({ message: 'Menu action logged successfully' });
+  } catch (error) {
+    console.error('Error logging menu action:', error);
+    res.status(500).json({ message: 'Error logging menu action' });
+  }
+};
+
+
+const getAdminLogs = async (req, res) => {
+  try {
+    const logs = await AdminLogCollection.aggregate([
+      {
+        $lookup: {
+          from: 'admins',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user'
+        }
+      },
+      { $unwind: '$user' },
+      {
+        $project: {
+          role: '$user.role',
+          name: '$user.name',
+          action: 1,
+          module: 1,
+          subModule: 1,
+          createdAt: 1
+        }
+      },
+      { $sort: { createdAt: -1 } }
+    ]);
+
+    res.status(200).json(logs);
+  } catch (error) {
+    console.error('Error fetching admin logs:', error);
+    res.status(500).json({ message: 'Error fetching admin logs' });
   }
 };
 
@@ -230,6 +311,20 @@ const getRolesWithPermissions = async (req, res) => {
 };
 
 
+
+const createLogEntry = async (userId, action, module, subModule) => {
+  try {
+    await AdminLogCollection.create({
+      userId,
+      action: action === 'Login Successful' ? 'Login' : action, // Convert to enum value
+      module,
+      subModule
+    });
+  } catch (error) {
+    console.error('Error creating log entry:', error);
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -238,6 +333,12 @@ module.exports = {
   addSubadmin,
   getUsers,
   editSubadmin,
-  deleteSubadmin,updateRolePermissions,  getRoles,getRolesWithPermissions
+  deleteSubadmin,
+  updateRolePermissions,
+  getRoles,
+  getRolesWithPermissions,
+  logMenuAction,
+  getAdminLogs,
+  createLogEntry,logAction
 
 };

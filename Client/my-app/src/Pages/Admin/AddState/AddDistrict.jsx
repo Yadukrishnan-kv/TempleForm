@@ -75,12 +75,15 @@ function AddDistrict() {
         console.log("Updating district:", currentDistrictId);
         const response = await axios.put(`${ip}/api/districts/updateDistrict/${currentDistrictId}`, payload);
         toast.success("District Updated successfully!")
+        logAction('Update', `updated new District: ${name}`);
 
         console.log("Update response:", response.data);
       } else {
         console.log("Creating new district");
         const response = await axios.post(`${ip}/api/districts/createDistrict`, payload);
         toast.success("District added successfully!")
+        logAction('Create', `created new District: ${name}`);
+
         console.log("Create response:", response.data);
       }
       
@@ -93,10 +96,12 @@ function AddDistrict() {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id,districtName) => {
     try {
       await axios.delete(`${ip}/api/districts/deleteDistrict/${id}`);
       await fetchDistricts();
+      await logAction('Delete', `Deleted District: ${districtName}`);
+
       toast.success("District deleted successfully!")
 
     } catch (error) {
@@ -105,7 +110,26 @@ function AddDistrict() {
       setError('Failed to delete district');
     }
   };
-
+   // Function to log actions
+   const logAction = async (action, details) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        `${ip}/api/adminlogin/log-action`,
+        {
+          action,
+          module: 'Master',
+          subModule: 'Manage District',
+          details
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+    } catch (error) {
+      console.error('Error logging action:', error);
+    }
+  };
   const handleEdit = (district) => {
     console.log("Editing district:", district);
     setIsEditing(true);
@@ -213,7 +237,7 @@ function AddDistrict() {
                       <button
                         type="button"
                         className="delete-button1"
-                        onClick={() => handleDelete(district._id)}
+                        onClick={() => handleDelete(district._id,district.name)}
                       >
                         Delete
                       </button>

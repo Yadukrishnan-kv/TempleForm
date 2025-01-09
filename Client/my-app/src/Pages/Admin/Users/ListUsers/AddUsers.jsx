@@ -36,6 +36,8 @@ function AddUsers() {
         response = await axios.put(`${ip}/api/adminlogin/editSubadmin/${editingUser._id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
+        logAction('Update', `Updated User: ${formData}`);
+
         toast.success("Subadmin updated successfully!", {
           position: "top-right",
           autoClose: 3000,
@@ -44,6 +46,8 @@ function AddUsers() {
         response = await axios.post(`${ip}/api/adminlogin/addSubadmin`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
+        await logAction('Create', `Created new User: ${formData}`);
+
         toast.success("Subadmin added successfully!", {
           position: "top-right",
           autoClose: 3000,
@@ -67,12 +71,14 @@ function AddUsers() {
     setIsFormVisible(true);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id,formData) => {
     try {
       const token = localStorage.getItem('token');
       await axios.delete(`${ip}/api/adminlogin/deleteSubadmin/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      await logAction('Delete', `Deleted state: ${formData}`);
+
       toast.success("Subadmin deleted successfully!", {
         position: "top-right",
         autoClose: 3000,
@@ -115,7 +121,25 @@ function AddUsers() {
     fetchUsers();
     fetchRoles();
   }, []);
-
+  const logAction = async (action, details) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        `${ip}/api/adminlogin/log-action`,
+        {
+          action,
+          module: 'Users',
+          subModule: 'List Users',
+          details
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+    } catch (error) {
+      console.error('Error logging action:', error);
+    }
+  };
   return (
     <div className="app-container">
       <Header />
@@ -215,7 +239,7 @@ function AddUsers() {
                         <button className="edit-link" onClick={() => handleEdit(user)}>Edit</button>
                       </td>
                       <td>
-                        <button className="delete-button1" onClick={() => handleDelete(user._id)}>Delete</button>
+                        <button className="delete-button1" onClick={() => handleDelete(user._id,user.name)}>Delete</button>
                       </td>
                     </tr>
                   ))}

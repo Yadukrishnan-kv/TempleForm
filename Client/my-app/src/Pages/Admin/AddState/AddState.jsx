@@ -11,77 +11,82 @@ const AddState = () => {
   const [states, setStates] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [editStateId, setEditStateId] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1); // Current page
-  const [totalStates, setTotalStates] = useState(0); // Total number of states
-  const [statesPerPage] = useState(5); // Number of states per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalStates, setTotalStates] = useState(0);
+  const [statesPerPage] = useState(5);
 
-  // Fetch all states with pagination
-  useEffect(() => {
-    axios.get(`${ip}/api/states/getAllStates?page=${currentPage}&limit=${statesPerPage}`)
-      .then(response => {
-        setStates(response.data.states);
-        setTotalStates(response.data.totalStates); // Total states for pagination
-      })
-      .catch(error => console.error(error));
-  }, [currentPage]); // Re-fetch data when the page changes
-
-  // Handle form submission for adding/updating a state
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (editStateId) {
-      axios
-        .put(`${ip}/api/states/updateState/${editStateId}`, { name })
-        .then(() => {
-          setName('');
-          setEditStateId(null);
-          setIsFormVisible(false);
-          refreshStates();
-          toast.success('State updated successfully!'); 
-        })
-        .catch((error) => {
-          console.error(error);
-          toast.error('Error updating state!'); 
-        });
-    } else {
-      axios
-        .post(`${ip}/api/states/createState`, { name })
-        .then(() => {
-          setName('');
-          setIsFormVisible(false);
-          refreshStates();
-          toast.success('State created successfully!');
-        })
-        .catch((error) => {
-          console.error(error);
-          toast.error('Error creating state!'); 
-        });
+  // Function to log actions
+  const logAction = async (action, details) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        `${ip}/api/adminlogin/log-action`,
+        {
+          action,
+          module: 'Master',
+          subModule: 'Manage States',
+          details
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+    } catch (error) {
+      console.error('Error logging action:', error);
     }
   };
-  // Load states
-  const refreshStates = () => {
-    axios.get(`${ip}/api/states/getAllStates?page=${currentPage}&limit=${statesPerPage}`)
-      .then(response => {
-        setStates(response.data.states);
-        setTotalStates(response.data.totalStates);
-      })
-      .catch(error => console.error(error));
+
+  useEffect(() => {
+    fetchStates();
+  }, [currentPage]);
+
+  const fetchStates = async () => {
+    try {
+      const response = await axios.get(
+        `${ip}/api/states/getAllStates?page=${currentPage}&limit=${statesPerPage}`
+      );
+      setStates(response.data.states);
+      setTotalStates(response.data.totalStates);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  // Handle delete state
-  const handleDelete = (id) => {
-    axios.delete(`${ip}/api/states/deleteState/${id}`)
-      .then(() => {
-        setStates(states.filter(state => state._id !== id));
-        toast.success("State deleted successfully!"); 
-      })
-      .catch((error) => {
-        console.error(error);
-        toast.error("Error deleting state!"); 
-      });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (editStateId) {
+        await axios.put(`${ip}/api/states/updateState/${editStateId}`, { name });
+        await logAction('Update', `Updated state: ${name}`);
+        toast.success('State updated successfully!');
+      } else {
+        await axios.post(`${ip}/api/states/createState`, { name });
+        await logAction('Create', `Created new state: ${name}`);
+        toast.success('State created successfully!');
+      }
+      setName('');
+      setEditStateId(null);
+      setIsFormVisible(false);
+      fetchStates();
+    } catch (error) {
+      console.error(error);
+      toast.error(editStateId ? 'Error updating state!' : 'Error creating state!');
+    }
   };
 
-  // Handle edit button click
-  const handleEdit = (id) => {
+  const handleDelete = async (id, stateName) => {
+    try {
+      await axios.delete(`${ip}/api/states/deleteState/${id}`);
+      await logAction('Delete', `Deleted state: ${stateName}`);
+      setStates(states.filter(state => state._id !== id));
+      toast.success("State deleted successfully!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Error deleting state!");
+    }
+  };
+
+  const handleEdit = async (id) => {
     const stateToEdit = states.find(state => state._id === id);
     if (stateToEdit) {
       setName(stateToEdit.name);
@@ -90,10 +95,15 @@ const AddState = () => {
     }
   };
 
-  // Calculate total pages
+  const handleAddNewClick = async () => {
+    setIsFormVisible(!isFormVisible);
+    setEditStateId(null);
+    setName('');
+    
+  };
+
   const totalPages = Math.ceil(totalStates / statesPerPage);
 
-  // Handle Previous and Next buttons
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -113,11 +123,10 @@ const AddState = () => {
         <Sidebar />
         <div className="Statesubmission-page">
           <h2>Manage States</h2>
-          <button className="add-button" onClick={() => {
-            setIsFormVisible(!isFormVisible);
-            setEditStateId(null);
-            setName('');
-          }}>
+          <button 
+            className="add-button" 
+            onClick={handleAddNewClick}
+          >
             {isFormVisible ? "Cancel" : "Add New State"}
           </button>
 
@@ -130,7 +139,9 @@ const AddState = () => {
                 placeholder="State Name"
                 required
               />
-              <button type="submit">{editStateId ? "Update State" : "Add State"}</button>
+              <button type="submit">
+                {editStateId ? "Update State" : "Add State"}
+              </button>
             </form>
           )}
 
@@ -149,17 +160,26 @@ const AddState = () => {
                   <tr key={state._id}>
                     <td>{state.name}</td>
                     <td>
-                      <button className="edit-link" onClick={() => handleEdit(state._id)}>Edit</button>
+                      <button 
+                        className="edit-link" 
+                        onClick={() => handleEdit(state._id)}
+                      >
+                        Edit
+                      </button>
                     </td>
                     <td>
-                      <button className="delete-button1" onClick={() => handleDelete(state._id)}>Delete</button>
+                      <button 
+                        className="delete-button1" 
+                        onClick={() => handleDelete(state._id, state.name)}
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
 
-            {/* Pagination */}
             <div className="pagination-controls">
               <button
                 className="prev-button"
@@ -185,4 +205,3 @@ const AddState = () => {
 };
 
 export default AddState;
-

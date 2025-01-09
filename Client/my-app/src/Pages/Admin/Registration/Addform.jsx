@@ -180,6 +180,27 @@ function Addform() {
     }));
   };
 
+  // Function to log actions
+  const logAction = async (action, details) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        `${ip}/api/adminlogin/log-action`,
+        {
+          action,
+          module: 'Registration',
+          subModule: 'Add Form',
+          details
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+    } catch (error) {
+      console.error('Error logging action:', error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -190,6 +211,8 @@ function Addform() {
         }
       });
       console.log('Server response:', response);
+      await logAction('Create', `Created formData: ${formData}`);
+
       toast.success("Form created successfully!"); 
       navigate("/view");
     } catch (error) {

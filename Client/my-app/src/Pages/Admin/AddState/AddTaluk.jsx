@@ -49,7 +49,26 @@ function AddTaluk() {
       });
   }, [ip]);
   
-  
+  // Function to log actions
+  const logAction = async (action, details) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        `${ip}/api/adminlogin/log-action`,
+        {
+          action,
+          module: 'Master',
+          subModule: 'Manage Taluks',
+          details
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+    } catch (error) {
+      console.error('Error logging action:', error);
+    }
+  };
 
   useEffect(() => {
     // Fetch all districts
@@ -98,6 +117,8 @@ function AddTaluk() {
             )
           );
           resetForm();
+           logAction('Update', `updated new Taluk: ${name}`);
+
           toast.success('Taluk updated successfully!');
         })
         .catch((error) => {
@@ -114,13 +135,15 @@ function AddTaluk() {
             state: selectedState
           };
           setTaluks([...taluks, newTaluk]);
+          logAction('Create', `created new Taluk: ${name}`);
+
           toast.success('Taluk created successfully!');
 
           resetForm();
         })
         .catch((error) => {
           console.error(error)
-                    toast.error('Error creating Taluk!'); 
+        toast.error('Error creating Taluk!'); 
           
     });
     }
@@ -137,10 +160,13 @@ function AddTaluk() {
   };
 
   // Handle delete action
-  const handleDelete = (id) => {
+  const handleDelete = (id,talukName) => {
     axios.delete(`${ip}/api/taluks/deleteTaluk/${id}`)
+    
       .then(() => {
         setTaluks(taluks.filter(taluk => taluk._id !== id));
+         logAction('Delete', `Deleted Taluk: ${talukName}`);
+
                 toast.success("Taluk deleted successfully!"); 
         
       })
@@ -230,7 +256,7 @@ function AddTaluk() {
                       </button>
                     </td>
                     <td>
-                      <button className="delete-button1" onClick={() => handleDelete(taluk._id)}>
+                      <button className="delete-button1" onClick={() => handleDelete(taluk._id,taluk.name)}>
                         Delete
                       </button>
                     </td>

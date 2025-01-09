@@ -27,6 +27,26 @@ function AboutTemple() {
         }
     };
 
+
+    const logAction = async (action, details) => {
+        try {
+          const token = localStorage.getItem('token');
+          await axios.post(
+            `${ip}/api/adminlogin/log-action`,
+            {
+              action,
+              module: 'Registration',
+              subModule: 'List Details-About',
+              details
+            },
+            {
+              headers: { Authorization: `Bearer ${token}` }
+            }
+          );
+        } catch (error) {
+          console.error('Error logging action:', error);
+        }
+      };
     const addDescription = async () => {
         try {
             const res = await axios.post(`${ip}/api/aboutTemple/createaboutTemple`, {
@@ -35,6 +55,8 @@ function AboutTemple() {
             });
             setDescriptions(prevDescriptions => [...prevDescriptions, res.data.data]);
             setNewDescription('');
+             logAction('Create', `Created new Descriptions: ${newDescription,templeId}`);
+
             toast.success("Descriptions created successfully!");
         } catch (error) {
             toast.error('Error creating description');
@@ -52,6 +74,8 @@ function AboutTemple() {
             );
             setEditing(null);
             setEditedDescription('');
+            await logAction('Update', `Updated Descriptions: ${newDescription,templeId}`);
+
             toast.success(" Description updated successfully!");
 
         } catch (error) {
@@ -59,11 +83,12 @@ function AboutTemple() {
         }
     };
 
-    const deleteDescription = async (id) => {
+    const deleteDescription = async (id,newDescription) => {
         try {
             await axios.delete(`${ip}/api/aboutTemple/deleteaboutTemple/${id}`);
             setDescriptions(prevDescriptions => prevDescriptions.filter(desc => desc._id !== id));
             toast.success("Description deleted successfully!");
+            await logAction('Delete', `Deleted state: ${newDescription}`);
 
             
         } catch (error) {
@@ -71,6 +96,7 @@ function AboutTemple() {
         }
     };
 
+    
     return (
         <div className="app-container">
             <Header />

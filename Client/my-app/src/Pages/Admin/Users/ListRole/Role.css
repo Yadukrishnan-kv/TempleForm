@@ -12,6 +12,7 @@
   .user-role-table {
     width: 100%;
     overflow-x: auto;
+    border: 1px solid rgba(0, 0, 0, 0.1);
   }
   
   .user-role-table table {

@@ -23,6 +23,7 @@ import BlogPage from '../Pages/Admin/BlogPage/BlogPage'
 import ProtectedRoute from '../Pages/Admin/ProtectedRoute/ProtectedRoute'
 import AddUsers from '../Pages/Admin/Users/ListUsers/AddUsers'
 import UserRole from '../Pages/Admin/Users/ListRole/UserRole'
+import Log from '../Pages/Admin/LogDetails/Log'
 
 function Dom() {
   return (
@@ -53,6 +54,8 @@ function Dom() {
           <Route path="/BlogPage" element={<BlogPage />} />
           <Route path="/listusers" element={<AddUsers/>} />
           <Route path="/usersrole" element={<UserRole/>} />
+          <Route path="/log" element={<><Log/></>} />
+
 
           
 

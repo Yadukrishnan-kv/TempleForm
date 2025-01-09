@@ -1,6 +1,6 @@
 .admin-profile-container {
   width: 600px;
-  height: 300px;
+  height: fit-content;
   margin: 0 auto;
   padding: 20px;
   box-shadow: 0 4px 4px 4px rgba(0, 0, 0, 0.1);

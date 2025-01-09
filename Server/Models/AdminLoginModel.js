@@ -25,13 +25,38 @@ const Adminschema = new Schema({
         dashboard: { type: Boolean, default: true },
         users: { type: Boolean, default: false },
         registration: { type: Boolean, default: false },
+        log: { type: Boolean, default: false },
         master: { type: Boolean, default: false },
         blogPage: { type: Boolean, default: false },
         enquiry: { type: Boolean, default: false },
         bookings: { type: Boolean, default: false }
     }
 }, { timestamps: true })
+const AdminLogSchema = new Schema({
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Admin',
+        required: true
+    },
+    action: {
+        type: String,
+        required: true,
+        enum: ['Login', 'Failed Login', 'Menu Click', 'Logout', 'Create', 'Update', 'Delete', 'View'] 
+    },
+    module: {
+        type: String,
+        required: true
+    },
+    subModule: {
+        type: String,
+        required: true
+    },
+    
+}, { timestamps: true })
 
 const AdminCollection = model('Admin', Adminschema)
-module.exports = AdminCollection
+const AdminLogCollection = model('AdminLog', AdminLogSchema)
+
+module.exports = { AdminCollection, AdminLogCollection }
+
 

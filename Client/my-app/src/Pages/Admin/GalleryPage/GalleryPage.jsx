@@ -40,6 +40,26 @@ const GalleryPage = () => {
     }
   };
 
+  const logAction = async (action, details) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        `${ip}/api/adminlogin/log-action`,
+        {
+          action,
+          module: 'Registration',
+          subModule: 'List Details-Gallery',
+          details
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+    } catch (error) {
+      console.error('Error logging action:', error);
+    }
+  };
+
   const handleFileSelect = (event) => {
     const files = Array.from(event.target.files);
     if (files.length > 4) {
@@ -69,6 +89,8 @@ const GalleryPage = () => {
       });
       setSelectedFiles([]);
       fetchImages();
+      await logAction('Create', `Created new Gallery: ${formData}`);
+
       toast.success(" Image uploaded successfully!");
       
     } catch (error) {
@@ -90,6 +112,8 @@ const GalleryPage = () => {
       await axios.delete(`${ip}/api/Gallery/${photoId}`);
       fetchImages();
       toast.success("Image deleted successfully!");
+      await logAction('Delete', `Deleted photo: ${photoId}`);
+
       
     } catch (error) {
       setError('Failed to delete image');

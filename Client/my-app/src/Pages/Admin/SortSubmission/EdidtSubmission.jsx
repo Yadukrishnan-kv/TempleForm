@@ -128,6 +128,28 @@ function EditSubmission() {
         fetchTempleData();
       }, [id, token, ip]);
     
+
+      const logAction = async (action, details) => {
+        try {
+          const token = localStorage.getItem('token');
+          await axios.post(
+            `${ip}/api/adminlogin/log-action`,
+            {
+              action,
+              module: 'Registration',
+              subModule: 'List Details-Edit',
+              details
+            },
+            {
+              headers: { Authorization: `Bearer ${token}` }
+            }
+          );
+        } catch (error) {
+          console.error('Error logging action:', error);
+        }
+      };
+    
+
       const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -137,6 +159,8 @@ function EditSubmission() {
             headers: { Authorization: `Bearer ${token}` },
           });
           navigate('/SortSubmission');
+          await logAction('Update', `Updated state: ${formData}`);
+
           toast.success('Form updated successfully!'); 
 
         } catch (err) {

@@ -116,4 +116,20 @@
     border-radius: 8px;
   }
   
+  .blogedit-button {
+    background-color: #007BFF; /* Primary blue color */
+    color: #fff; /* White text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding for a good click area */
+    font-size: 16px; /* Readable font size */
+    font-weight: bold; /* Emphasize text */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: all 0.3s ease; /* Smooth hover effect */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
   
+  .blogedit-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Slightly larger shadow */
+  }

@@ -15,4 +15,8 @@ Routes.get('/roles-permissions', authMiddleware, AdminController.getRolesWithPer
 Routes.put("/editSubadmin/:id", authMiddleware, AdminController.editSubadmin);
 Routes.delete("/deleteSubadmin/:id", authMiddleware, AdminController.deleteSubadmin);
 Routes.put('/updateRolePermissions', authMiddleware, AdminController.updateRolePermissions);
+
+Routes.get("/logs", authMiddleware, AdminController.getAdminLogs);
+Routes.post("/log-menu", authMiddleware, AdminController.logMenuAction);
+Routes.post("/log-action", authMiddleware, AdminController.logAction);
 module.exports = Routes
