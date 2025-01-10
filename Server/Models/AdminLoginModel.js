@@ -51,7 +51,10 @@ const AdminLogSchema = new Schema({
         type: String,
         required: true
     },
-    
+    ipAddress: {
+        type: String,
+        required: true
+    }
 }, { timestamps: true })
 
 const AdminCollection = model('Admin', Adminschema)

@@ -4,7 +4,7 @@ const fs = require('fs').promises;
 const createBlog = async (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ message: 'No image uploaded' });
+            return res.status(400).json({ message: 'No image upload' });
         }
 
         const { title, content, authorName, authorRole } = req.body;

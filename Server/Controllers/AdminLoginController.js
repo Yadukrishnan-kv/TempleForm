@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const mongoose = require('mongoose');
+
 const {AdminCollection,AdminLogCollection} = require("../Models/AdminLoginModel");
 
 const register = async (req, res) => {
@@ -73,13 +75,15 @@ const logAction = async (req, res) => {
   try {
     const { action, module, subModule, details } = req.body;
     const userId = req.user.id;
+    const ipAddress = req.ip || req.connection.remoteAddress;
 
     await AdminLogCollection.create({
       userId,
       action,
       module,
       subModule,
-      details
+      details,
+      ipAddress
     });
 
     res.status(200).json({ message: 'Action logged successfully' });
@@ -94,13 +98,15 @@ const logMenuAction = async (req, res) => {
   try {
     const { module, subModule } = req.body;
     const userId = req.user.id;
+    const ipAddress = req.ip || req.connection.remoteAddress;
 
     await AdminLogCollection.create({
       userId,
       action: 'Menu Click',
       module,
       subModule,
-      details: `Accessed ${subModule} under ${module}`
+      details: `Accessed ${subModule} under ${module}`,
+      ipAddress // Add this line
     });
 
     res.status(200).json({ message: 'Menu action logged successfully' });
@@ -109,39 +115,92 @@ const logMenuAction = async (req, res) => {
     res.status(500).json({ message: 'Error logging menu action' });
   }
 };
-
+const getAllAdminNames = async (req, res) => {
+  try {
+    const users = await AdminCollection.find({}, { name: 1, role: 1 })
+      .sort({ role: 1, name: 1 });
+    
+    if (!users) {
+      return res.status(404).json({ message: 'No users found' });
+    }
+    
+    res.status(200).json(users);
+  } catch (error) {
+    console.error('Error in getAllAdminNames:', error);
+    res.status(500).json({ message: 'Error fetching admin names', error: error.message });
+  }
+};
 
 const getAdminLogs = async (req, res) => {
   try {
+    const { startDate, endDate, userId } = req.query;
+    console.log('Query params:', { startDate, endDate, userId }); // Debug log
+    
+    let matchQuery = {};
+
+    if (startDate && endDate) {
+      matchQuery.createdAt = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate + 'T23:59:59.999Z') // Include the entire end date
+      };
+    }
+
+    if (userId && userId !== 'all') {
+      try {
+        matchQuery.userId = new mongoose.Types.ObjectId(userId);
+      } catch (err) {
+        console.error('Invalid userId format:', err);
+        return res.status(400).json({ message: 'Invalid user ID format' });
+      }
+    }
+
+    console.log('Match query:', matchQuery); // Debug log
+
     const logs = await AdminLogCollection.aggregate([
+      { 
+        $match: matchQuery 
+      },
       {
         $lookup: {
-          from: 'admins',
+          from: 'admins', // Make sure this matches your collection name
           localField: 'userId',
           foreignField: '_id',
           as: 'user'
         }
       },
-      { $unwind: '$user' },
+      { 
+        $unwind: {
+          path: '$user',
+          preserveNullAndEmptyArrays: true // Keep logs even if user is deleted
+        }
+      },
       {
         $project: {
+          _id: 1,
           role: '$user.role',
           name: '$user.name',
           action: 1,
           module: 1,
           subModule: 1,
-          createdAt: 1
+          createdAt: 1,
+          ipAddress: 1
         }
       },
       { $sort: { createdAt: -1 } }
     ]);
 
+    console.log(`Found ${logs.length} logs`); // Debug log
+
     res.status(200).json(logs);
   } catch (error) {
-    console.error('Error fetching admin logs:', error);
-    res.status(500).json({ message: 'Error fetching admin logs' });
+    console.error('Error in getAdminLogs:', error);
+    res.status(500).json({ 
+      message: 'Error fetching admin logs', 
+      error: error.message 
+    });
   }
 };
+
 
 const getProfile = async (req, res) => {
   try {
@@ -311,17 +370,28 @@ const getRolesWithPermissions = async (req, res) => {
 };
 
 
-
-const createLogEntry = async (userId, action, module, subModule) => {
+const createLogEntry = async (userId, action, module, subModule, req) => {
   try {
+    const ipAddress = req.ip || req.connection.remoteAddress;
     await AdminLogCollection.create({
       userId,
-      action: action === 'Login Successful' ? 'Login' : action, // Convert to enum value
+      action: action === 'Login Successful' ? 'Login' : action,
       module,
-      subModule
+      subModule,
+      ipAddress
     });
   } catch (error) {
     console.error('Error creating log entry:', error);
+  }
+};
+const deleteLogs = async (req, res) => {
+  try {
+    const { logIds } = req.body;
+    await AdminLogCollection.deleteMany({ _id: { $in: logIds } });
+    res.status(200).json({ message: 'Logs deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting logs:', error);
+    res.status(500).json({ message: 'Error deleting logs' });
   }
 };
 
@@ -339,6 +409,6 @@ module.exports = {
   getRolesWithPermissions,
   logMenuAction,
   getAdminLogs,
-  createLogEntry,logAction
+  createLogEntry,logAction,deleteLogs,getAllAdminNames
 
 };

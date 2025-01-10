@@ -5,7 +5,7 @@ const path = require('path');
 const uploadPhotos = async (req, res) => {
     try {
         if (!req.files || req.files.length === 0) {
-            return res.status(400).json({ message: 'No files uploaded' });
+            return res.status(400).json({ message: 'No files upload' });
         }
 
         const templeId = req.params.templeId;

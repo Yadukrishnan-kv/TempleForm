@@ -797,7 +797,16 @@ border-color: #dee2e6 !important;
   background-color: #191E25;
   color: #ffffff;
 }
+.footercustom-list {
+  padding-left: 80px; /* Add padding to the left of the list */
+}
+.custom-list {
+  padding-left: 100px; /* Add padding to the left of the list */
+}
 
+.custom-list li {
+  margin-bottom: 10px; /* Add gap between list items */
+}
 .social-icon .icon-wrap {
   width: 48px;
   height: 48px;
@@ -878,17 +887,36 @@ border-color: #dee2e6 !important;
   .app-image {
     margin-top: -5rem;
   }
+  .footercustom-list {
+    padding-left: 20px; /* Add padding to the left of the list */
+  }
+  .custom-list {
+    padding-left: 20px; /* Add padding to the left of the list */
+  }
 }
 @media (min-width: 567px) {
   .app-image {
     padding-top: 80px;
   }
-  
+  .footercustom-list {
+    padding-left: 20px; /* Add padding to the left of the list */
+  }
+  .custom-list {
+    padding-left: 20px; /* Add padding to the left of the list */
+  }
 }
 @media (min-width: 267px) {
   .app-image {
     padding-top: 80px;
   }
+  .footercustom-list {
+    padding-left: 20px; /* Add padding to the left of the list */
+  }
+  .custom-list {
+    padding-left: 20px; /* Add padding to the left of the list */
+  }
+  
+  
 }
 
 
@@ -1097,6 +1125,12 @@ border-color: #dee2e6 !important;
 
 .temple-card-content h2 {
   font-size: 1.25rem !important;
+}
+.footercustom-list {
+  padding-left: 0px; /* Add padding to the left of the list */
+}
+.custom-list {
+  padding-left: 0px; /* Add padding to the left of the list */
 }
 }
 

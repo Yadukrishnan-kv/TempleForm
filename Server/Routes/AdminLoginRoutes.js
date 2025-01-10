@@ -19,4 +19,8 @@ Routes.put('/updateRolePermissions', authMiddleware, AdminController.updateRoleP
 Routes.get("/logs", authMiddleware, AdminController.getAdminLogs);
 Routes.post("/log-menu", authMiddleware, AdminController.logMenuAction);
 Routes.post("/log-action", authMiddleware, AdminController.logAction);
+Routes.delete("/logs", authMiddleware, AdminController.deleteLogs);
+Routes.get("/admin-names", authMiddleware, AdminController.getAllAdminNames);
+
+
 module.exports = Routes

@@ -60,20 +60,7 @@ const Footer = () => {
           <div className="footer-row row gy-5 g-sm-5 gx-xxl-6">
             {/* Get In Touch Column */}
             <div className="border-end col-lg-4 col-md-7 col-sm-6">
-              <h5 className="fw-bold mb-4 text-white">Get In Touch</h5>
-              <div className="mb-4 text-[#8d9193]">Join our newsletter and receive the best job<br className="d-none d-xxl-block"/> openings of the week, right on your inbox.</div>
-              <div className="border rounded-4 p-4 mb-4">
-                <h6 className="text-white-50 mb-3">Join our Whatsapp:</h6>
-                <a className="align-items-center d-block d-flex whatsapp-number" href="#">
-                  <i className="fa-brands fa-whatsapp fs-3 me-2 text-white" ><FaWhatsapp  /></i>
-                  <span className="fs-5 fw-semibold text-decoration-underline text-white">(123) 456-7890</span>
-                </a>
-              </div>
-            </div>
-
-            {/* Stay Connect Column */}
-            <div className="border-end col-lg-4 col-md-5 col-sm-6">
-              <h5 className="fw-bold mb-4 text-white">Stay Connect</h5>
+            <h5 className="fw-bold mb-4 text-white">Stay Connect</h5>
               <div className="text-[#8d9193]">1123 Fictional St, San Francisco<br className="d-none d-xxl-block"/> , CA 94103</div>
               <div className="mt-4">
                 <a className="d-block fw-medium mb-1 " href="#" style={{textDecoration:"none",color:"white"}}>
@@ -86,6 +73,30 @@ const Footer = () => {
                   <span>[email&#160;protected]</span>
                 </a>
               </div>
+              <div className="border rounded-4 p-4 mb-4">
+                <h6 className="text-white-50 mb-3">Join our Whatsapp:</h6>
+                <a className="align-items-center d-block d-flex whatsapp-number" href="#">
+                  <i className="fa-brands fa-whatsapp fs-3 me-2 text-white" ><FaWhatsapp  /></i>
+                  <span className="fs-5 fw-semibold text-decoration-underline text-white">(123) 456-7890</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Stay Connect Column */}
+            <div className="border-end col-lg-4 col-md-5 col-sm-6">
+              <h5 className="fw-bold mb-4 text-white footercustom-list">Quick Links</h5>
+              <div className="text-[#8d9193]">
+              <ul className='custom-list' >
+  <li>Temples</li>
+  <li>Dravyas</li>
+  <li>Poojas</li>
+  <li>Acharyas</li>
+  <li>Temple services</li>
+  <li>Job portal</li>
+  <li>Services</li>
+</ul>
+              </div>
+              
             </div>
 
             {/* Newsletter Column */}

@@ -13,7 +13,7 @@ app.use(express.json());
 app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api/ping', (req, res) => {
-    res.send('Server is running!');
+    res.send('Server is runnings!');
 });
 
 const TempleRoutes = require('./Routes/TempleRoutes');
