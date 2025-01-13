@@ -62,8 +62,8 @@ const GalleryPage = () => {
 
   const handleFileSelect = (event) => {
     const files = Array.from(event.target.files);
-    if (files.length > 4) {
-      alert('You can only upload up to 4 images at once');
+    if (files.length > 10) {
+      alert('You can only upload up to 10 images at once');
       return;
     }
     setSelectedFiles(files);

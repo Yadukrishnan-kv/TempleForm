@@ -8,6 +8,8 @@ function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openDropdowns, setOpenDropdowns] = useState({});
+
   const location = useLocation();
 
   useEffect(() => {
@@ -33,6 +35,18 @@ function Navbar() {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+  
+  const toggleDropdown = (dropdownName) => {
+    setOpenDropdowns(prev => ({
+      ...prev,
+      [dropdownName]: !prev[dropdownName]
+    }));
+    
+  };
+
+  const closeDropdowns = () => {
+    setOpenDropdowns({});
   };
 
   return (
@@ -115,6 +129,73 @@ function Navbar() {
                 Temples
               </a>
             </li>
+            <li className="nav-item ">
+            <a className={`nav-link dropdown-toggle ${openDropdowns.wisdom ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('wisdom')}>Wisdom</a>
+            <ul className={`dropdown-menu ${openDropdowns.wisdom ? 'show' : ''}`}>
+                <li><a className="dropdown-item" href="#">Overview</a></li>
+                <li><a className="dropdown-item" href="#">Blog</a></li>
+                <li><a className="dropdown-item" href="#">Videos</a></li>
+                <li><a className="dropdown-item" href="#">Audios</a></li>
+                <li><a className="dropdown-item" href="#">Books</a></li>
+              </ul>
+            </li>
+            <li className="nav-item ">
+            <a className={`nav-link dropdown-toggle ${openDropdowns.consult ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('consult')}>Consult</a>
+            <ul className={`dropdown-menu ${openDropdowns.consult ? 'show' : ''}`}>
+                                <li><a className="dropdown-item" href="#">Jyothish</a></li>
+                                <li><a className="dropdown-item" href="#">Vastu</a></li>
+                                <li><a className="dropdown-item" href="#">Spiritual guidance</a></li>
+                                <li><a className="dropdown-item" href="#">Yoga</a></li>
+                            </ul>
+                    </li>
+                    <li className="nav-item ">
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.community ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('community')}>Community</a>
+              <ul className={`dropdown-menu ${openDropdowns.community ? 'show' : ''}`}>
+                                <li><a className="dropdown-item" href="#">Temple related rural development programs.</a></li>
+                                <li><a className="dropdown-item" href="#">Skill Development</a></li>
+                                <li><a className="dropdown-item" href="#">Organic farming</a></li>
+                                <li><a className="dropdown-item" href="#">Environment conservation projects</a></li>
+                                <li><a className="dropdown-item" href="#">Woman empowerment</a></li>
+                                <li><a className="dropdown-item" href="#">Flower garden</a></li>
+                                <li><a className="dropdown-item" href="#">Goshala</a></li>
+                                <li><a className="dropdown-item" href="#">MSME registration </a></li>
+                                <li><a className="dropdown-item" href="#">Group activities</a></li>
+                                <li><a className="dropdown-item" href="#">Join hands s</a></li>  
+                            </ul>
+                    </li>
+                    <li className="nav-item ">
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.events ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('events')}>Events</a>
+                    <ul className={`dropdown-menu ${openDropdowns.events ? 'show' : ''}`}>
+                                <li><a className="dropdown-item" href="#">Overview </a></li>
+                                <li><a className="dropdown-item" href="#">Calendar events </a></li>
+                                <li><a className="dropdown-item" href="#">Navaratri</a></li>
+                                <li><a className="dropdown-item" href="#">Mahashivaratri </a></li>
+                                <li><a className="dropdown-item" href="#">Events & programs</a></li>
+                            </ul>
+                    </li>
+                    <li className="nav-item ">
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.dakshina ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('dakshina')}>Dakshina</a>
+                    <ul className={`dropdown-menu ${openDropdowns.dakshina ? 'show' : ''}`}>
+                                <li><a className="dropdown-item" href="#">NGO Overview and its vision.</a></li>
+                                <li><a className="dropdown-item" href="#">Account details </a></li>
+                                <li><a className="dropdown-item" href="#">Running projects of community </a></li>
+                            </ul>
+                    </li>
+                    <li className="nav-item ">
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.dailyPractices ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('dailyPractices')}>Daily Practices</a>
+                    <ul className={`dropdown-menu ${openDropdowns.dailyPractices ? 'show' : ''}`}>
+                                <li className="nav-item ">
+                                    <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Kriyas </a>
+                                    {/* <ul className="dropdown-menu">
+                                        <li><a className="dropdown-item" href="#">Sandhya vandana </a></li>
+                                        <li><a className="dropdown-item" href="#">Basic yoga practices</a></li>
+                                        <li><a className="dropdown-item" href="#">Basic Prana Yamas </a></li>
+                                    </ul> */}
+                                </li>
+                                <li><a className="dropdown-item" href="#">Meditation </a></li>
+                                <li><a className="dropdown-item" href="#">Chants</a></li>
+                            </ul>
+                    </li>
             <li className="nav-item">
               <a
                 className={`nav-link ${activeLink === 'contact' ? 'active' : ''}`}
