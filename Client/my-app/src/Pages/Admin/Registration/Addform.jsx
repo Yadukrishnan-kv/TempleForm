@@ -20,7 +20,12 @@ function Addform() {
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
-    address:'',
+    address: '',
+    phone: '',
+    darshanaTime: {
+      morning: { from: '', to: '' },
+      evening: { from: '', to: '' }
+    },
     whatsapp: '',
     email: '',
     website: '',
@@ -126,10 +131,18 @@ function Addform() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    let updatedFormData = {...formData};
+    if(name.includes('.')){
+        const parts = name.split('.');
+        let currentLevel = updatedFormData;
+        for(let i = 0; i < parts.length -1; i++){
+            currentLevel = currentLevel[parts[i]];
+        }
+        currentLevel[parts[parts.length -1]] = value;
+    } else {
+        updatedFormData[name] = value;
+    }
+    setFormData(updatedFormData);
 
     if (name === 'state') {
       setFormData(prevState => ({ ...prevState, district: '', taluk: '' }));
@@ -181,27 +194,6 @@ function Addform() {
     }));
   };
 
-  // Function to log actions
-  const logAction = async (action, details) => {
-    try {
-      const token = localStorage.getItem('token');
-      await axios.post(
-        `${ip}/api/adminlogin/log-action`,
-        {
-          action,
-          module: 'Registration',
-          subModule: 'Add Form',
-          details
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` }
-        }
-      );
-    } catch (error) {
-      console.error('Error logging action:', error);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -212,24 +204,26 @@ function Addform() {
         }
       });
       console.log('Server response:', response);
-      await logAction('Create', `Created formData: ${formData}`);
-
-      toast.success("Form created successfully!"); 
-      navigate("/view");
+      toast.success("Form submitted successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+  
     } catch (error) {
       console.error('Error registering temple:', error.response ? error.response.data : error.message);
       setError('An error occurred while submitting the form. Please try again.');
-      toast.error("An error occurred while submitting the form!"); 
+      toast.error("An error occurred while submitting the form.");
 
     }
   };
+
 
   return (
     <div className="app-container">
       <Header />
       <div className="content-container">
         <Sidebar />
-    <div className="form-container">
+        <div className="form-container">
       <h1 className="form-title">ക്ഷേത്രേശ്രീ   ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
       <p className="form-group">കാലടി - 683 574., ഫോൺ : 9847047963</p>
       <p className="form-group">അപേക്ഷാഫോറം</p>
@@ -302,16 +296,73 @@ function Addform() {
           />
         </div>
         <div>
-        <div>
           <label className="form-label">ക്ഷേത്രത്തിന്റെ  മേൽവിലാസവും ഫോൺ നമ്പറും</label>
+          <textarea 
+            className="form-textarea" 
+            rows={3}
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+          ></textarea>
+        </div>
+        <div>
+          <label className="form-label">ഫോൺ നമ്പർ</label>
           <input 
-            type="text" 
-            className="form-input" 
-            name="address" 
-            value={formData.address} 
-            onChange={handleChange} 
+            type="tel" 
+            className="form-input"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
           />
         </div>
+        <div>
+          <label className="form-label">ദർശന സമയം</label>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="form-label">രാവിലെ</label>
+              <div className="flex items-center">
+                <input 
+                  type="time" 
+                  className="form-input"
+                  name="darshanaTime.morning.from"
+                  value={formData.darshanaTime.morning.from}
+                  onChange={handleChange}
+                />
+                <span className="mx-2">മുതൽ</span>
+                <input 
+                  type="time" 
+                  className="form-input"
+                  name="darshanaTime.morning.to"
+                  value={formData.darshanaTime.morning.to}
+                  onChange={handleChange}
+                />
+                <span className="ml-2">വരെ</span>
+              </div>
+            </div>
+            <div>
+              <label className="form-label">വൈകിട്ട്</label>
+              <div className="flex items-center">
+                <input 
+                  type="time" 
+                  className="form-input"
+                  name="darshanaTime.evening.from"
+                  value={formData.darshanaTime.evening.from}
+                  onChange={handleChange}
+                />
+                <span className="mx-2">മുതൽ</span>
+                <input 
+                  type="time" 
+                  className="form-input"
+                  name="darshanaTime.evening.to"
+                  value={formData.darshanaTime.evening.to}
+                  onChange={handleChange}
+                />
+                <span className="ml-2">വരെ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
           <label className="form-label">വാട്സ്ആപ്പ് നമ്പർ</label>
           <input 
             type="tel" 
@@ -522,9 +573,9 @@ function Addform() {
                 <input 
                   type="radio" 
                   name="hasInternet" 
-                  value="true"
-                  checked={formData.hasInternet === true}
-                  onChange={() => setFormData({...formData, hasInternet: true})}
+                  value={true}
+                  checked={formData.hasInternet}
+                  onChange={handleChange}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -533,9 +584,9 @@ function Addform() {
                 <input 
                   type="radio" 
                   name="hasInternet" 
-                  value="false"
-                  checked={formData.hasInternet === false}
-                  onChange={() => setFormData({...formData, hasInternet: false})}
+                  value={false}
+                  checked={!formData.hasInternet}
+                  onChange={handleChange}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -549,9 +600,9 @@ function Addform() {
                 <input 
                   type="radio" 
                   name="hasComputer" 
-                  value="true"
-                  checked={formData.hasComputer === true}
-                  onChange={() => setFormData({...formData, hasComputer: true})}
+                  value={true}
+                  checked={formData.hasComputer}
+                  onChange={handleChange}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -560,9 +611,9 @@ function Addform() {
                 <input 
                   type="radio" 
                   name="hasComputer" 
-                  value="false"
-                  checked={formData.hasComputer === false}
-                  onChange={() => setFormData({...formData, hasComputer: false})}
+                  value={false}
+                  checked={!formData.hasComputer}
+                  onChange={handleChange}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -576,9 +627,9 @@ function Addform() {
                 <input 
                   type="radio" 
                   name="hasPrinter" 
-                  value="true"
-                  checked={formData.hasPrinter === true}
-                  onChange={() => setFormData({...formData, hasPrinter: true})}
+                  value={true}
+                  checked={formData.hasPrinter}
+                  onChange={handleChange}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -587,9 +638,9 @@ function Addform() {
                 <input 
                   type="radio" 
                   name="hasPrinter" 
-                  value="false"
-                  checked={formData.hasPrinter === false}
-                  onChange={() => setFormData({...formData, hasPrinter: false})}
+                  value={false}
+                  checked={!formData.hasPrinter}
+                  onChange={handleChange}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -604,9 +655,9 @@ function Addform() {
                 <input 
                   type="radio" 
                   name="hasCamera" 
-                  value="true"
-                  checked={formData.hasCamera === true}
-                  onChange={() => setFormData({...formData, hasCamera: true})}
+                  value={true}
+                  checked={formData.hasCamera}
+                  onChange={handleChange}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -615,9 +666,9 @@ function Addform() {
                 <input 
                   type="radio" 
                   name="hasCamera" 
-                  value="false"
-                  checked={formData.hasCamera === false}
-                  onChange={() => setFormData({...formData, hasCamera: false})}
+                  value={false}
+                  checked={!formData.hasCamera}
+                  onChange={handleChange}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -631,9 +682,9 @@ function Addform() {
                 <input 
                   type="radio" 
                   name="hasDigitalBanking" 
-                  value="true"
-                  checked={formData.hasDigitalBanking === true}
-                  onChange={() => setFormData({...formData, hasDigitalBanking: true})}
+                  value={true}
+                  checked={formData.hasDigitalBanking}
+                  onChange={handleChange}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഉണ്ട്</span>
@@ -642,9 +693,9 @@ function Addform() {
                 <input 
                   type="radio" 
                   name="hasDigitalBanking" 
-                  value="false"
-                  checked={formData.hasDigitalBanking === false}
-                  onChange={() => setFormData({...formData, hasDigitalBanking: false})}
+                  value={false}
+                  checked={!formData.hasDigitalBanking}
+                  onChange={handleChange}
                   className="form-radio" 
                 />
                 <span className="ml-2">ഇല്ല</span>
@@ -810,9 +861,9 @@ function Addform() {
               <input 
                 type="radio" 
                 name="hasBuilding" 
-                value="true"
-                checked={formData.hasBuilding === true}
-                onChange={() => setFormData({...formData, hasBuilding: true})}
+                value={true}
+                checked={formData.hasBuilding}
+                onChange={handleChange}
                 className="form-radio" 
               />
               <span className="ml-2">ഉണ്ട്</span>
@@ -821,9 +872,9 @@ function Addform() {
               <input 
                 type="radio" 
                 name="hasBuilding" 
-                value="false"
-                checked={formData.hasBuilding === false}
-                onChange={() => setFormData({...formData, hasBuilding: false})}
+                value={false}
+                checked={!formData.hasBuilding}
+                onChange={handleChange}
                 className="form-radio" 
               />
               <span className="ml-2">ഇല്ല</span>
@@ -837,9 +888,9 @@ function Addform() {
               <input 
                 type="radio" 
                 name="hasSafe" 
-                value="true"
-                checked={formData.hasSafe === true}
-                onChange={() => setFormData({...formData, hasSafe: true})}
+                value={true}
+                checked={formData.hasSafe}
+                onChange={handleChange}
                 className="form-radio" 
               />
               <span className="ml-2">ഉണ്ട്</span>
@@ -848,9 +899,9 @@ function Addform() {
               <input 
                 type="radio" 
                 name="hasSafe" 
-                value="false"
-                checked={formData.hasSafe === false}
-                onChange={() => setFormData({...formData, hasSafe: false})}
+                value={false}
+                checked={!formData.hasSafe}
+                onChange={handleChange}
                 className="form-radio" 
               />
               <span className="ml-2">ഇല്ല</span>
