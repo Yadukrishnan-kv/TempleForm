@@ -42,7 +42,6 @@ function Navbar() {
       ...prev,
       [dropdownName]: !prev[dropdownName]
     }));
-    
   };
 
   const closeDropdowns = () => {
@@ -149,8 +148,8 @@ function Navbar() {
                             </ul>
                     </li>
                     <li className="nav-item ">
-                    <a className={`nav-link dropdown-toggle ${openDropdowns.community ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('community')}>Community</a>
-              <ul className={`dropdown-menu ${openDropdowns.community ? 'show' : ''}`}>
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.events ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('events')}>Events</a>
+                    <ul className={`dropdown-menu ${openDropdowns.events ? 'show' : ''}`}>
                                 <li><a className="dropdown-item" href="#">Temple related rural development programs.</a></li>
                                 <li><a className="dropdown-item" href="#">Skill Development</a></li>
                                 <li><a className="dropdown-item" href="#">Organic farming</a></li>

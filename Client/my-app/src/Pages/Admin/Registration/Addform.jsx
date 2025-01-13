@@ -20,6 +20,7 @@ function Addform() {
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
+    address:'',
     whatsapp: '',
     email: '',
     website: '',
@@ -307,7 +308,7 @@ function Addform() {
             type="text" 
             className="form-input" 
             name="name" 
-            value={formData.name} 
+            value={formData.address} 
             onChange={handleChange} 
           />
         </div>
