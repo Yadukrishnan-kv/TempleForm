@@ -307,7 +307,7 @@ function Addform() {
           <input 
             type="text" 
             className="form-input" 
-            name="name" 
+            name="address" 
             value={formData.address} 
             onChange={handleChange} 
           />
