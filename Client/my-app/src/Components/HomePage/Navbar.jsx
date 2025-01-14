@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Heart, UserPlus } from 'lucide-react';
 import logo1 from '../../assets/images/logo.png';
+import { IoMdArrowDropdown } from "react-icons/io";
+
 import './HomePage.css'
 import './Navbar.css'
 function Navbar() {
@@ -129,7 +131,8 @@ function Navbar() {
               </a>
             </li>
             <li className="nav-item ">
-            <a className={`nav-link dropdown-toggle ${openDropdowns.wisdom ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('wisdom')}>Wisdom</a>
+            <a className={`nav-link dropdown-toggle ${openDropdowns.wisdom ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('wisdom')}>Wisdom<IoMdArrowDropdown />
+            </a>
             <ul className={`dropdown-menu ${openDropdowns.wisdom ? 'show' : ''}`}>
                 <li><a className="dropdown-item" href="#">Overview</a></li>
                 <li><a className="dropdown-item" href="#">Blog</a></li>
@@ -139,7 +142,8 @@ function Navbar() {
               </ul>
             </li>
             <li className="nav-item ">
-            <a className={`nav-link dropdown-toggle ${openDropdowns.consult ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('consult')}>Consult</a>
+            <a className={`nav-link dropdown-toggle ${openDropdowns.consult ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('consult')}>Consult<IoMdArrowDropdown />
+            </a>
             <ul className={`dropdown-menu ${openDropdowns.consult ? 'show' : ''}`}>
                                 <li><a className="dropdown-item" href="#">Jyothish</a></li>
                                 <li><a className="dropdown-item" href="#">Vastu</a></li>
@@ -148,8 +152,9 @@ function Navbar() {
                             </ul>
                     </li>
                     <li className="nav-item ">
-                    <a className={`nav-link dropdown-toggle ${openDropdowns.events ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('events')}>Events</a>
-                    <ul className={`dropdown-menu ${openDropdowns.events ? 'show' : ''}`}>
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.Community ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('Community')}>Community<IoMdArrowDropdown />
+                    </a>
+                    <ul className={`dropdown-menu ${openDropdowns.Community ? 'show' : ''}`}>
                                 <li><a className="dropdown-item" href="#">Temple related rural development programs.</a></li>
                                 <li><a className="dropdown-item" href="#">Skill Development</a></li>
                                 <li><a className="dropdown-item" href="#">Organic farming</a></li>
@@ -163,7 +168,8 @@ function Navbar() {
                             </ul>
                     </li>
                     <li className="nav-item ">
-                    <a className={`nav-link dropdown-toggle ${openDropdowns.events ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('events')}>Events</a>
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.events ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('events')}>Events<IoMdArrowDropdown />
+                    </a>
                     <ul className={`dropdown-menu ${openDropdowns.events ? 'show' : ''}`}>
                                 <li><a className="dropdown-item" href="#">Overview </a></li>
                                 <li><a className="dropdown-item" href="#">Calendar events </a></li>
@@ -173,7 +179,8 @@ function Navbar() {
                             </ul>
                     </li>
                     <li className="nav-item ">
-                    <a className={`nav-link dropdown-toggle ${openDropdowns.dakshina ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('dakshina')}>Dakshina</a>
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.dakshina ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('dakshina')}>Dakshina<IoMdArrowDropdown />
+                    </a>
                     <ul className={`dropdown-menu ${openDropdowns.dakshina ? 'show' : ''}`}>
                                 <li><a className="dropdown-item" href="#">NGO Overview and its vision.</a></li>
                                 <li><a className="dropdown-item" href="#">Account details </a></li>
@@ -181,15 +188,16 @@ function Navbar() {
                             </ul>
                     </li>
                     <li className="nav-item ">
-                    <a className={`nav-link dropdown-toggle ${openDropdowns.dailyPractices ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('dailyPractices')}>Daily Practices</a>
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.dailyPractices ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('dailyPractices')}>Daily Practices<IoMdArrowDropdown />
+                    </a>
                     <ul className={`dropdown-menu ${openDropdowns.dailyPractices ? 'show' : ''}`}>
                                 <li className="nav-item ">
                                     <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Kriyas </a>
-                                    {/* <ul className="dropdown-menu">
+                                    <ul className="dropdown-menu">
                                         <li><a className="dropdown-item" href="#">Sandhya vandana </a></li>
                                         <li><a className="dropdown-item" href="#">Basic yoga practices</a></li>
                                         <li><a className="dropdown-item" href="#">Basic Prana Yamas </a></li>
-                                    </ul> */}
+                                    </ul>
                                 </li>
                                 <li><a className="dropdown-item" href="#">Meditation </a></li>
                                 <li><a className="dropdown-item" href="#">Chants</a></li>
