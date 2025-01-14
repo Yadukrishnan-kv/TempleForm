@@ -82,7 +82,7 @@ const About = () => {
           >
             <CountUp start={1} end={3000} duration={3} />+
           </div>
-          <h5 className="fs-18 mt-3">Job posted</h5>
+          <h5 className="fs-18 mt-3">Temple posted</h5>
         </div>
         <div className="col-12 col-sm-6 col-lg-3 text-center">
           <div
@@ -139,10 +139,14 @@ const About = () => {
                 <p>"SREESHUDDHI" is a realignment start-up mission that transcend devotee to spiritual ecstasy. It is a start-up initiative correlating hindu samskara, traditional kshethra rituals and practices, and spirituality, in its utmost purest forms, blending the modern technology and sustainable architecture of the ancient scriptures to evolve devotees into a new world experience of ecstasy and spiritual bliss of soulfulness.</p>
                 
                 <h4 className="font-caveat text-[#FFBD59] fw-medium fs-1">Vision</h4>
-                <p>"SREESHUDDHI" is a realignment of SAKTHI, BUDHI, SHUDDHI which denotes the essence of Hindu Samskara that transcend devotee to spiritual ecstasy.</p>
+                <p>"To actuate the well-being of all, envisaging oneness by integrating ancient Indian spiritual traditions into life."</p>
                 
                 <h4 className="font-caveat text-[#FFBD59] fw-medium fs-1">Mission</h4>
-                <p>'Sreeshuddhi' is the unique project that aims to ensure the complete purity of the ritual offerings (Pooja dravya) used in Hindu temples and for various traditional Vedic rituals performed by Vedic practiotioners, which are based on beliefs and practices that are carried out from ancient scriptures in an eco-friendly and sustainable manner. It is also a multifaceted project which could not only just impact temples, it will also significantly impact the lives of the common public in an empowering way.</p>
+                <p>"Our mission is to enrich lives by experiencing oneness. We act as an umbrella organization connecting people to the holistic living of India, its traditions, practices, and places of worship. We deliver ancient Indian practices, high-quality rituals, related services, and products, uniquely blending ancient traditional wisdom with technology."</p>
+
+                <h4 className="font-caveat text-[#FFBD59] fw-medium fs-1">Our Values and Approach</h4>
+                <p>Our mission is to enrich lives by experiencing oneness. We act as an umbrella organization connecting people to the holistic living of India, its traditions, practices, and places of worship. We deliver ancient Indian practices, high-quality rituals, related services, and products, uniquely blending ancient traditional wisdom with technology</p>
+                
               </div>
             </div>
 

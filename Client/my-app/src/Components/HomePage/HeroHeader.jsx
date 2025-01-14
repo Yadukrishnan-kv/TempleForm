@@ -27,8 +27,7 @@ function HeroHeader() {
         <div className="hero-background dark-overlay" />
         <div className="container">
           <h1 className="hero-title">
-            "SREESHUDDHI" is a realignment <br />
-            start-up mission that transcend devotee to <br />
+            "SREESHUDDHI"  Transcend devotee to <br />
             spiritual ecstasy.
           </h1>
 
