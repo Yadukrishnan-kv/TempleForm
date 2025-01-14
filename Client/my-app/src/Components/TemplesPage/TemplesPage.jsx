@@ -132,7 +132,7 @@ const TemplePage = () => {
                   </select>
                 </div>
 
-                <button type="submit" className="search-button">
+                <button type="submit" className="search-button1">
                   Search temples
                 </button>
               </div>

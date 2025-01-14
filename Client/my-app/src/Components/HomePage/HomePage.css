@@ -167,7 +167,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 1rem;
   margin: 0 1rem;
   overflow: hidden;
-  height: 840px;
+  height: 640px;
 }
 
 .hero-background {
@@ -176,10 +176,10 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('../../assets/images/banner01.jpg');
+  background-image: url('../../assets/images/banner011.jpg');
   background-size: cover;
   background-position: center;
-  opacity: 0.7;
+  opacity: 0.9;
   
 }
 
@@ -190,13 +190,12 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 3rem;
   position: relative;
   z-index: 1;
-  padding-top: 280px;
+  padding-top: 200px;
 }
 
 
 .search-wrapper {
   background-color: var(--white);
-  border-radius: 2rem;
   padding: 1rem;
   display: flex;
   gap: 1rem;

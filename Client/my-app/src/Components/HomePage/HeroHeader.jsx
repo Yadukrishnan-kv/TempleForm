@@ -31,7 +31,7 @@ function HeroHeader() {
             spiritual ecstasy.
           </h1>
 
-          <div className="row justify-content-center">
+          <div className="row justify-content-center" style={{borderRadius:"30px"}}>
             <div className="col-lg-10">
               <div className="search-wrapper">
                 <div className="search-field">
