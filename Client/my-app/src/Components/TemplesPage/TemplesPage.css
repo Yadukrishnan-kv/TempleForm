@@ -78,7 +78,7 @@
 @media (max-width: 768px) {
   .search-wrapper {
     flex-direction: column;
-      border-radius: 3rem;
+      border-radius: 1rem;
 
   }
 
