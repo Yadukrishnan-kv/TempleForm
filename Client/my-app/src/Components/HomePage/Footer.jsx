@@ -60,23 +60,24 @@ const Footer = () => {
             {/* Get In Touch Column */}
             <div className="border-end col-lg-4 col-md-7 col-sm-6">
             <h5 className="fw-bold mb-4 text-white">Stay Connect</h5>
-              <div className="text-[#8d9193]">1123 Fictional St, San Francisco<br className="d-none d-xxl-block"/> , CA 94103</div>
+              <div className="text-[#8d9193]">Kalady, Kerala, India - 683574</div>
               <div className="mt-4">
                 <a className="d-block fw-medium mb-1 " href="#" style={{textDecoration:"none",color:"white"}}>
                   <i className="fa-solid fa-phone "><Phone className="me-2" size={16} style={{ color: 'white' }} />
                   </i>
-                  <span>(123) 456-7890</span>
+                  <span>+91 98470 47963 </span>
                 </a>
                 <a className="email-link d-block fw-medium text-[#8d9193]" href="#" style={{textDecoration:"none",color:"white"}}>
                   <i className="fa-solid fa-envelope me-2"><FaEnvelope /></i>
-                  <span>[email&#160;protected]</span>
+                  <span>info@sreeshuddhi.com
+                  </span>
                 </a>
               </div>
-              <div className="border rounded-4 p-4 mb-4">
+              <div className="border rounded-4 p-4 mb-4 mt-5">
                 <h6 className="text-white-50 mb-3">Join our Whatsapp:</h6>
                 <a className="align-items-center d-block d-flex whatsapp-number" href="#">
                   <i className="fa-brands fa-whatsapp fs-3 me-2 text-white" ><FaWhatsapp  /></i>
-                  <span className="fs-5 fw-semibold text-decoration-underline text-white">(123) 456-7890</span>
+                  <span className="fs-5 fw-semibold text-decoration-underline text-white">+91 98470 47963</span>
                 </a>
               </div>
             </div>

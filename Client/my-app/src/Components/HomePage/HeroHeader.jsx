@@ -111,14 +111,28 @@ function HeroHeader() {
           </div>
 
           <div className="banner-carousel-container">
-            <Slider {...bannerSettings}>
-              {bannerButtons.map((text, index) => (
-                <div key={index} className="banner-button-wrapper">
-                  <a href="#" className="banner-button">{text}</a>
-                </div>
-              ))}
-            </Slider>
-          </div>
+  <Slider {...bannerSettings}>
+    <div className="banner-button-wrapper">
+      <a href="#" className="banner-button">Products</a>
+    </div>
+    <div className="banner-button-wrapper">
+      <a href="/TemplePage" className="banner-button">Temples</a>
+    </div>
+    <div className="banner-button-wrapper">
+      <a href="#" className="banner-button">Services</a>
+    </div>
+    <div className="banner-button-wrapper">
+      <a href="#" className="banner-button">Practices Registration</a>
+    </div>
+    <div className="banner-button-wrapper">
+      <a href="#" className="banner-button">Donations Trust</a>
+    </div>
+    <div className="banner-button-wrapper">
+      <a href="#" className="banner-button">Projects</a>
+    </div>
+  </Slider>
+</div>
+
         </div>
       </div>
 

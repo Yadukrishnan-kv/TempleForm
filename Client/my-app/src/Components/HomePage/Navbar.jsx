@@ -118,7 +118,7 @@ function Navbar() {
                 About Us
               </a>
             </li> */}
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <a
                 className={`nav-link ${activeLink === 'temples' ? 'active' : ''}`}
                 href="/TemplePage"
@@ -129,7 +129,7 @@ function Navbar() {
               >
                 Temples
               </a>
-            </li>
+            </li> */}
             <li className="nav-item ">
                     <a className={`nav-link dropdown-toggle ${openDropdowns.Ritrials ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('Ritrials')}>Ritrials<IoMdArrowDropdown />
                     </a>
