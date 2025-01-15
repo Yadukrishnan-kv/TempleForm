@@ -106,7 +106,7 @@ function Navbar() {
                 Home
               </a>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <a
                 className={`nav-link ${activeLink === 'about' ? 'active' : ''}`}
                 href="/about"
@@ -117,7 +117,7 @@ function Navbar() {
               >
                 About Us
               </a>
-            </li>
+            </li> */}
             <li className="nav-item">
               <a
                 className={`nav-link ${activeLink === 'temples' ? 'active' : ''}`}
@@ -131,76 +131,68 @@ function Navbar() {
               </a>
             </li>
             <li className="nav-item ">
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.Ritrials ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('Ritrials')}>Ritrials<IoMdArrowDropdown />
+                    </a>
+                    <ul className={`dropdown-menu ${openDropdowns.Ritrials ? 'show' : ''}`}>
+                                <li><a className="dropdown-item" href="#">Meditation</a></li>
+                                <li><a className="dropdown-item" href="#">Youtube </a></li>
+                                <li><a className="dropdown-item" href="#">Sound Cloud </a></li>
+                                <li><a className="dropdown-item" href="#">Kriyas </a></li>
+
+                            </ul>
+                    </li>
+                    <li className="nav-item ">
+            <a className={`nav-link dropdown-toggle ${openDropdowns.Padashala ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('Padashala')}>Padashala<IoMdArrowDropdown />
+            </a>
+            <ul className={`dropdown-menu ${openDropdowns.Padashala ? 'show' : ''}`}>
+            <li><a className="dropdown-item" href="#">Youtube</a></li>
+            <li><a className="dropdown-item" href="#">Sound Cloud</a></li>
+                            </ul>
+                    </li>
+            <li className="nav-item ">
             <a className={`nav-link dropdown-toggle ${openDropdowns.wisdom ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('wisdom')}>Wisdom<IoMdArrowDropdown />
             </a>
             <ul className={`dropdown-menu ${openDropdowns.wisdom ? 'show' : ''}`}>
-                <li><a className="dropdown-item" href="#">Overview</a></li>
-                <li><a className="dropdown-item" href="#">Blog</a></li>
-                <li><a className="dropdown-item" href="#">Videos</a></li>
-                <li><a className="dropdown-item" href="#">Audios</a></li>
-                <li><a className="dropdown-item" href="#">Books</a></li>
-              </ul>
+                <li><a className="dropdown-item" href="#">Youtube</a></li>
+                <li><a className="dropdown-item" href="#">Sound Cloud</a></li>
+            </ul>
             </li>
             <li className="nav-item ">
-            <a className={`nav-link dropdown-toggle ${openDropdowns.consult ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('consult')}>Consult<IoMdArrowDropdown />
-            </a>
-            <ul className={`dropdown-menu ${openDropdowns.consult ? 'show' : ''}`}>
-                                <li><a className="dropdown-item" href="#">Jyothish</a></li>
-                                <li><a className="dropdown-item" href="#">Vastu</a></li>
-                                <li><a className="dropdown-item" href="#">Spiritual guidance</a></li>
-                                <li><a className="dropdown-item" href="#">Yoga</a></li>
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.events ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('events')}>Events<IoMdArrowDropdown />
+                    </a>
+                    <ul className={`dropdown-menu ${openDropdowns.events ? 'show' : ''}`}>
+                                <li><a className="dropdown-item" href="#">Calendars</a></li>
+                                <li><a className="dropdown-item" href="#">Events</a></li>
                             </ul>
                     </li>
                     <li className="nav-item ">
                     <a className={`nav-link dropdown-toggle ${openDropdowns.Community ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('Community')}>Community<IoMdArrowDropdown />
                     </a>
                     <ul className={`dropdown-menu ${openDropdowns.Community ? 'show' : ''}`}>
-                                <li><a className="dropdown-item" href="#">Temple related rural development programs.</a></li>
-                                <li><a className="dropdown-item" href="#">Skill Development</a></li>
-                                <li><a className="dropdown-item" href="#">Organic farming</a></li>
-                                <li><a className="dropdown-item" href="#">Environment conservation projects</a></li>
-                                <li><a className="dropdown-item" href="#">Woman empowerment</a></li>
-                                <li><a className="dropdown-item" href="#">Flower garden</a></li>
-                                <li><a className="dropdown-item" href="#">Goshala</a></li>
-                                <li><a className="dropdown-item" href="#">MSME registration </a></li>
-                                <li><a className="dropdown-item" href="#">Group activities</a></li>
-                                <li><a className="dropdown-item" href="#">Join hands s</a></li>  
+                                <li><a className="dropdown-item" href="#">How to Join</a></li>
+                                <li><a className="dropdown-item" href="#">Social Impact</a></li>
+                               
                             </ul>
                     </li>
+                    
+                    
                     <li className="nav-item ">
-                    <a className={`nav-link dropdown-toggle ${openDropdowns.events ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('events')}>Events<IoMdArrowDropdown />
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.Aboutus ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('Aboutus')}>About Us<IoMdArrowDropdown />
                     </a>
-                    <ul className={`dropdown-menu ${openDropdowns.events ? 'show' : ''}`}>
-                                <li><a className="dropdown-item" href="#">Overview </a></li>
-                                <li><a className="dropdown-item" href="#">Calendar events </a></li>
-                                <li><a className="dropdown-item" href="#">Navaratri</a></li>
-                                <li><a className="dropdown-item" href="#">Mahashivaratri </a></li>
-                                <li><a className="dropdown-item" href="#">Events & programs</a></li>
-                            </ul>
-                    </li>
-                    <li className="nav-item ">
-                    <a className={`nav-link dropdown-toggle ${openDropdowns.dakshina ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('dakshina')}>Dakshina<IoMdArrowDropdown />
-                    </a>
-                    <ul className={`dropdown-menu ${openDropdowns.dakshina ? 'show' : ''}`}>
-                                <li><a className="dropdown-item" href="#">NGO Overview and its vision.</a></li>
-                                <li><a className="dropdown-item" href="#">Account details </a></li>
-                                <li><a className="dropdown-item" href="#">Running projects of community </a></li>
-                            </ul>
-                    </li>
-                    <li className="nav-item ">
-                    <a className={`nav-link dropdown-toggle ${openDropdowns.dailyPractices ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('dailyPractices')}>Daily Practices<IoMdArrowDropdown />
-                    </a>
-                    <ul className={`dropdown-menu ${openDropdowns.dailyPractices ? 'show' : ''}`}>
-                                <li className="nav-item ">
+                    <ul className={`dropdown-menu ${openDropdowns.Aboutus ? 'show' : ''}`}>
+                               
+                                <li><a className="dropdown-item" href="/about#vision">Vission </a></li>
+                                <li><a className="dropdown-item" href="/about#vision">Mission</a></li>
+                                <li><a className="dropdown-item" href="#">Accademic Panel and Acharyas</a></li>
+
+                                {/* <li className="nav-item ">
                                     <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Kriyas </a>
                                     <ul className="dropdown-menu">
                                         <li><a className="dropdown-item" href="#">Sandhya vandana </a></li>
                                         <li><a className="dropdown-item" href="#">Basic yoga practices</a></li>
                                         <li><a className="dropdown-item" href="#">Basic Prana Yamas </a></li>
                                     </ul>
-                                </li>
-                                <li><a className="dropdown-item" href="#">Meditation </a></li>
-                                <li><a className="dropdown-item" href="#">Chants</a></li>
+                                </li> */}
                             </ul>
                     </li>
             <li className="nav-item">

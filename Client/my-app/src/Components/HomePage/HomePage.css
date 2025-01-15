@@ -167,7 +167,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 1rem;
   margin: 0 1rem;
   overflow: hidden;
-  height: 640px;
+  height: 840px;
 }
 
 .hero-background {
@@ -176,7 +176,7 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url('../../assets/images/banner011.jpg');
+  background-image: url('../../assets/images/banner01.jpg');
   background-size: cover;
   background-position: center;
   opacity: 0.9;
@@ -874,9 +874,7 @@ border-color: #dee2e6 !important;
 .footer-nav a:hover {
   color: #ffffff !important;
 }
-.app-image {
-  margin-top: -15rem;
-}
+
 .btnhover{
   background-color: #FFBD59;
 }
@@ -885,7 +883,7 @@ border-color: #dee2e6 !important;
 }
 @media (min-width: 768px) {
   .app-image {
-    margin-top: -5rem;
+    margin-top: -8rem;
   }
   .footercustom-list {
     padding-left: 20px; /* Add padding to the left of the list */

@@ -5,7 +5,9 @@
     --text-light: #8d9193;
     --white: #ffffff;
   }
-  
+  html {
+    scroll-behavior: smooth;
+}
   
   /* Hero Section */
   .hero {

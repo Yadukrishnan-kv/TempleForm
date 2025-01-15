@@ -1,24 +1,72 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './HomePage.css';
 import './HeroHeader.css';
 import ad01 from '../../assets/images/ad01.jpg';
 import ad02 from '../../assets/images/ad02.jpg';
 import { Search, MapPin } from 'lucide-react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
 
 function HeroHeader() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-
   const images = [
-    [ad01, ad02], // First slide: two images
-    [ad02, ad01], // Second slide: two images
+    ad01,
+    ad02
   ];
 
-  const handlePrev = () => {
-    if (currentSlide > 0) setCurrentSlide(currentSlide - 1);
+  const bannerButtons = [
+    "Products", "Temples", "Services ", "Practices Registration",
+    "Donations Trust", "Projects"
+  ];
+
+  const bannerSettings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 5,
+        }
+      },
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 4,
+        }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 3,
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 2,
+        }
+      }
+    ]
   };
 
-  const handleNext = () => {
-    if (currentSlide < images.length - 1) setCurrentSlide(currentSlide + 1);
+  const carouselSettings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
   };
 
   return (
@@ -27,11 +75,11 @@ function HeroHeader() {
         <div className="hero-background dark-overlay" />
         <div className="container">
           <h1 className="hero-title">
-            "SREESHUDDHI"  Transcend devotee to <br />
+            "SREESHUDDHI" Transcend devotee to <br />
             spiritual ecstasy.
           </h1>
 
-          <div className="row justify-content-center" style={{borderRadius:"30px"}}>
+          <div className="row justify-content-center" style={{borderRadius: "30px"}}>
             <div className="col-lg-10">
               <div className="search-wrapper">
                 <div className="search-field">
@@ -61,47 +109,37 @@ function HeroHeader() {
               </div>
             </div>
           </div>
+
+          <div className="banner-carousel-container">
+            <Slider {...bannerSettings}>
+              {bannerButtons.map((text, index) => (
+                <div key={index} className="banner-button-wrapper">
+                  <a href="#" className="banner-button">{text}</a>
+                </div>
+              ))}
+            </Slider>
+          </div>
         </div>
       </div>
 
-      {/* Image Carousel */}
       <div className="carousel-container">
-        <div className="carousel-images">
-          {images[currentSlide].map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt={`Slide ${currentSlide + 1} - Image ${index + 1}`}
-              className="carousel-image"
-            />
+        <Slider {...carouselSettings}>
+          {images.map((image, index) => (
+            <div key={index} className="carousel-slide">
+              <img
+                src={image }
+                alt={`Slide ${index + 1}`}
+                className="carousel-image"
+              />
+            </div>
           ))}
-        </div>
-
-        {/* Prev Button */}
-        <button
-          onClick={handlePrev}
-          className={`carousel-button prev-button ${
-            currentSlide === 0 ? 'disabled' : ''
-          }`}
-          disabled={currentSlide === 0}
-        >
-          &#8249;
-        </button>
-
-        {/* Next Button */}
-        <button
-          onClick={handleNext}
-          className={`carousel-button next-button ${
-            currentSlide === images.length - 1 ? 'disabled' : ''
-          }`}
-          disabled={currentSlide === images.length - 1}
-        >
-          &#8250;
-        </button>
+        </Slider>
       </div>
     </div>
   );
 }
 
 export default HeroHeader;
+
+
 

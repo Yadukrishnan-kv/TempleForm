@@ -18,14 +18,13 @@ const Footer = () => {
       <div className="container pt-4">
         {/* App Download Section */}
         <div className="py-5">
-          <div className=" rounded-4 " style={{backgroundColor:"#FFBD59"}} >
+          <div className=" rounded-4 " style={{backgroundColor:"#FFBD59",}}  >
             <div className="col-xxl-10 col-md-11 col-10 d-flex flex-md-row flex-column-reverse align-items-md-end align-items-center mx-auto px-0 gap-4">
               <img 
                 className="app-image flex-shrink-0" 
                 src={phone_mpckup}
                 width="270"
                 alt="Mobile app"
-                style={{ marginTop: '-5rem' }}
               />
               <div className="align-items-lg-center align-self-center d-flex flex-column flex-lg-row ps-xxl-4 pt-5 py-md-3 text-center text-md-start">
                 <div className="me-md-5">

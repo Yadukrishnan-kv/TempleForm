@@ -16,6 +16,8 @@ import Footer from '../HomePage/Footer';
 import CountUp from "react-countup";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { useLocation } from 'react-router-dom';
+
 
 
 
@@ -23,6 +25,16 @@ import 'aos/dist/aos.css';
 
 const About = () => {
 
+  const location = useLocation();
+
+  useEffect(() => {
+      if (location.hash) {
+          const element = document.querySelector(location.hash);
+          if (element) {
+              element.scrollIntoView({ behavior: 'smooth' });
+          }
+      }
+  }, [location]);
    useEffect(() => {
       AOS.init({
         duration: 600, 
@@ -133,18 +145,18 @@ const About = () => {
           </div>
 
           <div className="row g-4">
-            <div className="col-md-6">
+            <div className="col-md-6" id="vision">
               <div className="column-text-box left">
                 <p>Origin of 'SREESHUDDHI' is from the Sanskrit term 'SREELAKAM' : where 'SREE' : the reflection of prosperity and wealth 'aiswarya' reigns which denotes the essence of Hindu Samskara.</p>
                 <p>"SREESHUDDHI" is a realignment start-up mission that transcend devotee to spiritual ecstasy. It is a start-up initiative correlating hindu samskara, traditional kshethra rituals and practices, and spirituality, in its utmost purest forms, blending the modern technology and sustainable architecture of the ancient scriptures to evolve devotees into a new world experience of ecstasy and spiritual bliss of soulfulness.</p>
                 
-                <h4 className="font-caveat text-[#FFBD59] fw-medium fs-1">Vision</h4>
+                <h4 className="font-caveat  fw-medium fs-1" style={{color:"#FFBD59"}} >Vision</h4>
                 <p>"To actuate the well-being of all, envisaging oneness by integrating ancient Indian spiritual traditions into life."</p>
                 
-                <h4 className="font-caveat text-[#FFBD59] fw-medium fs-1">Mission</h4>
+                <h4 className="font-caveat  fw-medium fs-1" style={{color:"#FFBD59"}} >Mission</h4>
                 <p>"Our mission is to enrich lives by experiencing oneness. We act as an umbrella organization connecting people to the holistic living of India, its traditions, practices, and places of worship. We deliver ancient Indian practices, high-quality rituals, related services, and products, uniquely blending ancient traditional wisdom with technology."</p>
 
-                <h4 className="font-caveat text-[#FFBD59] fw-medium fs-1">Our Values and Approach</h4>
+                <h4 className="font-caveat  fw-medium fs-1" style={{color:"#FFBD59"}}>Our Values and Approach</h4>
                 <p>Our mission is to enrich lives by experiencing oneness. We act as an umbrella organization connecting people to the holistic living of India, its traditions, practices, and places of worship. We deliver ancient Indian practices, high-quality rituals, related services, and products, uniquely blending ancient traditional wisdom with technology</p>
                 
               </div>
