@@ -1135,4 +1135,99 @@ border-color: #dee2e6 !important;
 
 
 
-  
+.authentication-wrap {
+  max-width: 30rem;
+}
+
+@media(min-width: 1400px) {
+  .authentication-wrap {
+      margin-left: 20%;
+  }
+}
+.Signup-form-group {
+  position: relative;
+}
+
+.Signup-form-group label {
+  position: absolute;
+  top: -11px;
+  left: 10px;
+  pointer-events: none;
+  z-index: 4;
+  background: var(--bs-white);
+  padding: 0 10px;
+  font-weight: 500;
+  color: var(--bs-dark);
+}
+.Signup-form-group label.required:after {
+  content: "*";
+  color: #dc3545;
+  margin-left: 4px;
+}
+
+[data-bs-theme=dark] .Signup-form-group label {
+  color: var(--bs-white);
+  background: var(--bs-body-bg);
+
+}
+
+.form-control,
+.form-select {
+  font-size: 15px;
+  font-weight: 500;
+  height: 52px;
+  border-radius: 0.5rem;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  -webkit-box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / .05);
+  box-shadow: 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 1px 2px 0 rgb(0 0 0 / .05);
+}
+
+.form-control:focus,
+.form-select:focus {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  padding-left: 1rem;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  border-color: var(--bs-primary);
+}
+
+textarea.form-control {
+  height: auto;
+}
+
+.Signup-form-group textarea.form-control {
+  height: auto;
+  padding: 15px 20px;
+} 
+.btn-primary {
+  --bs-btn-bg: #FFBD59;
+  --bs-btn-border-color: #FFBD59;
+  --bs-btn-hover-bg: #eb3616;
+  --bs-btn-hover-border-color: #eb3616;
+  --bs-btn-focus-shadow-rgb: none;
+  --bs-btn-active-bg: #eb3616;
+  --bs-btn-active-border-color: #eb3616;
+  --bs-btn-disabled-bg: #FFBD59;
+  --bs-btn-disabled-border-color: #FFBD59;
+}
+
+.toggle-password {
+  top: 50%;
+  right: 10px;
+  position: absolute;
+  color: #666;
+  cursor: pointer;
+  pointer-events: all;
+  -webkit-transform: translate(-5px, -50%);
+  -ms-transform: translate(-5px, -50%);
+  transform: translate(-5px, -50%);
+  font-size: 14px;
+}
+
+[data-bs-theme=dark] .toggle-password {
+  color: var(--bs-white);
+}

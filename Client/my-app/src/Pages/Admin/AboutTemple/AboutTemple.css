@@ -42,8 +42,9 @@
 .btn {
     padding: 0.5rem 1rem;
     font-size: 1rem;
-    border-radius: 0.25rem;
+    border-radius: 10px;
     cursor: pointer;
+    height: 50px;
     transition: background-color 0.2s ease-in-out;
 }
 
@@ -104,17 +105,17 @@
 }
 
 .btn-danger:hover {
-    background-color: #c82333;
+    background-color: #0056b3;
 }
 
 .btn-primary {
-    background-color: #007bff;
+    background-color: #FFBD59;
     color: white;
     border: none;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
+    background-color: #dc3545;
 }
 
 .btn-secondary {

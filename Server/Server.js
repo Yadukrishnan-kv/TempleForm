@@ -36,6 +36,9 @@ const BookingRoutes = require('./Routes/BookingRoutes');
 app.use('/api/Bookings', BookingRoutes);
 const BlogRoutes = require('./Routes/BlogRoutes');
 app.use('/api/Blog', BlogRoutes);
+const UserRoutes = require('./Routes/UserLoginRoutes');
+app.use('/api/UserRoutes', UserRoutes);
+
 const port = 4000;
 console.log("port:", port);
 app.listen(port, (err) => {

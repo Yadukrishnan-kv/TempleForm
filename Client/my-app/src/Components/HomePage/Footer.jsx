@@ -33,7 +33,7 @@ const Footer = () => {
                 </div>
                 <div className="d-flex flex-shrink-0 flex-wrap gap-3 justify-content-center">
                   <a className="align-items-center app-btn d-flex px-3 py-2 rounded-3 text-decoration-none text-white border" href="#">
-                    <i className="fa-apple  me-2"><FaApple size={30}/>
+                    <i className="  me-2"><FaApple size={30}/>
                     </i>
                     <div>
                       <span className="fs-11 d-block">Available on the App Store</span>
@@ -41,7 +41,7 @@ const Footer = () => {
                     </div>
                   </a>
                   <a className="align-items-center app-btn d-flex fs-11 px-3 py-2 rounded-3 text-decoration-none text-white border" href="#">
-                    <i className="fab fa-google-play fs-25 me-2"><IoLogoGooglePlaystore size={30} />
+                    <i className="fab  fs-25 me-2"  ><IoLogoGooglePlaystore size={30} />
                     </i>
                     <div>
                       <span className="fs-11 d-block">Get it on Google Play</span>
@@ -63,12 +63,12 @@ const Footer = () => {
               <div className="text-[#8d9193]">Kalady, Kerala, India - 683574</div>
               <div className="mt-4">
                 <a className="d-block fw-medium mb-1 " href="#" style={{textDecoration:"none",color:"white"}}>
-                  <i className="fa-solid fa-phone "><Phone className="me-2" size={16} style={{ color: 'white' }} />
+                  <i className="fa-solid  "><Phone className="me-2" size={16} style={{ color: 'white' }} />
                   </i>
                   <span>+91 98470 47963 </span>
                 </a>
                 <a className="email-link d-block fw-medium text-[#8d9193]" href="#" style={{textDecoration:"none",color:"white"}}>
-                  <i className="fa-solid fa-envelope me-2"><FaEnvelope /></i>
+                  <i className="fa-solid  me-2"><FaEnvelope /></i>
                   <span>info@sreeshuddhi.com
                   </span>
                 </a>
@@ -76,7 +76,7 @@ const Footer = () => {
               <div className="border rounded-4 p-4 mb-4 mt-5">
                 <h6 className="text-white-50 mb-3">Join our Whatsapp:</h6>
                 <a className="align-items-center d-block d-flex whatsapp-number" href="#">
-                  <i className="fa-brands fa-whatsapp fs-3 me-2 text-white" ><FaWhatsapp  /></i>
+                  <i className="fa-brands  fs-3 me-2 text-white" ><FaWhatsapp  /></i>
                   <span className="fs-5 fw-semibold text-decoration-underline text-white">+91 98470 47963</span>
                 </a>
               </div>
@@ -125,7 +125,7 @@ const Footer = () => {
                     
                   }}
                 >
-                  <i className="fa-solid fa-angle-right"><IoIosArrowForward  style={{fontSize:"16px",color:'white'}}/>
+                  <i className="fa-solid "><IoIosArrowForward  style={{fontSize:"16px",color:'white'}}/>
                   </i>
                 </button>
               </div>
@@ -134,29 +134,29 @@ const Footer = () => {
               <ul className="d-flex flex-wrap gap-2 list-unstyled mb-0 social-icon">
                 <li>
                   <a href="#" className="rounded-circle align-items-center d-flex fs-19 icon-wrap justify-content-center rounded-2 text-white inst">
-                    <i className="fab fa-instagram"><FaInstagram />
+                    <i className="fab "><FaInstagram />
                     </i>
                   </a>
                 </li>
                 <li>
                   <a href="#" className="rounded-circle align-items-center d-flex fs-19 icon-wrap justify-content-center rounded-2 text-white twi">
-                    <i className="fab fa-twitter"><FaTwitter />
+                    <i className="fab "><FaTwitter />
                     </i>
                   </a>
                 </li>
                 <li>
                   <a href="#" className="rounded-circle align-items-center d-flex fs-19 icon-wrap justify-content-center rounded-2 text-white dri">
-                    <i className="fab fa-dribbble"><FaDribbble/></i>
+                    <i className="fab "><FaDribbble/></i>
                   </a>
                 </li>
                 <li>
                   <a href="#" className="rounded-circle align-items-center d-flex fs-19 icon-wrap justify-content-center rounded-2 text-white fb">
-                    <i className="fab fa-facebook-f"><FaFacebook/></i>
+                    <i className="fab "><FaFacebook/></i>
                   </a>
                 </li>
                 <li>
                   <a href="#" className="rounded-circle align-items-center d-flex fs-19 icon-wrap justify-content-center rounded-2 text-white whatsapp">
-                    <i className="fa-brands fa-whatsapp"><FaWhatsapp/></i>
+                    <i className="fa-brands "><FaWhatsapp/></i>
                   </a>
                 </li>
               </ul>
@@ -185,6 +185,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      
     </footer>
   );
 };

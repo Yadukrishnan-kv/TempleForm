@@ -176,11 +176,11 @@ const fetchDescriptions = async () => {
                 />
                 <label className="form-check-label" htmlFor="jobBookmarkCheck">
                   <span className="form-check-bookmark-default text-black " style={{ fontSize: '16px'}}>
-                    <i className="fa-regular fa-heart me-1"><FaRegHeart />
+                    <i className="fa-regular fa-heart me-1">
                     </i> Save this listing
                   </span>
                   <span className="form-check-bookmark-active text-black" style={{ fontSize: '16px' }}>
-                    <i className="fa-solid fa-heart me-1"><FaRegHeart /></i> Saved
+                    <i className="fa-solid fa-heart me-1"></i> Saved
                   </span>
                 </label>
               </div>
@@ -262,7 +262,7 @@ const fetchDescriptions = async () => {
                   <div className="col-auto col-lg-3">
                     <div className="d-flex align-items-center text-dark">
                       <div className="flex-shrink-0">
-                        <i className="fa-solid fa-bus fs-18"><FaBusAlt size={18}/>
+                        <i className="fa-solid fa-bus fs-18">
                         </i>
                       </div>
                       <div className="flex-grow-1 fs-16 fw-medium ms-3">Bus Stand</div>
@@ -271,7 +271,7 @@ const fetchDescriptions = async () => {
                   <div className="col-auto col-lg-3">
                     <div className="d-flex align-items-center text-dark">
                       <div className="flex-shrink-0">
-                        <i className="fa-solid fa-plane fs-18"><IoAirplaneSharp size={20} />
+                        <i className="fa-solid fa-plane fs-18">
                         </i>
                       </div>
                       <div className="flex-grow-1 fs-16 fw-medium ms-3">Airport</div>
@@ -280,7 +280,7 @@ const fetchDescriptions = async () => {
                   <div className="col-auto col-lg-3">
                     <div className="d-flex align-items-center text-dark">
                       <div className="flex-shrink-0">
-                        <i className="fa-solid fa-train fs-18"><FaTrainSubway size={20} />
+                        <i className="fa-solid fa-train fs-18">
                         </i>
                       </div>
                       <div className="flex-grow-1 fs-16 fw-medium ms-3">Railway station</div>
@@ -445,7 +445,6 @@ const fetchDescriptions = async () => {
                     <i className="fa-solid fa-shop"></i>
                   </div>
                   <div className="align-items-center d-flex flex-wrap gap-1 text-primary card-start">
-                    <i className="fa-solid fa-star"></i>
                     <span className="fw-medium text-primary">
                       {/* <span className="fs-5 fw-semibold me-1">({temple.rating})</span>{temple.reviews} reviews */}
                     </span>

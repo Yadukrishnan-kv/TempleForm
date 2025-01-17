@@ -24,6 +24,9 @@ import ProtectedRoute from '../Pages/Admin/ProtectedRoute/ProtectedRoute'
 import AddUsers from '../Pages/Admin/Users/ListUsers/AddUsers'
 import UserRole from '../Pages/Admin/Users/ListRole/UserRole'
 import Log from '../Pages/Admin/LogDetails/Log'
+import Signup from '../Components/HomePage/Signup'
+import Signin from '../Components/HomePage/Signin'
+import ForgotPassword from '../Components/HomePage/ForgotPassword'
 
 function Dom() {
   return (
@@ -36,6 +39,12 @@ function Dom() {
         <Route path="/TemplePage" element={<TemplePage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/TempleDetails/:templeId" element={<TempleDetails />} />
+        <Route path="/Signup" element={<><Signup/></>} />
+        <Route path="/Signin" element={<><Signin/></>} />
+        <Route path="/ForgotPassword" element={<><ForgotPassword/></>} />
+
+
+
 
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>
@@ -55,6 +64,7 @@ function Dom() {
           <Route path="/listusers" element={<AddUsers/>} />
           <Route path="/usersrole" element={<UserRole/>} />
           <Route path="/log" element={<><Log/></>} />
+
 
 
           

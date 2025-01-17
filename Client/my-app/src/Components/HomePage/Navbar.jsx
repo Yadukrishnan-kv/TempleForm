@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Heart, UserPlus } from 'lucide-react';
 import logo1 from '../../assets/images/logo.png';
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -72,13 +72,13 @@ function Navbar() {
             <span className="nav-count">0</span>
           </a>
 
-          <a
-            href="/sign-in"
+         <Link to={'/Signup'}> <a
+            
             className="nav-icon-link"
             aria-label="Sign In"
           >
             <UserPlus className="nav-icon" />
-          </a>
+          </a></Link>
 
           <button
             className="navbar-toggler"
@@ -106,30 +106,7 @@ function Navbar() {
                 Home
               </a>
             </li>
-            {/* <li className="nav-item">
-              <a
-                className={`nav-link ${activeLink === 'about' ? 'active' : ''}`}
-                href="/about"
-                onClick={() => {
-                  setActiveLink('about');
-                  setIsMobileMenuOpen(false);
-                }}
-              >
-                About Us
-              </a>
-            </li> */}
-            {/* <li className="nav-item">
-              <a
-                className={`nav-link ${activeLink === 'temples' ? 'active' : ''}`}
-                href="/TemplePage"
-                onClick={() => {
-                  setActiveLink('temples');
-                  setIsMobileMenuOpen(false);
-                }}
-              >
-                Temples
-              </a>
-            </li> */}
+           
             <li className="nav-item ">
                     <a className={`nav-link dropdown-toggle ${openDropdowns.Ritrials ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('Ritrials')}>Ritrials<IoMdArrowDropdown />
                     </a>
@@ -185,14 +162,7 @@ function Navbar() {
                                 <li><a className="dropdown-item" href="/about#vision">Mission</a></li>
                                 <li><a className="dropdown-item" href="#">Accademic Panel and Acharyas</a></li>
 
-                                {/* <li className="nav-item ">
-                                    <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Kriyas </a>
-                                    <ul className="dropdown-menu">
-                                        <li><a className="dropdown-item" href="#">Sandhya vandana </a></li>
-                                        <li><a className="dropdown-item" href="#">Basic yoga practices</a></li>
-                                        <li><a className="dropdown-item" href="#">Basic Prana Yamas </a></li>
-                                    </ul>
-                                </li> */}
+                               
                             </ul>
                     </li>
             <li className="nav-item">
