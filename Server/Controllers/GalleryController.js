@@ -65,6 +65,8 @@ const deletePhoto = async (req, res) => {
     }
 };
 
+           
+
 const updatePhotoCaption = async (req, res) => {
     try {
         const photo = await Photo.findByIdAndUpdate(
