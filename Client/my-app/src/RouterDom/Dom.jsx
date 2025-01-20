@@ -44,6 +44,23 @@ function Dom() {
         <Route path="/Signin" element={<><Signin/></>} />
         <Route path="/ForgotPassword" element={<><ForgotPassword/></>} />
         <Route path="/userdashboard" element={<><UserDashboard/></>} />
+        <Route
+          path="/userdashboard"
+          element={
+            <ProtectedRoute allowedRole="1">
+              <UserDashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/contact"
+          element={
+            <ProtectedRoute allowedRole="2">
+              <ContactPage />
+            </ProtectedRoute>
+          }
+        />
 
 
 

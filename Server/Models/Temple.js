@@ -20,6 +20,14 @@ const TempleSchema = new Schema({
   },
   whatsapp: String,
   email: String,
+  password: {
+    type: String,
+    required: true
+  },
+role: {
+    type: String,
+    default: '2'
+},
   website: String,
   templeType: {
     type: String,

@@ -17,10 +17,11 @@ const Userschema = new Schema({
         type: String,
         required: true
       },
-    role: {
+      role: {
         type: String,
-        default: '1'
-    },
+        enum: ["1", "2"],
+      },
+    
    
 }, { timestamps: true })
 

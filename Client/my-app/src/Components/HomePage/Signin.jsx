@@ -2,12 +2,17 @@ import React, {  useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { toast } from "react-toastify"
+import axios from 'axios';
+
 
 function Signin() {
   const ip = process.env.REACT_APP_BACKEND_IP;
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  })
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -23,38 +28,44 @@ function Signin() {
   //   }
   // }, [navigate]);
 
+  const [loading, setLoading] = useState(false)
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
+
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setIsLoading(true);
+    e.preventDefault()
+    setError("")
+    setLoading(true)
 
     try {
-      const response = await fetch(`${ip}/api/UserRoutes/loginUser`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await axios.post(`${ip}/api/UserRoutes/loginUser`, formData)
 
-      const data = await response.json();
+      const { token, user } = response.data
 
-      if (!response.ok) {
-        throw new Error(data.message || 'An error occurred during login');
+      // Store auth data
+      localStorage.setItem("token", token)
+      localStorage.setItem("user", JSON.stringify(user))
+
+      // Navigate based on role
+      if (user.role === "1") {
+        navigate("/userdashboard")
+      } else if (user.role === "2") {
+        navigate("/contact")
       }
 
-      // Store the token in localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-
-      // Redirect to dashboard or home page
-      navigate('/userdashboard');
-    } catch (err) {
-      setError(err.message);
+      toast.success("Login successful!")
+    } catch (error) {
+      setError(error.response?.data?.message || "Login failed")
+      toast.error("Login failed")
     } finally {
-      setIsLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div>
@@ -107,9 +118,11 @@ function Signin() {
                   <label className="required">Enter Email</label>
                   <input
                     type="email"
+                    name="email"
+
                     className={`form-control ${error ? 'is-invalid' : ''}`}
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    value={formData.email}
+                    onChange={handleChange}
                     required
                   />
                   <div className="invalid-feedback text-start">Enter your valid email</div>
@@ -122,10 +135,12 @@ function Signin() {
                     <input
                       id="password"
                       type={showPassword ? 'text' : 'password'}
+                      name="password"
+
                       className="form-control password"
                       autoComplete="off"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      value={formData.password}
+                      onChange={handleChange}
                       required
                     />
                     <i

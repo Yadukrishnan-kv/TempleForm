@@ -16,6 +16,8 @@ function Form() {
   const [selectedTaluk, setSelectedTaluk] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -26,6 +28,8 @@ function Form() {
     },
     whatsapp: '',
     email: '',
+    password:'',
+    role:'2',
     website: '',
     templeType: '', 
     locationSketch: '',
@@ -193,28 +197,45 @@ function Form() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      console.log('Submitting form data:', formData);
-      const response = await axios.post(`${ip}/api/temples/register`, formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      console.log('Server response:', response);
-      toast.success("Form submitted successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+    e.preventDefault()
+    setError("")
+    setLoading(true)
   
+    try {
+      // First create user account for temple
+      const userResponse = await axios.post(`${ip}/api/UserRoutes/registerUser`, {
+        fullName: formData.name, // Use temple name as full name
+        email: formData.email,
+        password: formData.password,
+        role: "2", // Set role as temple
+      })
+  console.log(userResponse);
+  
+      // Then create temple record with user reference
+      const templeData = {
+        ...formData,
+        userId: userResponse.data.user._id,
+      }
+  
+      const templeResponse = await axios.post(`${ip}/api/temples/register`, templeData)
+  
+      toast.success("Temple registered successfully!")
+      navigate("/signin")
     } catch (error) {
-      console.error('Error registering temple:', error.response ? error.response.data : error.message);
-      setError('An error occurred while submitting the form. Please try again.');
-      toast.error("An error occurred while submitting the form.");
-
+      setError(error.response?.data?.message || "Registration failed")
+      toast.error("Registration failed")
+    } finally {
+      setLoading(false)
     }
-  };
+  }
 
+  const togglePasswordVisibility = (field) => {
+    if (field === "password") {
+      setShowPassword(!showPassword)
+    } else {
+      setShowConfirmPassword(!showConfirmPassword)
+    }
+  }
   return (
     <div>
     <div className="form-container">
@@ -376,6 +397,42 @@ function Form() {
             onChange={handleChange} 
           />
         </div>
+        <div>
+                  <label className="form-label">Password</label>
+                  <div className="position-relative">
+                    <input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      className="form-input"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                    />
+                    <i
+                      className={`fa-regular ${showPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
+                      onClick={() => togglePasswordVisibility("password")}
+                    />
+                  </div>
+                </div>
+                <div >
+                  <label className="form-label">Confirm Password</label>
+                  <div className="position-relative">
+                    <input
+                      id="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      className="form-input"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      required
+                    />
+                    <i
+                      className={`fa-regular ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
+                      onClick={() => togglePasswordVisibility("confirmPassword")}
+                    />
+                  </div>
+                </div>
         <div>
           <label className="form-label">വെബ്സൈറ്റ്</label>
           <input 
