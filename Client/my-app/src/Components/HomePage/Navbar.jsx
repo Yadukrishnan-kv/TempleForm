@@ -72,7 +72,7 @@ function Navbar() {
             <span className="nav-count">0</span>
           </a>
 
-         <Link to={'/Signup'}> <a
+         <Link to={'/Signin'}> <a
             
             className="nav-icon-link"
             aria-label="Sign In"

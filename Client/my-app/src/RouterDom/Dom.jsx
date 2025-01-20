@@ -27,6 +27,7 @@ import Log from '../Pages/Admin/LogDetails/Log'
 import Signup from '../Components/HomePage/Signup'
 import Signin from '../Components/HomePage/Signin'
 import ForgotPassword from '../Components/HomePage/ForgotPassword'
+import UserDashboard from '../Components/HomePage/UserDashboard'
 
 function Dom() {
   return (
@@ -42,6 +43,9 @@ function Dom() {
         <Route path="/Signup" element={<><Signup/></>} />
         <Route path="/Signin" element={<><Signin/></>} />
         <Route path="/ForgotPassword" element={<><ForgotPassword/></>} />
+        <Route path="/userdashboard" element={<><UserDashboard/></>} />
+
+
 
 
 
@@ -64,6 +68,7 @@ function Dom() {
           <Route path="/listusers" element={<AddUsers/>} />
           <Route path="/usersrole" element={<UserRole/>} />
           <Route path="/log" element={<><Log/></>} />
+
 
 
 
