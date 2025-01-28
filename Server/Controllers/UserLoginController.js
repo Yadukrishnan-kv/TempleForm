@@ -172,3 +172,7 @@ module.exports = {
   getProfile,
   updateProfile,getAllUsers
 };
+module.exports = { 
+    register,
+    login
+}
