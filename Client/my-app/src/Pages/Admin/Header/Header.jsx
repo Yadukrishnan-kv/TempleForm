@@ -10,6 +10,7 @@ function Header() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.href = '/AdminLogin';
+    
   };
   const [isSearchVisible, setIsSearchVisible] = useState(false);
 

@@ -47,7 +47,25 @@ function AdminProfile() {
       }
     }
   };
-
+  const logAction = async (action, details) => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.post(
+        `${ip}/api/adminlogin/log-action`,
+        {
+          action,
+          module: 'dashboard',
+          subModule: 'Profile',
+          details
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+    } catch (error) {
+      console.error('Error logging action:', error);
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -66,6 +84,8 @@ function AdminProfile() {
       await fetchProfile(token);
       setError('');
       toast.success("Profile updated successfully!")
+      await logAction('Update', `Updated profile: ${name}`);
+
       
       navigate('/Dashboard');
 

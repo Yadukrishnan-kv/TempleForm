@@ -12,9 +12,4 @@ Routes.put("/profile/update", authenticateToken, UserLoginController.updateProfi
 Routes.get("/all-users", authMiddleware, UserLoginController.getAllUsers);
 module.exports = Routes;
 
-Routes.post("/registerUser", UserLoginController.register)
-Routes.post("/loginUser", UserLoginController.login)
 
-
-
-module.exports = Routes

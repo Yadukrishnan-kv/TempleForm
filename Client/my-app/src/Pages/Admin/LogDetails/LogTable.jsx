@@ -163,7 +163,7 @@ function LogTable() {
       case 'Delete':
         return 'text-red-600';
       case 'Login':
-        return 'text-purple-600';
+        return 'text-green-600';
       default:
         return 'text-gray-600';
     }

@@ -47,7 +47,7 @@ const login = async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       // Log failed login attempt
-      await createLogEntry(user._id, 'Failed Login', 'Authentication', 'Login');
+      await createLogEntry(user._id, 'Failed Login', 'Authentication', 'Login',req);
       return res.status(400).json({ message: "Invalid email or password" });
     }
     
@@ -372,7 +372,9 @@ const getRolesWithPermissions = async (req, res) => {
 
 const createLogEntry = async (userId, action, module, subModule, req) => {
   try {
-    const ipAddress = req.ip || req.connection.remoteAddress;
+    // Default IP if req is undefined or doesn't have IP information
+    const ipAddress = req ? (req.ip || req.connection?.remoteAddress || '0.0.0.0') : '0.0.0.0';
+    
     await AdminLogCollection.create({
       userId,
       action: action === 'Login Successful' ? 'Login' : action,
