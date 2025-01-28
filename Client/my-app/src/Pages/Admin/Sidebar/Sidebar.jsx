@@ -103,34 +103,34 @@ function Sidebar() {
           )}
 
           {/* Users Menu Item */}
-          {hasPermission('users') && (
-            <li className={`menu-item has-submenu ${activeMenu === "users" ? "active" : ""}`}>
+          {hasPermission('Subadmins') && (
+            <li className={`menu-item has-submenu ${activeMenu === "Subadmins" ? "active" : ""}`}>
               <button 
                 className="menu-toggle1" 
-                onClick={() => toggleSubmenu("users")}
+                onClick={() => toggleSubmenu("Subadmins")}
               >
                 <FontAwesomeIcon icon={faUsers} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
-                <span className="menu-name">Users</span>
-                {openSubmenus.users ? (
+                <span className="menu-name">Subadmins</span>
+                {openSubmenus.Subadmins ? (
                   <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
                 ) : (
                   <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
                 )}
               </button>
-              {openSubmenus.users && (
+              {openSubmenus.Subadmins && (
                 <ul className="submenu">
                   <li>
                     <Link 
                       to="/listusers"
-                      onClick={() => handleSubmenuClick("Users", "List Users")}
+                      onClick={() => handleSubmenuClick("Subadmins", "List Subadmins")}
                     >
-                      List Users
+                      List Subadmins
                     </Link>
                   </li>
                   <li>
                     <Link 
                       to="/usersrole"
-                      onClick={() => handleSubmenuClick("Users", "Role")}
+                      onClick={() => handleSubmenuClick("Subadmins", "Role")}
                     >
                       Role
                     </Link>
@@ -343,7 +343,40 @@ function Sidebar() {
               )}
             </li>
           )}
+
+
+           {hasPermission('UsersList') && (
+            <li className={`menu-item has-submenu ${activeMenu === "UsersList" ? "active" : ""}`}>
+              <button 
+                className="menu-toggle1" 
+                onClick={() => toggleSubmenu("UsersList")}
+              >
+                <FontAwesomeIcon icon={faCalendarCheck} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                <span className="menu-name">UsersList</span>
+                {openSubmenus.UsersList ? (
+                  <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
+                ) : (
+                  <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+                )}
+              </button>
+              {openSubmenus.UsersList && (
+                <ul className="submenu">
+                  <li>
+                    <Link 
+                      to="/AllUsersList"
+                      onClick={() => handleSubmenuClick("UsersList", "List AllUsers")}
+                    >
+                      List AllUsers
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </li>
+          )}
         </ul>
+
+
+        
       </nav>
     </div>
   );

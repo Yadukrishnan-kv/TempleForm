@@ -1,9 +1,16 @@
-import React from 'react'
-import './HomePage.css'
-
-function UserDashboard() {
-  return (
-    <div>
+import React, { useState } from 'react'
+import '../../HomePage/HomePage.css'
+import avatar from  '../../../assets/images/avatar/01.jpg'
+import { Link, useParams } from 'react-router-dom';
+function TemapleDashboard() {
+      const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+      };
+      const { templeId } = useParams()
+      return (
+    
    <div>
   {/* Start preloader */}
   <div className="page-loader page-loader-active">
@@ -23,7 +30,7 @@ function UserDashboard() {
     <nav className="sidebar">
       <div className="sidebar-header">
         <a href="dashboard.html" className="sidebar-brand">
-          <img className="sidebar-brand_icon" src="assets/dist/img/mini-logo.png" alt />
+          {/* <img className="sidebar-brand_icon" src="assets/dist/img/mini-logo.png" alt /> */}
           <span className="sidebar-brand_text">List<span>On</span></span>
         </a>
       </div>
@@ -31,14 +38,9 @@ function UserDashboard() {
       <div className="sidebar-body">
         <nav className="sidebar-nav">
           <ul className="metismenu">
-            <li className="nav-label">
-              <span className="nav-label_text">Main Menu</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill="currentColor" className="bi bi-three-dots nav-label_ellipsis m-auto" viewBox="0 0 16 16">
-                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
-              </svg>
-            </li>
+           
             <li className="mm-active">
-              <a href="/UserProfile">
+              <a href="dashboard.html">
                 <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-speedometer" viewBox="0 0 16 16">
                   <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z" />
                   <path fillRule="evenodd" d="M6.664 15.889A8 8 0 1 1 9.336.11a8 8 0 0 1-2.672 15.78zm-4.665-4.283A11.945 11.945 0 0 1 8 10c2.186 0 4.236.585 6.001 1.606a7 7 0 1 0-12.002 0z" />
@@ -47,21 +49,26 @@ function UserDashboard() {
               </a>
             </li>
             <li>
-              <a href="add-listing.html">
+            <Link to={'/FormDetails'} style={{textDecoration:"none"}}>
+
                 <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-house-add" viewBox="0 0 16 16">
                   <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h4a.5.5 0 1 0 0-1h-4a.5.5 0 0 1-.5-.5V7.207l5-5 6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z" />
                   <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-3.5-2a.5.5 0 0 0-.5.5v1h-1a.5.5 0 0 0 0 1h1v1a.5.5 0 1 0 1 0v-1h1a.5.5 0 1 0 0-1h-1v-1a.5.5 0 0 0-.5-.5" />
                 </svg>
-                <span className="ms-2">Add listing</span>
-              </a>
+                <span className="ms-2">Form Details</span>
+                </Link>
             </li>
+          
             <li>
+            <Link to={'/UserProfile'} style={{textDecoration:"none"}}>
+
               <a href="wallet.html">
                 <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-wallet2" viewBox="0 0 16 16">
                   <path d="M12.136.326A1.5 1.5 0 0 1 14 1.78V3h.5A1.5 1.5 0 0 1 16 4.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 13.5v-9a1.5 1.5 0 0 1 1.432-1.499L12.136.326zM5.562 3H13V1.78a.5.5 0 0 0-.621-.484zM1.5 4a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5z" />
                 </svg>
-                <span className="ms-2">Wallet</span>
+                <span className="ms-2">Profile</span>
               </a>
+              </Link>
             </li>
             <li>
               <a href="messages.html">
@@ -73,26 +80,8 @@ function UserDashboard() {
                 <span className="badge rounded-pill bg-success">2</span>
               </a>
             </li>
-            <li className="nav-label">
-              <span className="nav-label_text">Listing</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill="currentColor" className="bi bi-three-dots nav-label_ellipsis m-auto" viewBox="0 0 16 16">
-                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
-              </svg>
-            </li>
-            <li>
-              <a className="has-arrow material-ripple" href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-file-earmark-plus" viewBox="0 0 16 16">
-                  <path d="M8 6.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 .5-.5" />
-                  <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z" />
-                </svg>
-                <span className="ms-2">My Listing</span>
-              </a>
-              <ul className="nav-second-level">
-                <li><a href="my-listing.html">Active</a></li>
-                <li><a href="my-listing.html">Pending</a></li>
-                <li><a href="my-listing.html">Expired</a></li>
-              </ul>
-            </li>
+          
+          
             <li>
               <a href="reviews.html">
                 <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-stars" viewBox="0 0 16 16">
@@ -119,35 +108,8 @@ function UserDashboard() {
                 <span className="ms-2">Bookmark</span>
               </a>
             </li>
-            <li>
-              <a className="has-arrow material-ripple" href="#">
-                <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-list-nested" viewBox="0 0 16 16">
-                  <path fillRule="evenodd" d="M4.5 11.5A.5.5 0 0 1 5 11h10a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5m-2-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m-2-4A.5.5 0 0 1 1 3h10a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5" />
-                </svg>
-                <span className="ms-2">Multi Level Menu</span>
-              </a>
-              <ul className="nav-second-level">
-                <li><a href="#">Menu - 2(1)</a></li>
-                <li>
-                  <a className="has-arrow" href="#" aria-expanded="false">Level - 2</a>
-                  <ul className="nav-third-level">
-                    <li><a href="#">Menu - 3(1)</a></li>
-                    <li>
-                      <a className="has-arrow" href="#" aria-expanded="false">Level - 3</a>
-                      <ul className="nav-fourth-level">
-                        <li><a href="#">Menu - 4(1)</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-            <li className="nav-label">
-              <span className="nav-label_text">Account</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width={18} height={18} fill="currentColor" className="bi bi-three-dots nav-label_ellipsis m-auto" viewBox="0 0 16 16">
-                <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
-              </svg>
-            </li>
+          
+           
             <li>
               <a href="profile.html">
                 <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-clipboard2-plus" viewBox="0 0 16 16">
@@ -203,27 +165,18 @@ function UserDashboard() {
         <nav className="navbar-custom-menu navbar navbar-expand-xl m-0 navbar-transfarent">
           <div className="sidebar-toggle">
             <div className="sidebar-toggle-icon" id="sidebarCollapse">
-              sidebar toggle<span />
+             
             </div>
           </div>
           {/*/.sidebar toggle icon*/}
           {/* Collapse */}
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             {/* Toggler */}
-            <button type="button" className="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-expanded="true" aria-label="Toggle navigation"><span /> <span /></button>
-            {/* Start search */}
-            <form className="search" action="#" method="get">
-              <div className="search__inner">
-                <input type="text" className="search__text" placeholder="Search (Ctrl+/)" />
-                <svg data-sa-action="search-close" xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-search search__helper" viewBox="0 0 16 16">
-                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
-                </svg>
-                <span className="search-shortcode">(Ctrl+/)</span>
-              </div>
-            </form>
-            {/* End /. search */}
+            <button type="button" className="navbar-toggler" onClick={toggleMobileMenu} data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-expanded="true" aria-label="Toggle navigation"><span /> <span /></button>
+         
+           
             <ul className="navbar-nav">
-              <li className="nav-item dropdown">
+              <li className="nav-item ">
                 <a className="nav-link dropdown-toggle material-ripple" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <i className="typcn typcn-weather-stormy top-menu-icon" />Home
                 </a>
@@ -238,7 +191,7 @@ function UserDashboard() {
                   <li><a className="dropdown-item" href="../home-restaurant.html">Home (Restaurant)&nbsp;<span className="badge text-bg-primary fw-semibold">New</span></a></li>
                 </ul>
               </li>
-              <li className="nav-item dropdown">
+              <li className="nav-item ">
                 <a className="nav-link dropdown-toggle material-ripple" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <i className="typcn typcn-weather-stormy top-menu-icon" />Dashboard
                 </a>
@@ -256,33 +209,33 @@ function UserDashboard() {
                   <li><a className="dropdown-item" href="setting-app.html">Settings</a></li>
                 </ul>
               </li>
-              <li className="nav-item dropdown">
+              <li className="nav-item ">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                   Listing
                 </a>
                 <ul className="dropdown-menu">
-                  <li className="nav-item dropdown">
+                  <li className="nav-item ">
                     <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">List View</a>
                     <ul className="dropdown-menu">
                       <li><a className="dropdown-item" href="../listings-list-left.html">Left Sidebar</a></li>
                       <li><a className="dropdown-item" href="../listings-list-right.html">Right Sidebar</a></li>
                     </ul>
                   </li>
-                  <li className="nav-item dropdown">
+                  <li className="nav-item ">
                     <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Grid View 1</a>
                     <ul className="dropdown-menu">
                       <li><a className="dropdown-item" href="../listings-grid-1-left.html">Left Sidebar</a></li>
                       <li><a className="dropdown-item" href="../listings-grid-1-right.html">Right Sidebar</a></li>
                     </ul>
                   </li>
-                  <li className="nav-item dropdown">
+                  <li className="nav-item ">
                     <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Grid View 2</a>
                     <ul className="dropdown-menu">
                       <li><a className="dropdown-item" href="../listings-grid-2-left.html">Left Sidebar</a></li>
                       <li><a className="dropdown-item" href="../listings-grid-2-right.html">Right Sidebar</a></li>
                     </ul>
                   </li>
-                  <li className="nav-item dropdown">
+                  <li className="nav-item ">
                     <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Half Map + Sidebar</a>
                     <ul className="dropdown-menu">
                       <li><a className="dropdown-item" href="../listings-map.html">Half Map List</a></li>
@@ -291,7 +244,7 @@ function UserDashboard() {
                       <li><a className="dropdown-item" href="../listings-map-grid-2.html">Half Map Grid 2</a></li>
                     </ul>
                   </li>
-                  <li className="nav-item dropdown">
+                  <li className="nav-item ">
                     <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Listing Details</a>
                     <ul className="dropdown-menu">
                       <li><a className="dropdown-item" href="../listing-details.html">Listing Details 1</a></li>
@@ -304,26 +257,26 @@ function UserDashboard() {
               <li className="nav-item">
                 <a className="nav-link" href="../listings-map-grid-1.html"><i className="typcn typcn-point-of-interest-outline top-menu-icon" />Explore</a>
               </li>
-              <li className="nav-item dropdown">
+              <li className="nav-item ">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                   Template
                 </a>
                 <ul className="dropdown-menu">
-                  <li className="nav-item dropdown">
+                  <li className="nav-item ">
                     <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">About</a>
                     <ul className="dropdown-menu">
                       <li><a className="dropdown-item" href="../about.html">About us 1</a></li>
                       <li><a className="dropdown-item" href="../about-2.html">About us 2</a></li>
                     </ul>
                   </li>
-                  <li className="nav-item dropdown">
+                  <li className="nav-item ">
                     <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Agent</a>
                     <ul className="dropdown-menu">
                       <li><a className="dropdown-item" href="../agent.html">Agent</a></li>
                       <li><a className="dropdown-item" href="../agent-details.html">Agent Details</a></li>
                     </ul>
                   </li>
-                  <li className="nav-item dropdown">
+                  <li className="nav-item ">
                     <a className="dropdown-item dropdown-toggle" href="../blog.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">Blog</a>
                     <ul className="dropdown-menu">
                       <li><a className="dropdown-item" href="../blog.html">Blog</a></li>
@@ -333,7 +286,7 @@ function UserDashboard() {
                   <li><a className="dropdown-item" href="../add-listing.html">Add Listing</a></li>
                   <li><a className="dropdown-item" href="../contact.html">Contact</a></li>
                   <li><a className="dropdown-item" href="../pricing.html">Pricing</a></li>
-                  <li className="nav-item dropdown">
+                  <li className="nav-item ">
                     <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Authentication</a>
                     <ul className="dropdown-menu">
                       <li><a className="dropdown-item" href="../sign-in.html">Sign In</a></li>
@@ -342,13 +295,13 @@ function UserDashboard() {
                       <li><a className="dropdown-item" href="../two-factor-auth.html">Two factor authentication</a></li>
                     </ul>
                   </li>
-                  <li className="nav-item dropdown">
+                  <li className="nav-item ">
                     <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Specialty</a>
                     <ul className="dropdown-menu">
                       <li><a className="dropdown-item" href="../404.html">404 Page</a></li>
                     </ul>
                   </li>
-                  <li className="nav-item dropdown">
+                  <li className="nav-item ">
                     <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Help Center</a>
                     <ul className="dropdown-menu">
                       <li><a className="dropdown-item" href="../faq.html">Faq Page</a></li>
@@ -362,36 +315,14 @@ function UserDashboard() {
           </div>
           <div className="navbar-icon d-flex">
             <ul className="navbar-nav flex-row align-items-center">
-              <li className="nav-item">
-                <a className="nav-link" href="#" id="btnFullscreen">
-                  <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-fullscreen" viewBox="0 0 16 16">
-                    <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5M.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5" />
-                  </svg>
-                </a>
-              </li>
-              <li className="nav-item">
-                <button className="nav-link dark-button">
-                  <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-moon" viewBox="0 0 16 16">
-                    <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278M4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.316 7.316 0 0 0 5.205-2.162c-.337.042-.68.063-1.029.063-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286z" />
-                  </svg>
-                </button>
-              </li>
-              <li className="nav-item">
-                <button className="nav-link light-button">
-                  <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-brightness-high" viewBox="0 0 16 16">
-                    <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
-                  </svg>
-                </button>
-              </li>
-              <li className="nav-item dropdown user-menu user-menu-custom">
+           
+              <li className="nav-item  user-menu user-menu-custom">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <div className="profile-element d-flex align-items-center flex-shrink-0 p-0 text-start">
                     <div className="avatar online">
-                      <img src="assets/dist/img/avatar/01.jpg" className="img-fluid rounded-circle" alt />
                     </div>
                     <div className="profile-text">
                       <h6 className="m-0 fw-medium fs-14">Naeem Khan</h6>
-                      <span><span className="__cf_email__" data-cfemail="25405d4448554940654248444c490b464a48">[email&nbsp;protected]</span></span>
                     </div>
                   </div>
                 </a>
@@ -400,9 +331,7 @@ function UserDashboard() {
                     <a href="#" className="header-arrow"><i className="icon ion-md-arrow-back" /></a>
                   </div>
                   <div className="user-header">
-                    <div className="img-user">
-                      <img src="assets/dist/img/avatar/01.jpg" alt />
-                    </div>{/* img-user */}
+                 
                     <h6>Naeem Khan</h6>
                     <span><a href="https://themes.easital.com/cdn-cgi/l/email-protection" className="__cf_email__" data-cfemail="debba6bfb3aeb2bb9eb9b3bfb7b2f0bdb1b3">[email&nbsp;protected]</a></span>
                   </div>{/* user-header */}
@@ -444,12 +373,12 @@ function UserDashboard() {
           </button>
         </nav>
         {/* End /. navbar */}
-        <div className="body-content">
+        {/* <div className="body-content">
           <div className="decoration blur-2" />
           <div className="decoration blur-3" />
           <div className="container-xxl">
             {/* Start header banner */}
-            <div className="header-banner align-items-center d-flex justify-content-between mb-3 p-4 rounded-4 w-100">
+            {/* <div className="header-banner align-items-center d-flex justify-content-between mb-3 p-4 rounded-4 w-100">
               <div className="header-banner-context">
                 <h3 className="align-items-center d-flex fs-5 gap-2 text-white mb-3">
                   <img src="assets/dist/img/photoshop.png" alt width={35} />
@@ -459,9 +388,9 @@ function UserDashboard() {
                 <button className="content-button btn btn-light mt-3">Start free trial</button>
               </div>
               <img className="content-wrapper-img" src="assets/dist/img/glass.png" alt width={180} />
-            </div>
+            </div> */}
             {/* End /. header banner */}
-            <div className="row g-3 mb-3">
+            {/* <div className="row g-3 mb-3">
               <div className="col-sm-6 col-md-6 col-lg-6 col-xl-3 d-flex">
                 <div className="card flex-column flex-fill p-4 position-relative shadow w-100 widget-card">
                   <div className="d-flex">
@@ -560,18 +489,18 @@ function UserDashboard() {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
             {/* Start statistics */}
-            <div className="card mb-3">
+            {/* <div className="card mb-3">
               <div className="card-header position-relative">
                 <h6 className="fs-17 fw-semi-bold my-1">Statistics</h6>
               </div>
               <div className="card-body">
                 <div id="chart" />
               </div>
-            </div>
+            </div> */}
             {/* End /. statistics */}
-            <div className="card">
+            {/* <div className="card">
               <div className="card-header position-relative">
                 <h6 className="fs-17 fw-semi-bold my-1">Recent Booking</h6>
               </div>
@@ -726,29 +655,22 @@ function UserDashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </div>  */}
         {/*/.body content*/}
       </div>
       {/*/.main content*/}
-      <footer className="footer-content">
+      {/* <footer className="footer-content">
         <div className="align-items-center d-flex footer-text gap-3 justify-content-between">
           <div className="copy">© 2022 ListOn - All Rights Reserved</div>
           <div className="credit">Developed by: <a href="#">ListOn</a> 🌺💚</div>
         </div>
-      </footer>
+      </footer> */}
       {/*/.footer content*/}
-      <div className="overlay" />
     </div>
     {/*/.wrapper*/}
   </div>
-  {/* Global script(used by all pages) */}
-  {/* Third Party Scripts(used by this page) */}
-  {/* Page Scripts(used by all page) */}
-  {/* Page Active Scripts(used by this page) */}
 </div>
-
-    </div>
   )
 }
 
-export default UserDashboard
+export default TemapleDashboard

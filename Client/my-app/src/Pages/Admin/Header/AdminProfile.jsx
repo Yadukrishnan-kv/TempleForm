@@ -4,6 +4,7 @@ import axios from 'axios';
 import './AdminProfile.css';
 import Header from './Header';
 import Sidebar from '../Sidebar/Sidebar';
+import { toast } from 'react-toastify';
 
 function AdminProfile() {
   const [profile, setProfile] = useState(null);
@@ -64,11 +65,15 @@ function AdminProfile() {
       setPassword('');
       await fetchProfile(token);
       setError('');
+      toast.success("Profile updated successfully!")
+      
       navigate('/Dashboard');
 
     } catch (error) {
       console.error('Error updating profile:', error);
       setError('Failed to update profile');
+      toast.error("Failed to update profile")
+      
     }
   };
 

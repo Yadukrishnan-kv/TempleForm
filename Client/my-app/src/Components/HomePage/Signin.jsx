@@ -55,7 +55,9 @@ function Signin() {
       if (user.role === "1") {
         navigate("/userdashboard")
       } else if (user.role === "2") {
-        navigate("/contact")
+        navigate("/TempleDashboard")
+      } else {
+        throw new Error("Invalid user role")
       }
 
       toast.success("Login successful!")

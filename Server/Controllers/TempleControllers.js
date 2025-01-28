@@ -1,21 +1,43 @@
 const TempleCollection = require('../Models/Temple');
 const Gallery = require('../Models/GalleryModel');
+const UserCollection = require("../Models/UserLogin");
+const bcrypt = require("bcrypt");
+
 
 
 // Register a new temple
-const registerTemple = async (req, res) => {
+const registerTemple =  async (req, res) => {
   try {
     const templeData = req.body;
-    const newTemple = new TempleCollection(templeData);
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(templeData.password, 10);
+
+    // Create user account
+    const userResponse = await UserCollection.create({
+      fullName: templeData.name,
+      email: templeData.email,
+      password: hashedPassword,
+      role: "2", // Temple role
+    });
+
+    // Create temple record
+    const newTemple = new TempleCollection({
+      ...templeData,
+      userId: userResponse._id,
+    });
     await newTemple.save();
-    res.status(201).send(newTemple);
+
+    res.status(201).send({ message: "Temple registered successfully", temple: newTemple });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(400).send({ message: "Error registering temple", error: error.message });
   }
 };
 
 // Get all temples
 const getAllTemples = async (req, res) => {
+  console.log("ok");
+  
   try {
     const temples = await TempleCollection.find();
     res.status(200).send(temples);
@@ -23,6 +45,29 @@ const getAllTemples = async (req, res) => {
     res.status(400).send(error);
   }
 };
+
+const getTempleDetails = async (req, res) => {
+
+  try {
+    
+
+    
+    // Use the email from UserLoginModel to find the temple
+    const temple = await TempleCollection.findOne({email:req.user.email})
+    console.log(temple);
+    
+    if (!temple) {
+      console.log("no Temple");
+
+      return res.status(404).json({ message: "Temple not found" })
+    }
+    res.status(200).json(temple)
+  } catch (error) {
+    console.error("Error fetching temple details:", error)
+    res.status(500).json({ message: "Error fetching temple details", error: error.message })
+  }
+}
+
 
 // Get temple by ID
 const getTempleById = async (req, res) => {
@@ -137,7 +182,7 @@ module.exports = {
   getTempleById,
   updateTemple,
   deleteTemple,
-  sortTemples,verifyTemple,getTemplesByDistrict
+  sortTemples,verifyTemple,getTemplesByDistrict,getTempleDetails
 };
 
 

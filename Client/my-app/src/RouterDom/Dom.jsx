@@ -28,6 +28,13 @@ import Signup from '../Components/HomePage/Signup'
 import Signin from '../Components/HomePage/Signin'
 import ForgotPassword from '../Components/HomePage/ForgotPassword'
 import UserDashboard from '../Components/HomePage/UserDashboard'
+import UserProfile from '../Components/UserDash/UserProfile'
+import AllUsersList from '../Pages/Admin/LoginDetailsUsers/AllUsersList'
+import TemapleDashboard from '../Components/TempleDash/TempleDashboard/TemapleDashboard'
+import TempleForm from '../Components/TempleDash/TempleForm/TempleForm'
+import TempleFormEdit from '../Components/TempleDash/TempleForm/TempleFormEdit'
+import TempleFormAbout from '../Components/TempleDash/TempleForm/TempleFormAbout'
+import TempleFormGallery from '../Components/TempleDash/TempleForm/TempleFormGallery'
 
 function Dom() {
   return (
@@ -44,23 +51,19 @@ function Dom() {
         <Route path="/Signin" element={<><Signin/></>} />
         <Route path="/ForgotPassword" element={<><ForgotPassword/></>} />
         <Route path="/userdashboard" element={<><UserDashboard/></>} />
-        <Route
-          path="/userdashboard"
-          element={
-            <ProtectedRoute allowedRole="1">
-              <UserDashboard />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/TempleDashboard" element={<><TemapleDashboard/></>} />
+        <Route path="/userdashboard" element={ <ProtectedRoute allowedRole="1"> <UserDashboard /></ProtectedRoute>}/>
+        <Route  path="/TempleDashboard" element={<ProtectedRoute allowedRole="2"><TemapleDashboard/></ProtectedRoute>}/>
+        <Route path="/UserProfile" element={<><UserProfile/></>} />
+        <Route path="/FormDetails" element={<TempleForm />} />
+        <Route path="/edit/:id" element={<><TempleFormEdit/></>} />
+        <Route path="/AboutTemple/:templeId" element={<><TempleFormAbout/></>} />
+        <Route path="/gallery/:templeId" element={<><TempleFormGallery/></>} />
 
-        <Route
-          path="/contact"
-          element={
-            <ProtectedRoute allowedRole="2">
-              <ContactPage />
-            </ProtectedRoute>
-          }
-        />
+
+
+
+
 
 
 
@@ -85,6 +88,8 @@ function Dom() {
           <Route path="/listusers" element={<AddUsers/>} />
           <Route path="/usersrole" element={<UserRole/>} />
           <Route path="/log" element={<><Log/></>} />
+          <Route path="/AllUsersList" element={<><AllUsersList/></>} />
+
 
 
 
