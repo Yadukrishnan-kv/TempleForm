@@ -19,8 +19,9 @@ const authenticateToken = async (req, res, next) => {
         console.log(user);
 
         req.user = {
+          fullName:user.fullName,
           id: user.id,
-          email:user.email
+          email:user.email,
 
         }
 

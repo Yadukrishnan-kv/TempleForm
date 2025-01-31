@@ -28,6 +28,8 @@ const talukRoutes = require('./Routes/TalukRoutes');
 app.use('/api/taluks', talukRoutes);
 const GalleryRoutes = require('./Routes/GalleryRoutes');
 app.use('/api/Gallery', GalleryRoutes);
+const PoojaRoutes = require('./Routes/PoojaRoutes');
+app.use('/api/PoojaRoutes', PoojaRoutes);
 const aboutTempleRoutes = require('./Routes/AboutTempleRoutes');
 app.use('/api/aboutTemple', aboutTempleRoutes);
 const ContactUsRoutes = require('./Routes/ContactUsRoutes');

@@ -4,9 +4,10 @@ import axios from "axios"
 import '../../../Pages/Admin/SortSubmission/SortSubmission.css';
 
 
-const ip = process.env.REACT_APP_BACKEND_IP
 
 function TempleForm() {
+  const ip = process.env.REACT_APP_BACKEND_IP
+
   const navigate = useNavigate()
   const [temple, setTemple] = useState(null)
   const [loading, setLoading] = useState(true)

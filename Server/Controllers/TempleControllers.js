@@ -36,7 +36,6 @@ const registerTemple =  async (req, res) => {
 
 // Get all temples
 const getAllTemples = async (req, res) => {
-  console.log("ok");
   
   try {
     const temples = await TempleCollection.find();
@@ -54,7 +53,6 @@ const getTempleDetails = async (req, res) => {
     
     // Use the email from UserLoginModel to find the temple
     const temple = await TempleCollection.findOne({email:req.user.email})
-    console.log(temple);
     
     if (!temple) {
       console.log("no Temple");

@@ -35,6 +35,7 @@ import TempleForm from '../Components/TempleDash/TempleForm/TempleForm'
 import TempleFormEdit from '../Components/TempleDash/TempleForm/TempleFormEdit'
 import TempleFormAbout from '../Components/TempleDash/TempleForm/TempleFormAbout'
 import TempleFormGallery from '../Components/TempleDash/TempleForm/TempleFormGallery'
+import PoojaForm from '../Components/TempleDash/PoojaForm/PoojaForm'
 
 function Dom() {
   return (
@@ -49,13 +50,15 @@ function Dom() {
         <Route path="/TempleDetails/:templeId" element={<TempleDetails />} />
         <Route path="/Signup" element={<><Signup/></>} />
         <Route path="/Signin" element={<><Signin/></>} />
-        <Route path="/ForgotPassword" element={<><ForgotPassword/></>} />
+        <Route path="/forgot-password" element={<><ForgotPassword/></>} />
         <Route path="/userdashboard" element={<><UserDashboard/></>} />
         <Route path="/TempleDashboard" element={<><TemapleDashboard/></>} />
         <Route path="/userdashboard" element={ <ProtectedRoute allowedRole="1"> <UserDashboard /></ProtectedRoute>}/>
         <Route  path="/TempleDashboard" element={<ProtectedRoute allowedRole="2"><TemapleDashboard/></ProtectedRoute>}/>
         <Route path="/UserProfile" element={<><UserProfile/></>} />
         <Route path="/FormDetails" element={<TempleForm />} />
+        <Route path="/PoojaForm" element={<><PoojaForm/></>} />
+
         <Route path="/edit/:id" element={<><TempleFormEdit/></>} />
         <Route path="/AboutTemple/:templeId" element={<><TempleFormAbout/></>} />
         <Route path="/gallery/:templeId" element={<><TempleFormGallery/></>} />

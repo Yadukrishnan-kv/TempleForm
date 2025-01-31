@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose")
 const validator = require("validator")
 
 const Userschema = new Schema({
-    fullName: {
+  fullName: {
         type: String,
         required: true,
         trim: true
@@ -21,7 +21,14 @@ const Userschema = new Schema({
         type: String,
         enum: ["1", "2"],
       },
-    
+      otp:{
+        type: String,
+
+      },
+      Expires:{
+        type: Date,
+
+      }
    
 }, { timestamps: true })
 
