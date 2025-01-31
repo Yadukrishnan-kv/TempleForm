@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve uploaded files statically
-app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api /uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api/ping', (req, res) => {
     res.send('Server is runnings!');
@@ -30,6 +30,8 @@ const GalleryRoutes = require('./Routes/GalleryRoutes');
 app.use('/api/Gallery', GalleryRoutes);
 const PoojaRoutes = require('./Routes/PoojaRoutes');
 app.use('/api/PoojaRoutes', PoojaRoutes);
+const vazhipadRoutes = require('./Routes/VazhipadRoutes');
+app.use('/api/vazhipadRoutes', vazhipadRoutes);
 const aboutTempleRoutes = require('./Routes/AboutTempleRoutes');
 app.use('/api/aboutTemple', aboutTempleRoutes);
 const ContactUsRoutes = require('./Routes/ContactUsRoutes');

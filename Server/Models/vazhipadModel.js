@@ -1,13 +1,13 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model } = require("mongoose")
 
-const poojaSchema = new Schema(
+const vazhipadSchema = new Schema(
   {
     name: {
       type: String,
       required: true,
     },
-    time: {
-      type: String,
+    price: {
+      type: Number,
       required: true,
     },
     temple: {
@@ -25,9 +25,9 @@ const poojaSchema = new Schema(
     },
   },
   { timestamps: true },
-);
+)
 
-const PoojaCollection = model("Pooja", poojaSchema);
+const VazhipadCollection = model("Vazhipad", vazhipadSchema)
 
-module.exports = PoojaCollection;
+module.exports = VazhipadCollection
 

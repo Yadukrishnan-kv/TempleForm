@@ -5,10 +5,7 @@ import 'owl.carousel/dist/assets/owl.theme.default.css';
 import './TempleDetails.css';
 import Footer from '../HomePage/Footer';
 import Navbar from '../HomePage/Navbar';
-import { FaBusAlt } from "react-icons/fa";
-import { IoAirplaneSharp } from "react-icons/io5";
-import { FaTrainSubway } from "react-icons/fa6";
-import { FaRegHeart } from "react-icons/fa";
+
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
@@ -25,6 +22,9 @@ const TempleDetails = () => {
   const [error, setError] = useState('');
   const [temple, setTemple] = useState(null);
   const [descriptions, setDescriptions] = useState([]);
+  const [poojas, setPoojas] = useState([])
+  const [vazhipads, setVazhipads] = useState([])
+
   const [otherTemples, setOtherTemples] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -104,13 +104,33 @@ const fetchDescriptions = async () => {
     setIsBookmarked(!isBookmarked);
   };
 
-  const poojaTimings = [
-    { title: 'Nirmalyam', time: '3:00 AM to 3:30 AM' },
-    { title: 'Oilabhishekam, Vakacharthu, Sankhabhishekam', time: '3:20 AM to 3:30 AM' },
-    { title: 'Malar Nivedyam, Alankaram', time: '3:30 AM to 4:15 AM' },
-    { title: 'Usha Nivedyam', time: '4:15 AM to 4:30 AM' },
-    { title: 'Ethirettu Pooja followed by Usha Pooja', time: '4:30 AM to 6:15 AM' },
-  ];
+
+
+  const fetchPoojas = async () => {
+    try {
+      const response = await axios.get(`${ip}/api/PoojaRoutes/GetPoojas/${templeId}`)
+      setPoojas(response.data)
+    } catch (error) {
+      console.error("Error fetching poojas:", error)
+    }
+  }
+  
+
+
+  const fetchVazhipads = async () => {
+    try {
+      const response = await axios.get(`${ip}/api/VazhipadRoutes/GetVazhipads/${templeId}`)
+      setVazhipads(response.data)
+    } catch (error) {
+      console.error("Error fetching vazhipads:", error)
+    }
+  }
+
+  useEffect(() => {
+    fetchPoojas()
+    fetchVazhipads()
+  }, [])
+  
 
   const openingHours = [
     { day: 'Morning', time: '6:00 am - 12:00 pm' },
@@ -118,12 +138,7 @@ const fetchDescriptions = async () => {
    
   ];
 
-  const similarTemples = [
-    { id: 1, name: 'Green Mart Apartment', image: 'assets/images/place/01.jpg', rating: 4.5, reviews: 2391 },
-    { id: 2, name: 'Chuijhal Hotel And Restaurant', image: 'assets/images/place/02.jpg', rating: 4.5, reviews: 2391 },
-    { id: 3, name: 'The Barber\'s Lounge', image: 'assets/images/place/03.jpg', rating: 4.5, reviews: 2391 },
-    { id: 4, name: 'Gaming Expo Spectacle', image: 'assets/images/place/04.jpg', rating: 4.5, reviews: 2391 },
-  ];
+  
 
   const carouselOptions = {
     items: 4,
@@ -293,34 +308,35 @@ const fetchDescriptions = async () => {
 
               {/* Pooja Timings Section */}
               <div className="mb-4">
-                <h4 className="fw-semibold fs-3 mb-4">Pooja Timings</h4>
-                <div className="row">
-                  <div className="col-sm-6">
-                    {poojaTimings.slice(0, Math.ceil(poojaTimings.length / 0)).map((pooja, index) => (
-                      <div className="mb-3 menu pb-2" key={index}>
-                        <div className="row">
-                          <div className="col-sm-8">
-                            <h4 className="fs-5 mb-0 menu-title">{pooja.title}</h4>
-                            <div className=" menu-detail text-muted">{pooja.time}</div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="col-sm-6">
-                    {poojaTimings.slice(Math.ceil(poojaTimings.length / 6)).map((pooja, index) => (
-                      <div className="mb-3 menu pb-2" key={index + Math.ceil(poojaTimings.length / 2)}>
-                        <div className="row">
-                          <div className="col-sm-8">
-                            <h4 className="fs-5 mb-0 menu-title">{pooja.title}</h4>
-                            <div className=" menu-detail text-muted">{pooja.time}</div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+      <div className="row">
+        <div className="col-sm-6">
+          <h4 className="fw-semibold fs-3 mb-4">Pooja Timings</h4>
+          {poojas.map((pooja) => (
+            <div className="mb-3 menu pb-2" key={pooja._id}>
+              <div className="row">
+                <div className="col-sm-8">
+                  <h4 className="fs-5 mb-0 menu-title">{pooja.name}</h4>
+                  <div className="menu-detail text-muted">{pooja.time}</div>
                 </div>
               </div>
+            </div>
+          ))}
+        </div>
+        <div className="col-sm-6">
+          <h4 className="fw-semibold fs-3 mb-4">Vazhipad </h4>
+          {vazhipads.map((vazhipad) => (
+            <div className="mb-3 menu pb-2" key={vazhipad._id}>
+              <div className="row">
+                <div className="col-sm-8">
+                  <h4 className="fs-5 mb-0 menu-title">{vazhipad.name}</h4>
+                  <div className="menu-detail text-muted">₹{vazhipad.price}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
             </div>
             <div className="col-lg-4 ps-xxl-5 ">
               {/* Booking Form */}

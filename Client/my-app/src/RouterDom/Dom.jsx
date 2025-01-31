@@ -36,6 +36,7 @@ import TempleFormEdit from '../Components/TempleDash/TempleForm/TempleFormEdit'
 import TempleFormAbout from '../Components/TempleDash/TempleForm/TempleFormAbout'
 import TempleFormGallery from '../Components/TempleDash/TempleForm/TempleFormGallery'
 import PoojaForm from '../Components/TempleDash/PoojaForm/PoojaForm'
+import VazhipadForm from '../Components/TempleDash/VazhipadForm/VazhipadForm'
 
 function Dom() {
   return (
@@ -58,7 +59,7 @@ function Dom() {
         <Route path="/UserProfile" element={<><UserProfile/></>} />
         <Route path="/FormDetails" element={<TempleForm />} />
         <Route path="/PoojaForm" element={<><PoojaForm/></>} />
-
+        <Route path="/VazhipadForm" element={<><VazhipadForm/></>} />
         <Route path="/edit/:id" element={<><TempleFormEdit/></>} />
         <Route path="/AboutTemple/:templeId" element={<><TempleFormAbout/></>} />
         <Route path="/gallery/:templeId" element={<><TempleFormGallery/></>} />
