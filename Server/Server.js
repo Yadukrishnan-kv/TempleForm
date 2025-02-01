@@ -32,6 +32,8 @@ const PoojaRoutes = require('./Routes/PoojaRoutes');
 app.use('/api/PoojaRoutes', PoojaRoutes);
 const vazhipadRoutes = require('./Routes/VazhipadRoutes');
 app.use('/api/vazhipadRoutes', vazhipadRoutes);
+const VazhipadBookingRoutes = require('./Routes/VazhipadBookingRoutes');
+app.use('/api/VazhipadBooking', VazhipadBookingRoutes);
 const aboutTempleRoutes = require('./Routes/AboutTempleRoutes');
 app.use('/api/aboutTemple', aboutTempleRoutes);
 const ContactUsRoutes = require('./Routes/ContactUsRoutes');

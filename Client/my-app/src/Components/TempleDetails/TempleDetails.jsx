@@ -8,6 +8,7 @@ import Navbar from '../HomePage/Navbar';
 
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import VazhipadBookingModal from './VazhipadBookingModal';
 
 
 
@@ -24,9 +25,9 @@ const TempleDetails = () => {
   const [descriptions, setDescriptions] = useState([]);
   const [poojas, setPoojas] = useState([])
   const [vazhipads, setVazhipads] = useState([])
-
+  const [selectedVazhipad, setSelectedVazhipad] = useState(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [otherTemples, setOtherTemples] = useState([]);
-
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -131,6 +132,11 @@ const fetchDescriptions = async () => {
     fetchVazhipads()
   }, [])
   
+
+  const handleVazhipadClick = (vazhipad) => {
+    setSelectedVazhipad(vazhipad)
+    setIsModalOpen(true)
+  }
 
   const openingHours = [
     { day: 'Morning', time: '6:00 am - 12:00 pm' },
@@ -308,35 +314,43 @@ const fetchDescriptions = async () => {
 
               {/* Pooja Timings Section */}
               <div className="mb-4">
-      <div className="row">
-        <div className="col-sm-6">
-          <h4 className="fw-semibold fs-3 mb-4">Pooja Timings</h4>
-          {poojas.map((pooja) => (
-            <div className="mb-3 menu pb-2" key={pooja._id}>
-              <div className="row">
-                <div className="col-sm-8">
-                  <h4 className="fs-5 mb-0 menu-title">{pooja.name}</h4>
-                  <div className="menu-detail text-muted">{pooja.time}</div>
+        <div className="row">
+          <div className="col-sm-6">
+            <h4 className="fw-semibold fs-3 mb-4">Pooja Timings</h4>
+            {poojas.map((pooja) => (
+              <div className="mb-3 menu pb-2" key={pooja._id}>
+                <div className="row">
+                  <div className="col-sm-8">
+                    <h4 className="fs-5 mb-0 menu-title">{pooja.name}</h4>
+                    <div className="menu-detail text-muted">{pooja.time}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-        <div className="col-sm-6">
-          <h4 className="fw-semibold fs-3 mb-4">Vazhipad </h4>
-          {vazhipads.map((vazhipad) => (
-            <div className="mb-3 menu pb-2" key={vazhipad._id}>
-              <div className="row">
-                <div className="col-sm-8">
-                  <h4 className="fs-5 mb-0 menu-title">{vazhipad.name}</h4>
-                  <div className="menu-detail text-muted">₹{vazhipad.price}</div>
+            ))}
+          </div>
+          <div className="col-sm-6">
+            <h4 className="fw-semibold fs-3 mb-4">Vazhipad </h4>
+            {vazhipads.map((vazhipad) => (
+              <div
+                className="mb-3 menu pb-2"
+                key={vazhipad._id}
+                onClick={() => handleVazhipadClick(vazhipad)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="row">
+                  <div className="col-sm-8">
+                    <h4 className="fs-5 mb-0 menu-title">{vazhipad.name}</h4>
+                    <div className="menu-detail text-muted">₹{vazhipad.price}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+      {isModalOpen && (
+        <VazhipadBookingModal vazhipad={selectedVazhipad} onClose={() => setIsModalOpen(false)} templeId={templeId} />
+      )}
             </div>
             <div className="col-lg-4 ps-xxl-5 ">
               {/* Booking Form */}
