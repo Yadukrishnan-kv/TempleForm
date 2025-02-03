@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import { useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 const nakshatras = [
   "Ashwini",
@@ -38,6 +40,7 @@ const VazhipadBookingModal = ({ vazhipad, onClose, templeId }) => {
   const [totalAmount, setTotalAmount] = useState(vazhipad.price)
   const [availableVazhipads, setAvailableVazhipads] = useState([])
   const ip = process.env.REACT_APP_BACKEND_IP
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchAvailableVazhipads()
@@ -80,8 +83,25 @@ const VazhipadBookingModal = ({ vazhipad, onClose, templeId }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    const token = localStorage.getItem("token")
+
+    if (!token) {
+      toast.error("Please log in to book a vazhipad")
+      // Store booking details in session storage
+      sessionStorage.setItem(
+        "pendingBooking",
+        JSON.stringify({
+          templeId,
+          selectedVazhipads,
+          totalAmount,
+          returnUrl: window.location.pathname + window.location.search,
+        }),
+      )
+      navigate("/signin")
+      return
+    }
+
     try {
-      const token = localStorage.getItem("token")
       const bookingData = selectedVazhipads.map((v) => ({
         vazhipadId: v._id,
         vazhipadName: v.name,
@@ -101,10 +121,18 @@ const VazhipadBookingModal = ({ vazhipad, onClose, templeId }) => {
           },
         },
       )
+
       console.log("Booking successful:", response.data)
+      toast.success("Booking successful!")
       onClose()
     } catch (error) {
       console.error("Error booking vazhipad:", error)
+      if (error.response && error.response.status === 401) {
+        toast.error("Your session has expired. Please log in again.")
+        navigate("/signin")
+      } else {
+        toast.error("Booking failed. Please try again.")
+      }
     }
   }
 
@@ -178,7 +206,6 @@ const VazhipadBookingModal = ({ vazhipad, onClose, templeId }) => {
                 </select>
               </div>
 
-              {/* Consolidated table for all vazhipads and entries */}
               {selectedVazhipads.some((v) => v.entries.some((e) => e.name && e.birthNakshatra)) && (
                 <table className="table table-bordered mt-3">
                   <thead>
@@ -219,4 +246,8 @@ const VazhipadBookingModal = ({ vazhipad, onClose, templeId }) => {
 }
 
 export default VazhipadBookingModal
+
+
+
+
 

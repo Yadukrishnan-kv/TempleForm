@@ -4,7 +4,8 @@ const VazhipadBookingsController = require("../Controllers/vazhipadBookingContro
 const authenticateToken = require("../Middleware/authenticateToken")
 
 
-router.post('/vazhipad-bookings', authenticateToken,VazhipadBookingsController. createVazhipadBooking);
+router.post('/vazhipad-bookings',VazhipadBookingsController. createVazhipadBooking);
 router.get('/vazhipad-bookings/:templeId', authenticateToken, VazhipadBookingsController.getVazhipadBookings);
+router.patch("/update-status/:bookingId", authenticateToken,VazhipadBookingsController. updateBookingStatus)
 
 module.exports = router

@@ -2,6 +2,11 @@ const { Schema, model } = require("mongoose")
 
 const vazhipadBookingSchema = new Schema(
   {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
+    },
     temple: {
       type: Schema.Types.ObjectId,
       ref: "Temple",
@@ -48,4 +53,6 @@ const vazhipadBookingSchema = new Schema(
 const VazhipadBookingCollection = model("VazhipadBooking", vazhipadBookingSchema)
 
 module.exports = VazhipadBookingCollection
+
+
 
