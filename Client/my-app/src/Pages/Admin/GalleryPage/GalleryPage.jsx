@@ -142,7 +142,7 @@ const GalleryPage = () => {
         <Sidebar />
         <div className="gallery-page">
           <div className="gallery-header">
-            <h1>{temple?.name} Gallery</h1>
+            <h1>{temple?.names} Gallery</h1>
             <p className="temple-details">{temple?.address}</p>
           </div>
 

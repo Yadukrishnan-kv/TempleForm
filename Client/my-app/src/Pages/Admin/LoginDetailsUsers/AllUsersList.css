@@ -1,46 +1,106 @@
 /* Wrapper container */
 .searchbar-container {
-    position: relative;
-    width: 100%;
-    max-width: 400px; /* Adjust for responsiveness */
-    margin-left: 20px;
-  }
+  position: relative;
+  width: 100%;
+  max-width: 400px; /* Default size */
+  margin-left: 20px;
   
-  /* Search icon styling */
-  .searchbar-subcontainer {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #9ca3af; /* Gray color for the icon */
-    height: 20px;
-    width: 20px;
-    pointer-events: none; /* Ensure click events pass through to the input */
-  }
-  
-  /* Input styling */
-  .searchbar-container input {
-    width: 100%;
-    padding: 10px 16px;
-    padding-left: 40px; /* Space for the icon */
-    border: 1px solid #d1d5db; /* Light gray border */
-    border-radius: 8px;
-    font-size: 14px;
-    outline: none;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .searchbar-container  input:focus {
-    border-color: #3b82f6; /* Blue border on focus */
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3); /* Ring effect */
-  }
-  
-  .searchbar-container input::placeholder {
-    color: #9ca3af; /* Placeholder text color */
-    font-size: 14px;
+}
+
+/* Search icon styling */
+.searchbar-subcontainer {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af; /* Gray color for the icon */
+  height: 20px;
+  width: 20px;
+  pointer-events: none; /* Ensure click events pass through to the input */
+}
+
+/* Input styling */
+.searchbar-container input {
+  width: 100%;
+  padding: 10px 16px;
+  padding-left: 40px; /* Space for the icon */
+  border: 1px solid #d1d5db; /* Light gray border */
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.searchbar-container input:focus {
+  border-color: #3b82f6; /* Blue border on focus */
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.3); /* Ring effect */
+}
+
+.searchbar-container input::placeholder {
+  color: #9ca3af; /* Placeholder text color */
+  font-size: 14px;
+}
+
+/* Scrollable container with overflow support */
+.overflow-x-autos {
+  overflow-x: auto;
+  padding: 20px;
+  margin-left: 20px;
+  margin-top: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: #f4f7fb;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .searchbar-container {
+      max-width: 100%; /* Full width on tablets */
+      margin-left: 10px;
   }
 
-  
+  .searchbar-container input {
+      padding: 8px 12px;
+      padding-left: 35px; /* Adjusted for smaller screens */
+      font-size: 13px;
+  }
+
+  .searchbar-subcontainer {
+      left: 8px;
+      width: 18px;
+      height: 18px;
+  }
+
+  .overflow-x-autos {
+      margin-left: 10px;
+      padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchbar-container {
+      max-width: 100%; /* Full width on mobile */
+      margin-left: 5px;
+  }
+
+  .searchbar-container input {
+      padding: 8px 10px;
+      padding-left: 30px; /* Adjusted for smaller screens */
+      font-size: 12px;
+  }
+
+  .searchbar-subcontainer {
+      left: 6px;
+      width: 16px;
+      height: 16px;
+  }
+
+  .overflow-x-autos {
+      margin-left: 5px;
+      padding: 10px;
+      border-radius: 8px;
+  }
+}
 
 
 

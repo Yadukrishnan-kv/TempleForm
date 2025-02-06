@@ -90,7 +90,7 @@ function AllUsersList() {
         <Sidebar />
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4 mt-3 ms-3">User Management</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-4  ms-3" style={{marginTop:"100px"}}>User Management</h1>
 
         {/* Search Bar */}
         <div className="relative searchbar-container">
@@ -108,7 +108,7 @@ function AllUsersList() {
       {error && <div className="bg-red-50 text-red-600 p-4 rounded-lg ">{error}</div>}
 
       <div className=" rounded-lg  overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-autos">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>

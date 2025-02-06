@@ -22,9 +22,11 @@
     background: white;
     border-radius: 8px;
     padding: 24px;
-    margin-bottom: 24px;
+    margin-bottom: 24px;  /* Keep the bottom margin */
+    margin-top: 0; /* Remove any margin at the top */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   }
+  
   
   .upload-instructions1 {
     margin-bottom: 16px;

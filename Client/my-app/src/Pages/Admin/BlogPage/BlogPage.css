@@ -2,13 +2,12 @@
     padding: 10px;
     max-width: 800px;
     margin-left: 30px;
-    margin-top: 10px;
+    margin-top: 100px;
+    
   }
   
   .blogview-page {
-    padding: 10px;
-    margin-left: 30px;
-    margin-top: 10px;
+    margin-left: 40px;
   }
   
   .blog-form {
@@ -46,90 +45,144 @@
   
   .blog-list {
     display: grid;
-    gap: 20px;
-  }
-  
-  .blog-item {
+    grid-template-columns: repeat(4, 1fr); /* 4 blogs in a row */
+    gap: 15px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.blog-item {
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    overflow: hidden;
-  }
-  
-  /* .blog-content {
-    padding: 20px;
-  }
-   */
-  .blog-title {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-    padding-left: 10px;
-    padding-top: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 350px; /* Smaller width */
+    height: 330px; /* Reduced height */
+}
 
-  }
-  
-  .blog-text {
-    margin-bottom: 15px;
-    padding-left: 10px;
+.blog-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
 
-  }
-  
-  .blog-meta {
-    font-size: 0.9em;
-    color: #666;
-    margin-bottom: 15px;
-    padding-left: 10px;
-
-  }
-  
-  .blog-image1 {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  .delete-button {
-    display: block;
-    width: 100px;
+.blog-content {
     padding: 10px;
+}
+
+.blog-title {
+    font-size: 1.2rem; /* Smaller title */
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+   
+}
+
+.blog-text {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.4;
+    overflow: hidden;
+}
+
+.blog-meta {
+    font-size: 0.8rem;
+    color: #777;
+}
+
+.blog-image1 {
+    width: 100%;
+    height: 120px; /* Smaller image */
+    object-fit: cover;
+    border-radius: 8px 8px 0 0;
+}
+
+/* Buttons */
+.blog-buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+}
+
+.blogedit-button, .delete-button {
+    flex: 1;
+    padding: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.blogedit-button {
+    background-color: #007BFF;
+    color: white;
+    margin-right: 5px;
+}
+
+.blogedit-button:hover {
+    background-color: #0056b3;
+}
+
+.delete-button {
     background-color: #dc3545;
     color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin-left: 10px;
+}
+
+.delete-button:hover {
+    background-color: #b02a37;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .blog-list {
+        grid-template-columns: repeat(3, 1fr); /* 3 blogs per row for medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .blog-list {
+        grid-template-columns: repeat(2, 1fr); /* 2 blogs per row for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-list {
+        grid-template-columns: 1fr; /* 1 blog per row on mobile */
   }
+  .blogview-page{
   
-  .delete-button:hover {
-    background-color: #c82333;
-  }
+    margin-left: 20px;
   
-  .error-message {
-    color: red;
-    margin-bottom: 10px;
   }
-  
-  .no-blogs {
-    text-align: center;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
+
+}
+
+  /* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .blog-page {
+      max-width: 90%; /* Adjust width for tablets */
+      padding: 15px;
+      margin-top: 100px;
+
   }
-  
-  .blogedit-button {
-    background-color: #007BFF; /* Primary blue color */
-    color: #fff; /* White text */
-    border: none; /* No border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 20px; /* Padding for a good click area */
-    font-size: 16px; /* Readable font size */
-    font-weight: bold; /* Emphasize text */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: all 0.3s ease; /* Smooth hover effect */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+@media (max-width: 768px) {
+  .blog-page {
+      max-width: 95%;
+      padding: 10px;
+      margin-top: 100px;
+
   }
-  
-  .blogedit-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Slightly larger shadow */
+}
+
+@media (max-width: 480px) {
+  .blog-page {
+      max-width: 110%; /* Utilize full width on small screens */
+      margin: 5px auto; /* Reduce top margin */
+      padding: 8px;
+      margin-top: 100px;
+
   }
+}

@@ -109,7 +109,7 @@ const VazhipadForm = () => {
   return (
     <div className="app-container">
       <div className="content-container">
-        <div className="Statesubmission-page">
+        <div className="Vazhipadsubmission-page">
           <h2>Vazhipad Management for {templeInfo.name}</h2>
 
           {!showForm && (
@@ -158,7 +158,7 @@ const VazhipadForm = () => {
 
           <div className="state-list">
             <h3>Vazhipads</h3>
-            <table className="state-table">
+            <table className="Vazhipad-table">
               <thead>
                 <tr>
                   <th>Name</th>

@@ -2,11 +2,11 @@
 .overflow-x-auto {
     overflow-x: auto;
     padding: 20px;
-    margin-left: 20px;
+    margin-left: 80px;
     margin-top: 30px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+    background-color: #f4f7fb;
   }
   
   /* Table styles */
@@ -16,6 +16,7 @@
     font-family: 'Inter', sans-serif;
     color: #374151;
     font-size: 14px;
+    
   }
   
   /* Table header styles */
@@ -86,6 +87,7 @@
     tbody td {
       font-size: 13px;
     }
+    
   }
   
   /* Smooth scrolling for horizontal overflow */
@@ -194,6 +196,9 @@
     margin-bottom: 1rem;
     align-items: center;
     flex-wrap: wrap;
+    margin-left: 50px;
+    margin-top: 80px;
+
   }
   
   /* Sort Dropdown */
@@ -260,3 +265,43 @@
       width: 200px;
     }
   }
+
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .overflow-x-auto {
+        margin-left: 50px;
+        padding: 15px;
+    }
+    .filters-container {
+      margin-left: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+    .overflow-x-auto {
+        margin-left: 20px;
+        padding: 10px;
+    }
+    .filters-container {
+      flex-direction: column; /* Stack filters vertically */
+      align-items: flex-start; /* Align items to the left */
+      margin-left: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+    .overflow-x-auto {
+        margin-left: 10px;
+        padding: 5px;
+        box-shadow: none; /* Reduce shadow effect on small screens */
+    }
+    .filters-container {
+      margin-left: 10px;
+      gap: 0.5rem; /* Reduce gap for small screens */
+  }
+}
+
+
+
+

@@ -34,6 +34,8 @@ body {
   margin-bottom: 15px;
   text-align: center;
 }
+
+
 .form-table {
   width: 100%;
   border-collapse: collapse;
@@ -198,5 +200,32 @@ body {
   .form-submit {
     font-size: 12px;
     padding: 6px;
+  }
+}
+.form-groupform {
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 1rem;  /* Default font size */
+  word-wrap: break-word; /* Ensure long words break to the next line */
+  overflow-wrap: break-word; /* Ensures text breaks within the container */
+}
+
+/* For tablets and below */
+@media (max-width: 768px) {
+  .form-groupform  {
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 480px) {
+  .form-groupform {
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 }

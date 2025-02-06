@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
-import './BookingsPage.css'
 
 const BookingsPage = () => {
   const [bookings, setBookings] = useState([]);
@@ -34,11 +33,15 @@ const BookingsPage = () => {
     <Header />
     <div className="content-container">
       <Sidebar />
-      <div className="booking-container">
-      <h1 className="booking-title">Submitted Bookings</h1>
+      <div className="enquiry-container">
+      <div className="enquiry-header">
+        <h1 className="enquiry-title">Bookings</h1>
+        <p className="enquiry-subtitle">View all submitted Bookings</p>
+      </div>
+     
       
-      <div className="table-wrapper">
-        <table className="booking-table">
+      <div className="enquirytable-container">
+        <table className="enquiry-table">
           <thead>
             <tr>
               <th>Full Name</th>

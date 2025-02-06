@@ -7,6 +7,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import { toast } from 'react-toastify';
 
 const BlogPage = () => {
+  
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -197,43 +198,41 @@ const BlogPage = () => {
           {error && <div className="error-message">{error}</div>}
 
           <div className="blogview-page">
-            <div className="blog-list">
-              {blogs.map((blog) => (
+    <div className="blog-list">
+        {blogs.length > 0 ? (
+            blogs.map((blog) => (
                 <div key={blog._id} className="blog-item">
-                  <div className="blog-content">
                     {blog.image && (
-                      <img
-                        src={`${ip}/${blog.image.path}`}
-                        alt={blog.title}
-                        className="blog-image1"
-                      />
+                        <img
+                            src={`${ip}/${blog.image.path}`}
+                            alt={blog.title}
+                            className="blog-image1"
+                        />
                     )}
-                    <h2 className="blog-title">{blog.title}</h2>
-                    <p className="blog-text">{blog.content}</p>
-                    <div className="blog-meta">
-                      <p>
-                        Author: {blog.author.name} ({blog.author.role})
-                      </p>
-                      <p>Date: {new Date(blog.date).toLocaleDateString()}</p>
+                    <div className="blog-content">
+                        <h2 className="blog-title">{blog.title}</h2>
+                        <p className="blog-text">{blog.content}</p>
+                        <div className="blog-meta">
+                            <p >Author: {blog.author.name} ({blog.author.role})</p>
+                            <p>Date: {new Date(blog.date).toLocaleDateString()}</p>
+                        </div>
                     </div>
-                  </div>
-                  <div style={{display:"flex"}}> 
-
-                  <button onClick={() => handleEdit(blog)} className="blogedit-button">
-                    Update
-                  </button>
-                  <button onClick={() => handleDelete(blog._id)} className="delete-button">
-                    Delete
-                  </button>
-                  </div>
-                  
+                    <div className="blog-buttons">
+                        <button onClick={() => handleEdit(blog)} className="blogedit-button">
+                            Update
+                        </button>
+                        <button onClick={() => handleDelete(blog._id)} className="delete-button">
+                            Delete
+                        </button>
+                    </div>
                 </div>
-              ))}
-              {blogs.length === 0 && (
-                <div className="no-blogs">No blog posts yet. Create one to get started.</div>
-              )}
-            </div>
-          </div>
+            ))
+        ) : (
+            <div className="no-blogs">No blog posts yet. Create one to get started.</div>
+        )}
+    </div>
+</div>
+
         </div>
       </div>
     </div>

@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve uploaded files statically
-app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/api/ping', (req, res) => {
     res.send('Server is runnings!');

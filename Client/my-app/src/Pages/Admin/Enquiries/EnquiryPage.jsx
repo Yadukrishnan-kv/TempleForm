@@ -47,7 +47,7 @@ import './EnquiryPage.css'
         <p className="enquiry-subtitle">View all submitted enquiries</p>
       </div>
 
-      <div className="table-container">
+      <div className="enquirytable-container">
         <table className="enquiry-table">
           <thead>
             <tr>
@@ -61,10 +61,10 @@ import './EnquiryPage.css'
           <tbody>
             {enquiries.map((enquiry) => (
               <tr key={enquiry._id}>
-                <td className="name-cell">{enquiry.fullName}</td>
-                <td className="email-cell">{enquiry.email}</td>
-                <td className="phone-cell">{enquiry.phone}</td>
-                <td className="comment-cell">
+                <td>{enquiry.fullName}</td>
+                <td>{enquiry.email}</td>
+                <td>{enquiry.phone}</td>
+                <td>
                   {enquiry.comments}
                 </td>
                 <td className="date-cell">

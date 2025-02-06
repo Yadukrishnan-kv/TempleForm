@@ -12,11 +12,14 @@
 
 .Statesubmission-page {
   flex: 1;
-  margin-left: 40px;
-  margin-top: 20px;
+  margin-left: 50px;
+  margin-top: 100px;
   margin-right: 20px;
+
   padding: 20px;
   background-color: #f4f7fb;
+  border-radius: 16px;
+  
 }
 
 h2 {
@@ -250,6 +253,8 @@ h2 {
   .Statesubmission-page {
       margin-left: 20px;
       margin-right: 20px;
+      margin-top: 100px;
+
   }
 
   .state-form input,
@@ -277,6 +282,8 @@ h2 {
   .Statesubmission-page {
       margin-left: 10px;
       margin-right: 10px;
+      margin-top: 100px;
+
   }
 
   .add-button {
@@ -355,4 +362,11 @@ h2 {
       padding: 3px 6px;
       font-size: 10px;
   }
+  .Statesubmission-page {
+   width: 100%;
+   margin-left: 0px;
+   margin-top: 100px;
+
+ }
+
 }

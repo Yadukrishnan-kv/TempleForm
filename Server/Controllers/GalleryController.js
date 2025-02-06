@@ -16,7 +16,7 @@ const uploadPhotos = async (req, res) => {
                 temple: templeId,
                 filename: file.filename,
                 originalname: file.originalname,
-                path: `api/${file.path}`,
+                path: file.path,
                 caption: req.body.caption || ''
             });
 

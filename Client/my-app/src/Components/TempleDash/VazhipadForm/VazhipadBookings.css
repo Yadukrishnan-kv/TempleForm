@@ -8,7 +8,7 @@
     flex: 1;
   }
   
-  .Statesubmission-page {
+  .Vazhipadsubmission-page {
     flex: 1;
     margin-left: 40px;
     margin-top: 20px;
@@ -149,9 +149,8 @@
   }
   
   /* Table Styling */
-  .state-table,
-  .district-table,
-  .taluk-table {
+  .Vazhipad-table
+   {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
@@ -161,31 +160,24 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
-  .state-table th, .state-table td,
-  .district-table th, .district-table td,
-  .taluk-table th, .taluk-table td {
+  .Vazhipad-table th, .Vazhipad-table td
+   {
     padding: 15px;
     text-align: left;
     border: 1px solid #ddd;
   }
   
-  .state-table th,
-  .district-table th,
-  .taluk-table th {
+  .Vazhipad-table th {
     background-color: #f4f7fb;
     font-weight: bold;
     color: #333;
   }
   
-  .state-table tbody tr:nth-child(even),
-  .district-table tbody tr:nth-child(even),
-  .taluk-table tbody tr:nth-child(even) {
+  .Vazhipad-table tbody tr:nth-child(even){
     background-color: #f9f9f9;
   }
   
-  .state-table tbody tr:hover,
-  .district-table tbody tr:hover,
-  .taluk-table tbody tr:hover {
+  .Vazhipad-table tbody tr:hover {
     background-color: #f1f1f1;
   }
   
@@ -245,7 +237,7 @@
   
   /* Responsive Styles */
   @media (max-width: 1200px) {
-    .Statesubmission-page {
+    .Vazhipadsubmission-page {
         margin-left: 20px;
         margin-right: 20px;
     }
@@ -272,7 +264,7 @@
         padding: 10px;
     }
   
-    .Statesubmission-page {
+    .Vazhipadsubmission-page {
         margin-left: 10px;
         margin-right: 10px;
     }
@@ -302,12 +294,8 @@
         gap: 5px;
     }
   
-    .state-table th,
-    .state-table td,
-    .district-table th,
-    .district-table td,
-    .taluk-table th,
-    .taluk-table td {
+    .Vazhipad-table th
+    .Vazhipad-table td{
         padding: 10px;
     }
   
@@ -340,12 +328,8 @@
         gap: 5px;
     }
   
-    .state-table th,
-    .state-table td,
-    .district-table th,
-    .district-table td,
-    .taluk-table th,
-    .taluk-table td {
+    .Vazhipad-table th
+    .Vazhipad-table td {
         padding: 8px;
     }
   

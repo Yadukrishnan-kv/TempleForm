@@ -121,7 +121,7 @@ const PoojaForm = () => {
   return (
     <div className="app-container">
       <div className="content-container">
-        <div className="Statesubmission-page">
+        <div className="Vazhipadsubmission-page">
           {/* <h2>Pooja Management for {templeInfo.name}</h2> */}
 
           {!showForm && (
@@ -186,7 +186,7 @@ const PoojaForm = () => {
 
           <div className="state-list">
             <h3>Poojas</h3>
-            <table className="state-table">
+            <table className="Vazhipad-table">
               <thead>
                 <tr>
                   <th>Name</th>

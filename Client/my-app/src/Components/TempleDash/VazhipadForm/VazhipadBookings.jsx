@@ -81,7 +81,7 @@ const VazhipadBookings = () => {
     return (
       <div className="app-containervazhipad ">
         <div className="content-container">
-          <div className="Statesubmission-page">
+          <div className="Vazhipadsubmission-page">
             <div className="d-flex justify-content-center align-items-center p-5">
               <div className="spinner-border text-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
@@ -96,13 +96,13 @@ const VazhipadBookings = () => {
   return (
     <div className="app-container">
       <div className="content-container">
-        <div className="Statesubmission-page">
+        <div className="Vazhipadsubmission-page">
           <h2>Temple Bookings</h2>
 
           {bookings.length > 0 ? (
             <>
               <div className="table-responsive">
-                <table className="state-table">
+                <table className="Vazhipad-table">
                   <thead>
                     <tr>
                       <th>Booking Date</th>

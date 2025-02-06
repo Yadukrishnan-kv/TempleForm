@@ -1,5 +1,7 @@
 .header {
+  width: 100%;
   display: flex;
+  position: fixed;
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
@@ -212,46 +214,21 @@
     .search-bar {
       width: 150px;
     }
+    
   }
   
   @media (max-width: 768px) {
     .header {
-      padding: 10px 15px;
       flex-direction: column; /* Stack items vertically */
       align-items: stretch; /* Stretch items to fill the header */
+      margin-left: 0;
     }
   
-    .header-left {
-      justify-content: space-between; /* Space out items */
-      margin-bottom: 10px; /* Add space below header-left */
-    }
+    
   
-    .search-bar {
-      display: none; /* Hide search bar by default */
-    }
+    
   
-    .search-bar.visible {
-      display: flex; /* Show search bar when toggled */
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      padding: 10px;
-      background-color: white;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-  
-    .search-bar.visible input {
-      width: 100%; /* Full width for input */
-    }
-  
-    .search-toggle {
-      display: block; /* Show search toggle button */
-    }
-  
-    .header-leftdiv {
-      margin-left: 0; /* Reset margin for smaller screens */
-    }
+   
   }
   
   @media (max-width: 480px) {

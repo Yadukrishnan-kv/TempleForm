@@ -103,7 +103,7 @@ function AboutTemple() {
             <div className="content-container">
                 <Sidebar />
                 <div className="about-temple-container">
-                    <h2>About Temple</h2>
+                    <h2>About Templesss</h2>
                     <div className="add-description">
                         <textarea
                             placeholder="Add new description"
@@ -113,7 +113,7 @@ function AboutTemple() {
                             rows="5"
                         />
                         <button onClick={addDescription} className="btn btn-success">
-                            Add Description
+                            Add Descriptions
                         </button>
                     </div>
                     <div className="description-list">
