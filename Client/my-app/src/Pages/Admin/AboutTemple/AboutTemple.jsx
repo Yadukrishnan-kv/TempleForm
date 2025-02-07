@@ -103,7 +103,7 @@ function AboutTemple() {
             <div className="content-container">
                 <Sidebar />
                 <div className="about-temple-container">
-                    <h2>About Templesss</h2>
+                    <h2>About Temples</h2>
                     <div className="add-description">
                         <textarea
                             placeholder="Add new description"

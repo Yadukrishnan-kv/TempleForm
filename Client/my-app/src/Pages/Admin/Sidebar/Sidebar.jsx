@@ -118,7 +118,7 @@ function Sidebar() {
             {hasPermission("dashboard") && (
               <li className={`menu-item ${activeMenu === "dashboard" ? "active" : ""}`}>
                 <Link to="/Dashboard" onClick={() => handleSubmenuClick("Dashboard", "Dashboard View")}>
-                  <RiHome3Fill style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                  <RiHome3Fill style={{ fontSize: "25px", color: "#FFBD59" }} />
                   <span className="menu-name">Dashboard</span>
                 </Link>
               </li>
@@ -128,7 +128,7 @@ function Sidebar() {
             {hasPermission("Subadmins") && (
               <li className={`menu-item has-submenu ${activeMenu === "Subadmins" ? "active" : ""}`}>
                 <button className="menu-toggle1" onClick={() => toggleSubmenu("Subadmins")}>
-                  <FontAwesomeIcon icon={faUsers} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                  <FontAwesomeIcon icon={faUsers} style={{ fontSize: "25px", color: "#FFBD59" }} />
                   <span className="menu-name">Subadmins</span>
                   {openSubmenus.Subadmins ? (
                     <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
@@ -157,7 +157,7 @@ function Sidebar() {
             {hasPermission("registration") && (
               <li className={`menu-item has-submenu ${activeMenu === "registration" ? "active" : ""}`}>
                 <button className="menu-toggle1" onClick={() => toggleSubmenu("registration")}>
-                  <MdOutlineAppRegistration style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                  <MdOutlineAppRegistration style={{ fontSize: "25px", color: "#FFBD59" }} />
                   <span className="menu-name">Registration</span>
                   {openSubmenus.registration ? (
                     <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
@@ -186,7 +186,7 @@ function Sidebar() {
             {hasPermission("log") && (
               <li className={`menu-item has-submenu ${activeMenu === "log" ? "active" : ""}`}>
                 <button className="menu-toggle1" onClick={() => toggleSubmenu("log")}>
-                  <IoLogoBuffer style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                  <IoLogoBuffer style={{ fontSize: "25px", color: "#FFBD59" }} />
                   <span className="menu-name">Log</span>
                   {openSubmenus.log ? (
                     <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
@@ -210,7 +210,7 @@ function Sidebar() {
             {hasPermission("master") && (
               <li className={`menu-item has-submenu ${activeMenu === "master" ? "active" : ""}`}>
                 <button className="menu-toggle1" onClick={() => toggleSubmenu("master")}>
-                  <SlCursor style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                  <SlCursor style={{ fontSize: "25px", color: "#FFBD59" }} />
                   <span className="menu-name">Master</span>
                   {openSubmenus.master ? (
                     <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
@@ -244,7 +244,7 @@ function Sidebar() {
             {hasPermission("blogPage") && (
               <li className={`menu-item has-submenu ${activeMenu === "blogPage" ? "active" : ""}`}>
                 <button className="menu-toggle1" onClick={() => toggleSubmenu("blogPage")}>
-                  <FontAwesomeIcon icon={faBlog} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                  <FontAwesomeIcon icon={faBlog} style={{ fontSize: "25px", color: "#FFBD59" }} />
                   <span className="menu-name">Blog Page</span>
                   {openSubmenus.blogPage ? (
                     <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
@@ -268,7 +268,7 @@ function Sidebar() {
             {hasPermission("enquiry") && (
               <li className={`menu-item has-submenu ${activeMenu === "enquiry" ? "active" : ""}`}>
                 <button className="menu-toggle1" onClick={() => toggleSubmenu("enquiry")}>
-                  <FontAwesomeIcon icon={faEnvelope} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                  <FontAwesomeIcon icon={faEnvelope} style={{ fontSize: "25px", color: "#FFBD59" }} />
                   <span className="menu-name">Enquiry</span>
                   {openSubmenus.enquiry ? (
                     <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
@@ -292,7 +292,7 @@ function Sidebar() {
             {hasPermission("bookings") && (
               <li className={`menu-item has-submenu ${activeMenu === "bookings" ? "active" : ""}`}>
                 <button className="menu-toggle1" onClick={() => toggleSubmenu("bookings")}>
-                  <FontAwesomeIcon icon={faCalendarCheck} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                  <FontAwesomeIcon icon={faCalendarCheck} style={{ fontSize: "25px", color: "#FFBD59" }} />
                   <span className="menu-name">Bookings</span>
                   {openSubmenus.bookings ? (
                     <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
@@ -316,7 +316,7 @@ function Sidebar() {
             {hasPermission("UsersList") && (
               <li className={`menu-item has-submenu ${activeMenu === "UsersList" ? "active" : ""}`}>
                 <button className="menu-toggle1" onClick={() => toggleSubmenu("UsersList")}>
-                  <FontAwesomeIcon icon={faUsers} style={{ fontSize: "25px", color: "rgb(85, 139, 47)" }} />
+                  <FontAwesomeIcon icon={faUsers} style={{ fontSize: "25px", color: "#FFBD59" }} />
                   <span className="menu-name">UsersList</span>
                   {openSubmenus.UsersList ? (
                     <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />

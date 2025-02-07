@@ -198,14 +198,14 @@ function TempleForm() {
                 </Link>
               </td>
               <td className="border border-gray-300 px-4 py-2">
-                <Link to={`/AboutTemple/${temple._id}`}>
+                <Link to={`/TempleDash-AboutTemple/${temple._id}`}>
                   <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded view-button">
                     About
                   </button>
                 </Link>
               </td>
               <td className="border border-gray-300 px-4 py-2">
-                <Link to={`/gallery/${temple._id}`}>
+                <Link to={`/TempleDash-gallery/${temple._id}`}>
                   <button className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded gallery-button">
                     Gallery
                   </button>

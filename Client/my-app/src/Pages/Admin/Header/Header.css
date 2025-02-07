@@ -5,7 +5,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 30px;
-  background-color: white;
+  background-color:white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap; /* Allow wrapping for smaller screens */
 }
@@ -253,4 +253,11 @@
     .dropdown-item.logout {
       font-size: 0.9rem; /* Smaller font size for logout button */
     }
+    .header {
+      flex-direction: column; /* Stack items vertically */
+      align-items: stretch; /* Stretch items to fill the header */
+      margin-left: 0;
+      width: 100%;
+    }
+  
   }

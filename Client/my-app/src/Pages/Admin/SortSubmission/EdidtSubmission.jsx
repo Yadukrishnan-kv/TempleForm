@@ -262,10 +262,7 @@ function EditSubmission() {
 
 
   return (
-    <div className="app-container">
-    <Header />
-    <div className="content-container">
-      <Sidebar />
+   
       <div className="form-container">
       <h1 className="form-title">ക്ഷേത്രേശ്രീ   ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
       <p className="form-group">കാലടി - 683 574., ഫോൺ : 9847047963</p>
@@ -954,6 +951,8 @@ function EditSubmission() {
         </div>
         <div >
           <label className="form-label">സത്യവാങ്മൂലം</label>
+          <p className="form-groupform">മേൽ പറഞ്ഞിരിക്കുന്ന കാര്യങ്ങൾ എന്റെ / ഞങ്ങളുടെ അറിവിലും വിശ്വാസത്തിലും സത്യമാണെന്നും ശ്രീശുദ്ധി ക്ഷേത്രോദ്ധാരണപദ്ധതിയുടെ നിബന്ധനകൾക്കുവിധേയമായിപ്രവർത്തിച്ചുകൊള്ളാമെന്നും ഇതിനാൽ ഉറപ്പുനൽകുന്നു.</p>
+
         </div>
         <div className="grid-container">
           <div>
@@ -1138,8 +1137,7 @@ label">തീയതി</label>
       </form>
     </div>
       
-    </div>
-  </div>
+   
   )
 }
 

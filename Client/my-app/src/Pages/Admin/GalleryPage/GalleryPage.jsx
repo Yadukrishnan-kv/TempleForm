@@ -123,17 +123,17 @@ const GalleryPage = () => {
     }
   };
 
-  // const handleCaptionUpdate = async (photoId, newCaption) => {
-  //   try {
-  //     await axios.put(`${ip}/api/Gallery/${photoId}/caption`, {
-  //       caption: newCaption
-  //     });
-  //     fetchImages();
-  //   } catch (error) {
-  //     setError('Failed to update caption');
-  //     console.error('Error updating caption:', error);
-  //   }
-  // };
+  const handleCaptionUpdate = async (photoId, newCaption) => {
+    try {
+      await axios.put(`${ip}/api/Gallery/${photoId}/caption`, {
+        caption: newCaption
+      });
+      fetchImages();
+    } catch (error) {
+      setError('Failed to update caption');
+      console.error('Error updating caption:', error);
+    }
+  };
 
   return (
     <div className="app-container">
@@ -142,14 +142,12 @@ const GalleryPage = () => {
         <Sidebar />
         <div className="gallery-page">
           <div className="gallery-header">
-            <h1>{temple?.names} Gallery</h1>
-            <p className="temple-details">{temple?.address}</p>
+            <h1>{temple?.name}</h1>
           </div>
 
           <div className="upload-section">
             <div className="upload-instructions1">
               <h3>Add Images</h3>
-              <p>Upload up to 4 images at once. Supported formats: JPG, PNG</p>
             </div>
             <div className="upload-controls">
               <input
@@ -182,13 +180,19 @@ const GalleryPage = () => {
                   />
                 </div>
                 <div className="gallery-item-controls">
-                 
+                <button 
+                    onClick={() => handleCaptionUpdate(image._id)}
+                    className="galleryupdate-button"
+                  >
+                    Edit
+                  </button>
                   <button 
                     onClick={() => handleDelete(image._id)}
                     className="delete-button"
                   >
                     Delete
                   </button>
+                  
                 </div>
               </div>
             ))}

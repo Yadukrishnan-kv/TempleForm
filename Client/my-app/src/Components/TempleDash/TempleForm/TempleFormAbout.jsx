@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-
-import '../../../Pages/Admin/AboutTemple/AboutTemple.css';
+import './TempleFormAbout.css'
 import { toast } from 'react-toastify';
 
 function TempleFormAbout() {
@@ -74,42 +73,42 @@ function TempleFormAbout() {
 
   return (
     <div>
-        <div className="about-temple-container">
+        <div className="TempleDash-about-temple-container">
                     <h2>About Temple</h2>
-                    <div className="add-description">
+                    <div className="TempleDash-add-description">
                         <textarea
                             placeholder="Add new description"
                             value={newDescription}
                             onChange={(e) => setNewDescription(e.target.value)}
-                            className="description-input"
+                            className="TempleDash-description-input"
                             rows="5"
                         />
-                        <button onClick={addDescription} className="btn btn-success">
+                        <button onClick={addDescription} className="TempleDash-btn btn-success">
                             Add Description
                         </button>
                     </div>
-                    <div className="description-list">
+                    <div className="TempleDash-description-list">
                         {descriptions.map((desc) => (
-                            <div key={desc._id} className="description-item">
+                            <div key={desc._id} className="TempleDash-description-item">
                                 {editing === desc._id ? (
-                                    <div className="edit-description">
+                                    <div className="TempleDash-edit-description">
                                         <textarea
                                             value={editedDescription}
                                             onChange={(e) => setEditedDescription(e.target.value)}
-                                            className="description-input"
+                                            className="TempleDash-description-input"
                                             rows="5"
                                         />
-                                        <div className="button-group">
-                                            <button onClick={() => editDescription(desc._id)} className="btn btn-primary">
+                                        <div className="TempleDash-button-group">
+                                            <button onClick={() => editDescription(desc._id)} className="TempleDash-btn TempleDash-btn-primary">
                                                 Save
                                             </button>
-                                            <button onClick={() => setEditing(null)} className="btn btn-secondary">
+                                            <button onClick={() => setEditing(null)} className="TempleDash-btn TempleDash-btn-secondary">
                                                 Cancel
                                             </button>
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="view-description">
+                                    <div className="TempleDash-view-description">
                                         <pre>{desc.description}</pre>
                                         <div className="button-group">
                                             <button 
@@ -117,11 +116,11 @@ function TempleFormAbout() {
                                                     setEditing(desc._id);
                                                     setEditedDescription(desc.description);
                                                 }} 
-                                                className="btn btn-warning"
+                                                className="TempleDash-btn TempleDash-btn-warning"
                                             >
                                                 Edit
                                             </button>
-                                            <button onClick={() => deleteDescription(desc._id)} className="btn btn-danger">
+                                            <button onClick={() => deleteDescription(desc._id)} className="TempleDash-btn TempleDash-btn-danger">
                                                 Delete
                                             </button>
                                         </div>

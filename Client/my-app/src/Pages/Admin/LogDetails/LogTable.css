@@ -213,6 +213,10 @@
   .sortselect:hover {
     border-color: #D1D5DB;
   }
+
+  .no-logs-message{
+    margin-left: 50px;
+  }
   
   /* Responsive adjustments */
   @media (max-width: 640px) {
@@ -299,6 +303,10 @@
     .filters-container {
       margin-left: 10px;
       gap: 0.5rem; /* Reduce gap for small screens */
+  }
+  .no-logs-message{
+    margin-left: 0px;
+
   }
 }
 
