@@ -57,10 +57,24 @@ function TempleForm() {
     { key: 'chiefPriestDetails', label: 'മേൽ ശാന്തി' },
     { key: 'kazhakamDetails', label: 'കഴകം' },
     { key: 'emergencyDetails', label: 'അടിയന്തിരം' },
+    { key: 'emergencyDetailsPermanent', label: 'സ്ഥിരം' },
+    { key: 'emergencyDetailsPhone', label: 'ഫോൺ' },
+
     { key: 'sreekaaryamDetails', label: 'ശ്രീകാര്യം' },
+    { key: 'sreekaaryamDetailsPermanent', label: 'സ്ഥിരം' },
+    { key: 'sreekaaryamDetailsPhone', label: 'ഫോൺ' },
+
     { key: 'puramDetails', label: 'പുറം അടിച്ചുതളി' },
+    { key: 'puramDetailsPermanent', label: 'സ്ഥിരം' },
+    { key: 'puramDetailsPhone', label: 'ഫോൺ' },
+
     { key: 'securityDetails', label: 'സെക്യൂരിറ്റി' },
+    { key: 'securityDetailsPermanent', label: 'സ്ഥിരം' },
+    { key: 'securityDetailsPhone', label: 'ഫോൺ'},
+
     { key: 'templeAssets', label: 'ക്ഷേത്രം വക വസ്തുക്കൾ' },
+    { key: 'templeAssetsPermanent', label: 'സ്ഥിരം' },
+    { key: 'templeAssetsPhone', label: 'ഫോൺ' },
     { key: 'hasBuilding', label: 'കെട്ടിടം' },
     { key: 'hasSafe', label: 'സേഫ് / ലോക്കർ' },
     { key: 'declarationPlace', label: 'സത്യവാങ്മൂലം സ്ഥലം' },
@@ -69,15 +83,7 @@ function TempleForm() {
     { key: 'committeeDecision', label: 'കമ്മിറ്റി തീരുമാനം' },
     { key: 'membershipNumber', label: 'അംഗത്വ നമ്പർ' },
     { key: 'decisionDate', label: 'തീരുമാന തീയതി' },
-    { key: 'presidentPermanent', label: 'പ്രസിഡന്റ് (സ്ഥിരം)' },
-    { key: 'presidentTemporary', label: 'പ്രസിഡന്റ് (അസ്ഥിരം)' },
-    { key: 'presidentPhone', label: 'പ്രസിഡന്റ് ഫോൺ' },
-    { key: 'secretaryPermanent', label: 'സെക്രട്ടറി (സ്ഥിരം)' },
-    { key: 'secretaryTemporary', label: 'സെക്രട്ടറി (അസ്ഥിരം)' },
-    { key: 'secretaryPhone', label: 'സെക്രട്ടറി ഫോൺ' },
-    { key: 'treasurerPermanent', label: 'ട്രഷറർ (സ്ഥിരം)' },
-    { key: 'treasurerTemporary', label: 'ട്രഷറർ (അസ്ഥിരം)' },
-    { key: 'treasurerPhone', label: 'ട്രഷറർ ഫോൺ' },
+   
   ];
 
 
@@ -191,7 +197,7 @@ function TempleForm() {
                 </button>
               </td>
               <td className="border border-gray-300 px-4 py-2">
-                <Link to={`/edit/${temple._id}`}>
+                <Link to={`/TempleDash-Edit/${temple._id}`}>
                   <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded edit-button ">
                     Edit
                   </button>

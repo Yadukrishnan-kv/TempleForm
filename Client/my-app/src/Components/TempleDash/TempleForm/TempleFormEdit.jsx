@@ -47,10 +47,20 @@ function TempleFormEdit() {
        chiefPriestDetails: '', 
        kazhakamDetails: '', 
        emergencyDetails: '',
+       emergencyDetailsPermanent: false,
+       emergencyDetailsPhone: '',
        sreekaaryamDetails: '', 
+       sreekaaryamDetailsPermanent: false,
+       sreekaaryamDetailsPhone: '',
        puramDetails: '', 
+       puramDetailsPermanent: false,
+       puramDetailsPhone: '',
        securityDetails: '', 
+       securityDetailsPermanent: false,
+       securityDetailsPhone: '',
        templeAssets: '',
+       templeAssetsPermanent: false,
+       templeAssetsPhone: '',
        hasBuilding: false,
        hasSafe: false,
        declarationPlace: '',
@@ -59,15 +69,7 @@ function TempleFormEdit() {
        committeeDecision: '',
        membershipNumber: '',
        decisionDate: '',
-       presidentPermanent: '',
-       presidentTemporary: '',
-       presidentPhone: '',
-       secretaryPermanent: '',
-       secretaryTemporary: '',
-       secretaryPhone: '',
-       treasurerPermanent: '',
-       treasurerTemporary: '',
-       treasurerPhone: '',
+     
        state: '',
        district: '',
        taluk: '',
@@ -677,7 +679,41 @@ function TempleFormEdit() {
             value={formData.emergencyDetails}
             onChange={handleInputChange}
           />
-        </div>
+           <div className="form-radio-group mt-2">
+            <label className="form-radio-label">
+              <input 
+                type="radio" 
+                name="emergencyDetailsPermanent" 
+                value={true}
+                checked={formData.emergencyDetailsPermanent === true}
+                onChange={(e) => setFormData({...formData, emergencyDetailsPermanent: e.target.value === 'true'})} 
+                className="form-radio" 
+              />
+              <span className="ml-2">സ്ഥിരം</span>
+            </label>
+            <label className="form-radio-label">
+              <input 
+                type="radio" 
+                name="emergencyDetailsPermanent" 
+                value={false}
+                checked={formData.emergencyDetailsPermanent === false}
+                onChange={(e) => setFormData({...formData, emergencyDetailsPermanent: e.target.value === 'true'})} 
+                className="form-radio" 
+              />
+              <span className="ml-2">അസ്ഥിരം</span>
+            </label>
+          </div>
+          <div className="mt-2">
+              <label className="form-label">ഫോൺ</label>
+              <input 
+                type="tel" 
+                className="form-input"
+                name="emergencyDetailsPhones"
+                value={formData.emergencyDetailsPhone}
+                onChange={handleInputChange}
+              />
+            </div>
+          </div>
         <div>
           <label className="form-label">ശ്രീകാര്യം</label>
           <input 
@@ -687,6 +723,40 @@ function TempleFormEdit() {
             value={formData.sreekaaryamDetails}
             onChange={handleInputChange}
           />
+          <div className="form-radio-group mt-2">
+            <label className="form-radio-label">
+              <input 
+                type="radio" 
+                name="sreekaaryamDetailsPermanent" 
+                value={true}
+                checked={formData.sreekaaryamDetailsPermanent === true}
+                onChange={(e) => setFormData({...formData, sreekaaryamDetailsPermanent: e.target.value === 'true'})} 
+                className="form-radio" 
+              />
+              <span className="ml-2">സ്ഥിരം</span>
+            </label>
+            <label className="form-radio-label">
+              <input 
+                type="radio" 
+                name="sreekaaryamDetailsPermanent" 
+                value={false}
+                checked={formData.sreekaaryamDetailsPermanent === false}
+                onChange={(e) => setFormData({...formData, sreekaaryamDetailsPermanent: e.target.value === 'true'})}  
+                                className="form-radio" 
+              />
+              <span className="ml-2">അസ്ഥിരം</span>
+            </label>
+          </div>
+          <div className="mt-2">
+              <label className="form-label">ഫോൺ</label>
+              <input 
+                type="tel" 
+                className="form-input"
+                name="sreekaaryamDetailsPhone"
+                value={formData.sreekaaryamDetailsPhone}
+                onChange={handleInputChange}
+              />
+            </div>
         </div>
         <div>
           <label className="form-label">പുറം അടിച്ചുതളി</label>
@@ -697,6 +767,40 @@ function TempleFormEdit() {
             value={formData.puramDetails}
             onChange={handleInputChange}
           />
+          <div className="form-radio-group mt-2">
+            <label className="form-radio-label">
+              <input 
+                type="radio" 
+                name="puramDetailsPermanent" 
+                value={true}
+                checked={formData.puramDetailsPermanent === true}
+                onChange={(e) => setFormData({...formData, puramDetailsPermanent: e.target.value === 'true'})}            
+                    className="form-radio" 
+              />
+              <span className="ml-2">സ്ഥിരം</span>
+            </label>
+            <label className="form-radio-label">
+              <input 
+                type="radio" 
+                name="puramDetailsPermanent" 
+                value={false}
+                checked={formData.puramDetailsPermanent === false}
+                onChange={(e) => setFormData({...formData, puramDetailsPermanent: e.target.value === 'true'})}  
+                className="form-radio" 
+              />
+              <span className="ml-2">അസ്ഥിരം</span>
+            </label>
+          </div>
+          <div className="mt-2">
+              <label className="form-label">ഫോൺ</label>
+              <input 
+                type="tel" 
+                className="form-input"
+                name="puramDetailsPhone"
+                value={formData.puramDetailsPhone}
+                onChange={handleInputChange}
+              />
+            </div>
         </div>
         <div>
           <label className="form-label">സെക്യൂരിറ്റി</label>
@@ -707,6 +811,40 @@ function TempleFormEdit() {
             value={formData.securityDetails}
             onChange={handleInputChange}
           />
+          <div className="form-radio-group mt-2">
+            <label className="form-radio-label">
+              <input 
+                type="radio" 
+                name="securityDetailsPermanent" 
+                value={true}
+                checked={formData.securityDetailsPermanent === true}
+                onChange={(e) => setFormData({...formData, securityDetailsPermanent: e.target.value === 'true'})}
+                className="form-radio" 
+              />
+              <span className="ml-2">സ്ഥിരം</span>
+            </label>
+            <label className="form-radio-label">
+              <input 
+                type="radio" 
+                name="securityDetailsPermanent" 
+                value={false}
+                checked={formData.securityDetailsPermanent === false}
+                onChange={(e) => setFormData({...formData, securityDetailsPermanent: e.target.value === 'true'})}
+                className="form-radio" 
+              />
+              <span className="ml-2">അസ്ഥിരം</span>
+            </label>
+          </div>
+          <div className="mt-2">
+              <label className="form-label">ഫോൺ</label>
+              <input 
+                type="tel" 
+                className="form-input"
+                name="securityDetailsPhone"
+                value={formData.securityDetailsPhone}
+                onChange={handleInputChange}
+              />
+            </div>
         </div>
         <div>
           <label className="form-label">ക്ഷേത്രം വക വസ്തുക്കൾ</label>
@@ -717,6 +855,40 @@ function TempleFormEdit() {
             value={formData.templeAssets}
             onChange={handleInputChange}
           ></textarea>
+          <div className="form-radio-group mt-2">
+            <label className="form-radio-label">
+              <input 
+                type="radio" 
+                name="templeAssetsPermanent" 
+                value={true}
+                checked={formData.templeAssetsPermanent === true}
+                onChange={(e) => setFormData({...formData, templeAssetsPermanent: e.target.value === 'true'})}
+                  className="form-radio" 
+              />
+              <span className="ml-2">സ്ഥിരം</span>
+            </label>
+            <label className="form-radio-label">
+              <input 
+                type="radio" 
+                name="templeAssetsPermanent" 
+                value={false}
+                checked={formData.templeAssetsPermanent === false}
+                onChange={(e) => setFormData({...formData, templeAssetsPermanent: e.target.value === 'true'})}  
+                className="form-radio" 
+              />
+              <span className="ml-2">അസ്ഥിരം</span>
+            </label>
+          </div>
+          <div className="mt-2">
+              <label className="form-label">ഫോൺ</label>
+              <input 
+                type="tel" 
+                className="form-input"
+                name="templeAssetsPhone"
+                value={formData.templeAssetsPhone}
+                onChange={handleInputChange}
+              />
+            </div>
         </div>
         <div style={{display:"flex",gap:"20px"}}>
         <div>
@@ -852,107 +1024,7 @@ label">തീയതി</label>
           <p>അഡ്വ. ബ്രഹ്മശ്രീ ഈശാനൻ നമ്പൂതിരിപ്പാട്</p>
           <p>വേഴപ്പറമ്പ് മന, മനയ്ക്കപ്പടി, എൻ. പറവൂർ</p>
         </div>
-        <div className="grid-container">
-          <div>
-            <h3 className="font-bold mb-2">പ്രസിഡന്റ്</h3>
-            <div>
-              <label className="form-label">സ്ഥിരം</label>
-              <input 
-                type="text" 
-                className="form-input"
-                name="presidentPermanent"
-                value={formData.presidentPermanent}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mt-2">
-              <label className="form-label">അസ്ഥിരം</label>
-              <input 
-                type="text" 
-                className="form-input"
-                name="presidentTemporary"
-                value={formData.presidentTemporary}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mt-2">
-              <label className="form-label">ഫോൺ</label>
-              <input 
-                type="tel" 
-                className="form-input"
-                name="presidentPhone"
-                value={formData.presidentPhone}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-          <div>
-            <h3 className="font-bold mb-2">സെക്രട്ടറി</h3>
-            <div>
-              <label className="form-label">സ്ഥിരം</label>
-              <input 
-                type="text" 
-                className="form-input"
-                name="secretaryPermanent"
-                value={formData.secretaryPermanent}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mt-2">
-              <label className="form-label">അസ്ഥിരം</label>
-              <input 
-                type="text" 
-                className="form-input"
-                name="secretaryTemporary"
-                value={formData.secretaryTemporary}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mt-2">
-              <label className="form-label">ഫോൺ</label>
-              <input 
-                type="tel" 
-                className="form-input"
-                name="secretaryPhone"
-                value={formData.secretaryPhone}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-          <div>
-            <h3 className="font-bold mb-2">ട്രഷറർ</h3>
-            <div>
-              <label className="form-label">സ്ഥിരം</label>
-              <input 
-                type="text" 
-                className="form-input"
-                name="treasurerPermanent"
-                value={formData.treasurerPermanent}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mt-2">
-              <label className="form-label">അസ്ഥിരം</label>
-              <input 
-                type="text" 
-                className="form-input"
-                name="treasurerTemporary"
-                value={formData.treasurerTemporary}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mt-2">
-              <label className="form-label">ഫോൺ</label>
-              <input 
-                type="tel" 
-                className="form-input"
-                name="treasurerPhone"
-                value={formData.treasurerPhone}
-                onChange={handleInputChange}
-              />
-            </div>
-          </div>
-        </div>
+        
         {loading && <p>Loading...</p>}
         {error && <p className="error-message">{error}</p>}
         <button type="submit" className="form-submit" disabled={loading}>

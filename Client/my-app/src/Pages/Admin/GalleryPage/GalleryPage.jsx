@@ -8,12 +8,14 @@ import Sidebar from '../Sidebar/Sidebar';
 import { toast } from 'react-toastify';
 
 const GalleryPage = () => {
-  const { templeId } = useParams();
+  const { templeId,photoId } = useParams();
   const [images, setImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [temple, setTemple] = useState(null);
+  const [editingId, setEditingId] = useState(null)
+  const [updateFile, setUpdateFile] = useState(null)
   const ip = process.env.REACT_APP_BACKEND_IP;
 
   useEffect(() => {
@@ -123,17 +125,41 @@ const GalleryPage = () => {
     }
   };
 
-  const handleCaptionUpdate = async (photoId, newCaption) => {
-    try {
-      await axios.put(`${ip}/api/Gallery/${photoId}/caption`, {
-        caption: newCaption
-      });
-      fetchImages();
-    } catch (error) {
-      setError('Failed to update caption');
-      console.error('Error updating caption:', error);
+  const handleUpdateFileSelect = (event) => {
+    const file = event.target.files[0]
+    if (file) {
+      setUpdateFile(file)
     }
-  };
+  }
+
+
+  const handleUpdate = async (photoId) => {
+    if (!updateFile) {
+      toast.error("Please select a file to update")
+      return
+    }
+
+    const formData = new FormData()
+    formData.append("photo", updateFile)
+
+    try {
+      setLoading(true)
+      await axios.put(`${ip}/api/Gallery/${photoId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      setEditingId(null)
+      setUpdateFile(null)
+      fetchImages()
+      toast.success("Image updated successfully!")
+    } catch (error) {
+      console.error("Error updating image:", error)
+      toast.error("Error updating image")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="app-container">
@@ -150,19 +176,9 @@ const GalleryPage = () => {
               <h3>Add Images</h3>
             </div>
             <div className="upload-controls">
-              <input
-                type="file"
-                multiple
-                accept="image/*"
-                onChange={handleFileSelect}
-                className="file-input"
-              />
-              <button 
-                onClick={handleUpload}
-                disabled={loading || selectedFiles.length === 0}
-                className="upload-button"
-              >
-                {loading ? 'Uploading...' : 'Upload Images'}
+              <input type="file" multiple accept="image/*" onChange={handleFileSelect} className="file-input" />
+              <button onClick={handleUpload} disabled={loading || selectedFiles.length === 0} className="upload-button">
+                {loading ? "Uploading..." : "Upload Images"}
               </button>
             </div>
           </div>
@@ -173,40 +189,53 @@ const GalleryPage = () => {
             {images.map((image) => (
               <div key={image._id} className="gallery-item">
                 <div className="image-container">
-                  <img 
-                    src={`${ip}/${image.path}`} 
-                    alt={image.caption || 'Temple image'} 
-                    className="gallery-image"
-                  />
+                  <img src={`${ip}/${image.path}`} alt="Temple image" className="gallery-image" />
                 </div>
                 <div className="gallery-item-controls">
-                <button 
-                    onClick={() => handleCaptionUpdate(image._id)}
-                    className="galleryupdate-button"
-                  >
-                    Edit
-                  </button>
-                  <button 
-                    onClick={() => handleDelete(image._id)}
-                    className="delete-button"
-                  >
-                    Delete
-                  </button>
-                  
+                  {editingId === image._id ? (
+                    <div className="update-controls">
+                      <input type="file" accept="image/*" onChange={handleUpdateFileSelect} className="file-input" />
+                      <div className="button-group">
+                        <button
+                          onClick={() => handleUpdate(image._id)}
+                          disabled={!updateFile || loading}
+                          className="update-button"
+                        >
+                          {loading ? "Updating..." : "Save"}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setEditingId(null)
+                            setUpdateFile(null)
+                          }}
+                          className="cancel-button"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <button onClick={() => setEditingId(image._id)} className="galleryupdate-button">
+                        Update Image
+                      </button>
+                      <button onClick={() => handleDelete(image._id)} className="delete-button">
+                        Delete
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
             {images.length === 0 && (
-              <div className="no-images">
-                No images uploaded yet. Add some images to get started.
-              </div>
+              <div className="no-images">No images uploaded yet. Add some images to get started.</div>
             )}
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default GalleryPage;
 

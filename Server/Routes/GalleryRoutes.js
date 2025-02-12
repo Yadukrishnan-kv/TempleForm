@@ -13,8 +13,7 @@ router.get('/temple/:templeId', photoController.getTemplePhotos);
 router.delete('/:photoId', photoController.deletePhoto);
 
 // Update photo caption
-router.put('/:photoId/caption', photoController.updatePhotoCaption);
-
+router.put("/:photoId", upload.single("photo"), photoController.updatePhoto)
 module.exports = router;
 
 
