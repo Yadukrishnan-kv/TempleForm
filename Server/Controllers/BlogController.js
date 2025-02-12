@@ -1,5 +1,6 @@
 const Blog = require('../Models/BlogModel');
 const fs = require('fs').promises;
+const path = require('path');
 
 const createBlog = async (req, res) => {
     try {
@@ -19,7 +20,7 @@ const createBlog = async (req, res) => {
             image: {
                 filename: req.file.filename,
                 originalname: req.file.originalname,
-                path: `api/${req.file.path}`
+                path: req.file.path // Removed 'api/' to maintain consistency
             }
         });
 
@@ -53,7 +54,8 @@ const deleteBlog = async (req, res) => {
         }
 
         if (blog.image && blog.image.path) {
-            await fs.unlink(blog.image.path);
+            const filePath = path.resolve(blog.image.path); // Ensure correct file path
+            await fs.unlink(filePath);
         }
         
         await Blog.findByIdAndDelete(req.params.blogId);
@@ -81,19 +83,23 @@ const updateBlog = async (req, res) => {
 
         if (req.file) {
             if (blog.image && blog.image.path) {
-                await fs.unlink(blog.image.path);
+                const oldFilePath = path.resolve(blog.image.path);
+                await fs.unlink(oldFilePath);
             }
 
             blog.image = {
                 filename: req.file.filename,
                 originalname: req.file.originalname,
-                path: req.file.path
+                path: req.file.path // Ensure consistency
             };
         }
 
         await blog.save();
         
-        res.json(blog);
+        res.json({
+            message: 'Blog post updated successfully',
+            blog
+        });
     } catch (error) {
         console.error('Error updating blog post:', error);
         res.status(500).json({ message: 'Error updating blog post' });
