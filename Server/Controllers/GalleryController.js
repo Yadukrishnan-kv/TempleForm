@@ -71,7 +71,7 @@ const deletePhoto = async (req, res) => {
 const updatePhoto = async (req, res) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ message: 'No file uploaded' });
+            return res.status(400).json({ message: 'No file upload' });
         }
 
         const photo = await Photo.findById(req.params.photoId);
