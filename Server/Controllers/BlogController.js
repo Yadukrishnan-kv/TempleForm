@@ -54,7 +54,14 @@ const deleteBlog = async (req, res) => {
 
         if (blog.image && blog.image.path) {
             const fullPath = path.join(process.cwd(), blog.image.path);
-            await fs.unlink(fullPath);
+            console.log('Attempting to delete file:', fullPath); // Debug log
+            try {
+                await fs.unlink(fullPath);
+                console.log('File deleted successfully'); // Debug log
+            } catch (unlinkError) {
+                console.error('Error deleting file:', unlinkError);
+                // Continue with blog deletion even if file deletion fails
+            }
         }
         
         await Blog.findByIdAndDelete(req.params.blogId);
@@ -65,7 +72,6 @@ const deleteBlog = async (req, res) => {
         res.status(500).json({ message: 'Error deleting blog post', error: error.message });
     }
 };
-
 const updateBlog = async (req, res) => {
     try {
         const blog = await Blog.findById(req.params.blogId);
@@ -75,17 +81,29 @@ const updateBlog = async (req, res) => {
 
         const { title, content, authorName, authorRole } = req.body;
 
+        // Update text fields
         blog.title = title || blog.title;
         blog.content = content || blog.content;
-        blog.author.name = authorName || blog.author.name;
-        blog.author.role = authorRole || blog.author.role;
+        if (blog.author) {
+            blog.author.name = authorName || blog.author.name;
+            blog.author.role = authorRole || blog.author.role;
+        }
 
+        // Handle image update if a new file is uploaded
         if (req.file) {
+            // Delete old image if it exists
             if (blog.image && blog.image.path) {
-                const fullPath = path.join(process.cwd(), blog.image.path);
-                await fs.unlink(fullPath);
+                try {
+                    const oldImagePath = path.join(process.cwd(), blog.image.path);
+                    await fs.unlink(oldImagePath);
+                    console.log('Old image deleted successfully');
+                } catch (unlinkError) {
+                    console.error('Error deleting old image:', unlinkError);
+                    // Continue with update even if old file deletion fails
+                }
             }
 
+            // Update with new image
             blog.image = {
                 filename: req.file.filename,
                 originalname: req.file.originalname,
@@ -93,12 +111,19 @@ const updateBlog = async (req, res) => {
             };
         }
 
-        await blog.save();
+        // Save the updated blog
+        const updatedBlog = await blog.save();
         
-        res.json(blog);
+        res.json({
+            message: 'Blog post updated successfully',
+            blog: updatedBlog
+        });
     } catch (error) {
         console.error('Error updating blog post:', error);
-        res.status(500).json({ message: 'Error updating blog post', error: error.message });
+        res.status(500).json({ 
+            message: 'Error updating blog post', 
+            error: error.message 
+        });
     }
 };
 
