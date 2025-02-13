@@ -51,20 +51,18 @@ const deleteBlog = async (req, res) => {
         if (!blog) {
             return res.status(404).json({ message: 'Blog post not found' });
         }
- // Correct path handling
-        const filePath = path.join(__dirname, '..', photo.path.replace('api/', ''));
 
-        // Delete file from filesystem
-        await fs.unlink(filePath);
-
-       
+        if (blog.image && blog.image.path) {
+            const fullPath = path.join(process.cwd(), blog.image.path);
+            await fs.unlink(fullPath);
+        }
         
         await Blog.findByIdAndDelete(req.params.blogId);
         
         res.json({ message: 'Blog post deleted successfully' });
     } catch (error) {
         console.error('Error deleting blog post:', error);
-        res.status(500).json({ message: 'Error deleting blog post' });
+        res.status(500).json({ message: 'Error deleting blog post', error: error.message });
     }
 };
 
@@ -82,27 +80,28 @@ const updateBlog = async (req, res) => {
         blog.author.name = authorName || blog.author.name;
         blog.author.role = authorRole || blog.author.role;
 
-       
- // Correct path handling
-        const oldFilePath = path.join(__dirname, '..', photo.path.replace('api/', ''));
+        if (req.file) {
+            if (blog.image && blog.image.path) {
+                const fullPath = path.join(process.cwd(), blog.image.path);
+                await fs.unlink(fullPath);
+            }
 
-        // Delete old file
-        await fs.unlink(oldFilePath);
             blog.image = {
                 filename: req.file.filename,
                 originalname: req.file.originalname,
                 path: `api/${req.file.path}`
             };
-       
+        }
 
         await blog.save();
         
         res.json(blog);
     } catch (error) {
         console.error('Error updating blog post:', error);
-        res.status(500).json({ message: 'Error updating blog post' });
+        res.status(500).json({ message: 'Error updating blog post', error: error.message });
     }
 };
+
 
 module.exports = {
     createBlog,
