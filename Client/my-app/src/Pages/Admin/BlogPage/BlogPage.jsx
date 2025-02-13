@@ -218,7 +218,7 @@ const BlogPage = () => {
                         </div>
                     </div>
                     <div className="blog-buttons">
-                        <button onClick={() => handleEdit(blog)} className="blogedit-button">
+                        <button onClick={() => handleEdit(blog._id)} className="blogedit-button">
                             Update
                         </button>
                         <button onClick={() => handleDelete(blog._id)} className="delete-button">

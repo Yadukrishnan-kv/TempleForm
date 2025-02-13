@@ -1,5 +1,6 @@
 const Blog = require('../Models/BlogModel');
 const fs = require('fs').promises;
+const path = require('path');
 
 const createBlog = async (req, res) => {
     try {
@@ -53,19 +54,19 @@ const deleteBlog = async (req, res) => {
         }
 
         if (blog.image && blog.image.path) {
-            const fullPath = path.join(process.cwd(), blog.image.path);
-            console.log('Attempting to delete file:', fullPath); // Debug log
+            const fullPath = path.join(__dirname, '..', blog.image.path);
+            console.log('Attempting to delete file:', fullPath);
+
             try {
+                await fs.access(fullPath);
                 await fs.unlink(fullPath);
-                console.log('File deleted successfully'); // Debug log
+                console.log('File deleted successfully');
             } catch (unlinkError) {
                 console.error('Error deleting file:', unlinkError);
-                // Continue with blog deletion even if file deletion fails
             }
         }
         
         await Blog.findByIdAndDelete(req.params.blogId);
-        
         res.json({ message: 'Blog post deleted successfully' });
     } catch (error) {
         console.error('Error deleting blog post:', error);
