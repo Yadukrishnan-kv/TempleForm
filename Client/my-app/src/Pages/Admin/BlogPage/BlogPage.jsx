@@ -113,7 +113,7 @@ const BlogPage = () => {
     }
   };
   const handleDelete = async (blogId, blogTitle) => {
-    if (!window.confirm(`Are you sure you want to delete the blog post "${blogTitle}"?`)) {
+    if (!window.confirm(`Are you sure you want to delete the blog post`)) {
       return;
     }
   

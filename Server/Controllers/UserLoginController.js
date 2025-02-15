@@ -44,12 +44,15 @@ const register = async (req, res) => {
     
            // Set up Nodemailer transporter
            const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            secure: process.env.SMTP_PORT == 465, 
             auth: {
-              user: process.env.EMAIL_USER,   // Access email from .env
+              user: process.env.EMAIL_USER,
               pass: process.env.EMAIL_PASS
             },
           });
+          
                 // Mail options
                 const mailOptions = {
                   from: process.env.EMAIL_USER,   // Use email from .env
@@ -61,14 +64,14 @@ For your security, never share your OTP with anyone via call, email, or message.
 
             };
                 
-                transporter.sendMail(mailOptions,  (error, info) => {
+            transporter.sendMail(mailOptions,  (error, info) => {
                   
-                  if (error) {
-                    return res.status(500).json({ message: 'Failed to send OTP' });
-                  }
-                  // Send success response after OTP is sent
-                  res.status(200).json({ message: 'OTP sent successfully' });
-                });
+              if (error) {
+                console.log('SMTP Connection Error:', error);
+              } else {
+                console.log('SMTP Server is ready to take our messages');
+              }
+            });
     }
         return res.status(200).send({
           token,
@@ -269,7 +272,9 @@ const forgotPassword = async (req, res) => {
 
     // Send OTP via email
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: process.env.SMTP_HOST,
+      port: process.env.SMTP_PORT,
+      secure: process.env.SMTP_PORT == 465, 
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
