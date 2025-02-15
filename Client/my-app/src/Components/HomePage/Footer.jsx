@@ -1,7 +1,6 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import './HomePage.css';
-import  logo from '../../assets/images/logo.png' 
+import  logo from '../../assets/images/logo.png'
 import { IoLogoGooglePlaystore } from "react-icons/io5";
 import { FaApple } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
@@ -9,7 +8,7 @@ import { IoIosArrowForward } from "react-icons/io";
 
 
 import phone_mpckup from '../../assets/images/phone-mpckup.png'
-import { FaDribbble, FaEnvelope, FaFacebook, FaInstagram, FaPhone, FaTwitter, FaWhatsapp } from "react-icons/fa";
+import { FaDribbble, FaEnvelope, FaFacebook, FaInstagram, FaTwitter, FaWhatsapp } from "react-icons/fa";
 import { Phone } from 'lucide-react';
 
 const Footer = () => {

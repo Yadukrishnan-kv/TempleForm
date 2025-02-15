@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import './About.css';
 import Navbar from '../HomePage/Navbar';
 import subbanner from '../../assets/images/subbanner.jpg'

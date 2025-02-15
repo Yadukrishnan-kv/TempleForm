@@ -1,4 +1,3 @@
-import React from 'react';
 import './HomePage.css';
 import './HeroHeader.css';
 import ad01 from '../../assets/images/ad01.jpg';
