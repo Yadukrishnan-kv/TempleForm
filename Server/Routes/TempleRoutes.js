@@ -4,7 +4,6 @@ const TempleController = require('../Controllers/TempleControllers');
 const authenticateToken = require('../Middleware/authenticateToken');
 
 TempleRoutes.get("/details", authenticateToken, TempleController.getTempleDetails)
-
 TempleRoutes.post("/register", TempleController.registerTemple);
 TempleRoutes.get("/all", TempleController.getAllTemples);
 TempleRoutes.get("/sort", TempleController.sortTemples);

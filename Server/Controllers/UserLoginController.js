@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 
-
+const TempleCollection = require('../Models/Temple');
 const UserCollection = require("../Models/UserLogin");
 
 const register = async (req, res) => {
@@ -176,6 +176,7 @@ const login = async (req, res) => {
     });
   }
 };
+
 const getProfile = async (req, res) => {
   try {
     const user = await UserCollection.findById(req.user.id)
@@ -252,6 +253,31 @@ const getAllUsers = async (req, res) => {
 };
 
 
+const deleteUser = async (req, res) => {
+  try {
+    const { userId } = req.params
+
+    // Check if the user exists
+    const user = await UserCollection.findById(userId)
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" })
+    }
+
+    // If the user is a temple (role 2), delete the associated temple record
+    if (user.role === "2") {
+      await TempleCollection.findOneAndDelete({ userId: user._id })
+    }
+
+    // Delete the user
+    await UserCollection.findByIdAndDelete(userId)
+
+    res.status(200).json({ success: true, message: "User and associated data deleted successfully" })
+  } catch (error) {
+    console.error("Error deleting user:", error)
+    res.status(500).json({ success: false, message: "Internal server error" })
+  }
+}
+
 
 const forgotPassword = async (req, res) => {
   try {
@@ -296,25 +322,7 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-// const verifyOtp = async (req, res) => {
-//   try {
-//     const { email, otp } = req.body;
-//     const user = await UserCollection.findOne({ email });
 
-//     if (!user) {
-//       return res.status(404).json({ message: 'User not found' });
-//     }
-
-//     if (user.otp === otp && user.Expires > Date.now()) {
-//       res.status(200).json({ message: 'OTP verified successfully' });
-//     } else {
-//       res.status(400).json({ message: 'Invalid OTP or OTP expired' });
-//     }
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// };
 
 const resetPassword = async (req, res) => {
   try {
@@ -351,7 +359,8 @@ module.exports = {
   getProfile,
   updateProfile,
   getAllUsers,
-  verifyemail, forgotPassword,
-
+  verifyemail,
+  forgotPassword,
   resetPassword,
+  deleteUser
 };

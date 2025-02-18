@@ -18,6 +18,8 @@ function Addform() {
   const [selectedTaluk, setSelectedTaluk] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
      name: '',
      address: '',
@@ -219,7 +221,13 @@ function Addform() {
 
     }
   };
-
+  const togglePasswordVisibility = (field) => {
+    if (field === "password") {
+      setShowPassword(!showPassword)
+    } else {
+      setShowConfirmPassword(!showConfirmPassword)
+    }
+  }
 
   return (
     <div className="app-container">
@@ -385,6 +393,42 @@ function Addform() {
             onChange={handleChange} 
           />
         </div>
+        <div>
+                  <label className="form-label">Password</label>
+                  <div className="position-relative">
+                    <input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      className="form-input"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                    />
+                    <i
+                      className={`fa-regular ${showPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
+                      onClick={() => togglePasswordVisibility("password")}
+                    />
+                  </div>
+                </div>
+                <div >
+                  <label className="form-label">Confirm Password</label>
+                  <div className="position-relative">
+                    <input
+                      id="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      className="form-input"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      required
+                    />
+                    <i
+                      className={`fa-regular ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
+                      onClick={() => togglePasswordVisibility("confirmPassword")}
+                    />
+                  </div>
+                </div>
         <div>
           <label className="form-label">വെബ്സൈറ്റ്</label>
           <input 
@@ -844,7 +888,7 @@ function Addform() {
               <input 
                 type="tel" 
                 className="form-input"
-                name="emergencyDetailsPhones"
+                name="emergencyDetailsPhone"
                 value={formData.emergencyDetailsPhone}
                 onChange={handleChange}
               />

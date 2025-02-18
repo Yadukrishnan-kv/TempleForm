@@ -14,6 +14,7 @@ Routes.post("/reset-password", UserLoginController.resetPassword);
 Routes.get("/profile", authenticateToken, UserLoginController.getProfile);
 Routes.put("/profile/update", authenticateToken, UserLoginController.updateProfile);
 Routes.get("/all-users", authMiddleware, UserLoginController.getAllUsers);
+Routes.delete("/delete-users/:userId", authMiddleware, UserLoginController.deleteUser)
 module.exports = Routes;
 
 

@@ -6,6 +6,7 @@ import { Search } from "lucide-react"
 import Header from "../Header/Header"
 import Sidebar from "../Sidebar/Sidebar"
 import './AllUsersList.css'
+import { toast } from "react-toastify";
 
 function AllUsersList() {
   const [users, setUsers] = useState([])
@@ -21,6 +22,7 @@ function AllUsersList() {
   }, [])
 
   const fetchUsers = async () => {
+  
     try {
       const token = localStorage.getItem("token")
       if (!token) {
@@ -82,6 +84,31 @@ function AllUsersList() {
       </div>
     )
   }
+
+
+
+
+  const deleteUser = async (userId) => {
+    if (!window.confirm('Are you sure you want to Remove?')) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token")
+      await axios.delete(`${ip}/api/UserRoutes/delete-users/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      setUsers(users.filter((user) => user._id !== userId))
+      toast.success(" Deleted successfully!");
+
+      await logAction("Delete", { userId })
+    } catch (error) {
+      console.error("Error deleting user:", error)
+      setError(error.response?.data?.message || "Failed to delete user")
+      toast.error("Error deleting !"); 
+
+    }
+  }
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(users.map(user => ({
       Name: user.fullName,
@@ -133,6 +160,9 @@ function AllUsersList() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Joined
                 </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -160,6 +190,12 @@ function AllUsersList() {
 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500" data-label="Joined">
   {new Date(user.createdAt).toLocaleDateString()}
 </td>
+<td className="px-6 py-4 whitespace-nowrap" data-label="Actions">
+                        <button onClick={() => deleteUser(user._id)} className="userdelete-button">
+
+                        Delete
+                      </button>
+                      </td>
                 </tr>
               ))}
             </tbody>
