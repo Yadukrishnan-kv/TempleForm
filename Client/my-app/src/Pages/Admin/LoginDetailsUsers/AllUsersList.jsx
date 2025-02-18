@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import * as XLSX from 'xlsx';
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { Search } from "lucide-react"
@@ -81,7 +82,18 @@ function AllUsersList() {
       </div>
     )
   }
-
+  const exportToExcel = () => {
+    const worksheet = XLSX.utils.json_to_sheet(users.map(user => ({
+      Name: user.fullName,
+      Email: user.email,
+      Role: user.role === "2" ? "Temple" : "User",
+      Joined: new Date(user.createdAt).toLocaleDateString()
+    })));
+  
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
+    XLSX.writeFile(workbook, "UsersList.xlsx");
+  };
   return (
 
     <div className="app-container">
@@ -91,8 +103,6 @@ function AllUsersList() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-4  ms-3" style={{marginTop:"100px"}}>User Management</h1>
-
-        {/* Search Bar */}
         <div className="relative searchbar-container">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 searchbar-subcontainer" />
           <input
@@ -102,13 +112,16 @@ function AllUsersList() {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
-        </div>
-      </div>
-
+         </div>
+       </div>
       {error && <div className="bg-red-50 text-red-600 p-4 rounded-lg ">{error}</div>}
-
-      <div className=" rounded-lg  overflow-hidden">
-        <div className="overflow-x-autos">
+         <div className=" rounded-lg  overflow-hidden">
+         <div className="overflow-x-autos">
+        <div >
+            <button onClick={exportToExcel} className="exportExcel-button" >
+            Export to Excel
+           </button>
+         </div>
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
