@@ -7,6 +7,7 @@ const TempleSchema = new Schema({
   taluk: { type: String, required: true },
   name: { type: String, required: true },
   address: { type: String, required: true },
+  locationUrl: { type: String, required: true },
   phone: { type: String, required: true },
   darshanaTime: {
     morning: {

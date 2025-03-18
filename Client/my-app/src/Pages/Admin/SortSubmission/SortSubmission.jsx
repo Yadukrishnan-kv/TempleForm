@@ -32,6 +32,8 @@ const SortSubmission = () => {
   const allFields = [
     { key: 'darshanaTime', label: 'ദർശന സമയം' },
     { key: 'website', label: 'വെബ്സൈറ്റ്' },
+    { key: 'locationUrl', label: 'ലൊക്കേഷൻ' },
+
     { key: 'templeType', label: 'ദേശക്ഷേത്ര വിവരം' },
     { key: 'locationSketch', label: 'ലൊക്കേഷൻ സ്കെച്ച്' },
     { key: 'history', label: 'ക്ഷേത്ര ഐതിഹ്യം' },

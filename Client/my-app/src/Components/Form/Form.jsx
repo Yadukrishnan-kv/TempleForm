@@ -21,6 +21,7 @@ function Form() {
   const [formData, setFormData] = useState({
     name: '',
     address: '',
+    locationUrl:'',
     phone: '',
     darshanaTime: {
       morning: { from: '', to: '' },
@@ -314,6 +315,16 @@ function Form() {
             className="form-input"
             name="phone"
             value={formData.phone}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label className="form-label">Location</label>
+          <input 
+           
+            className="form-input"
+            name="locationUrl"
+            value={formData.locationUrl}
             onChange={handleChange}
           />
         </div>

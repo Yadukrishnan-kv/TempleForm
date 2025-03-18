@@ -23,6 +23,7 @@ function Addform() {
   const [formData, setFormData] = useState({
      name: '',
      address: '',
+     locationUrl:'',
      phone: '',
      darshanaTime: {
        morning: { from: '', to: '' },
@@ -209,6 +210,8 @@ function Addform() {
         }
       });
       console.log('Server response:', response);
+      navigate("/SortSubmission")
+
       toast.success("Form submitted successfully!", {
         position: "top-right",
         autoClose: 3000,
@@ -323,6 +326,16 @@ function Addform() {
             className="form-input"
             name="phone"
             value={formData.phone}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label className="form-label">Location</label>
+          <input 
+           
+            className="form-input"
+            name="locationUrl"
+            value={formData.locationUrl}
             onChange={handleChange}
           />
         </div>

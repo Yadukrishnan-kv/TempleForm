@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
-import '../../HomePage/HomePage.css'
+import '../../TempleDash/TempleDashboard/TempleDashboard.css'
 import { Link, useParams } from 'react-router-dom';
+import logo1 from '../../../assets/images/logo.png';
+
+
+
 function TemapleDashboard() {
       const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     
@@ -17,34 +21,28 @@ function TemapleDashboard() {
       return (
     
    <div>
-  {/* Start preloader */}
-  <div className="page-loader page-loader-active">
-    <div className="page-loader-content">
-      <div className="page-loader-logo">
-        <img src="assets/dist/img/logo.png" alt="Logo" />
-      </div>
-      <div className="page-loader-progress">
-        <div className="page-loader-bar" />
-        <div className="page-loader-percent">0%</div>
-      </div>
-    </div>
-  </div>
+ 
   {/* End /. preloader */}
-  <div className="wrapper">
-    {/* Sidebar  */}
-    <nav className="sidebar">
-      <div className="sidebar-header">
-        <a href="dashboard.html" className="sidebar-brand">
-          {/* <img className="sidebar-brand_icon" src="assets/dist/img/mini-logo.png" alt /> */}
-          <span className="sidebar-brand_text">List<span>On</span></span>
-        </a>
+  <div className="TempleDash-wrapper">
+    {/* TempleDash-sidebar  */}
+    <nav className="TempleDash-sidebar">
+      <div className="TempleDash-sidebar-header">
+        <a href="dashboard.html" className="TempleDash-sidebar-brand">
+        <img
+                   className="sidebar-brand_icon"
+                   src={logo1}
+                   alt="Logo"
+                   height={70}
+                 />
+               </a>
+       
       </div>
-      {/*/.sidebar header*/}
-      <div className="sidebar-body">
-        <nav className="sidebar-nav">
-          <ul className="metismenu">
+      {/*/.TempleDash-sidebar header*/}
+      <div className="TempleDash-sidebar-body">
+        <nav className="TempleDash-sidebar-nav">
+          <ul className="TempleDash-metismenu">
            
-            <li className="mm-active">
+            <li className="TempleDash-mm-active" style={{listStyle:"none"}}>
               <a href="dashboard.html">
                 <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-speedometer" viewBox="0 0 16 16">
                   <path d="M8 2a.5.5 0 0 1 .5.5V4a.5.5 0 0 1-1 0V2.5A.5.5 0 0 1 8 2M3.732 3.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 8a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 8m9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5m.754-4.246a.389.389 0 0 0-.527-.02L7.547 7.31A.91.91 0 1 0 8.85 8.569l3.434-4.297a.389.389 0 0 0-.029-.518z" />
@@ -53,7 +51,7 @@ function TemapleDashboard() {
                 <span className="ms-2">Dashboard</span>
               </a>
             </li>
-            <li>
+            <li style={{listStyle:"none"}}>
             <Link to={'/FormDetails'} style={{textDecoration:"none"}}>
 
                 <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-house-add" viewBox="0 0 16 16">
@@ -64,7 +62,7 @@ function TemapleDashboard() {
                 </Link>
             </li>
           
-            <li>
+            <li style={{listStyle:"none"}}>
             <Link to={'/UserProfile'} style={{textDecoration:"none"}}>
 
               <a href="wallet.html">
@@ -75,7 +73,7 @@ function TemapleDashboard() {
               </a>
               </Link>
             </li>
-            <li>
+            <li style={{listStyle:"none"}}>
             <Link to={'/PoojaForm'} style={{textDecoration:"none"}}>
 
                 <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-chat-left-text" viewBox="0 0 16 16">
@@ -88,7 +86,7 @@ function TemapleDashboard() {
             </li>
           
           
-            <li>
+            <li style={{listStyle:"none"}}>
             <Link to={'/VazhipadForm'} style={{textDecoration:"none"}}>
                 <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-stars" viewBox="0 0 16 16">
                   <path d="M7.657 6.247c.11-.33.576-.33.686 0l.645 1.937a2.89 2.89 0 0 0 1.829 1.828l1.936.645c.33.11.33.576 0 .686l-1.937.645a2.89 2.89 0 0 0-1.828 1.829l-.645 1.936a.361.361 0 0 1-.686 0l-.645-1.937a2.89 2.89 0 0 0-1.828-1.828l-1.937-.645a.361.361 0 0 1 0-.686l1.937-.645a2.89 2.89 0 0 0 1.828-1.828l.645-1.937zM3.794 1.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387A1.734 1.734 0 0 0 4.593 5.69l-.387 1.162a.217.217 0 0 1-.412 0L3.407 5.69A1.734 1.734 0 0 0 2.31 4.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387A1.734 1.734 0 0 0 3.407 2.31l.387-1.162zM10.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732L9.1 2.137a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L10.863.1z" />
@@ -96,7 +94,7 @@ function TemapleDashboard() {
                 <span className="ms-2">VazhipadForm</span>
                 </Link>
                 </li>
-            <li>
+            <li style={{listStyle:"none"}}>
             <Link to={'/VazhipadBookings'} style={{textDecoration:"none"}}>
                 <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-journal-bookmark-fill" viewBox="0 0 16 16">
                   <path fillRule="evenodd" d="M6 1h6v7a.5.5 0 0 1-.757.429L9 7.083 6.757 8.43A.5.5 0 0 1 6 8z" />
@@ -106,17 +104,10 @@ function TemapleDashboard() {
                 <span className="ms-2">Bookings</span>
                 </Link>
             </li>
-            <li>
-              <a href="bookmark.html">
-                <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-heart" viewBox="0 0 16 16">
-                  <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15" />
-                </svg>
-                <span className="ms-2">Bookmark</span>
-              </a>
-            </li>
+           
           
            
-            <li>
+            <li style={{listStyle:"none"}}>
               <a href="profile.html">
                 <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-clipboard2-plus" viewBox="0 0 16 16">
                   <path d="M9.5 0a.5.5 0 0 1 .5.5.5.5 0 0 0 .5.5.5.5 0 0 1 .5.5V2a.5.5 0 0 1-.5.5h-5A.5.5 0 0 1 5 2v-.5a.5.5 0 0 1 .5-.5.5.5 0 0 0 .5-.5.5.5 0 0 1 .5-.5z" />
@@ -126,24 +117,9 @@ function TemapleDashboard() {
                 <span className="ms-2">Edit Profile</span>
               </a>
             </li>
-            <li>
-              <a href="setting-app.html">
-                <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-gear" viewBox="0 0 16 16">
-                  <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z" />
-                  <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z" />
-                </svg>
-                <span className="ms-2">Setting</span>
-              </a>
-            </li>
-            <li>
-              <a href="../sign-up.html">
-                <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-headset" viewBox="0 0 16 16">
-                  <path d="M8 1a5 5 0 0 0-5 5v1h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a6 6 0 1 1 12 0v6a2.5 2.5 0 0 1-2.5 2.5H9.366a1 1 0 0 1-.866.5h-1a1 1 0 1 1 0-2h1a1 1 0 0 1 .866.5H11.5A1.5 1.5 0 0 0 13 12h-1a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1h1V6a5 5 0 0 0-5-5" />
-                </svg>
-                <span className="ms-2">Support</span>
-              </a>
-            </li>
-            <li>
+          
+          
+            <li style={{listStyle:"none"}}>
               <a >
                 <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" className="bi bi-box-arrow-left" viewBox="0 0 16 16">
                   <path fillRule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z" />
@@ -162,167 +138,24 @@ function TemapleDashboard() {
             <div className="d-grid"><a className="btn btn-primary" href="#" target="_blank">Purchase</a></div>
           </div>
         </div>
-      </div>{/* sidebar-body */}
+      </div>{/* TempleDash-sidebar-body */}
     </nav>
     {/* Page Content  */}
-    <div className="content-wrapper">
+    <div className="content-TempleDash-wrapper">
       <div className="main-content">
         {/* Star navbar */}
         <nav className="navbar-custom-menu navbar navbar-expand-xl m-0 navbar-transfarent">
-          <div className="sidebar-toggle">
-            <div className="sidebar-toggle-icon" id="sidebarCollapse">
+          <div className="TempleDash-sidebar-toggle">
+            <div className="TempleDash-sidebar-toggle-icon" id="TempleDash-sidebarCollapse">
              
             </div>
           </div>
-          {/*/.sidebar toggle icon*/}
+          {/*/.TempleDash-sidebar toggle icon*/}
           {/* Collapse */}
-          <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            {/* Toggler */}
-            <button type="button" className="navbar-toggler" onClick={toggleMobileMenu} data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-expanded="true" aria-label="Toggle navigation"><span /> <span /></button>
          
-           
-            <ul className="navbar-nav">
-              <li className="nav-item ">
-                <a className="nav-link dropdown-toggle material-ripple" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i className="typcn typcn-weather-stormy top-menu-icon" />Home
-                </a>
-                <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" href="../index.html">Home (Main)</a></li>
-                  <li><a className="dropdown-item" href="../home-classic.html">Home (Classic)</a></li>
-                  <li><a className="dropdown-item" href="../home-rounded.html">Home (Rounded)</a></li>
-                  <li><a className="dropdown-item" href="../home-map.html">Home (Map)</a></li>
-                  <li><a className="dropdown-item" href="../home-grid.html">Home (Grid)</a></li>
-                  <li><a className="dropdown-item" href="../home-waves.html">Home (Waves)</a></li>
-                  <li><a className="dropdown-item" href="../home-car.html">Home (Car)&nbsp;<span className="badge text-bg-primary fw-semibold">New</span></a></li>
-                  <li><a className="dropdown-item" href="../home-restaurant.html">Home (Restaurant)&nbsp;<span className="badge text-bg-primary fw-semibold">New</span></a></li>
-                </ul>
-              </li>
-              <li className="nav-item ">
-                <a className="nav-link dropdown-toggle material-ripple" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i className="typcn typcn-weather-stormy top-menu-icon" />Dashboard
-                </a>
-                <ul className="dropdown-menu">
-                  <li><a className="dropdown-item" href="dashboard.html">Dashboard</a></li>
-                  <li><a className="dropdown-item" href="bookings.html">Bookings</a></li>
-                  <li><a className="dropdown-item" href="messages.html">Message</a></li>
-                  <li><a className="dropdown-item" href="wallet.html">Wallet</a></li>
-                  <li><a className="dropdown-item" href="profile.html">Edit Profile</a></li>
-                  <li><a className="dropdown-item" href="add-listing.html">Add listing</a></li>
-                  <li><a className="dropdown-item" href="my-listing.html">My listing</a></li>
-                  <li><a className="dropdown-item" href="bookings.html">Bookings</a></li>
-                  <li><a className="dropdown-item" href="reviews.html">Reviews</a></li>
-                  <li><a className="dropdown-item" href="bookmark.html">Bookmark</a></li>
-                  <li><a className="dropdown-item" href="setting-app.html">Settings</a></li>
-                </ul>
-              </li>
-              <li className="nav-item ">
-                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                  Listing
-                </a>
-                <ul className="dropdown-menu">
-                  <li className="nav-item ">
-                    <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">List View</a>
-                    <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="../listings-list-left.html">Left Sidebar</a></li>
-                      <li><a className="dropdown-item" href="../listings-list-right.html">Right Sidebar</a></li>
-                    </ul>
-                  </li>
-                  <li className="nav-item ">
-                    <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Grid View 1</a>
-                    <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="../listings-grid-1-left.html">Left Sidebar</a></li>
-                      <li><a className="dropdown-item" href="../listings-grid-1-right.html">Right Sidebar</a></li>
-                    </ul>
-                  </li>
-                  <li className="nav-item ">
-                    <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Grid View 2</a>
-                    <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="../listings-grid-2-left.html">Left Sidebar</a></li>
-                      <li><a className="dropdown-item" href="../listings-grid-2-right.html">Right Sidebar</a></li>
-                    </ul>
-                  </li>
-                  <li className="nav-item ">
-                    <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Half Map + Sidebar</a>
-                    <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="../listings-map.html">Half Map List</a></li>
-                      <li><a className="dropdown-item" href="../listings-map-car.html">Half Map List (Car)&nbsp;<span className="badge text-bg-primary fw-semibold">New</span></a></li>
-                      <li><a className="dropdown-item" href="../listings-map-grid-1.html">Half Map Grid 1</a></li>
-                      <li><a className="dropdown-item" href="../listings-map-grid-2.html">Half Map Grid 2</a></li>
-                    </ul>
-                  </li>
-                  <li className="nav-item ">
-                    <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Listing Details</a>
-                    <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="../listing-details.html">Listing Details 1</a></li>
-                      <li><a className="dropdown-item" href="../listing-details-2.html">Listing Details 2</a></li>
-                      <li><a className="dropdown-item" href="../listing-details-car.html">Listing Details Car&nbsp;<span className="badge text-bg-primary fw-semibold">New</span></a></li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link" href="../listings-map-grid-1.html"><i className="typcn typcn-point-of-interest-outline top-menu-icon" />Explore</a>
-              </li>
-              <li className="nav-item ">
-                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                  Template
-                </a>
-                <ul className="dropdown-menu">
-                  <li className="nav-item ">
-                    <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">About</a>
-                    <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="../about.html">About us 1</a></li>
-                      <li><a className="dropdown-item" href="../about-2.html">About us 2</a></li>
-                    </ul>
-                  </li>
-                  <li className="nav-item ">
-                    <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Agent</a>
-                    <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="../agent.html">Agent</a></li>
-                      <li><a className="dropdown-item" href="../agent-details.html">Agent Details</a></li>
-                    </ul>
-                  </li>
-                  <li className="nav-item ">
-                    <a className="dropdown-item dropdown-toggle" href="../blog.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">Blog</a>
-                    <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="../blog.html">Blog</a></li>
-                      <li><a className="dropdown-item" href="../blog-details.html">Blog Details</a></li>
-                    </ul>
-                  </li>
-                  <li><a className="dropdown-item" href="../add-listing.html">Add Listing</a></li>
-                  <li><a className="dropdown-item" href="../contact.html">Contact</a></li>
-                  <li><a className="dropdown-item" href="../pricing.html">Pricing</a></li>
-                  <li className="nav-item ">
-                    <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Authentication</a>
-                    <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="../sign-in.html">Sign In</a></li>
-                      <li><a className="dropdown-item" href="../sign-up.html">Sign Up</a></li>
-                      <li><a className="dropdown-item" href="../forgot-password.html">Forgot Password</a></li>
-                      <li><a className="dropdown-item" href="../two-factor-auth.html">Two factor authentication</a></li>
-                    </ul>
-                  </li>
-                  <li className="nav-item ">
-                    <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Specialty</a>
-                    <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="../404.html">404 Page</a></li>
-                    </ul>
-                  </li>
-                  <li className="nav-item ">
-                    <a className="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Help Center</a>
-                    <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="../faq.html">Faq Page</a></li>
-                      <li><a className="dropdown-item" href="../terms-conditions.html">Terms &amp; Conditions</a></li>
-                    </ul>
-                  </li>
-                  <li><a className="dropdown-item" href="../style-guide.html">Style Guide</a></li>
-                </ul>
-              </li>
-            </ul>
-          </div>
           <div className="navbar-icon d-flex">
             <ul className="navbar-nav flex-row align-items-center">
-           
-              <li className="nav-item  user-menu user-menu-custom">
+           <li className="nav-item  user-menu user-menu-custom">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <div className="profile-element d-flex align-items-center flex-shrink-0 p-0 text-start">
                     <div className="avatar online">
@@ -374,7 +207,7 @@ function TemapleDashboard() {
               </li>
             </ul>
           </div>
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button className="TempleDash-navbar-toggler" type="button" data-bs-toggle="TempleDash-collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <i className="fa-solid fa-bars fs-18" />
           </button>
         </nav>
@@ -393,7 +226,7 @@ function TemapleDashboard() {
                 <div className="content-text fs-14 opacity-75 text-white">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout their default.</div>
                 <button className="content-button btn btn-light mt-3">Start free trial</button>
               </div>
-              <img className="content-wrapper-img" src="assets/dist/img/glass.png" alt width={180} />
+              <img className="content-TempleDash-wrapper-img" src="assets/dist/img/glass.png" alt width={180} />
             </div> */}
             {/* End /. header banner */}
             {/* <div className="row g-3 mb-3">
@@ -673,7 +506,7 @@ function TemapleDashboard() {
       </footer> */}
       {/*/.footer content*/}
     </div>
-    {/*/.wrapper*/}
+    {/*/.TempleDash-wrapper*/}
   </div>
 </div>
   )

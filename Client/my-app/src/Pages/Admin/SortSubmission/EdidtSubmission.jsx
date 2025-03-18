@@ -82,6 +82,7 @@ function EditSubmission() {
        taluk: '',
        address: '',
        phone: '',
+       locationUrl:'',
        darshanaTime: {
         morning: { from: '', to: '' },
         evening: { from: '', to: '' }
@@ -353,6 +354,16 @@ function EditSubmission() {
             className="form-input"
             name="phone"
             value={formData.phone}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <label className="form-label">Location</label>
+          <input 
+           
+            className="form-input"
+            name="locationUrl"
+            value={formData.locationUrl}
             onChange={handleInputChange}
           />
         </div>
