@@ -3,8 +3,11 @@ const axios = require("axios")
 const crypto = require("crypto")
 const PDFDocument = require("pdfkit")
 
-const fs = require("fs")
+// const fs = require("fs")
 const pdf = require('html-pdf');
+// const path = require('path');
+const puppeteer = require('puppeteer');
+const fs = require('fs');
 const path = require('path');
 require("dotenv").config()
 
@@ -401,44 +404,39 @@ const getSubscriptionByEmail = async (req, res) => {
 };
 
 const downloadInvoice = async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
 
   try {
-    const subscription = await Subscription.findById(id)
+    const subscription = await Subscription.findById(id);
 
     if (!subscription) {
-      return res.status(404).json({ message: "Subscription not found" })
+      return res.status(404).json({ message: "Subscription not found" });
     }
 
-    // Read the logo file and convert to base64
-    // const logoPath = path.join(__dirname, "../assets/images/logo.png")
-    let logoBase64 = ""
-
+    // Read the logo file and convert to base64 (if needed)
+    const logoPath = path.join(__dirname, "../assets/images/logo.png");
+    let logoBase64 = "";
     try {
-      const logoData = fs.readFileSync(logoPath)
-      logoBase64 = `data:image/png;base64,${logoData.toString("base64")}`
+      const logoData = fs.readFileSync(logoPath);
+      logoBase64 = `data:image/png;base64,${logoData.toString("base64")}`;
     } catch (err) {
-      console.error("Error reading logo file:", err)
+      console.error("Error reading logo file:", err);
       // If logo can't be read, continue without it
     }
 
     // Generate invoice number dynamically
-    const currentDate = new Date()
-    const year = currentDate.getFullYear()
-    const month = String(currentDate.getMonth() + 1).padStart(2, "0") // Format month as 2 digits
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
 
-    // Get current invoice number and increment it
-    const invoiceNumber = String(subscription.invoiceNumber || 0).padStart(6, "0")
+    const invoiceNumber = String(subscription.invoiceNumber || 0).padStart(6, "0");
+    const nextInvoiceNumber = parseInt(invoiceNumber) + 1;
+    subscription.invoiceNumber = nextInvoiceNumber;
+    await subscription.save();
 
-    // Increment the invoice number after generating the invoice
-    const nextInvoiceNumber = parseInt(invoiceNumber) + 1
-    subscription.invoiceNumber = nextInvoiceNumber
-    await subscription.save()
+    const invoiceId = `SSD-${year}-${month}/${invoiceNumber}`;
 
-    // Create dynamic invoice number format
-    const invoiceId = `SSD-${year}-${month}/${invoiceNumber}`
-
-    // Create invoice HTML content
+    // Create invoice HTML content (same as before)
     const invoiceHtml = `
     <!DOCTYPE html>
 <html lang="en">
@@ -559,7 +557,6 @@ const downloadInvoice = async (req, res) => {
                 <p class="status_green">PAID</p>
             </div>
             <div class="invoice-title1">
-               
                 <h3>SREESHUDDHI</h3>
                 <p>Kalady, Kerala, India - 683574</p>
                 <p>Phone: +91 98470 47963</p>
@@ -588,7 +585,7 @@ const downloadInvoice = async (req, res) => {
             </tr>
             <tr>
                 <td>1</td>
-                <td><strong>  Subscription Charges </strong></td>
+                <td><strong>Subscription Charges</strong></td>
                 <td>₹1000.00</td>
                 <td>₹180.00</td>
                 <td>₹${subscription.totalAmount}</td>
@@ -600,35 +597,46 @@ const downloadInvoice = async (req, res) => {
     </div>
 </body>
 </html>
-    `
+    `;
+
+    // Launch Puppeteer and generate PDF
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required for some production environments
+    });
+    const page = await browser.newPage();
+
+    // Set the HTML content
+    await page.setContent(invoiceHtml, { waitUntil: 'networkidle0' });
 
     // Define PDF options
     const pdfOptions = {
-      format: "A4",
-      orientation: "portrait",
-      border: {
-        top: "10mm",
-        right: "10mm",
-        bottom: "10mm",
-        left: "10mm",
+      format: 'A4',
+      margin: {
+        top: '10mm',
+        right: '10mm',
+        bottom: '10mm',
+        left: '10mm',
       },
-    }
+      printBackground: true, // Ensures background colors and styles are included
+    };
 
-    // Generate PDF and send it
-    pdf.create(invoiceHtml, pdfOptions).toStream((err, stream) => {
-      if (err) {
-        console.log("PDF Generation Error😊:", err)
-        return res.status(500).json({ message: "Error generating PDF", error: err.message || err })
-      }
-      
-      res.setHeader("Content-disposition", `attachment; filename=invoice_${subscription._id}.pdf`)
-      res.setHeader("Content-type", "application/pdf")
-      stream.pipe(res)
-    })
+    // Generate PDF as a buffer
+    const pdfBuffer = await page.pdf(pdfOptions);
+
+    // Close the browser
+    await browser.close();
+
+    // Set response headers and send the PDF
+    res.setHeader('Content-Disposition', `attachment; filename=invoice_${subscription._id}.pdf`);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.send(pdfBuffer);
+
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    console.error("PDF Generation Error:", error);
+    res.status(500).json({ message: "Error generating PDF", error: error.message });
   }
-}
+};
 
 // Get formatted invoice number for display
 const getInvoiceNumber = (req, res) => {
