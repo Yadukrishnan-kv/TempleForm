@@ -411,7 +411,7 @@ const downloadInvoice = async (req, res) => {
     }
 
     // Read the logo file and convert to base64
-    const logoPath = path.join(process.cwd(), "assets/images/logo.png")
+    const logoPath = path.join(__dirname, "../assets/images/logo.png")
     let logoBase64 = ""
 
     try {

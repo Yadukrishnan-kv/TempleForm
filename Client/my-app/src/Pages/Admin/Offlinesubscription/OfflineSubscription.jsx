@@ -70,11 +70,31 @@ function OfflineSubscription() {
   // Download Invoice
   const downloadInvoice = async (id) => {
     try {
-      window.open(`${ip}/api/payments/offlineSubscriptions/invoice/${id}`, '_blank');
+      const response = await fetch(`${ip}/api/payments/offlineSubscriptions/invoice/${id}`, {
+        method: 'GET',
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to download invoice');
+      }
+  
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+  
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `invoice_${id}.pdf`; // Set desired file name
+      document.body.appendChild(a);
+      a.click();
+  
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
     } catch (error) {
       console.error('Error downloading invoice:', error);
     }
   };
+  
   
   
   return (
