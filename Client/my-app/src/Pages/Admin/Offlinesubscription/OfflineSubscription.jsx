@@ -106,7 +106,7 @@ function OfflineSubscription() {
       <Sidebar />
 
     <div className="Subscription-container">
-      <h2 className='Subscription-h2'>Add Offline Subscription</h2>
+      <h2 className='Subscription-h2'> Offline Subscription</h2>
       <form onSubmit={handleSubmit} className="Subscription-form-container">
         <div className='Subscription-form'>
           <label className='Subscription-label '>Temple Name:</label>
