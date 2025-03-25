@@ -403,10 +403,13 @@ const getSubscriptionByEmail = async (req, res) => {
   }
 };
 
+
+
 const downloadInvoice = async (req, res) => {
   const { id } = req.params;
 
   try {
+    console.log('Fetching subscription...');
     const subscription = await Subscription.findById(id);
 
     if (!subscription) {
@@ -421,14 +424,12 @@ const downloadInvoice = async (req, res) => {
       logoBase64 = `data:image/png;base64,${logoData.toString("base64")}`;
     } catch (err) {
       console.error("Error reading logo file:", err);
-      // If logo can't be read, continue without it
     }
 
     // Generate invoice number dynamically
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-
     const invoiceNumber = String(subscription.invoiceNumber || 0).padStart(6, "0");
     const nextInvoiceNumber = parseInt(invoiceNumber) + 1;
     subscription.invoiceNumber = nextInvoiceNumber;
@@ -436,180 +437,158 @@ const downloadInvoice = async (req, res) => {
 
     const invoiceId = `SSD-${year}-${month}/${invoiceNumber}`;
 
-    // Create invoice HTML content (same as before)
+    // Inline CSS to avoid network requests
     const invoiceHtml = `
     <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-        
-        body {
-            font-family: 'Roboto', sans-serif;
-        }
-        p {
-            margin: 7px 0;
-            color: #444;
-        }
-        .amount-section p {
-            color: #000;
-        }
-        .invoice-container {
-            background: #fff;
-            padding: 40px 30px;
-            max-width: 800px;
-            margin: auto;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .invoiceheader {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #eee;
-        }
-        .invoice-title {
-            text-align: right;
-        }
-        .invoice-title h2 {
-            margin: 0 0 20px 0;
-            color: #000;
-        }
-        .invoice-title .status_red {
-            font-weight: bold;
-            color: red;
-        }
-        .invoice-title .status_green {
-            font-weight: bold;
-            color: green;
-        }
-        .info-section {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .table th, .table td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        .table th {
-            background: #4d628c;
-            color: #fff;
-            font-weight: 500;
-        }
-        .amount-section {
-            text-align: right;
-            margin-top: 60px;
-        }
-        .amount-section p {
-            padding-right: 30px;
-        }
-        .bggrey {
-            background: #eee;
-            margin: 0;
-            padding: 8px 30px;
-            border-radius: 5px;
-        }
-        .button_outer {
-            padding: 40px 30px;
-            max-width: 800px;
-            margin: auto;
-            display: flex;
-            justify-content: end;
-        }
-        .button_outer a {
-            color: #fff;
-            background: #333;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            margin-left: 15px;
-            font-weight: 500;
-        }
-        .button_outer a:hover {
-            background: #555;
-        }
-        .invoice-title1 {
-            margin-top: -120px;
-        }
-        .invoice-title2 {
-            margin-top: -80px;
-        }
-    </style>
-</head>
-<body>
-    <div class="invoice-container">
-        <div class="invoiceheader">
-            <div class="invoice-title">
-                <h2>INVOICE</h2>
-                <p># ${invoiceId}</p>
-                <p class="status_green">PAID</p>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Invoice</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif; /* Use a common default font */
+            }
+            p {
+                margin: 7px 0;
+                color: #444;
+            }
+            .amount-section p {
+                color: #000;
+            }
+            .invoice-container {
+                background: #fff;
+                padding: 40px 30px;
+                max-width: 800px;
+                margin: auto;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .invoiceheader {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-bottom: 10px;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #eee;
+            }
+            .invoice-title {
+                text-align: right;
+            }
+            .invoice-title h2 {
+                margin: 0 0 20px 0;
+                color: #000;
+            }
+            .invoice-title .status_red {
+                font-weight: bold;
+                color: red;
+            }
+            .invoice-title .status_green {
+                font-weight: bold;
+                color: green;
+            }
+            .table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .table th, .table td {
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            .table th {
+                background: #4d628c;
+                color: #fff;
+                font-weight: 500;
+            }
+            .amount-section {
+                text-align: right;
+                margin-top: 60px;
+            }
+            .amount-section p {
+                padding-right: 30px;
+            }
+            .bggrey {
+                background: #eee;
+                margin: 0;
+                padding: 8px 30px;
+                border-radius: 5px;
+            }
+            .invoice-title1 {
+                margin-top: -120px;
+            }
+            .invoice-title2 {
+                margin-top: -80px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="invoice-container">
+            <div class="invoiceheader">
+                <div class="invoice-title">
+                    <h2>INVOICE</h2>
+                    <p># ${invoiceId}</p>
+                    <p class="status_green">PAID</p>
+                </div>
+                <div class="invoice-title1">
+                    <h3>SREESHUDDHI</h3>
+                    <p>Kalady, Kerala, India - 683574</p>
+                    <p>Phone: +91 98470 47963</p>
+                </div>
             </div>
-            <div class="invoice-title1">
-                <h3>SREESHUDDHI</h3>
-                <p>Kalady, Kerala, India - 683574</p>
-                <p>Phone: +91 98470 47963</p>
+            <div class="invoiceheader">
+                <div class="invoice-title">
+                    <p><strong>Invoice Date:</strong> ${new Date(subscription.startDate).toDateString()}</p>
+                    <p><strong>Due Date:</strong> ${new Date(subscription.endDate).toDateString()}</p>
+                </div>
+                <div class="invoice-title2">
+                    <h4>Bill To:</h4>
+                    <p>${subscription.templeName}</p>
+                    <p>${subscription.address}</p>
+                    <p>${subscription.number}</p>
+                    <p>${subscription.email}</p>
+                </div>
             </div>
-        </div>
-        <div class="invoiceheader">
-            <div class="invoice-title">
-                <p><strong>Invoice Date:</strong> ${new Date(subscription.startDate).toDateString()}</p>
-                <p><strong>Due Date:</strong> ${new Date(subscription.endDate).toDateString()}</p>
-            </div>
-            <div class="invoice-title2">
-                <h4>Bill To:</h4>
-                <p>${subscription.templeName}</p>
-                <p>${subscription.address}</p>
-                <p>${subscription.number}</p>
-                <p>${subscription.email}</p>
+            <table class="table">
+                <tr>
+                    <th>#</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>GST (18%)</th>
+                    <th>Total Amount</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><strong>Subscription Charges</strong></td>
+                    <td>₹1000.00</td>
+                    <td>₹180.00</td>
+                    <td>₹${subscription.totalAmount}</td>
+                </tr>
+            </table>
+            <div class="amount-section">
+                <p class="bggrey"><strong>Total Amount:</strong> ₹${subscription.totalAmount}</p>
             </div>
         </div>
-        <table class="table">
-            <tr>
-                <th>#</th>
-                <th>Description</th>
-                <th>Amount</th>
-                <th>GST (18%)</th>
-                <th>Total Amount</th>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td><strong>Subscription Charges</strong></td>
-                <td>₹1000.00</td>
-                <td>₹180.00</td>
-                <td>₹${subscription.totalAmount}</td>
-            </tr>
-        </table>
-        <div class="amount-section">
-            <p class="bggrey"><strong>Total Amount:</strong> ₹${subscription.totalAmount}</p>
-        </div>
-    </div>
-</body>
-</html>
+    </body>
+    </html>
     `;
 
-    // Launch Puppeteer and generate PDF
+    console.log('Launching browser...');
     const browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required for some production environments
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
+    console.log('Browser launched');
+
     const page = await browser.newPage();
+    page.setDefaultTimeout(60000); // Increase timeout to 60 seconds
 
-    // Set the HTML content
-    await page.setContent(invoiceHtml, { waitUntil: 'networkidle0' });
+    console.log('Setting content...');
+    await page.setContent(invoiceHtml, { waitUntil: 'load' }); // Faster than 'networkidle0'
+    console.log('Content set');
 
-    // Define PDF options
+    console.log('Generating PDF...');
     const pdfOptions = {
       format: 'A4',
       margin: {
@@ -618,25 +597,23 @@ const downloadInvoice = async (req, res) => {
         bottom: '10mm',
         left: '10mm',
       },
-      printBackground: true, // Ensures background colors and styles are included
+      printBackground: true,
     };
-
-    // Generate PDF as a buffer
     const pdfBuffer = await page.pdf(pdfOptions);
+    console.log('PDF generated');
 
-    // Close the browser
     await browser.close();
+    console.log('Browser closed');
 
-    // Set response headers and send the PDF
     res.setHeader('Content-Disposition', `attachment; filename=invoice_${subscription._id}.pdf`);
     res.setHeader('Content-Type', 'application/pdf');
     res.send(pdfBuffer);
-
   } catch (error) {
-    console.error("PDF Generation Error:", error);
-    res.status(500).json({ message: "Error generating PDF", error: error.message });
+    console.error('PDF Generation Error:', error);
+    res.status(500).json({ message: 'Error generating PDF', error: error.message });
   }
 };
+
 
 // Get formatted invoice number for display
 const getInvoiceNumber = (req, res) => {
