@@ -620,9 +620,9 @@ const downloadInvoice = async (req, res) => {
 
     // Generate PDF and send it
     pdf.create(invoiceHtml, pdfOptions).toStream((err, stream) => {
-      if (err) {
-        return res.status(500).json({ message: "Error generating PDF", error: err })
-      }
+      // if (err) {
+      //   return res.status(500).json({ message: "Error generating PDF", error: err })
+      // }
       res.setHeader("Content-disposition", `attachment; filename=invoice_${subscription._id}.pdf`)
       res.setHeader("Content-type", "application/pdf")
       stream.pipe(res)
