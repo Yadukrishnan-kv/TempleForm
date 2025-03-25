@@ -608,16 +608,11 @@ const downloadInvoice = async (req, res) => {
 
     // Define PDF options
     const pdfOptions = {
-      format: "A4",
-      orientation: "portrait",
-      border: {
-        top: "10mm",
-        right: "10mm",
-        bottom: "10mm",
-        left: "10mm",
-      },
-    }
-
+      format: 'A4',
+      orientation: 'portrait',
+      border: '10mm',
+      phantomPath: require('phantomjs-prebuilt').path, // Set the PhantomJS path
+    };
     // Generate PDF and send it
     pdf.create(invoiceHtml, pdfOptions).toStream((err, stream) => {
       if (err) {
