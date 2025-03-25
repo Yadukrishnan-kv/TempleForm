@@ -38,12 +38,15 @@ import TempleFormGallery from '../Components/TempleDash/TempleForm/TempleFormGal
 import PoojaForm from '../Components/TempleDash/PoojaForm/PoojaForm'
 import VazhipadForm from '../Components/TempleDash/VazhipadForm/VazhipadForm'
 import VazhipadBookings from '../Components/TempleDash/VazhipadForm/VazhipadBookings'
+import SubscriptionPayment from '../Components/TempleDash/Subscription/SubscriptionPayment'
+import OfflineSubscription from '../Pages/Admin/Offlinesubscription/OfflineSubscription'
 
 function Dom() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />} />
+
         <Route path="/form" element={<Form />} />
         <Route path="/AdminLogin" element={<LoginPage />} />
         <Route path="/about" element={<About />} />
@@ -62,6 +65,8 @@ function Dom() {
         <Route path="/PoojaForm" element={<><PoojaForm/></>} />
         <Route path="/VazhipadForm" element={<><VazhipadForm/></>} />
         <Route path="/VazhipadBookings" element={<><VazhipadBookings/></>} />
+        <Route path="/subscriptionPayment" element={ <><SubscriptionPayment/></>} />
+
 
         <Route path="/TempleDash-Edit/:id" element={<><TempleFormEdit/></>} />
         <Route path="/TempleDash-AboutTemple/:templeId" element={<><TempleFormAbout/></>} />
@@ -96,6 +101,9 @@ function Dom() {
           <Route path="/usersrole" element={<UserRole/>} />
           <Route path="/log" element={<><Log/></>} />
           <Route path="/AllUsersList" element={<><AllUsersList/></>} />
+          <Route path="/subscriptionoffline/:templeId" element={<><OfflineSubscription/></>} />
+          
+
 
 
 

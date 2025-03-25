@@ -1,0 +1,280 @@
+.Subscription-container {
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  margin-left: 50px;
+  margin-top: 100px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.Subscription-h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.Subscription-form-container {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.Subscription-form {
+  margin-bottom: 15px;
+}
+
+.Subscription-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.Subscription-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.Subscription-amount-info p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.Subscription-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.Subscription-button:hover {
+  background-color: #45a049;
+}
+
+.Subscription-subscription-table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.Subscription-table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+/* Table Container with Horizontal Scroll */
+.Subscription-table-container {
+  width: 100%;
+  overflow-x: auto; /* Enables horizontal scroll */
+  margin-top: 20px;
+}
+
+/* Subscription Table */
+.Subscription-subscription-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1000px; /* Ensures scrollability for smaller screens */
+}
+
+/* Table Header and Cell Styles */
+.Subscription-subscription-table th,
+.Subscription-subscription-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  white-space: nowrap; /* Prevents content from wrapping */
+}
+
+/* Header Background */
+.Subscription-subscription-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Button Styles */
+.Subscription-button {
+  padding: 8px 12px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.Subscription-button:hover {
+  background-color: #45a049;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .Subscription-subscription-table th,
+  .Subscription-subscription-table td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .Subscription-button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Subscription-subscription-table th,
+  .Subscription-subscription-table td {
+    font-size: 11px;
+    padding: 6px;
+  }
+
+  .Subscription-button {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+}
+
+
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .Subscription-container {
+    width: 95%;
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  .Subscription-h2 {
+    font-size: 20px;
+  }
+
+  .Subscription-form-container {
+    padding: 15px;
+  }
+
+  .Subscription-input {
+    padding: 8px;
+  }
+
+  .Subscription-button {
+    padding: 10px;
+  }
+
+  .Subscription-subscription-table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .Subscription-subscription-table th,
+  .Subscription-subscription-table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+}
+
+/* For Small Screens */
+@media screen and (max-width: 480px) {
+  .Subscription-container {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .Subscription-h2 {
+    font-size: 18px;
+  }
+
+  .Subscription-form-container {
+    padding: 10px;
+  }
+
+  .Subscription-input {
+    padding: 8px;
+  }
+
+  .Subscription-button {
+    padding: 8px 12px;
+  }
+
+  .Subscription-subscription-table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .Subscription-subscription-table th,
+  .Subscription-subscription-table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .Subscription-button {
+    width: 100%;
+  }
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .Subscription-container {
+    width: 95%;
+    margin: 20px auto;
+    padding: 15px;
+  }
+
+  .Subscription-h2 {
+    font-size: 20px;
+  }
+
+  .Subscription-form-container {
+    padding: 15px;
+  }
+
+  .Subscription-input {
+    padding: 8px;
+  }
+
+  .Subscription-button {
+    padding: 10px;
+  }
+
+ 
+}
+
+/* For Small Screens */
+@media screen and (max-width: 480px) {
+  .Subscription-container {
+    width: 100%;
+    padding: 10px;
+    margin-top: 100px;
+  }
+
+  .Subscription-h2 {
+    font-size: 18px;
+  }
+
+  .Subscription-form-container {
+    padding: 10px;
+  }
+
+  .Subscription-input {
+    padding: 8px;
+  }
+
+  .Subscription-button {
+    padding: 8px 12px;
+  }
+
+}
+

@@ -357,6 +357,8 @@ const SortSubmission = () => {
                   <th>Edit</th>
                   <th>About</th>
                   <th>Gallery</th>
+                  <th>subscription</th>
+
                 </tr>
               </thead>
               <tbody>
@@ -395,6 +397,15 @@ const SortSubmission = () => {
                             <button className='gallery-button'>Gallery</button>
                           </Link>
                         </td>
+                        <td>
+                              <Link
+                                to={`/subscriptionoffline/${temple._id}`}
+                                state={{ templeData: temple }} // Correct way to pass state in v6
+                              >
+                                <button className="gallery-button">Subscription</button>
+                              </Link>
+                            </td>
+
                       </tr>
                       {expandedTemple === temple._id && (
                         <tr>

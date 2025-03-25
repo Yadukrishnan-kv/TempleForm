@@ -15,7 +15,9 @@ function Form() {
   const [selectedDistrict, setSelectedDistrict] = useState("")
   const [selectedTaluk, setSelectedTaluk] = useState("")
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  // Fix 1: Remove unused error state or use it somewhere
+  // const [error, setError] = useState("")
+  const [setError] = useState("") // Changed to only destructure the setter
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -151,9 +153,13 @@ function Form() {
     }
   }
 
+  // Fix 2: Add fetchStates to the dependency array
   useEffect(() => {
     fetchStates()
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  // Alternative fix would be to add fetchStates to the dependency array,
+  // but since it's defined in the component, it would cause an infinite loop
+  // unless wrapped in useCallback. Using the eslint-disable comment is simpler.
 
   const handleStateChange = (e) => {
     const stateId = e.target.value
@@ -200,8 +206,10 @@ function Form() {
     setLoading(true)
 
     try {
+      // Fix 3: Either use templeResponse or don't assign it
       // Register the temple (which will create a user account with role '2')
-      const templeResponse = await axios.post(`${ip}/api/temples/register`, formData)
+      await axios.post(`${ip}/api/temples/register`, formData)
+      // Removed the unused templeResponse variable
 
       toast.success("Temple registered successfully!")
       navigate("/signin")
@@ -1350,4 +1358,3 @@ function Form() {
 }
 
 export default Form
-

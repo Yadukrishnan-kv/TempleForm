@@ -9,6 +9,7 @@ require("./Config/db");
 app.use(cors());
 app.use(express.json());
 
+
 // Serve uploaded files statically
 app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -44,6 +45,9 @@ const BlogRoutes = require('./Routes/BlogRoutes');
 app.use('/api/Blog', BlogRoutes);
 const UserRoutes = require('./Routes/UserLoginRoutes');
 app.use('/api/UserRoutes', UserRoutes);
+
+const SubscriptionRoutes = require('./Routes/paymentRoutes');
+app.use("/api/payments", SubscriptionRoutes);
 
 const port = 4000;
 console.log("port:", port);
