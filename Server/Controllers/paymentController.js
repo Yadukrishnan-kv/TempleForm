@@ -2,8 +2,6 @@ const Subscription = require("../Models/Subscription")
 const axios = require("axios")
 const crypto = require("crypto")
 const PDFDocument = require("pdfkit")
-const puppeteer = require("puppeteer")
-const chromium = require('chrome-aws-lambda')
 
 const fs = require("fs")
 const pdf = require('html-pdf');
@@ -412,149 +410,225 @@ const downloadInvoice = async (req, res) => {
       return res.status(404).json({ message: "Subscription not found" })
     }
 
-    // Path to logo image
+    // Read the logo file and convert to base64
     const logoPath = path.join(__dirname, "../assets/images/logo.png")
     let logoBase64 = ""
 
-    // Read the logo and convert it to base64
     try {
       const logoData = fs.readFileSync(logoPath)
       logoBase64 = `data:image/png;base64,${logoData.toString("base64")}`
     } catch (err) {
       console.error("Error reading logo file:", err)
+      // If logo can't be read, continue without it
     }
 
     // Generate invoice number dynamically
     const currentDate = new Date()
     const year = currentDate.getFullYear()
-    const month = String(currentDate.getMonth() + 1).padStart(2, "0")
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0") // Format month as 2 digits
 
-    // Generate a new invoice number
-    const invoiceNumber = String(subscription.invoiceNumber || 1).padStart(6, "0")
+    // Get current invoice number and increment it
+    const invoiceNumber = String(subscription.invoiceNumber || 0).padStart(6, "0")
+
+    // Increment the invoice number after generating the invoice
     const nextInvoiceNumber = parseInt(invoiceNumber) + 1
-
-    // Update invoice number for future use
     subscription.invoiceNumber = nextInvoiceNumber
     await subscription.save()
 
+    // Create dynamic invoice number format
     const invoiceId = `SSD-${year}-${month}/${invoiceNumber}`
 
-    // Generate invoice HTML
+    // Create invoice HTML content
     const invoiceHtml = `
     <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Invoice</title>
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-            body { font-family: 'Roboto', sans-serif; background: #f9f9f9; padding: 20px; }
-            .invoice-container { background: #fff; padding: 40px; max-width: 800px; margin: auto; border-radius: 10px; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-            .invoiceheader { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
-            .invoice-title h2 { margin: 0; color: #333; }
-            .invoice-title p { margin: 5px 0; }
-            .info-section { display: flex; justify-content: space-between; margin-bottom: 20px; }
-            .table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            .table th, .table td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
-            .table th { background: #4d628c; color: #fff; }
-            .amount-section { text-align: right; margin-top: 30px; }
-            .amount-section p { font-size: 18px; font-weight: 500; }
-            .bggrey { background: #eee; padding: 8px 20px; border-radius: 5px; }
-        </style>
-    </head>
-    <body>
-        <div class="invoice-container">
-            <div class="invoiceheader">
-                <div>
-                    <h2>INVOICE</h2>
-                    <p># ${invoiceId}</p>
-                    <p class="status_green" style="color: green; font-weight: bold;">PAID</p>
-                </div>
-                <div>
-                    ${
-                      logoBase64
-                        ? `<img src="${logoBase64}" style="width: 120px;" alt="SREESHUDDHI Logo">`
-                        : ""
-                    }
-                    <h3>SREESHUDDHI</h3>
-                    <p>Kalady, Kerala, India - 683574</p>
-                    <p>Phone: +91 98470 47963</p>
-                </div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        p {
+            margin: 7px 0;
+            color: #444;
+        }
+        .amount-section p {
+            color: #000;
+        }
+        .invoice-container {
+            background: #fff;
+            padding: 40px 30px;
+            max-width: 800px;
+            margin: auto;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .invoiceheader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        .invoice-title {
+            text-align: right;
+        }
+        .invoice-title h2 {
+            margin: 0 0 20px 0;
+            color: #000;
+        }
+        .invoice-title .status_red {
+            font-weight: bold;
+            color: red;
+        }
+        .invoice-title .status_green {
+            font-weight: bold;
+            color: green;
+        }
+        .info-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .table th {
+            background: #4d628c;
+            color: #fff;
+            font-weight: 500;
+        }
+        .amount-section {
+            text-align: right;
+            margin-top: 60px;
+        }
+        .amount-section p {
+            padding-right: 30px;
+        }
+        .bggrey {
+            background: #eee;
+            margin: 0;
+            padding: 8px 30px;
+            border-radius: 5px;
+        }
+        .button_outer {
+            padding: 40px 30px;
+            max-width: 800px;
+            margin: auto;
+            display: flex;
+            justify-content: end;
+        }
+        .button_outer a {
+            color: #fff;
+            background: #333;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-left: 15px;
+            font-weight: 500;
+        }
+        .button_outer a:hover {
+            background: #555;
+        }
+        .invoice-title1 {
+            margin-top: -120px;
+        }
+        .invoice-title2 {
+            margin-top: -80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="invoiceheader">
+            <div class="invoice-title">
+                <h2>INVOICE</h2>
+                <p># ${invoiceId}</p>
+                <p class="status_green">PAID</p>
             </div>
-            <div class="info-section">
-                <div>
-                    <p><strong>Invoice Date:</strong> ${new Date(subscription.startDate).toDateString()}</p>
-                    <p><strong>Due Date:</strong> ${new Date(subscription.endDate).toDateString()}</p>
-                </div>
-                <div>
-                    <h4>Bill To:</h4>
-                    <p>${subscription.templeName}</p>
-                    <p>${subscription.address}</p>
-                    <p>${subscription.number}</p>
-                    <p>${subscription.email}</p>
-                </div>
-            </div>
-            <table class="table">
-                <tr>
-                    <th>#</th>
-                    <th>Description</th>
-                    <th>Amount</th>
-                    <th>GST (18%)</th>
-                    <th>Total Amount</th>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td><strong>Subscription Charges</strong></td>
-                    <td>₹1000.00</td>
-                    <td>₹180.00</td>
-                    <td>₹${subscription.totalAmount.toFixed(2)}</td>
-                </tr>
-            </table>
-            <div class="amount-section">
-                <p class="bggrey"><strong>Total Amount:</strong> ₹${subscription.totalAmount.toFixed(2)}</p>
+            <div class="invoice-title1">
+                ${
+                  logoBase64
+                    ? `<img src="${logoBase64}" style="width: 120px;" alt="SREESHUDDHI Logo">`
+                    : ""
+                }
+                <h3>SREESHUDDHI</h3>
+                <p>Kalady, Kerala, India - 683574</p>
+                <p>Phone: +91 98470 47963</p>
             </div>
         </div>
-    </body>
-    </html>
+        <div class="invoiceheader">
+            <div class="invoice-title">
+                <p><strong>Invoice Date:</strong> ${new Date(subscription.startDate).toDateString()}</p>
+                <p><strong>Due Date:</strong> ${new Date(subscription.endDate).toDateString()}</p>
+            </div>
+            <div class="invoice-title2">
+                <h4>Bill To:</h4>
+                <p>${subscription.templeName}</p>
+                <p>${subscription.address}</p>
+                <p>${subscription.number}</p>
+                <p>${subscription.email}</p>
+            </div>
+        </div>
+        <table class="table">
+            <tr>
+                <th>#</th>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>GST (18%)</th>
+                <th>Total Amount</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td><strong>  Subscription Charges </strong></td>
+                <td>₹1000.00</td>
+                <td>₹180.00</td>
+                <td>₹${subscription.totalAmount}</td>
+            </tr>
+        </table>
+        <div class="amount-section">
+            <p class="bggrey"><strong>Total Amount:</strong> ₹${subscription.totalAmount}</p>
+        </div>
+    </div>
+</body>
+</html>
     `
 
-    // Launch Puppeteer using chrome-aws-lambda
-    const browser = await chromium.puppeteer.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath,
-      headless: true,
-    })
-
-    const page = await browser.newPage()
-
-    // Load HTML content into Puppeteer
-    await page.setContent(invoiceHtml, { waitUntil: "domcontentloaded" })
-
-    // Generate PDF with options
-    const pdfBuffer = await page.pdf({
+    // Define PDF options
+    const pdfOptions = {
       format: "A4",
-      printBackground: true,
-      margin: {
+      orientation: "portrait",
+      border: {
         top: "10mm",
         right: "10mm",
         bottom: "10mm",
         left: "10mm",
       },
+    }
+
+    // Generate PDF and send it
+    pdf.create(invoiceHtml, pdfOptions).toStream((err, stream) => {
+      // if (err) {
+      //   return res.status(500).json({ message: "Error generating PDF", error: err })
+      // }
+      res.setHeader("Content-disposition", `attachment; filename=invoice_${subscription._id}.pdf`)
+      res.setHeader("Content-type", "application/pdf")
+      stream.pipe(res)
     })
-
-    await browser.close()
-
-    // Send PDF as response
-    res.setHeader(
-      "Content-disposition",
-      `attachment; filename=invoice_${subscription._id}.pdf`
-    )
-    res.setHeader("Content-type", "application/pdf")
-    res.send(pdfBuffer)
   } catch (error) {
-    console.error("Error generating PDF:", error)
-    res.status(500).json({ message: "Error generating PDF", error: error.message })
+    res.status(500).json({ message: error.message })
   }
 }
 
