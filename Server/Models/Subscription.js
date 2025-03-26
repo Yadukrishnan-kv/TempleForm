@@ -17,7 +17,7 @@ const subscriptionSchema = new Schema(
     amount: { type: Number, default: 1000 },
     gst: { type: Number, default: 180 },
     totalAmount: { type: Number, default: 1180 },
-    invoiceNumber: { type: Number, default: 0 }, // ✅ Added invoiceNumber
+    invoiceNumber: { type: Number, unique: true, default: 0 }, // ✅ Added unique
   },
   { timestamps: true }
 );
