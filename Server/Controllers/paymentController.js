@@ -492,7 +492,7 @@ doc
    .text(`Invoice Date: ${new Date(subscription.startDate).toDateString()}`, 400, 160, {
      align: "right",
    })
-   .text(`Due Date: ${new Date(subscription.endDate).toDateString()}`, { align: "right" })
+  //  .text(`Due Date: ${new Date(subscription.endDate).toDateString()}`, { align: "right" })
    .moveDown(5)
  
 // Move the table down by increasing the Y-axis position
