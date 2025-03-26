@@ -27,7 +27,7 @@
     "nodemon": "^3.1.7",
     "pdfkit": "^0.16.0",
     "phantomjs-prebuilt": "^2.1.16",
-    "puppeteer-core": "^24.4.0",
+
     "validator": "^13.12.0"
   }
 }
