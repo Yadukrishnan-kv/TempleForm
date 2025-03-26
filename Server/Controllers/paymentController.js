@@ -400,6 +400,8 @@ const getSubscriptionByEmail = async (req, res) => {
   }
 };
 
+
+
 const downloadInvoice = async (req, res) => {
   const { id } = req.params
 
@@ -410,28 +412,17 @@ const downloadInvoice = async (req, res) => {
       return res.status(404).json({ message: "Subscription not found" })
     }
 
-    // Read logo file and convert to base64
-    const logoPath = path.join(__dirname, "../assets/images/logo.png")
-    let logoBase64 = ""
-    try {
-      const logoData = fs.readFileSync(logoPath)
-      logoBase64 = `data:image/png;base64,${logoData.toString("base64")}`
-    } catch (err) {
-      console.error("Error reading logo file:", err)
-    }
-
     // Generate invoice number dynamically
     const currentDate = new Date()
     const year = currentDate.getFullYear()
     const month = String(currentDate.getMonth() + 1).padStart(2, "0")
     const invoiceNumber = String(subscription.invoiceNumber || 0).padStart(6, "0")
+    const invoiceId = `SSD-${year}-${month}/${invoiceNumber}`
 
     // Increment invoice number for the next invoice
     const nextInvoiceNumber = parseInt(invoiceNumber) + 1
     subscription.invoiceNumber = nextInvoiceNumber
     await subscription.save()
-
-    const invoiceId = `SSD-${year}-${month}/${invoiceNumber}`
 
     // Create PDF document
     const doc = new PDFDocument({ margin: 50 })
@@ -441,95 +432,130 @@ const downloadInvoice = async (req, res) => {
     // Pipe the PDF to response
     doc.pipe(res)
 
-    // Add Logo
-    if (logoBase64) {
-      const logoBuffer = Buffer.from(logoBase64.split(",")[1], "base64")
-      doc.image(logoBuffer, 50, 45, { width: 100 }).moveDown(1)
-    }
+ // Load and embed logo if available
+const logoPath = path.join(__dirname, "../assets/images/logo.png")
+if (fs.existsSync(logoPath)) {
+  doc.image(logoPath, 50, 45, { width: 100 }) // Logo at (50, 45)
+}
 
-    // Add Company Info
-    doc
-      .fontSize(20)
-      .text("SREESHUDDHI", 50, 50, { align: "right" })
-      .fontSize(10)
-      .text("Kalady, Kerala, India - 683574", { align: "right" })
-      .text("Phone: +91 98470 47963", { align: "right" })
-      .moveDown(1)
+// Move down after logo for spacing
+doc.moveDown(4) // Add some space after the logo
 
-    // Invoice Title & Number
+// Header Section
+doc
+  .font("Helvetica-Bold")
+  .fontSize(16)
+  .fillColor("#333")
+  .text("SREESHUDDHI", 50, doc.y, { align: "left" }) // Positioned below logo
+  .fontSize(10)
+  .fillColor("#666")
+  .text("Kalady, Kerala, India - 683574", 50, doc.y, { align: "left" })
+  .text("Phone: +91 98470 47963", 50, doc.y, { align: "left" })
+  .moveDown(1) // Space after header section
+
+// Bill To Section
+doc
+  .fontSize(10)
+  .fillColor("#444")
+  .text("Bill To:", 50, doc.y) // Placed after header section
+  .font("Helvetica-Bold")
+  .text(subscription.templeName, { continued: true }) // Same line as "Bill To:"
+  .font("Helvetica")
+  .text(`\n${subscription.address}\n${subscription.number}\n${subscription.email}`) // Multi-line content
+  .moveDown(1)
+
+
+
+    // Invoice Title Section
     doc
-      .fontSize(20)
-      .text("INVOICE", { align: "left" })
-      .moveDown(0.5)
+      .font("Helvetica-Bold")
+      .fontSize(16)
+      .fillColor("#000")
+      .text("INVOICE", 400, 50, { align: "right" })
       .fontSize(12)
-      .text(`Invoice Number: ${invoiceId}`)
-      .text(`Invoice Date: ${new Date(subscription.startDate).toDateString()}`)
-      .text(`Due Date: ${new Date(subscription.endDate).toDateString()}`)
-      .moveDown(1)
+      .fillColor("#666")
+      .text(`# ${invoiceId}`, { align: "right" })
+      .moveDown(0)
 
-    // Customer Info
-    doc
-      .fontSize(14)
-      .text("Bill To:", { underline: true })
-      .fontSize(12)
-      .text(subscription.templeName)
-      .text(subscription.address)
-      .text(subscription.number)
-      .text(subscription.email)
-      .moveDown(1)
+    // Status Section
+   // Status Section (Always "PAID" with no color change)
+   doc
+   .fontSize(12)
+   .fillColor("#000") // Black or default text color
+   .text("PAID", { align: "right" }) // Status is always PAID
+   .moveDown(2) // Increased space after "PAID"
+ 
+ // Invoice Date and Due Date
+ doc
+   .font("Helvetica")
+   .fontSize(10)
+   .text(`Invoice Date: ${new Date(subscription.startDate).toDateString()}`, 400, 160, {
+     align: "right",
+   })
+   .text(`Due Date: ${new Date(subscription.endDate).toDateString()}`, { align: "right" })
+   .moveDown(5)
+ 
+// Move the table down by increasing the Y-axis position
+const tableStartY = 250 // Moved down from 220 to 300
 
-    // Table Header
-    doc
-      .fontSize(12)
-      .text("#", 50, 300, { width: 50, align: "left" })
-      .text("Description", 100, 300, { width: 200, align: "left" })
-      .text("Amount", 300, 300, { width: 100, align: "right" })
-      .text("GST (18%)", 400, 300, { width: 100, align: "right" })
-      .text("Total Amount", 500, 300, { width: 100, align: "right" })
-      .moveDown(0.5)
+// Table Header with Increased Width and Reduced Spacing
+doc
+  .rect(50, tableStartY, 520, 20) // Increased width by 20px
+  .fill("#4d628c")
+  .fillColor("#fff")
+  .font("Helvetica-Bold")
+  .fontSize(10)
+  .text("#", 55, tableStartY + 5, { width: 30, align: "left" }) // Reduced width
+  .text("Description", 85, tableStartY + 5, { width: 180, align: "left" }) // Reduced width slightly
+  .text("Amount", 290, tableStartY + 5, { width: 70, align: "right" })
+  .text("GST (18%)", 370, tableStartY + 5, { width: 70, align: "right" })
+  .text("Total Amount", 460, tableStartY + 5, { width: 90, align: "right" })
 
-    doc
-      .moveTo(50, 315)
-      .lineTo(550, 315)
-      .stroke()
+doc
+  .moveTo(50, tableStartY + 20)
+  .lineTo(570, tableStartY + 20) // Updated to match the increased width
+  .stroke()
 
-    // Table Row
-    doc
-      .fontSize(12)
-      .text("1", 50, 330, { width: 50, align: "left" })
-      .text("Subscription Charges", 100, 330, { width: 200, align: "left" })
-      .text("₹1000.00", 300, 330, { width: 100, align: "right" })
-      .text("₹180.00", 400, 330, { width: 100, align: "right" })
-      .text(`₹${subscription.totalAmount}`, 500, 330, { width: 100, align: "right" })
+// Table Row with Updated Width and Reduced Spacing
+doc
+  .fillColor("#000")
+  .font("Helvetica")
+  .fontSize(10)
+  .text("1", 55, tableStartY + 35, { width: 30, align: "left" })
+  .text("Subscription Charges", 85, tableStartY + 35, { width: 180, align: "left" })
+  .text("1000.00", 290, tableStartY + 35, { width: 70, align: "right" })
+  .text("180.00", 370, tableStartY + 35, { width: 70, align: "right" })
+  .text(`${subscription.totalAmount}`, 460, tableStartY + 35, { width: 90, align: "right" })
 
-    doc
-      .moveTo(50, 345)
-      .lineTo(550, 345)
-      .stroke()
+doc
+  .moveTo(50, tableStartY + 50)
+  .lineTo(570, tableStartY + 50) // Updated to match the increased width
+  .stroke()
 
-    // Total Amount Section
-    doc
-      .fontSize(12)
-      .text("Total Amount:", 400, 380, { width: 100, align: "right" })
-      .text(`₹${subscription.totalAmount}`, 500, 380, { width: 100, align: "right" })
-      .moveDown(2)
+  doc
+  .rect(50, tableStartY + 80, 520, 20) // Full width background
+  .fill("#eee")
+  .fillColor("#000")
+  .font("Helvetica-Bold")
+  .fontSize(10)
+  .text("Total Amount:", 420, tableStartY + 85, { width: 100, align: "right" }) // Moved 50px left
+  .text(`${subscription.totalAmount}`, 480, tableStartY + 85, { width: 70, align: "right" }) // Moved 50px left
 
-    doc
-      .fontSize(10)
-      .fillColor("#444444")
-      .text(
-        "Thank you for your subscription. If you have any questions regarding this invoice, please contact us.",
-        50,
-        450,
-        { align: "center" }
-      )
 
-    // Finalize PDF
-    doc.end()
+
+  // Finalize PDF
+  doc.end()  
+
+
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
 }
+
+
+
+
+
 // Get formatted invoice number for display
 const getInvoiceNumber = (req, res) => {
   const currentDate = new Date()

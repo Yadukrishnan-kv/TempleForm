@@ -1,0 +1,108 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+p {
+  margin: 7px 0;
+  color: #444;
+}
+.amount-section p {
+  color: #000;
+}
+.invoice-container {
+  background: #fff;
+  padding: 40px 30px;
+  max-width: 800px;
+  margin: auto;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.invoiceheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #eee;
+}
+.invoice-title {
+  text-align: right;
+}
+.invoice-title h2 {
+  margin: 0 0 20px 0;
+  color: #000;
+}
+.invoice-title .status_red {
+  font-weight: bold;
+  color: red;
+}
+.invoice-title .status_green {
+  font-weight: bold;
+  color: green;
+}
+.info-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.table th,
+.table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.table th {
+  background: #4d628c;
+  color: #fff;
+  font-weight: 500;
+}
+.amount-section {
+  text-align: right;
+  margin-top: 60px;
+}
+.amount-section p {
+  padding-right: 30px;
+}
+.bggrey {
+  background: #eee;
+  margin: 0;
+  padding: 8px 30px;
+  border-radius: 5px;
+}
+.button_outer {
+  padding: 40px 30px;
+  max-width: 800px;
+  margin: auto;
+  display: flex;
+  justify-content: end;
+}
+.button_outer a {
+  color: #fff;
+  background: #333;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-left: 15px;
+  font-weight: 500;
+}
+.button_outer a:hover {
+  background: #555;
+}
+.invoice-title1 {
+  margin-top: -120px;
+}
+.invoice-title2 {
+  margin-top: -80px;
+}
+.footer-section {
+  margin-top: 40px;
+  text-align: center;
+  color: #555;
+  font-size: 12px;
+}
