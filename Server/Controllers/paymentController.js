@@ -3,6 +3,7 @@ const axios = require("axios")
 const crypto = require("crypto")
 const PDFDocument = require("pdfkit")
 const puppeteer = require("puppeteer")
+const chromium = require('chrome-aws-lambda')
 
 const fs = require("fs")
 const pdf = require('html-pdf');
@@ -518,11 +519,13 @@ const downloadInvoice = async (req, res) => {
     </html>
     `
 
-    // Launch Puppeteer to generate PDF
-    const browser = await puppeteer.launch({
+    // Launch Puppeteer using chrome-aws-lambda
+    const browser = await chromium.puppeteer.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath,
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     })
+
     const page = await browser.newPage()
 
     // Load HTML content into Puppeteer
