@@ -3,6 +3,11 @@ const { Schema, model } = mongoose;
 
 const subscriptionSchema = new Schema(
   {
+    orderId: {
+      type: String,
+      required: true,
+      unique: true
+    },
     templeId: {
       type: Schema.Types.ObjectId,
       ref: "Temple",
@@ -17,7 +22,9 @@ const subscriptionSchema = new Schema(
     amount: { type: Number, default: 1000 },
     gst: { type: Number, default: 180 },
     totalAmount: { type: Number, default: 1180 },
-    invoiceNumber: { type: Number, unique: true, default: 0 }, // ✅ Added unique
+    transactionId: { type: String, default: null },
+    paymentStatus: { type: String, enum: ["Pending", "Paid", "Failed"], default: "Pending" },
+    invoiceNumber: { type: Number, unique: true, default: 0 }, 
   },
   { timestamps: true }
 );

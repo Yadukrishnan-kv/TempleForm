@@ -1,10 +1,13 @@
 const Subscription = require("../Models/Subscription")
+const TempleCollection = require('../Models/Temple');
+const { v4: uuidv4 } = require('uuid'); 
+
 const axios = require("axios")
 const crypto = require("crypto")
 const PDFDocument = require("pdfkit")
+const jwt = require("jsonwebtoken");
 
 const fs = require("fs")
-const pdf = require('html-pdf');
 const path = require('path');
 require("dotenv").config()
 
@@ -12,111 +15,114 @@ require("dotenv").config()
 const API_URL = process.env.OMNIWARE_API_URL
 const API_KEY = process.env.OMNIWARE_API_KEY
 const MERCHANT_ID = process.env.OMNIWARE_MERCHANT_ID
-const SECRET = process.env.OMNIWARE_SECRET
+const OMNIWARE_SALT= process.env.OMNIWARE_SALT
 const FRONTEND_URL = process.env.FRONTEND_URL
+const OMNIWARE_PAYMENT_URL ="https://payments.omniware.in/pay" 
 
-// Generate secure signature
+
+// Signature generator for verification
 const generateSignature = (payload) => {
-  const payloadString = JSON.stringify(payload)
-  return crypto.createHmac("sha256", SECRET).update(payloadString).digest("hex")
-}
+  const dataString = `${payload.merchant_id}|${payload.order_id}|${payload.transaction_id}|${OMNIWARE_SALT}`;
+  return crypto.createHash("sha256").update(dataString).digest("hex");
+};
 
-// Create a payment order
-const createPayment = async (req, res) => {
+// Signature for initiating payment
+const generateChecksum = (orderId, amount, redirectUrl) => {
+  const signatureString = `${MERCHANT_ID}|${orderId}|${amount}|INR|${redirectUrl}|${OMNIWARE_SALT}`;
+  return crypto.createHash('sha256').update(signatureString).digest("hex");
+};
+
+// Create subscription and initiate payment
+const createonlineSubscription = async (req, res) => {
   try {
-    const { userId, orderId, templeDetails } = req.body
+    const token = req.headers.authorization?.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    const email = decoded.email;
+    const temple = await TempleCollection.findOne({ email });
 
-    // Validate required fields
-    if (!templeDetails.templeName || !templeDetails.email || !templeDetails.phone) {
-      return res.status(400).json({
-        success: false,
-        message: "Temple name, email, and phone are required",
-      })
-    }
+    if (!temple) return res.status(404).json({ message: "Temple not found" });
 
-    // Create payload for Omniware
-    const payload = {
+    const startDate = new Date();
+    const endDate = new Date();
+    endDate.setMonth(endDate.getMonth() + 12);
+
+    const orderId = `ORD-${Date.now()}`;
+    const transactionId = uuidv4();
+
+    const lastSub = await Subscription.findOne().sort({ invoiceNumber: -1 });
+    const invoiceNumber = lastSub ? lastSub.invoiceNumber + 1 : 1;
+
+    const subscription = new Subscription({
+      orderId,
+      transactionId,
+      templeName: temple.name,
+      templeId: temple.id,
+      address: temple.address,
+      email: temple.email,
+      number: temple.phone,
+      startDate,
+      endDate,
+      amount: temple.amount,
+      gst: temple.gst,
+      totalAmount: temple.totalAmount,
+      invoiceNumber,
+      paymentStatus: "Pending"
+    });
+
+    await subscription.save();
+
+    const amount = subscription.totalAmount.toFixed(2);
+    const redirectUrl = `${FRONTEND_URL}/payment-success?orderId=${orderId}`;
+    const cancelUrl = `${FRONTEND_URL}/payment-failed?orderId=${orderId}`;
+
+    const paymentPayload = {
       merchant_id: MERCHANT_ID,
       order_id: orderId,
-      amount: templeDetails.totalAmount.toFixed(2),
+      transaction_id: transactionId,
+      amount,
       currency: "INR",
-      user_id: userId,
-      redirect_url: `${FRONTEND_URL}/payment-success`,
-      cancel_url: `${FRONTEND_URL}/payment-failure`,
-    }
+      redirect_url: redirectUrl,
+      cancel_url: cancelUrl,
+      email,
+      number: temple.phone,
+      name: temple.name
+    };
 
-    const signature = generateSignature(payload)
+    const checksum = generateChecksum(orderId, amount, redirectUrl);
+    paymentPayload.checksum = checksum;
 
-    // Create subscription record in database
-    const subscription = new Subscription({
-      templeName: templeDetails.templeName,
-      email: templeDetails.email,
-      phone: templeDetails.phone,
-      amount: templeDetails.amount,
-      gst: templeDetails.gst,
-      totalAmount: templeDetails.totalAmount,
-      orderId: orderId,
-      paymentStatus: "Pending",
-      startDate: new Date(), // Set start date to now
-      // The endDate will be set by the pre-save hook in the Subscription model
-    })
+    res.status(201).json({
+      message: "Subscription created. Redirect to Omniware PG.",
+      paymentUrl: OMNIWARE_PAYMENT_URL,
+      paymentPayload,
+      subscription
+    });
 
-    await subscription.save()
-
-    // Call Omniware API to create payment
-    const response = await axios.post(`${API_URL}/create-order`, payload, {
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": API_KEY,
-        "x-signature": signature,
-      },
-    })
-
-    if (response.data.status === "success") {
-      res.status(200).json({
-        success: true,
-        paymentUrl: response.data.payment_url,
-      })
-    } else {
-      res.status(400).json({
-        success: false,
-        message: "Payment creation failed",
-        error: response.data.message,
-      })
-    }
   } catch (error) {
-    console.error("Error creating payment:", error)
-    res.status(500).json({
-      success: false,
-      message: "Failed to create payment",
-      error: error.message,
-    })
+    console.error("Error creating subscription:", error.message);
+    res.status(500).json({ message: error.message });
   }
-}
+};
 
-// Verify payment after completion
+// Verify payment after redirection
 const verifyPayment = async (req, res) => {
   try {
-    const { transactionId, orderId } = req.body
+    const { transactionId, orderId } = req.body;
 
-    // Find the subscription in our database
-    const subscription = await Subscription.findOne({ orderId })
-
-    if (!subscription) {
-      return res.status(404).json({
-        success: false,
-        message: "Subscription not found",
-      })
+    if (!transactionId || !orderId) {
+      return res.status(400).json({ success: false, message: "Missing transactionId or orderId" });
     }
 
-    // Verify payment with Omniware
+    const subscription = await Subscription.findOne({ orderId });
+    if (!subscription) return res.status(404).json({ success: false, message: "Subscription not found" });
+
     const payload = {
       merchant_id: MERCHANT_ID,
       order_id: orderId,
       transaction_id: transactionId,
-    }
+    };
 
-    const signature = generateSignature(payload)
+    const signature = generateSignature(payload);
 
     const response = await axios.post(`${API_URL}/verify-payment`, payload, {
       headers: {
@@ -124,19 +130,22 @@ const verifyPayment = async (req, res) => {
         "x-api-key": API_KEY,
         "x-signature": signature,
       },
-    })
+    });
 
     if (response.data.status === "success") {
-      // Update subscription status
-      subscription.paymentStatus = "Paid"
-      subscription.transactionId = transactionId
-      await subscription.save()
+      subscription.paymentStatus = "Paid";
+      subscription.transactionId = transactionId;
+      subscription.startDate = new Date();
 
-      // Generate invoice
-      await generateInvoice(subscription)
+      const endDate = new Date();
+      endDate.setFullYear(endDate.getFullYear() + 1);
+      subscription.endDate = endDate;
+
+      await subscription.save();
 
       return res.status(200).json({
         success: true,
+        message: "Payment verified successfully",
         subscription: {
           templeName: subscription.templeName,
           amount: subscription.amount,
@@ -147,226 +156,43 @@ const verifyPayment = async (req, res) => {
           transactionId: subscription.transactionId,
           orderId: subscription.orderId,
         },
-      })
+      });
     } else {
-      // Update subscription status to failed
-      subscription.paymentStatus = "Failed"
-      await subscription.save()
+      subscription.paymentStatus = "Failed";
+      await subscription.save();
 
       return res.status(400).json({
         success: false,
         message: "Payment verification failed",
-      })
+        details: response.data,
+      });
     }
   } catch (error) {
-    console.error("Error verifying payment:", error)
-    res.status(500).json({
-      success: false,
-      message: "Failed to verify payment",
-      error: error.message,
-    })
+    console.error("Error verifying payment:", error?.response?.data || error.message);
+    return res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
   }
-}
+};
 
-// Get subscription details
-const getSubscriptionDetails = async (req, res) => {
-  try {
-    const { orderId } = req.params
 
-    const subscription = await Subscription.findOne({ orderId })
-
-    if (!subscription) {
-      return res.status(404).json({
-        success: false,
-        message: "Subscription not found",
-      })
-    }
-
-    return res.status(200).json({
-      success: true,
-      subscription: {
-        templeName: subscription.templeName,
-        email: subscription.email,
-        phone: subscription.phone,
-        amount: subscription.amount,
-        gst: subscription.gst,
-        totalAmount: subscription.totalAmount,
-        startDate: subscription.startDate,
-        endDate: subscription.endDate,
-        paymentStatus: subscription.paymentStatus,
-        transactionId: subscription.transactionId,
-        orderId: subscription.orderId,
-        invoiceUrl: subscription.invoiceUrl,
-      },
-    })
-  } catch (error) {
-    console.error("Error fetching subscription details:", error)
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch subscription details",
-      error: error.message,
-    })
-  }
-}
-
-// Get all subscriptions for a temple by email
-const getTempleSubscriptions = async (req, res) => {
-  try {
-    const { email } = req.params
-
-    if (!email) {
-      return res.status(400).json({
-        success: false,
-        message: "Email is required",
-      })
-    }
-
-    const subscriptions = await Subscription.find({ email }).sort({ createdAt: -1 })
-
-    return res.status(200).json({
-      success: true,
-      subscriptions,
-    })
-  } catch (error) {
-    console.error("Error fetching temple subscriptions:", error)
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch temple subscriptions",
-      error: error.message,
-    })
-  }
-}
-
-// Generate invoice
-const generateAndDownloadInvoice = async (req, res) => {
-  try {
-    const { orderId } = req.params
-
-    // Fetch subscription details from DB
-    const subscription = await Subscription.findOne({ orderId })
-
-    if (!subscription) {
-      return res.status(404).json({
-        success: false,
-        message: "Subscription not found",
-      })
-    }
-
-    // Set response headers for PDF download
-    res.setHeader("Content-Type", "application/pdf")
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename=invoice_${orderId}.pdf`
-    )
-
-    // Create a new PDF document
-    const doc = new PDFDocument({ margin: 50 })
-
-    // Pipe PDF to response stream
-    doc.pipe(res)
-
-    // Add content to the PDF
-    doc.fontSize(20).text("INVOICE", { align: "center" })
-    doc.moveDown()
-
-    // Company Info
-    doc.fontSize(12).text("Temple Subscription Services", { align: "left" })
-    doc.fontSize(10).text("123 Temple Street, City, State, PIN", { align: "left" })
-    doc.fontSize(10).text("GSTIN: 12ABCDE1234F1Z5", { align: "left" })
-    doc.moveDown()
-
-    // Invoice Details
-    doc
-      .fontSize(12)
-      .text(`Invoice Number: INV-${subscription.transactionId || subscription.orderId}`, { align: "left" })
-    doc.fontSize(10).text(`Date: ${new Date().toLocaleDateString()}`, { align: "left" })
-    doc.moveDown()
-
-    // Customer Details
-    doc.fontSize(12).text("Customer Details:", { align: "left" })
-    doc.fontSize(10).text(`Temple Name: ${subscription.templeName}`, { align: "left" })
-    doc.fontSize(10).text(`Email: ${subscription.email}`, { align: "left" })
-    doc.fontSize(10).text(`Phone: ${subscription.phone}`, { align: "left" })
-    doc.moveDown()
-
-    // Subscription Details
-    doc.fontSize(12).text("Subscription Details:", { align: "left" })
-    doc.fontSize(10).text(`Start Date: ${new Date(subscription.startDate).toLocaleDateString()}`, { align: "left" })
-    doc.fontSize(10).text(`End Date: ${new Date(subscription.endDate).toLocaleDateString()}`, { align: "left" })
-    doc.moveDown()
-
-    // Table Header
-    doc.fontSize(10)
-    const tableTop = doc.y
-    doc.text("Description", 50, tableTop)
-    doc.text("Amount (₹)", 400, tableTop, { width: 90, align: "right" })
-    doc.moveDown()
-
-    // Draw Line
-    doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke()
-    doc.moveDown()
-
-    // Table Content
-    doc.text("Annual Subscription", 50, doc.y)
-    doc.text(subscription.amount.toFixed(2), 400, doc.y, { width: 90, align: "right" })
-    doc.moveDown()
-
-    doc.text("GST (18%)", 50, doc.y)
-    doc.text(subscription.gst.toFixed(2), 400, doc.y, { width: 90, align: "right" })
-    doc.moveDown()
-
-    // Draw Line
-    doc.moveTo(50, doc.y).lineTo(550, doc.y).stroke()
-    doc.moveDown()
-
-    // Total Amount
-    doc.fontSize(12).text("Total Amount", 50, doc.y)
-    doc.fontSize(12).text(subscription.totalAmount.toFixed(2), 400, doc.y, { width: 90, align: "right" })
-    doc.moveDown()
-
-    // Payment Info
-    doc.moveDown()
-    doc.fontSize(10).text("Payment Information:", { align: "left" })
-    doc.fontSize(10).text(`Transaction ID: ${subscription.transactionId || "Pending"}`, { align: "left" })
-    doc.fontSize(10).text(`Payment Status: ${subscription.paymentStatus.toUpperCase()}`, { align: "left" })
-    doc.moveDown()
-
-    // Footer
-    doc.fontSize(10).text("Thank you for your subscription!", { align: "center" })
-    doc
-      .fontSize(8)
-      .text("This is a computer-generated invoice and does not require a signature.", { align: "center" })
-
-    // Finalize the PDF
-    doc.end()
-
-    // Handle stream errors
-    res.on("error", (err) => {
-      console.error("Stream error:", err)
-      res.status(500).send("Failed to generate and download invoice.")
-    })
-  } catch (error) {
-    console.error("Error generating and downloading invoice:", error)
-    res.status(500).json({
-      success: false,
-      message: "Failed to generate and download invoice",
-      error: error.message,
-    })
-  }
-}
 
 
 //offline payment// 
 
 
-const createSubscription = async (req, res) => {
+const createOfflineSubscription = async (req, res) => {
   try {
-    const { templeName,templeId, address, email, number } = req.body;
+    const { templeName, templeId, address, email, number } = req.body;
+
     const startDate = new Date();
     const endDate = new Date();
-    endDate.setMonth(endDate.getMonth() + 12); // 12 months duration
+    endDate.setFullYear(endDate.getFullYear() + 1);
+
+    const orderId = `ORD-${Date.now()}`;
+    const transactionId = `TXN-${uuidv4()}`;
 
     const subscription = new Subscription({
+      orderId,
+      transactionId,
       templeName,
       templeId,
       address,
@@ -377,14 +203,17 @@ const createSubscription = async (req, res) => {
       amount: 1000,
       gst: 180,
       totalAmount: 1180,
+      paymentStatus: "Paid", // ✅ SET TO PAID
     });
 
     await subscription.save();
-    res.status(201).json({ message: 'Subscription added successfully', subscription });
+
+    res.status(201).json({ message: "Offline subscription created and marked as Paid", subscription });
   } catch (error) {
+    console.error("Subscription creation failed:", error.message);
     res.status(500).json({ message: error.message });
   }
-};
+}
 
 
 const getSubscriptionByEmail = async (req, res) => {
@@ -571,11 +400,8 @@ const getInvoiceNumber = (req, res) => {
 
 
 module.exports = {
-  createPayment,
+  createonlineSubscription,
   verifyPayment,
-  getSubscriptionDetails,
-  getTempleSubscriptions,
-  generateAndDownloadInvoice,
-  createSubscription,getSubscriptionByEmail,downloadInvoice,getInvoiceNumber
+  createOfflineSubscription,getSubscriptionByEmail,downloadInvoice,getInvoiceNumber
 }
 

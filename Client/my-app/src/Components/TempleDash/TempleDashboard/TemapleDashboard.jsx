@@ -15,7 +15,7 @@ function TemapleDashboard() {
 
       const handleLogout = () => {
         localStorage.removeItem('token');
-        window.location.href = '/AdminLogin';
+        window.location.href = '/Signin';
         
       };
       return (

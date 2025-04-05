@@ -49,9 +49,7 @@ const getTempleDetails = async (req, res) => {
 
   try {
     
-
-    
-    // Use the email from UserLoginModel to find the temple
+ // Use the email from UserLoginModel to find the temple
     const temple = await TempleCollection.findOne({email:req.user.email})
     
     if (!temple) {

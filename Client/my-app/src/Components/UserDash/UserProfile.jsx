@@ -23,7 +23,7 @@ function UserProfile() {
   const checkAuthAndFetchProfile = async () => {
     const token = localStorage.getItem("token")
     if (!token) {
-      navigate("/login")
+      navigate("/Signin")
       return
     }
     await fetchProfile(token)
@@ -53,7 +53,7 @@ function UserProfile() {
     try {
       const token = localStorage.getItem("token")
       if (!token) {
-        navigate("/login")
+        navigate("/Signin")
         return
       }
 

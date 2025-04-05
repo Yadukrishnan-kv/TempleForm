@@ -40,6 +40,7 @@ import VazhipadForm from '../Components/TempleDash/VazhipadForm/VazhipadForm'
 import VazhipadBookings from '../Components/TempleDash/VazhipadForm/VazhipadBookings'
 import SubscriptionPayment from '../Components/TempleDash/Subscription/SubscriptionPayment'
 import OfflineSubscription from '../Pages/Admin/Offlinesubscription/OfflineSubscription'
+import PaymentSuccess from '../Components/TempleDash/Subscription/PaymentSuccess'
 
 function Dom() {
   return (
@@ -66,6 +67,8 @@ function Dom() {
         <Route path="/VazhipadForm" element={<><VazhipadForm/></>} />
         <Route path="/VazhipadBookings" element={<><VazhipadBookings/></>} />
         <Route path="/subscriptionPayment" element={ <><SubscriptionPayment/></>} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+
 
 
         <Route path="/TempleDash-Edit/:id" element={<><TempleFormEdit/></>} />
