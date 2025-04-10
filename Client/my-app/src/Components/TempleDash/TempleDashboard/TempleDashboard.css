@@ -1,1 +1,118 @@
 
+  body {
+    background-color: #fdf9f7;
+    color: #333;
+  }
+  
+  .Templedashcontainer {
+    display: flex;
+  }
+  
+  /* Sidebar */
+  .Templedashsidebar {
+    width: 250px;
+    background: #fff;
+    border-right: 1px solid #eee;
+    height: 100vh;
+    padding: 20px;
+    position: fixed;
+  }
+  
+  .Templedashlogo {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+  .Templedashlogo span {
+    color: #fc5c35;
+  }
+  
+  .Templedashside-menu a {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.3s;
+    border-radius: 10px;
+  }
+  .Templedashside-menu a:hover, .Templedashside-menu a.active {
+    background: #ffeae5;
+    color: #fc5c35;
+  }
+  .Templedashside-menu i {
+    margin-right: 10px;
+  }
+  .Templedashside-menu .badge {
+    margin-left: auto;
+    background: green;
+    color: #fff;
+    border-radius: 50%;
+    padding: 2px 8px;
+    font-size: 12px;
+  }
+  
+  hr {
+    margin: 10px 0;
+    border: 0;
+    border-top: 1px solid #eee;
+  }
+  
+  /* Main content */
+  .Templedashmain-content {
+    margin-left: 250px;
+    padding: 20px;
+    width: calc(100% - 250px);
+  }
+  
+  /* Navbar */
+  .Templedashnavbar {
+    background: #fef3ee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+  .Templedashnavbar nav a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .Templedashnavbar .Templedashprofile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .Templedashnavbar .Templedashprofile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  /* Form styles */
+  .form-section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 20px;
+    box-shadow: 0 0 10px #f1f1f1;
+  }
+  .form-section h2 {
+    margin-bottom: 15px;
+    font-size: 18px;
+  }
+  .form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  input, select {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+  
