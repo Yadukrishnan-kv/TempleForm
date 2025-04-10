@@ -1,26 +1,31 @@
 const Subscription = require("../Models/Subscription")
 const TempleCollection = require('../Models/Temple');
 const { v4: uuidv4 } = require('uuid'); 
+
 const axios = require("axios")
 const crypto = require("crypto")
 const PDFDocument = require("pdfkit")
 const jwt = require("jsonwebtoken");
+
 const fs = require("fs")
 const path = require('path');
 require("dotenv").config()
+
 
 const API_URL = process.env.OMNIWARE_API_URL
 const API_KEY = process.env.OMNIWARE_API_KEY
 const MERCHANT_ID = process.env.OMNIWARE_MERCHANT_ID
 const OMNIWARE_SALT= process.env.OMNIWARE_SALT
 const FRONTEND_URL = process.env.FRONTEND_URL
-const OMNIWARE_PAYMENT_URL ="https://secure.omniware.in/pay" 
+const OMNIWARE_PAYMENT_URL ="http://pgbiz.omniware.in" 
+
 
 // Signature generator for verification
 const generateSignature = (payload) => {
   const dataString = `${payload.merchant_id}|${payload.order_id}|${payload.transaction_id}|${OMNIWARE_SALT}`;
   return crypto.createHash("sha256").update(dataString).digest("hex");
 };
+
 // Signature for initiating payment
 const generateChecksum = (orderId, amount, redirectUrl) => {
   const signatureString = `${MERCHANT_ID}|${orderId}|${amount}|INR|${redirectUrl}|${OMNIWARE_SALT}`;
@@ -34,14 +39,19 @@ const createonlineSubscription = async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     const email = decoded.email;
     const temple = await TempleCollection.findOne({ email });
+
     if (!temple) return res.status(404).json({ message: "Temple not found" });
+
     const startDate = new Date();
     const endDate = new Date();
     endDate.setMonth(endDate.getMonth() + 12);
+
     const orderId = `ORD-${Date.now()}`;
     const transactionId = uuidv4();
+
     const lastSub = await Subscription.findOne().sort({ invoiceNumber: -1 });
     const invoiceNumber = lastSub ? lastSub.invoiceNumber + 1 : 1;
+
     const subscription = new Subscription({
       orderId,
       transactionId,
@@ -58,11 +68,14 @@ const createonlineSubscription = async (req, res) => {
       invoiceNumber,
       paymentStatus: "Pending"
     });
+
     await subscription.save();
+
     const amount = subscription.totalAmount.toFixed(2);
     const redirectUrl = `${FRONTEND_URL}/payment-success?orderId=${orderId}`;
     const cancelUrl = `${FRONTEND_URL}/payment-failed?orderId=${orderId}`;
-      const paymentPayload = {
+
+    const paymentPayload = {
       merchant_id: MERCHANT_ID,
       order_id: orderId,
       transaction_id: transactionId,
@@ -74,8 +87,10 @@ const createonlineSubscription = async (req, res) => {
       number: temple.phone,
       name: temple.name
     };
+
     const checksum = generateChecksum(orderId, amount, redirectUrl);
     paymentPayload.checksum = checksum;
+
     res.status(201).json({
       message: "Subscription created. Redirect to Omniware PG.",
       paymentUrl: OMNIWARE_PAYMENT_URL,
