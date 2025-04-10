@@ -17,25 +17,24 @@ const API_KEY = process.env.OMNIWARE_API_KEY
 const MERCHANT_ID = process.env.OMNIWARE_MERCHANT_ID
 const OMNIWARE_SALT= process.env.OMNIWARE_SALT
 const FRONTEND_URL = process.env.FRONTEND_URL
-const OMNIWARE_PAYMENT_URL ="http://pgbiz.omniware.in" 
+const OMNIWARE_PAYMENT_URL = "https://pgbiz.omniware.in/payment/request";
 
-
-// Signature generator for verification
-const generateSignature = (payload) => {
-  const dataString = `${payload.merchant_id}|${payload.order_id}|${payload.transaction_id}|${OMNIWARE_SALT}`;
-  return crypto.createHash("sha256").update(dataString).digest("hex");
-};
-
-// Signature for initiating payment
+// Generate Checksum
 const generateChecksum = (orderId, amount, redirectUrl) => {
   const signatureString = `${MERCHANT_ID}|${orderId}|${amount}|INR|${redirectUrl}|${OMNIWARE_SALT}`;
-  return crypto.createHash('sha256').update(signatureString).digest("hex");
+  return crypto.createHash("sha256").update(signatureString).digest("hex");
 };
 
-// Create subscription and initiate payment
+// Generate Signature for Verification
+const generateSignature = (payload) => {
+  const dataString = JSON.stringify(payload);
+  return crypto.createHmac("sha256", OMNIWARE_SALT).update(dataString).digest("hex");
+};
+
+// Create Subscription and Return Payment Form
 const createonlineSubscription = async (req, res) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1];
+    const token = req.headers.authorization?.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     const email = decoded.email;
     const temple = await TempleCollection.findOne({ email });
@@ -66,7 +65,7 @@ const createonlineSubscription = async (req, res) => {
       gst: temple.gst,
       totalAmount: temple.totalAmount,
       invoiceNumber,
-      paymentStatus: "Pending"
+      paymentStatus: "Pending",
     });
 
     await subscription.save();
@@ -74,28 +73,24 @@ const createonlineSubscription = async (req, res) => {
     const amount = subscription.totalAmount.toFixed(2);
     const redirectUrl = `${FRONTEND_URL}/payment-success?orderId=${orderId}`;
     const cancelUrl = `${FRONTEND_URL}/payment-failed?orderId=${orderId}`;
-
-    const paymentPayload = {
-      merchant_id: MERCHANT_ID,
-      order_id: orderId,
-      transaction_id: transactionId,
-      amount,
-      currency: "INR",
-      redirect_url: redirectUrl,
-      cancel_url: cancelUrl,
-      email,
-      number: temple.phone,
-      name: temple.name
-    };
-
     const checksum = generateChecksum(orderId, amount, redirectUrl);
-    paymentPayload.checksum = checksum;
 
-    res.status(201).json({
-      message: "Subscription created. Redirect to Omniware PG.",
+    // Return form data to frontend
+    return res.status(200).json({
       paymentUrl: OMNIWARE_PAYMENT_URL,
-      paymentPayload,
-      subscription
+      paymentPayload: {
+        merchant_id: MERCHANT_ID,
+        order_id: orderId,
+        transaction_id: transactionId,
+        amount,
+        currency: "INR",
+        redirect_url: redirectUrl,
+        cancel_url: cancelUrl,
+        email,
+        number: temple.phone,
+        name: temple.name,
+        checksum
+      }
     });
 
   } catch (error) {
@@ -104,7 +99,7 @@ const createonlineSubscription = async (req, res) => {
   }
 };
 
-// Verify payment after redirection
+// ✅ Verify payment after Omniware redirection
 const verifyPayment = async (req, res) => {
   try {
     const { transactionId, orderId } = req.body;
@@ -172,7 +167,6 @@ const verifyPayment = async (req, res) => {
     return res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
   }
 };
-
 
 
 
