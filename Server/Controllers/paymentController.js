@@ -8,12 +8,36 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config()
 
 // Updated to use HTTPS
-const API_URL = "https://pgbiz.omniware.in"
+const API_URL = process.env.OMNIWARE_API_URL
 const API_KEY = process.env.OMNIWARE_API_KEY
 const MERCHANT_ID = process.env.OMNIWARE_MERCHANT_ID
 const OMNIWARE_SALT = process.env.OMNIWARE_SALT
 const FRONTEND_URL = process.env.FRONTEND_URL
-const OMNIWARE_PAYMENT_URL = "https://pgbiz.omniware.in/payment/request";
+const OMNIWARE_PAYMENT_URL = process.env.PAYMENT_URL
+
+
+console.log("API_URL:", API_URL);
+console.log("API_KEY:", API_KEY); 
+console.log("MERCHANT_ID:", MERCHANT_ID);
+console.log("OMNIWARE_SALT:", OMNIWARE_SALT);
+console.log("FRONTEND_URL:", FRONTEND_URL);
+
+// ✅ Throw error if any of them is missing
+if (!API_URL) {
+  throw new Error("OMNIWARE_API_URL not set");
+}
+if (!API_KEY) {
+  throw new Error("OMNIWARE_API_KEY not set");
+}
+if (!MERCHANT_ID) {
+  throw new Error("OMNIWARE_MERCHANT_ID not set");
+}
+if (!OMNIWARE_SALT) {
+  throw new Error("OMNIWARE_SALT not set");
+}
+if (!FRONTEND_URL) {
+  throw new Error("FRONTEND_URL not set");
+}
 
 // Generate Checksum with logging
 const generateChecksum = (orderId, amount, redirectUrl) => {
