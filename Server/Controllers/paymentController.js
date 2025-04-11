@@ -4,25 +4,37 @@ const { v4: uuidv4 } = require('uuid');
 
 const axios = require("axios")
 const crypto = require("crypto")
-const PDFDocument = require("pdfkit")
 const jwt = require("jsonwebtoken");
-
-const fs = require("fs")
-const path = require('path');
 require("dotenv").config()
 
-
-const API_URL = process.env.OMNIWARE_API_URL
+// Updated to use HTTPS
+const API_URL = "https://pgbiz.omniware.in"
 const API_KEY = process.env.OMNIWARE_API_KEY
 const MERCHANT_ID = process.env.OMNIWARE_MERCHANT_ID
-const OMNIWARE_SALT= process.env.OMNIWARE_SALT
+const OMNIWARE_SALT = process.env.OMNIWARE_SALT
 const FRONTEND_URL = process.env.FRONTEND_URL
 const OMNIWARE_PAYMENT_URL = "https://pgbiz.omniware.in/payment/request";
 
-// Generate Checksum
+// Generate Checksum with logging
 const generateChecksum = (orderId, amount, redirectUrl) => {
-  const signatureString = `${MERCHANT_ID}|${orderId}|${amount}|INR|${redirectUrl}|${OMNIWARE_SALT}`;
-  return crypto.createHash("sha256").update(signatureString).digest("hex");
+  // Ensure amount is a string with 2 decimal places
+  const formattedAmount = typeof amount === 'string' ? amount : parseFloat(amount).toFixed(2);
+  
+  // Create the signature string exactly as Omniware expects
+  const signatureString = `${MERCHANT_ID}|${orderId}|${formattedAmount}|INR|${redirectUrl}|${OMNIWARE_SALT}`;
+  console.log("Checksum generation:");
+  console.log("- Merchant ID:", MERCHANT_ID);
+  console.log("- Order ID:", orderId);
+  console.log("- Amount:", formattedAmount);
+  console.log("- Currency:", "INR");
+  console.log("- Redirect URL:", redirectUrl);
+  console.log("- Salt (first 4 chars):", OMNIWARE_SALT.substring(0, 4) + "...");
+  console.log("- Signature string:", signatureString);
+  
+  const checksum = crypto.createHash("sha256").update(signatureString).digest("hex");
+  console.log("- Generated checksum:", checksum);
+  
+  return checksum;
 };
 
 // Generate Signature for Verification
@@ -34,10 +46,14 @@ const generateSignature = (payload) => {
 // Create Subscription and Return Payment Form
 const createonlineSubscription = async (req, res) => {
   try {
+    console.log("Starting createonlineSubscription");
     const token = req.headers.authorization?.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     const email = decoded.email;
+    console.log("User email:", email);
+    
     const temple = await TempleCollection.findOne({ email });
+    console.log("Temple found:", temple ? "Yes" : "No");
 
     if (!temple) return res.status(404).json({ message: "Temple not found" });
 
@@ -45,52 +61,75 @@ const createonlineSubscription = async (req, res) => {
     const endDate = new Date();
     endDate.setMonth(endDate.getMonth() + 12);
 
-    const orderId = `ORD-${Date.now()}`;
-    const transactionId = uuidv4();
+    // Generate unique order ID with timestamp (no hyphens or special characters)
+    const orderId = `ORD${Date.now()}`;
+    const transactionId = `TXN${Date.now()}`;
+    console.log("Generated order ID:", orderId);
+    console.log("Generated transaction ID:", transactionId);
 
     const lastSub = await Subscription.findOne().sort({ invoiceNumber: -1 });
     const invoiceNumber = lastSub ? lastSub.invoiceNumber + 1 : 1;
+    console.log("Invoice number:", invoiceNumber);
+
+    // Use fixed values for testing if temple values are not available
+    const amount = temple.amount || 1000;
+    const gst = temple.gst || 180;
+    const totalAmount = temple.totalAmount || 1180;
+    console.log("Amount:", amount);
+    console.log("GST:", gst);
+    console.log("Total amount:", totalAmount);
 
     const subscription = new Subscription({
       orderId,
       transactionId,
       templeName: temple.name,
-      templeId: temple.id,
+      templeId: temple._id,
       address: temple.address,
       email: temple.email,
       number: temple.phone,
       startDate,
       endDate,
-      amount: temple.amount,
-      gst: temple.gst,
-      totalAmount: temple.totalAmount,
+      amount,
+      gst,
+      totalAmount,
       invoiceNumber,
       paymentStatus: "Pending",
     });
 
     await subscription.save();
+    console.log("Subscription saved to database");
 
-    const amount = subscription.totalAmount.toFixed(2);
-    const redirectUrl = `${FRONTEND_URL}/payment-success?orderId=${orderId}`;
-    const cancelUrl = `${FRONTEND_URL}/payment-failed?orderId=${orderId}`;
-    const checksum = generateChecksum(orderId, amount, redirectUrl);
+    // Format amount with 2 decimal places as a string
+    const formattedAmount = totalAmount.toFixed(2);
+    const redirectUrl = `${FRONTEND_URL}/payment-success`;
+    const cancelUrl = `${FRONTEND_URL}/payment-failed`;
+    const checksum = generateChecksum(orderId, formattedAmount, redirectUrl);
 
-    // Return form data to frontend
+    console.log("Payment request details:");
+    console.log("- Payment URL:", OMNIWARE_PAYMENT_URL);
+    console.log("- Redirect URL:", redirectUrl);
+    console.log("- Cancel URL:", cancelUrl);
+
+    // Return form data to frontend with all required parameters
+    const paymentPayload = {
+      merchant_id: MERCHANT_ID,
+      order_id: orderId,
+      transaction_id: transactionId,
+      amount: formattedAmount,
+      currency: "INR",
+      redirect_url: redirectUrl,
+      cancel_url: cancelUrl,
+      customer_email: email,
+      customer_mobile: temple.phone,
+      customer_name: temple.name,
+      checksum
+    };
+    
+    console.log("Payment payload:", JSON.stringify(paymentPayload, null, 2));
+    
     return res.status(200).json({
       paymentUrl: OMNIWARE_PAYMENT_URL,
-      paymentPayload: {
-        merchant_id: MERCHANT_ID,
-        order_id: orderId,
-        transaction_id: transactionId,
-        amount,
-        currency: "INR",
-        redirect_url: redirectUrl,
-        cancel_url: cancelUrl,
-        email,
-        number: temple.phone,
-        name: temple.name,
-        checksum
-      }
+      paymentPayload
     });
 
   } catch (error) {
@@ -99,18 +138,56 @@ const createonlineSubscription = async (req, res) => {
   }
 };
 
-// ✅ Verify payment after Omniware redirection
+// Verify payment after Omniware redirection
 const verifyPayment = async (req, res) => {
   try {
-    const { transactionId, orderId } = req.body;
+    console.log("Verify payment request received");
+    console.log("Request body:", req.body);
+    console.log("Request query:", req.query);
+    
+    // Extract parameters from query string or body
+    const transactionId = req.query.transaction_id || req.body.transactionId;
+    const orderId = req.query.order_id || req.body.orderId;
+    const status = req.query.status || req.body.status;
+
+    console.log("Payment verification parameters:");
+    console.log("- Transaction ID:", transactionId);
+    console.log("- Order ID:", orderId);
+    console.log("- Status:", status);
 
     if (!transactionId || !orderId) {
       return res.status(400).json({ success: false, message: "Missing transactionId or orderId" });
     }
 
     const subscription = await Subscription.findOne({ orderId });
+    console.log("Subscription found:", subscription ? "Yes" : "No");
+    
     if (!subscription) return res.status(404).json({ success: false, message: "Subscription not found" });
 
+    // If status is already provided in the callback, use it
+    if (status === "success") {
+      subscription.paymentStatus = "Paid";
+      subscription.transactionId = transactionId;
+      await subscription.save();
+      console.log("Payment marked as successful based on callback status");
+
+      return res.status(200).json({
+        success: true,
+        message: "Payment verified successfully",
+        subscription: {
+          templeName: subscription.templeName,
+          amount: subscription.amount,
+          gst: subscription.gst,
+          totalAmount: subscription.totalAmount,
+          startDate: subscription.startDate,
+          endDate: subscription.endDate,
+          transactionId: subscription.transactionId,
+          orderId: subscription.orderId,
+        },
+      });
+    }
+
+    // Otherwise, verify with Omniware API
     const payload = {
       merchant_id: MERCHANT_ID,
       order_id: orderId,
@@ -118,7 +195,11 @@ const verifyPayment = async (req, res) => {
     };
 
     const signature = generateSignature(payload);
+    console.log("Verification API request:");
+    console.log("- Payload:", JSON.stringify(payload));
+    console.log("- Signature:", signature);
 
+    console.log("Making verification API call to:", `${API_URL}/verify-payment`);
     const response = await axios.post(`${API_URL}/verify-payment`, payload, {
       headers: {
         "Content-Type": "application/json",
@@ -127,16 +208,13 @@ const verifyPayment = async (req, res) => {
       },
     });
 
+    console.log("Verification API response:", response.data);
+
     if (response.data.status === "success") {
       subscription.paymentStatus = "Paid";
       subscription.transactionId = transactionId;
-      subscription.startDate = new Date();
-
-      const endDate = new Date();
-      endDate.setFullYear(endDate.getFullYear() + 1);
-      subscription.endDate = endDate;
-
       await subscription.save();
+      console.log("Payment marked as successful based on API verification");
 
       return res.status(200).json({
         success: true,
@@ -155,6 +233,7 @@ const verifyPayment = async (req, res) => {
     } else {
       subscription.paymentStatus = "Failed";
       await subscription.save();
+      console.log("Payment marked as failed based on API verification");
 
       return res.status(400).json({
         success: false,
@@ -167,6 +246,8 @@ const verifyPayment = async (req, res) => {
     return res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
   }
 };
+
+
 
 
 
