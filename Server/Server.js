@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const bodyParser = require('body-parser');
 const path = require("path");
 
 require("./Config/db");
@@ -8,6 +9,8 @@ require("./Config/db");
 // Allow requests from all origins
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // Serve uploaded files statically

@@ -1,253 +1,124 @@
-const Subscription = require("../Models/Subscription")
-const TempleCollection = require('../Models/Temple');
-const { v4: uuidv4 } = require('uuid'); 
+const Subscription = require("../Models/Subscription");
+const crypto = require("crypto");
+require("dotenv").config();
 
-const axios = require("axios")
-const crypto = require("crypto")
-const jwt = require("jsonwebtoken");
-require("dotenv").config()
+const SALT = process.env.OMNIWARE_SALT;
 
-// Updated to use HTTPS
-const API_URL = process.env.OMNIWARE_API_URL
-const API_KEY = process.env.OMNIWARE_API_KEY
-const MERCHANT_ID = process.env.OMNIWARE_MERCHANT_ID
-const OMNIWARE_SALT = process.env.OMNIWARE_SALT
-const FRONTEND_URL = process.env.FRONTEND_URL
-const OMNIWARE_PAYMENT_URL = "https://pgbiz.omniware.in/v2/paymentrequest";
+const createPaymentHash = (reqData) => {
+  const shasum = crypto.createHash('sha512');
+  let hashData = SALT;
+  const hashColumns = [
+    "address_line_1", "address_line_2", "amount", "api_key", "city", "country",
+    "currency", "description", "email", "mode", "name", "order_id", "phone",
+    "return_url", "state", "udf1", "udf2", "udf3", "udf4", "udf5", "zip_code"
+  ];
 
-// Generate Checksum with logging
-const generateChecksum = (orderId, amount, redirectUrl) => {
-  // Ensure amount is a string with 2 decimal places
-  const formattedAmount = typeof amount === 'string' ? amount : parseFloat(amount).toFixed(2);
-  
-  // Create the signature string exactly as Omniware expects
-  const signatureString = `${MERCHANT_ID}|${orderId}|${formattedAmount}|INR|${redirectUrl}|${OMNIWARE_SALT}`;
-  console.log("Checksum generation:");
-  console.log("- Merchant ID:", MERCHANT_ID);
-  console.log("- API_KEY :", API_KEY );
+  hashColumns.forEach(entry => {
+    if (entry in reqData && reqData[entry]) {
+      console.log(`📌 Adding to hash: ${entry} = ${reqData[entry]}`);
+      hashData += '|' + reqData[entry];
+    }
+  });
 
-  console.log("- Order ID:", orderId);
-  console.log("- Amount:", formattedAmount);
-  console.log("- Currency:", "INR");
-  console.log("- Redirect URL:", redirectUrl);
-  console.log("- Salt (first 4 chars):", OMNIWARE_SALT.substring(0, 4) + "...");
-  console.log("- Signature string:", signatureString);
-  
-  const checksum = crypto.createHash("sha256").update(signatureString).digest("hex");
-  console.log("- Generated checksum:", checksum);
-  
-  return checksum;
+  return shasum.update(hashData).digest('hex').toUpperCase();
 };
 
-// Generate Signature for Verification
-const generateSignature = (payload) => {
-  const dataString = JSON.stringify(payload);
-  return crypto.createHmac("sha256", OMNIWARE_SALT).update(dataString).digest("hex");
-};
+const paymentRequest = async (req, res) => {
+  console.log("📥 Received paymentRequest API call");
+  const reqData = req.body;
+  console.log("💡 Request Body:", reqData);
 
-// Create Subscription and Return Payment Form
-const createonlineSubscription = async (req, res) => {
-  try {
-    console.log("Starting createonlineSubscription");
-    const token = req.headers.authorization?.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_KEY);
-    const email = decoded.email;
-    console.log("User email:", email);
-    
-    const temple = await TempleCollection.findOne({ email });
-    console.log("Temple found:", temple ? "Yes" : "No");
+  const {
+    amount, address_line_1, city, name, email, phone,
+    order_id, currency, description, country, return_url
+  } = reqData;
 
-    if (!temple) return res.status(404).json({ message: "Temple not found" });
+  const apiKey = (process.env.OMNIWARE_API_KEY || "").trim(); // ✅ Step 1 & 2
 
-    const startDate = new Date();
-    const endDate = new Date();
-    endDate.setMonth(endDate.getMonth() + 12);
-
-    // Generate unique order ID with timestamp (no hyphens or special characters)
-    const orderId = `ORD${Date.now()}`;
-    const transactionId = `TXN${Date.now()}`;
-    console.log("Generated order ID:", orderId);
-    console.log("Generated transaction ID:", transactionId);
-
-    const lastSub = await Subscription.findOne().sort({ invoiceNumber: -1 });
-    const invoiceNumber = lastSub ? lastSub.invoiceNumber + 1 : 1;
-    console.log("Invoice number:", invoiceNumber);
-
-    // Use fixed values for testing if temple values are not available
-    const amount = temple.amount || 1000;
-    const gst = temple.gst || 180;
-    const totalAmount = temple.totalAmount || 1180;
-    console.log("Amount:", amount);
-    console.log("GST:", gst);
-    console.log("Total amount:", totalAmount);
-
-    const subscription = new Subscription({
-      orderId,
-      transactionId,
-      templeName: temple.name,
-      templeId: temple._id,
-      address: temple.address,
-      email: temple.email,
-      number: temple.phone,
-      startDate,
-      endDate,
-      amount,
-      gst,
-      totalAmount,
-      invoiceNumber,
-      paymentStatus: "Pending",
-    });
-
-    await subscription.save();
-    console.log("Subscription saved to database");
-
-    // Format amount with 2 decimal places as a string
-    const formattedAmount = totalAmount.toFixed(2);
-    const redirectUrl = `${FRONTEND_URL}/payment-success`;
-    const cancelUrl = `${FRONTEND_URL}/payment-failed`;
-    const checksum = generateChecksum(orderId, formattedAmount, redirectUrl);
-
-    console.log("Payment request details:");
-    console.log("- Payment URL:", OMNIWARE_PAYMENT_URL);
-    console.log("- Redirect URL:", redirectUrl);
-    console.log("- Cancel URL:", cancelUrl);
-
-    // Return form data to frontend with all required parameters
-    const paymentPayload = {
-      merchant_id: MERCHANT_ID,
-      order_id: orderId,
-      transaction_id: transactionId,
-      amount: formattedAmount,
-      currency: "INR",
-      redirect_url: redirectUrl,
-      cancel_url: cancelUrl,
-      customer_email: email,
-      customer_mobile: temple.phone,
-      customer_name: temple.name,
-      checksum
-    };
-    
-    console.log("Payment payload:", JSON.stringify(paymentPayload, null, 2));
-    
-    return res.status(200).json({
-      paymentUrl: OMNIWARE_PAYMENT_URL,
-      paymentPayload
-    });
-
-  } catch (error) {
-    console.error("Error creating subscription:", error.message);
-    res.status(500).json({ message: error.message });
+  if (!apiKey) {
+    console.error("❌ API key not found in .env");
+    return res.status(500).json({ error: "Missing API Key configuration" });
   }
+
+  if (!amount || !address_line_1 || !city || !name || !email || !phone || !order_id || !currency || !description || !country || !return_url) {
+    console.warn("⚠️ Missing required fields");
+    return res.status(400).json({ data: '' });
+  }
+
+  reqData.api_key = apiKey;
+
+  // ✅ Step 3: Log API key and mode
+  console.log(`🔐 API Key added: ${apiKey}`);
+  console.log(`🌐 Mode: ${reqData.mode}`);
+
+  // ✅ Step 4: Warning if using TEST mode with LIVE key or vice versa
+  if (reqData.mode === "TEST" && !apiKey.includes("test")) {
+    console.warn("⚠️ You are using a LIVE API key in TEST mode!");
+  } else if (reqData.mode === "LIVE" && apiKey.includes("test")) {
+    console.warn("⚠️ You are using a TEST API key in LIVE mode!");
+  }
+
+  console.log("🔧 Creating payment hash...");
+  const resultKey = createPaymentHash(reqData);
+
+  // ✅ Step 5: Log full final payload
+  console.log("📤 Final Payload with API Key:", reqData);
+  console.log("✅ Final Payment Hash:", resultKey);
+
+  return res.json({ data: resultKey });
 };
 
-// Verify payment after Omniware redirection
-const verifyPayment = async (req, res) => {
-  try {
-    console.log("Verify payment request received");
-    console.log("Request body:", req.body);
-    console.log("Request query:", req.query);
-    
-    // Extract parameters from query string or body
-    const transactionId = req.query.transaction_id || req.body.transactionId;
-    const orderId = req.query.order_id || req.body.orderId;
-    const status = req.query.status || req.body.status;
+const paymentResponse = async (req, res) => {
+  console.log("📥 Received paymentResponse API call");
+  const reqData = req.body;
+  console.log("💡 Response Body:", reqData);
 
-    console.log("Payment verification parameters:");
-    console.log("- Transaction ID:", transactionId);
-    console.log("- Order ID:", orderId);
-    console.log("- Status:", status);
+  const shasum = crypto.createHash('sha512');
+  let hashData = SALT;
+  let keys = Object.keys(reqData).sort();
 
-    if (!transactionId || !orderId) {
-      return res.status(400).json({ success: false, message: "Missing transactionId or orderId" });
+  keys.forEach(k => {
+    if (k !== 'hash' && reqData[k]) {
+      hashData += '|' + reqData[k].toString();
     }
+  });
 
-    const subscription = await Subscription.findOne({ orderId });
-    console.log("Subscription found:", subscription ? "Yes" : "No");
-    
-    if (!subscription) return res.status(404).json({ success: false, message: "Subscription not found" });
+  const calculatedHash = shasum.update(hashData).digest('hex').toUpperCase();
+  console.log("🔒 Calculated Hash:", calculatedHash);
+  console.log("🔑 Received Hash:", reqData['hash']);
 
-    // If status is already provided in the callback, use it
-    if (status === "success") {
-      subscription.paymentStatus = "Paid";
-      subscription.transactionId = transactionId;
-      await subscription.save();
-      console.log("Payment marked as successful based on callback status");
-
-      return res.status(200).json({
-        success: true,
-        message: "Payment verified successfully",
-        subscription: {
-          templeName: subscription.templeName,
-          amount: subscription.amount,
-          gst: subscription.gst,
-          totalAmount: subscription.totalAmount,
-          startDate: subscription.startDate,
-          endDate: subscription.endDate,
-          transactionId: subscription.transactionId,
-          orderId: subscription.orderId,
-        },
+  if (reqData['hash'] === calculatedHash) {
+    if (reqData['response_code'] === "0") {
+      const subscription = new Subscription({
+        orderId: reqData['order_id'],
+        templeName: reqData['temple_name'],
+        address: reqData['address'],
+        email: reqData['email'],
+        number: reqData['phone'],
+        amount: reqData['amount'],
+        transactionId: reqData['transaction_id'],
+        paymentStatus: 'Paid'
       });
-    }
 
-    // Otherwise, verify with Omniware API
-    const payload = {
-      merchant_id: MERCHANT_ID,
-      order_id: orderId,
-      transaction_id: transactionId,
-    };
-
-    const signature = generateSignature(payload);
-    console.log("Verification API request:");
-    console.log("- Payload:", JSON.stringify(payload));
-    console.log("- Signature:", signature);
-
-    console.log("Making verification API call to:", `${API_URL}/verify-payment`);
-    const response = await axios.post(`${API_URL}/verify-payment`, payload, {
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": API_KEY,
-        "x-signature": signature,
-      },
-    });
-
-    console.log("Verification API response:", response.data);
-
-    if (response.data.status === "success") {
-      subscription.paymentStatus = "Paid";
-      subscription.transactionId = transactionId;
       await subscription.save();
-      console.log("Payment marked as successful based on API verification");
+      console.log("✅ Subscription saved successfully");
 
-      return res.status(200).json({
-        success: true,
-        message: "Payment verified successfully",
-        subscription: {
-          templeName: subscription.templeName,
-          amount: subscription.amount,
-          gst: subscription.gst,
-          totalAmount: subscription.totalAmount,
-          startDate: subscription.startDate,
-          endDate: subscription.endDate,
-          transactionId: subscription.transactionId,
-          orderId: subscription.orderId,
-        },
+      res.render('success', {
+        message: reqData['response_message'],
+        transaction_id: reqData['transaction_id'],
+        amount: reqData['amount']
       });
     } else {
-      subscription.paymentStatus = "Failed";
-      await subscription.save();
-      console.log("Payment marked as failed based on API verification");
-
-      return res.status(400).json({
-        success: false,
-        message: "Payment verification failed",
-        details: response.data,
-      });
+      console.error("❌ Payment Failed:", reqData['response_message']);
+      res.render('failed', { message: reqData['response_message'] });
     }
-  } catch (error) {
-    console.error("Error verifying payment:", error?.response?.data || error.message);
-    return res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
+  } else {
+    console.error("❌ Hash Mismatch!");
+    res.render('failed', { message: 'Hash Mismatch' });
   }
 };
+
+module.exports = { paymentRequest, paymentResponse };
 
 
 
@@ -479,7 +350,7 @@ const getInvoiceNumber = (req, res) => {
 
 
 module.exports = {
-  createonlineSubscription,
-  verifyPayment,
+  paymentRequest,
+  paymentResponse,
   createOfflineSubscription,getSubscriptionByEmail,downloadInvoice,getInvoiceNumber
 }
