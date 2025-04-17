@@ -10,7 +10,7 @@ const createPaymentHash = (reqData) => {
   const hashColumns = [
     "address_line_1", "address_line_2", "amount", "api_key", "city", "country",
     "currency", "description", "email", "mode", "name", "order_id", "phone",
-    "return_url", "state", "udf1", "udf2", "udf3", "udf4", "udf5", "zip_code"
+    "return_url", "state", "zip_code"
   ];
 
   hashColumns.forEach(entry => {
@@ -118,7 +118,6 @@ const paymentResponse = async (req, res) => {
   }
 };
 
-module.exports = { paymentRequest, paymentResponse };
 
 
 
