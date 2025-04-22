@@ -16,12 +16,14 @@ const createPaymentHash = (reqData) => {
 
   hashColumns.forEach(entry => {
     if (entry in reqData && reqData[entry]) {
-      hashData += '|' + reqData[entry];
+      // Trim the value before appending
+      hashData += '|' + String(reqData[entry]).trim();
     }
   });
 
   return shasum.update(hashData).digest('hex').toUpperCase();
 };
+
 
 const paymentRequest = async (req, res) => {
   const reqData = req.body;
