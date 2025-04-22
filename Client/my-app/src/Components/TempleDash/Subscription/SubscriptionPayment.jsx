@@ -4,6 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import './SubscriptionPayment.css';
 
+// Function to double trim a string (removes leading/trailing spaces and collapses multiple internal spaces)
+const doubleTrim = (value) => {
+  if (typeof value === 'string') {
+    return value.trim().replace(/\s+/g, ' ');
+  }
+  return value;
+};
+
 const SubscriptionPayment = () => {
   const ip = process.env.REACT_APP_BACKEND_IP;
   const apiKey = process.env.REACT_APP_OMNIWARE_API_KEY;
@@ -76,15 +84,26 @@ const SubscriptionPayment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Sanitize all form values before submitting
+    const sanitizedFormData = {};
+    Object.keys(formData).forEach((key) => {
+      sanitizedFormData[key] = doubleTrim(formData[key]);
+    });
+
     try {
-      const response = await axios.post(`${ip}/api/payments/paymentRequest`, formData);
-      console.log("Form submitted with data:", formData);
+      const response = await axios.post(`${ip}/api/payments/paymentRequest`, sanitizedFormData);
+      console.log("Form submitted with sanitized data:", sanitizedFormData);
 
       if (response.data.data) {
         setHash(response.data.data);
+
+        // Optionally update local state with sanitized data
+        setFormData(sanitizedFormData);
+
         setTimeout(() => {
           formRef.current.submit();
-        }, 100); // slight delay to ensure DOM is updated
+        }, 100);
       } else {
         alert('Missing required fields!');
       }
@@ -171,5 +190,6 @@ const SubscriptionPayment = () => {
 };
 
 export default SubscriptionPayment;
+
 
 
