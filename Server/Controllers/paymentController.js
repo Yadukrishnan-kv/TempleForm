@@ -54,17 +54,24 @@ const paymentResponse = async (req, res) => {
 
   const shasum = crypto.createHash('sha512');
   
-  // Trim spaces from all the relevant fields
-  const trimmedAmount = reqData['amount'].trim();
-  const trimmedTransactionId = reqData['transaction_id'].trim();
-  const trimmedCity = reqData['city'].trim();
-  const trimmedCountry = reqData['country'].trim();
-  const trimmedCurrency = reqData['currency'].trim();
-  const trimmedEmail = reqData['email'].trim();
-  const trimmedOrderId = reqData['order_id'].trim();
-  const trimmedPhone = reqData['phone'].trim();
-  const trimmedState = reqData['state'].trim();
-  const trimmedAddress = reqData['address'].trim();
+  // Trim spaces and remove any unintended characters in the input parameters
+  const trimValue = (value) => {
+    if (value) {
+      return value.trim().replace(/\s+/g, ' ').replace(/\r?\n|\r/g, '').trim(); // Trims spaces and normalizes internal spaces
+    }
+    return '';
+  };
+
+  const trimmedAmount = trimValue(reqData['amount']);
+  const trimmedTransactionId = trimValue(reqData['transaction_id']);
+  const trimmedCity = trimValue(reqData['city']);
+  const trimmedCountry = trimValue(reqData['country']);
+  const trimmedCurrency = trimValue(reqData['currency']);
+  const trimmedEmail = trimValue(reqData['email']);
+  const trimmedOrderId = trimValue(reqData['order_id']);
+  const trimmedPhone = trimValue(reqData['phone']);
+  const trimmedState = trimValue(reqData['state']);
+  const trimmedAddress = trimValue(reqData['address']);
 
   // Construct the hash string with trimmed values
   let hashData = process.env.OMNIWARE_SALT;  // YOUR_SALT from environment variable
