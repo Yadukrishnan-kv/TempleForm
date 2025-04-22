@@ -1,6 +1,7 @@
 const Subscription = require("../Models/Subscription");
 const crypto = require("crypto");
 require("dotenv").config();
+const moment = require('moment');
 
 const SALT = process.env.OMNIWARE_SALT;
 
@@ -45,10 +46,13 @@ const paymentRequest = async (req, res) => {
 const paymentResponse = async (req, res) => {
   const reqData = req.body;
 
-  const shasum = crypto.createHash('sha512');
-  let hashData = SALT;
-  let keys = Object.keys(reqData).sort();
+  console.log("Incoming payment response data:", reqData);
 
+  const shasum = crypto.createHash('sha512');
+  let hashData = process.env.OMNIWARE_SALT;
+
+  // Construct hash string in key order
+  const keys = Object.keys(reqData).sort();
   keys.forEach(k => {
     if (k !== 'hash' && reqData[k]) {
       hashData += '|' + reqData[k].toString();
@@ -56,44 +60,39 @@ const paymentResponse = async (req, res) => {
   });
 
   const calculatedHash = shasum.update(hashData).digest('hex').toUpperCase();
+  console.log("Calculated Hash for Response:", calculatedHash);
 
   if (reqData['hash'] === calculatedHash) {
     if (reqData['response_code'] === "0") {
-      try {
-        const subscription = new Subscription({
-          orderId: reqData['order_id'],
-          templeId: reqData['temple_id'],              // ✅ Add templeId
-          templeName: reqData['temple_name'],
-          address: reqData['address'],
-          email: reqData['email'],
-          number: reqData['phone'],
-          amount: parseFloat(reqData['amount']),
-          transactionId: reqData['transaction_id'],
-          paymentStatus: 'Paid',
-        });
+      // Payment success
 
+      const endDate = moment().add(30, 'days').toDate(); // Add endDate here
+
+      const subscription = new Subscription({
+        orderId: reqData['order_id'],
+        templeId: reqData['temple_id'],
+        templeName: reqData['temple_name'],
+        address: reqData['address'],
+        email: reqData['email'],
+        number: reqData['phone'],
+        amount: parseFloat(reqData['amount']),
+        transactionId: reqData['transaction_id'],
+        paymentStatus: 'Paid',
+        endDate: endDate 
+      });
+
+      try {
         await subscription.save();
         console.log("✅ Subscription saved successfully");
-
-        // Optional: Respond with JSON if you're building an API
         return res.status(201).json({
           message: "Payment Successful",
           subscriptionId: subscription._id,
-          transactionId: subscription.transactionId,
+          transactionId: subscription.transactionId
         });
-
-        // Or if you're rendering view
-        // res.render('success', {
-        //   message: reqData['response_message'],
-        //   transaction_id: reqData['transaction_id'],
-        //   amount: reqData['amount']
-        // });
-
-      } catch (err) {
-        console.error("❌ Error saving subscription:", err);
-        return res.status(500).json({ error: "Subscription save failed" });
+      } catch (error) {
+        console.error("❌ Error saving subscription:", error);
+        return res.status(400).json({ message: "Error saving subscription" });
       }
-
     } else {
       console.error("❌ Payment Failed:", reqData['response_message']);
       return res.status(400).json({ message: reqData['response_message'] });
@@ -103,7 +102,6 @@ const paymentResponse = async (req, res) => {
     return res.status(400).json({ message: "Hash mismatch" });
   }
 };
-
 
 
 
