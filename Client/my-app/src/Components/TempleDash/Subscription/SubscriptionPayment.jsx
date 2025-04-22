@@ -60,7 +60,7 @@ const SubscriptionPayment = () => {
           email: temple.email || '',
           phone: temple.phone || '',
           address_line_1: temple.address || '',
-          address_line_2: temple.address || '',
+          address_line_2: temple._id  || '',
           city: temple.district || '',
           state: temple.state || '',
           zip_code: temple.address?.zip || '000000',
