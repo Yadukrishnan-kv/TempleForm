@@ -46,18 +46,33 @@ const paymentRequest = async (req, res) => {
 const paymentResponse = async (req, res) => {
   const reqData = req.body;
 
+  // Log the received data to debug the incoming payment response
+  console.log('Received payment data:', reqData);
+
+  const { udf1: templeId, udf2: templeName, udf3: address } = req.body;
   console.log("Incoming payment response data:", reqData);
 
   const shasum = crypto.createHash('sha512');
-  let hashData = process.env.OMNIWARE_SALT;
+  
+  // Trim spaces from all the relevant fields
+  const trimmedAmount = reqData['amount'].trim();
+  const trimmedTransactionId = reqData['transaction_id'].trim();
+  const trimmedCity = reqData['city'].trim();
+  const trimmedCountry = reqData['country'].trim();
+  const trimmedCurrency = reqData['currency'].trim();
+  const trimmedEmail = reqData['email'].trim();
+  const trimmedOrderId = reqData['order_id'].trim();
+  const trimmedPhone = reqData['phone'].trim();
+  const trimmedState = reqData['state'].trim();
+  const trimmedAddress = reqData['address'].trim();
 
-  // Construct hash string in key order
-  const keys = Object.keys(reqData).sort();
-  keys.forEach(k => {
-    if (k !== 'hash' && reqData[k]) {
-      hashData += '|' + reqData[k].toString();
-    }
-  });
+  // Construct the hash string with trimmed values
+  let hashData = process.env.OMNIWARE_SALT;  // YOUR_SALT from environment variable
+
+  // Use the trimmed values in the hash string
+  hashData += `|x|x|${trimmedAmount}|${trimmedTransactionId}|${trimmedCity}|${trimmedCountry}|${trimmedCurrency}|Annual subscription|${trimmedEmail}|LIVE|x|${trimmedOrderId}|${trimmedPhone}|${process.env.CALLBACK_URL}|${trimmedState}|${trimmedAddress}|x|x|000000`;
+
+  console.log("Hash String:", hashData);  // Log the full hash string for debugging
 
   const calculatedHash = shasum.update(hashData).digest('hex').toUpperCase();
   console.log("Calculated Hash for Response:", calculatedHash);
@@ -70,17 +85,17 @@ const paymentResponse = async (req, res) => {
 
       const subscription = new Subscription({
         orderId: reqData['order_id'],
-        templeId: reqData['temple_id'],
-        templeName: reqData['temple_name'],
-        address: reqData['address'],
+        templeName,   // from udf2
+        address,      // from udf3
         email: reqData['email'],
         number: reqData['phone'],
         amount: parseFloat(reqData['amount']),
         transactionId: reqData['transaction_id'],
         paymentStatus: 'Paid',
-        endDate: endDate 
+        endDate,
+        templeId,     // from udf1
       });
-
+      
       try {
         await subscription.save();
         console.log("✅ Subscription saved successfully");
@@ -102,6 +117,7 @@ const paymentResponse = async (req, res) => {
     return res.status(400).json({ message: "Hash mismatch" });
   }
 };
+
 
 
 
