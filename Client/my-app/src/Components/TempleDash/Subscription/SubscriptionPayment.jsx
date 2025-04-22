@@ -60,19 +60,31 @@ const SubscriptionPayment = () => {
         });
 
         const temple = res.data;
-        setTempleDetails(temple);
 
-        setFormData((prevData) => ({
-          ...prevData,
-          name: temple.name || '',
-          email: temple.email || '',
-          phone: temple.phone || '',
-          address_line_1: temple.address || '',
-          address_line_2: temple.address || '',
-          city: temple.district || '',
-          state: temple.state || '',
-          zip_code: temple.address?.zip || '000000',
-        }));
+const cleanedTemple = {
+  name: doubleTrim(temple.name || ''),
+  email: doubleTrim(temple.email || ''),
+  phone: doubleTrim(temple.phone || ''),
+  address: doubleTrim(temple.address || ''),
+  district: doubleTrim(temple.district || ''),
+  state: doubleTrim(temple.state || ''),
+  zip: temple.address?.zip || '000000',
+};
+
+setTempleDetails(cleanedTemple);
+
+setFormData((prevData) => ({
+  ...prevData,
+  name: cleanedTemple.name,
+  email: cleanedTemple.email,
+  phone: cleanedTemple.phone,
+  address_line_1: cleanedTemple.address,
+  address_line_2: cleanedTemple.address,
+  city: cleanedTemple.district,
+  state: cleanedTemple.state,
+  zip_code: cleanedTemple.zip,
+}));
+
       } catch (err) {
         console.error('Fetch error:', err);
         setError('Failed to fetch temple details.');
@@ -92,8 +104,9 @@ const SubscriptionPayment = () => {
     });
 
     try {
+      await setFormData(sanitizedFormData); // update state
       const response = await axios.post(`${ip}/api/payments/paymentRequest`, sanitizedFormData);
-      console.log("Form submitted with sanitized data:", sanitizedFormData);
+            console.log("Form submitted with sanitized data:", sanitizedFormData);
 
       if (response.data.data) {
         setHash(response.data.data);
