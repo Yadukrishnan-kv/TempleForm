@@ -8,6 +8,10 @@ const SALT = process.env.OMNIWARE_SALT;
 const createPaymentHash = (reqData) => {
   const shasum = crypto.createHash('sha512');
   let hashData = SALT;
+
+  const normalize = (value) =>
+    value ? value.trim().replace(/\s+/g, ' ') : '';
+
   const hashColumns = [
     "address_line_1", "address_line_2", "amount", "api_key", "city", "country",
     "currency", "description", "email", "mode", "name", "order_id", "phone",
@@ -15,13 +19,13 @@ const createPaymentHash = (reqData) => {
   ];
 
   hashColumns.forEach(entry => {
-    if (entry in reqData && reqData[entry]) {
-      hashData += '|' + reqData[entry];
-    }
+    const normalized = normalize(reqData[entry]);
+    hashData += '|' + normalized;
   });
 
   return shasum.update(hashData).digest('hex').toUpperCase();
 };
+
 
 const paymentRequest = async (req, res) => {
   const reqData = req.body;
