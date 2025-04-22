@@ -24,7 +24,7 @@ const PaymentSuccess = () => {
 
         console.log("Payment callback received:", { orderId, transactionId, paymentStatus });
 
-        const res = await axios.post(`${ip}/api/payments/verify-payment`, {
+        const res = await axios.post(`${ip}/api/payments/paymentResponse`, {
           orderId,
           transactionId,
           status: paymentStatus

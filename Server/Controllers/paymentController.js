@@ -15,7 +15,6 @@ const createPaymentHash = (reqData) => {
 
   hashColumns.forEach(entry => {
     if (entry in reqData && reqData[entry]) {
-      console.log(`📌 Adding to hash: ${entry} = ${reqData[entry]}`);
       hashData += '|' + reqData[entry];
     }
   });
@@ -24,54 +23,27 @@ const createPaymentHash = (reqData) => {
 };
 
 const paymentRequest = async (req, res) => {
-  console.log("📥 Received paymentRequest API call");
   const reqData = req.body;
-  console.log("💡 Request Body:", reqData);
 
   const {
     amount, address_line_1, city, name, email, phone,
     order_id, currency, description, country, return_url
   } = reqData;
 
-  const apiKey = (process.env.OMNIWARE_API_KEY || "").trim(); // ✅ Step 1 & 2
-
-  if (!apiKey) {
-    console.error("❌ API key not found in .env");
-    return res.status(500).json({ error: "Missing API Key configuration" });
-  }
+  const apiKey = process.env.OMNIWARE_API_KEY;
 
   if (!amount || !address_line_1 || !city || !name || !email || !phone || !order_id || !currency || !description || !country || !return_url) {
-    console.warn("⚠️ Missing required fields");
-    return res.status(400).json({ data: '' });
+    return res.status(400).json({ error: "Missing required fields" });
   }
 
   reqData.api_key = apiKey;
 
-  // ✅ Step 3: Log API key and mode
-  console.log(`🔐 API Key added: ${apiKey}`);
-  console.log(`🌐 Mode: ${reqData.mode}`);
-
-  // ✅ Step 4: Warning if using TEST mode with LIVE key or vice versa
-  if (reqData.mode === "TEST" && !apiKey.includes("test")) {
-    console.warn("⚠️ You are using a LIVE API key in TEST mode!");
-  } else if (reqData.mode === "LIVE" && apiKey.includes("test")) {
-    console.warn("⚠️ You are using a TEST API key in LIVE mode!");
-  }
-
-  console.log("🔧 Creating payment hash...");
   const resultKey = createPaymentHash(reqData);
-
-  // ✅ Step 5: Log full final payload
-  console.log("📤 Final Payload with API Key:", reqData);
-  console.log("✅ Final Payment Hash:", resultKey);
-
   return res.json({ data: resultKey });
 };
 
 const paymentResponse = async (req, res) => {
-  console.log("📥 Received paymentResponse API call");
   const reqData = req.body;
-  console.log("💡 Response Body:", reqData);
 
   const shasum = crypto.createHash('sha512');
   let hashData = SALT;
@@ -84,40 +56,53 @@ const paymentResponse = async (req, res) => {
   });
 
   const calculatedHash = shasum.update(hashData).digest('hex').toUpperCase();
-  console.log("🔒 Calculated Hash:", calculatedHash);
-  console.log("🔑 Received Hash:", reqData['hash']);
 
   if (reqData['hash'] === calculatedHash) {
     if (reqData['response_code'] === "0") {
-      const subscription = new Subscription({
-        orderId: reqData['order_id'],
-        templeName: reqData['temple_name'],
-        address: reqData['address'],
-        email: reqData['email'],
-        number: reqData['phone'],
-        amount: reqData['amount'],
-        transactionId: reqData['transaction_id'],
-        paymentStatus: 'Paid'
-      });
+      try {
+        const subscription = new Subscription({
+          orderId: reqData['order_id'],
+          templeId: reqData['temple_id'],              // ✅ Add templeId
+          templeName: reqData['temple_name'],
+          address: reqData['address'],
+          email: reqData['email'],
+          number: reqData['phone'],
+          amount: parseFloat(reqData['amount']),
+          transactionId: reqData['transaction_id'],
+          paymentStatus: 'Paid',
+        });
 
-      await subscription.save();
-      console.log("✅ Subscription saved successfully");
+        await subscription.save();
+        console.log("✅ Subscription saved successfully");
 
-      res.render('success', {
-        message: reqData['response_message'],
-        transaction_id: reqData['transaction_id'],
-        amount: reqData['amount']
-      });
+        // Optional: Respond with JSON if you're building an API
+        return res.status(201).json({
+          message: "Payment Successful",
+          subscriptionId: subscription._id,
+          transactionId: subscription.transactionId,
+        });
+
+        // Or if you're rendering view
+        // res.render('success', {
+        //   message: reqData['response_message'],
+        //   transaction_id: reqData['transaction_id'],
+        //   amount: reqData['amount']
+        // });
+
+      } catch (err) {
+        console.error("❌ Error saving subscription:", err);
+        return res.status(500).json({ error: "Subscription save failed" });
+      }
+
     } else {
       console.error("❌ Payment Failed:", reqData['response_message']);
-      res.render('failed', { message: reqData['response_message'] });
+      return res.status(400).json({ message: reqData['response_message'] });
     }
   } else {
     console.error("❌ Hash Mismatch!");
-    res.render('failed', { message: 'Hash Mismatch' });
+    return res.status(400).json({ message: "Hash mismatch" });
   }
 };
-
 
 
 
