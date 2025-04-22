@@ -8,6 +8,9 @@ const SALT = process.env.OMNIWARE_SALT;
 const createPaymentHash = (reqData) => {
   const shasum = crypto.createHash('sha512');
   let hashData = SALT;
+
+  const normalize = (value) => value ? value.trim() : '';
+
   const hashColumns = [
     "address_line_1", "address_line_2", "amount", "api_key", "city", "country",
     "currency", "description", "email", "mode", "name", "order_id", "phone",
@@ -15,13 +18,15 @@ const createPaymentHash = (reqData) => {
   ];
 
   hashColumns.forEach(entry => {
-    if (entry in reqData && reqData[entry]) {
-      hashData += '|' + reqData[entry];
-    }
+    const normalized = normalize(reqData[entry]);
+    hashData += '|' + normalized;
   });
+
+  console.log("HASH INPUT STRING:", hashData); // Debugging help
 
   return shasum.update(hashData).digest('hex').toUpperCase();
 };
+
 
 const paymentRequest = async (req, res) => {
   const reqData = req.body;
@@ -46,18 +51,40 @@ const paymentRequest = async (req, res) => {
 const paymentResponse = async (req, res) => {
   const reqData = req.body;
 
+  // Log the received data to debug the incoming payment response
+  console.log('Received payment data:', reqData);
+
+  const { udf1: templeId, udf2: templeName, udf3: address } = req.body;
   console.log("Incoming payment response data:", reqData);
 
   const shasum = crypto.createHash('sha512');
-  let hashData = process.env.OMNIWARE_SALT;
-
-  // Construct hash string in key order
-  const keys = Object.keys(reqData).sort();
-  keys.forEach(k => {
-    if (k !== 'hash' && reqData[k]) {
-      hashData += '|' + reqData[k].toString();
+  
+  // Trim spaces and remove any unintended characters in the input parameters
+  const trimValue = (value) => {
+    if (value) {
+      return value.trim().replace(/\s+/g, ' ').replace(/\r?\n|\r/g, '').trim(); // Trims spaces and normalizes internal spaces
     }
-  });
+    return '';
+  };
+
+  const trimmedAmount = trimValue(reqData['amount']);
+  const trimmedTransactionId = trimValue(reqData['transaction_id']);
+  const trimmedCity = trimValue(reqData['city']);
+  const trimmedCountry = trimValue(reqData['country']);
+  const trimmedCurrency = trimValue(reqData['currency']);
+  const trimmedEmail = trimValue(reqData['email']);
+  const trimmedOrderId = trimValue(reqData['order_id']);
+  const trimmedPhone = trimValue(reqData['phone']);
+  const trimmedState = trimValue(reqData['state']);
+  const trimmedAddress = trimValue(reqData['address']);
+
+  // Construct the hash string with trimmed values
+  let hashData = process.env.OMNIWARE_SALT;  // YOUR_SALT from environment variable
+
+  // Use the trimmed values in the hash string
+  hashData += `|x|x|${trimmedAmount}|${trimmedTransactionId}|${trimmedCity}|${trimmedCountry}|${trimmedCurrency}|Annual subscription|${trimmedEmail}|LIVE|x|${trimmedOrderId}|${trimmedPhone}|${process.env.CALLBACK_URL}|${trimmedState}|${trimmedAddress}|x|x|000000`;
+
+  console.log("Hash String:", hashData);  // Log the full hash string for debugging
 
   const calculatedHash = shasum.update(hashData).digest('hex').toUpperCase();
   console.log("Calculated Hash for Response:", calculatedHash);
@@ -78,9 +105,10 @@ const paymentResponse = async (req, res) => {
         amount: parseFloat(reqData['amount']),
         transactionId: reqData['transaction_id'],
         paymentStatus: 'Paid',
-        endDate: endDate 
+        endDate,
+        templeId,     // from udf1
       });
-
+      
       try {
         await subscription.save();
         console.log("✅ Subscription saved successfully");
@@ -102,6 +130,7 @@ const paymentResponse = async (req, res) => {
     return res.status(400).json({ message: "Hash mismatch" });
   }
 };
+
 
 
 

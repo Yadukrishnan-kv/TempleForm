@@ -4,6 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import './SubscriptionPayment.css';
 
+// Function to double trim a string (removes leading/trailing spaces and collapses multiple internal spaces)
+const doubleTrim = (value) => {
+  if (typeof value === 'string') {
+    return value.trim().replace(/\s+/g, ' ');
+  }
+  return value;
+};
+
 const SubscriptionPayment = () => {
   const ip = process.env.REACT_APP_BACKEND_IP;
   const apiKey = process.env.REACT_APP_OMNIWARE_API_KEY;
@@ -52,7 +60,18 @@ const SubscriptionPayment = () => {
         });
 
         const temple = res.data;
-        setTempleDetails(temple);
+
+const cleanedTemple = {
+  name: doubleTrim(temple.name || ''),
+  email: doubleTrim(temple.email || ''),
+  phone: doubleTrim(temple.phone || ''),
+  address: doubleTrim(temple.address || ''),
+  district: doubleTrim(temple.district || ''),
+  state: doubleTrim(temple.state || ''),
+  zip: temple.address?.zip || '000000',
+};
+
+setTempleDetails(cleanedTemple);
 
         setFormData((prevData) => ({
           ...prevData,
@@ -76,15 +95,22 @@ const SubscriptionPayment = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    const sanitizedFormData = {};
+    Object.keys(formData).forEach((key) => {
+      sanitizedFormData[key] = doubleTrim(formData[key]);
+    });
+  
     try {
-      const response = await axios.post(`${ip}/api/payments/paymentRequest`, formData);
-      console.log("Form submitted with data:", formData);
-
+      const response = await axios.post(`${ip}/api/payments/paymentRequest`, sanitizedFormData);
+  
+      console.log("Form submitted with sanitized data:", sanitizedFormData);
+  
       if (response.data.data) {
-        setHash(response.data.data);
+        setHash(response.data.data);  // hash value received from backend
         setTimeout(() => {
           formRef.current.submit();
-        }, 100); // slight delay to ensure DOM is updated
+        }, 100);
       } else {
         alert('Missing required fields!');
       }
@@ -92,7 +118,7 @@ const SubscriptionPayment = () => {
       console.error('Payment request error:', error);
     }
   };
-
+  
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md mt-10">
       <h2 className="text-2xl font-bold mb-6 text-center">Subscription Payment</h2>
@@ -171,5 +197,6 @@ const SubscriptionPayment = () => {
 };
 
 export default SubscriptionPayment;
+
 
 
