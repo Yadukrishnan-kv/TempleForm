@@ -9,13 +9,25 @@ const createPaymentHash = (reqData) => {
   const shasum = crypto.createHash('sha512');
   let hashData = SALT;
 
-  const normalize = (value) =>
-    value ? value.trim().replace(/\s+/g, ' ') : '';
+  const normalize = (value) => value ? value.trim().replace(/\s+/g, ' ') : '';
 
   const hashColumns = [
-    "address_line_1", "address_line_2", "amount", "api_key", "city", "country",
-    "currency", "description", "email", "mode", "name", "order_id", "phone",
-    "return_url", "state", "zip_code"
+    "api_key",
+    "address_line_1",
+    "address_line_2",
+    "amount",
+    "city",
+    "country",
+    "currency",
+    "description",
+    "email",
+    "mode",
+    "name",
+    "order_id",
+    "phone",
+    "return_url",
+    "state",
+    "zip_code"
   ];
 
   hashColumns.forEach(entry => {

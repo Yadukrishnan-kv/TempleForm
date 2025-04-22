@@ -96,24 +96,19 @@ setFormData((prevData) => ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Sanitize all form values before submitting
+  
     const sanitizedFormData = {};
     Object.keys(formData).forEach((key) => {
       sanitizedFormData[key] = doubleTrim(formData[key]);
     });
-
+  
     try {
-      await setFormData(sanitizedFormData); // update state
       const response = await axios.post(`${ip}/api/payments/paymentRequest`, sanitizedFormData);
-            console.log("Form submitted with sanitized data:", sanitizedFormData);
-
+  
+      console.log("Form submitted with sanitized data:", sanitizedFormData);
+  
       if (response.data.data) {
-        setHash(response.data.data);
-
-        // Optionally update local state with sanitized data
-        setFormData(sanitizedFormData);
-
+        setHash(response.data.data);  // hash value received from backend
         setTimeout(() => {
           formRef.current.submit();
         }, 100);
@@ -124,7 +119,7 @@ setFormData((prevData) => ({
       console.error('Payment request error:', error);
     }
   };
-
+  
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md mt-10">
       <h2 className="text-2xl font-bold mb-6 text-center">Subscription Payment</h2>
