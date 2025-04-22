@@ -70,9 +70,9 @@ const paymentResponse = async (req, res) => {
 
       const subscription = new Subscription({
         orderId: reqData['order_id'],
-        templeId: reqData[' address_line_2'],
+        templeId: reqData['address_line_2'],
         templeName: reqData['name'],
-        address: reqData[' address_line_1'],
+        address: reqData['address_line_1'],
         email: reqData['email'],
         number: reqData['phone'],
         amount: parseFloat(reqData['amount']),
