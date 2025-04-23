@@ -2,7 +2,8 @@ const Subscription = require("../Models/Subscription");
 const crypto = require("crypto");
 require("dotenv").config();
 const moment = require('moment');
-
+const { v4: uuidv4 } = require('uuid'); 
+const PDFDocument = require("pdfkit")
 const SALT = process.env.OMNIWARE_SALT;
 
 const createPaymentHash = (reqData) => {
@@ -41,6 +42,11 @@ const paymentRequest = async (req, res) => {
 
   reqData.api_key = apiKey;
 
+  const existingSubscription = await Subscription.findOne({ email });
+
+  if (existingSubscription && new Date(existingSubscription.endDate) > new Date()) {
+    return res.status(400).json({ error: "You are already subscribed. Please wait until the end of your current subscription." });
+  }
   const resultKey = createPaymentHash(reqData);
   return res.json({ data: resultKey });
 };
@@ -53,7 +59,6 @@ const paymentResponse = async (req, res) => {
   const shasum = crypto.createHash('sha512');
   let hashData = process.env.OMNIWARE_SALT;
 
-  // Construct hash string in key order
   const keys = Object.keys(reqData).sort();
   keys.forEach(k => {
     if (k !== 'hash' && reqData[k]) {
@@ -67,8 +72,7 @@ const paymentResponse = async (req, res) => {
   if (reqData['hash'] === calculatedHash) {
     if (reqData['response_code'] === "0") {
       // Payment success
-
-      const endDate = moment().add(30, 'days').toDate(); // Add endDate here
+      const endDate = moment().add(365, 'days').toDate();
 
       const subscription = new Subscription({
         orderId: reqData['order_id'],
@@ -80,28 +84,25 @@ const paymentResponse = async (req, res) => {
         amount: parseFloat(reqData['amount']),
         transactionId: reqData['transaction_id'],
         paymentStatus: 'Paid',
-        endDate: endDate 
+        endDate: endDate
       });
 
       try {
         await subscription.save();
         console.log("✅ Subscription saved successfully");
-        return res.status(201).json({
-          message: "Payment Successful",
-          subscriptionId: subscription._id,
-          transactionId: subscription.transactionId
-        });
+        return res.redirect(`${process.env.FRONTEND_URL}/subscription-success`);
       } catch (error) {
         console.error("❌ Error saving subscription:", error);
-        return res.status(400).json({ message: "Error saving subscription" });
+        // If saving fails, redirect to failure page
+        return res.redirect(`${process.env.FRONTEND_URL}/subscription-failed`);
       }
     } else {
       console.error("❌ Payment Failed:", reqData['response_message']);
-      return res.status(400).json({ message: reqData['response_message'] });
+      return res.redirect(`${process.env.FRONTEND_URL}/subscription-failed`);
     }
   } else {
     console.error("❌ Hash Mismatch!");
-    return res.status(400).json({ message: "Hash mismatch" });
+    return res.redirect(`${process.env.FRONTEND_URL}/subscription-failed`);
   }
 };
 
@@ -117,6 +118,18 @@ const createOfflineSubscription = async (req, res) => {
   try {
     const { templeName, templeId, address, email, number } = req.body;
 
+      // Check if the user already has an active subscription
+      const existingSubscription = await Subscription.findOne({
+        email,
+        templeId,
+        endDate: { $gt: new Date() }, // Check if there is an active subscription (endDate > current date)
+      });
+  
+      if (existingSubscription) {
+        return res.status(400).json({
+          message: "You already have an active subscription. Please renew after the current subscription ends.",
+        });
+      }
     const startDate = new Date();
     const endDate = new Date();
     endDate.setFullYear(endDate.getFullYear() + 1);

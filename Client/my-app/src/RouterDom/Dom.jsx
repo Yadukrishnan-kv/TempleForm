@@ -68,8 +68,8 @@ function Dom() {
         <Route path="/VazhipadForm" element={<><VazhipadForm/></>} />
         <Route path="/VazhipadBookings" element={<><VazhipadBookings/></>} />
         <Route path="/subscriptionPayment" element={ <><SubscriptionPayment/></>} />
-        <Route path="/payment-success" element={<PaymentSuccess />} />
-        <Route path="/payment-failed" element={<PaymentFailed />} />
+        <Route path="/subscription-success" element={<PaymentSuccess />} />
+        <Route path="/subscription-failed" element={<PaymentFailed />} />
 
 
 

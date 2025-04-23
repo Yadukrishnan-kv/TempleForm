@@ -4,6 +4,8 @@ import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import './Offlinesubscription.css';
 import { useLocation } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify'; // Importing toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Import the necessary styles for the toast
 
 function OfflineSubscription() {
   const ip = process.env.REACT_APP_BACKEND_IP;
@@ -50,6 +52,13 @@ function OfflineSubscription() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+     // Check if the user already has an active subscription
+     const existingSubscription = subscriptions.find(sub => sub.email === formData.email && sub.templeId === formData.templeId && new Date(sub.endDate) > new Date());
+
+     if (existingSubscription) {
+       toast.error("You are already subscribed. Please wait until your current subscription ends before subscribing again.");
+       return;
+     }
     try {
       await axios.post(`${ip}/api/payments/create-offlinesubscription`, formData);
       alert('Subscription added successfully!');

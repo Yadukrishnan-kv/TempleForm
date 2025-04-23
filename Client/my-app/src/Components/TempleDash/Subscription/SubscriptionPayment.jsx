@@ -3,6 +3,9 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import './SubscriptionPayment.css';
+import { useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
 
 const SubscriptionPayment = () => {
   const ip = process.env.REACT_APP_BACKEND_IP;
@@ -12,6 +15,7 @@ const SubscriptionPayment = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const formRef = useRef(null);
+  
 
   const [formData, setFormData] = useState({
     amount: '5.05',
@@ -74,8 +78,12 @@ const SubscriptionPayment = () => {
     fetchTemple();
   }, [ip, navigate]);
 
+
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     try {
       const response = await axios.post(`${ip}/api/payments/paymentRequest`, formData);
       console.log("Form submitted with data:", formData);
@@ -89,20 +97,24 @@ const SubscriptionPayment = () => {
         alert('Missing required fields!');
       }
     } catch (error) {
+      if (error.response && error.response.data.error) {
+        toast.error(error.response.data.error); // Show the error message from the backend
+      } else {
+        toast.error("Payment request error: Please try again.");
+      }
       console.error('Payment request error:', error);
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md mt-10">
-      <h2 className="text-2xl font-bold mb-6 text-center">Subscription Payment</h2>
+    <div className="Subscription-container">
+      <h2 className="Subscription-h2">Annual Subscription Payment</h2>
       <form
         ref={formRef}
-        className="subscription-form"
+        className="Subscription-form-container"
         action="https://pgbiz.omniware.in/v2/paymentrequest"
         method="post"
       >
-        <h2 className="form-title">Annual Subscription Payment</h2>
         <input type="hidden" name="api_key" value={apiKey} />
         <input type="hidden" name="hash" value={hash} />
 
@@ -127,13 +139,12 @@ const SubscriptionPayment = () => {
         </div>
 
         <div className="form-group">
-          <label>Address Line 1*</label>
+          <label>Address </label>
           <input type="text" name="address_line_1" value={formData.address_line_1} onChange={handleChange} required />
         </div>
 
         <div className="form-group">
-          <label>Address Line 2</label>
-          <input type="text" name="address_line_2" value={formData.address_line_2} onChange={handleChange} />
+          <input type="hidden"name="address_line_2" value={formData.address_line_2} onChange={handleChange} />
         </div>
 
         <div className="form-group">
@@ -152,7 +163,7 @@ const SubscriptionPayment = () => {
         </div>
 
         <div className="form-group">
-          <label>Zip Code*</label>
+          <label>Pin Code*</label>
           <input type="text" name="zip_code" value={formData.zip_code} onChange={handleChange} required />
         </div>
 
