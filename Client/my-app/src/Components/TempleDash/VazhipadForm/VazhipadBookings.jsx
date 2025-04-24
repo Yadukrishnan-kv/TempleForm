@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"
 import axios from "axios"
 import { toast } from "react-toastify"
 import "./VazhipadBookings.css" // Import the CSS file
+import TemapleDashboard from "../TempleDashboard/TemapleDashboard"
 
 const VazhipadBookings = () => {
   const [bookings, setBookings] = useState([])
@@ -94,7 +95,9 @@ const VazhipadBookings = () => {
   }
 
   return (
-    <div className="app-container">
+    <div>
+      <TemapleDashboard/>
+    <div >
       <div className="content-container">
         <div className="Vazhipadsubmission-page">
           <h2>Temple Bookings</h2>
@@ -175,6 +178,8 @@ const VazhipadBookings = () => {
         </div>
       </div>
     </div>
+    </div>
+
   )
 }
 

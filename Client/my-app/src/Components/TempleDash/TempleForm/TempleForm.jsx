@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import axios from "axios"
 import '../../../Pages/Admin/SortSubmission/SortSubmission.css';
+import TemapleDashboard from "../TempleDashboard/TemapleDashboard";
 
 
 
@@ -163,7 +164,9 @@ function TempleForm() {
   }
 
   return (
-    <div className="submission-page">
+    <div>
+      <TemapleDashboard/>
+    <div>
      <div className="overflow-x-auto ">
         <table className="w-full border-collapse border border-gray-300">
           <thead>
@@ -238,6 +241,7 @@ function TempleForm() {
         </table>
       </div>
     </div>
+     </div>
   )
 }
 

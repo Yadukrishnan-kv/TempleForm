@@ -1,13 +1,59 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import '../../TempleDash/TempleDashboard/TempleDashboard.css'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useLocation } from 'react-router-dom';
+
 import logo1 from '../../../assets/images/logo.png';
+import axios from 'axios';
 
 
 
 function TemapleDashboard() {
       const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    
+      const [profile, setProfile] = useState(null)
+      const [isEditing, setIsEditing] = useState(false)
+      const [fullName, setFullName] = useState("")
+      const [email, setEmail] = useState("")
+      const [password, setPassword] = useState("")
+      const [error, setError] = useState("")
+      const navigate = useNavigate()
+      const location = useLocation();
+
+      const ip = process.env.REACT_APP_BACKEND_IP
+
+
+  useEffect(() => {
+    checkAuthAndFetchProfile()
+  }, [])
+
+  const checkAuthAndFetchProfile = async () => {
+    const token = localStorage.getItem("token")
+    if (!token) {
+      navigate("/Signin")
+      return
+    }
+    await fetchProfile(token)
+  }
+
+  const fetchProfile = async (token) => {
+    try {
+      const response = await axios.get(`${ip}/api/UserRoutes/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      setProfile(response.data)
+      setFullName(response.data.fullName)
+      setEmail(response.data.email)
+    } catch (error) {
+      console.error("Error fetching profile:", error)
+      if (error.response?.status === 401) {
+        localStorage.removeItem("token")
+        navigate("/login")
+      } else {
+        setError("Failed to fetch profile data")
+      }
+    }
+  }
+
+
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
       };
@@ -18,9 +64,13 @@ function TemapleDashboard() {
         window.location.href = '/Signin';
         
       };
+
+
+
+
       return (
     
-   <div>
+   <div class="Templedashcontainerrr">
  
  <div class="Templedashcontainer">
     
@@ -32,31 +82,31 @@ function TemapleDashboard() {
                    height={70}
                  /></div>
       <nav class="Templedashside-menu">
-        <a href="#" class="active"><i class="fa fa-clock"></i> Dashboard</a>
+            <Link to="/TemapleDash" className={`Templedashside-link ${location.pathname === '/TemapleDash' ? 'active' : ''}`} style={{ textDecoration: "none" }}>
+             <i class="fa fa-clock"></i> Dashboard </Link>
         <hr/>
-        <Link to={'/FormDetails'} style={{textDecoration:"none"}}>
-            <a href="#" ><i class="fa fa-plus"></i> Form Details</a>
+            <Link to="/FormDetails" className={`Templedashside-link ${location.pathname === '/FormDetails' ? 'active' : ''}`} style={{ textDecoration: "none" }}>
+         <i class="fa fa-plus"></i> Form Details
         </Link>
-        <Link to={'/PoojaForm'} style={{textDecoration:"none"}}>
-          <a href="#"><i class="fa fa-message"></i> PoojaForm </a>
+        <Link to={'/PoojaForm'} className={`Templedashside-link ${location.pathname === '/PoojaForm' ? 'active' : ''}`} style={{textDecoration:"none"}}>
+         <i class="fa fa-message"></i> Pooja Form 
         </Link>
-        <Link to={'/subscriptionPayment'} style={{textDecoration:"none"}}>
-        <a href="#"><i class="fa fa-list"></i> subscriptionPayment</a>
+        <Link to={'/VazhipadForm'} className={`Templedashside-link ${location.pathname === '/VazhipadForm' ? 'active' : ''}`} style={{textDecoration:"none"}}>
+        <i class="fa fa-star"></i> Vazhipad Form
         </Link>
-        <Link to={'/VazhipadForm'} style={{textDecoration:"none"}}>
-        <a href="#"><i class="fa fa-star"></i> VazhipadForm</a>
+        <Link to={'/VazhipadBookings'} className={`Templedashside-link ${location.pathname === '/VazhipadBookings' ? 'active' : ''}`} style={{textDecoration:"none"}}>
+       <i class="fa fa-calendar"></i> Bookings
         </Link>
-        <Link to={'/VazhipadBookings'} style={{textDecoration:"none"}}>
-        <a href="#"><i class="fa fa-calendar"></i> Bookings</a>
+        <Link to={'/subscriptionPayment'} className={`Templedashside-link ${location.pathname === '/subscriptionPayment' ? 'active' : ''}`} style={{textDecoration:"none"}}>
+        <i class="fa fa-list"></i> subscription
         </Link>
-
-        <Link to={'/UserProfile'} style={{textDecoration:"none"}}>
-             <a href="#"><i class="fa fa-user-edit"></i>Edit Profile</a>
+       
+       
+         <Link to={'/UserProfile'} style={{textDecoration:"none"}}>
+     <i class="fa fa-user-edit"></i>Profile
        </Link>
-        <a href="#"><i class="fa fa-user-edit" onClick={handleLogout} ></i>Logout</a>
-
-
-      </nav>
+        <a href="#" onClick={handleLogout}>Logout</a>
+         </nav>
     </aside>
 
   
@@ -64,43 +114,19 @@ function TemapleDashboard() {
       <header class="Templedashnavbar">
         <button class="menu-toggle"><i class="fa fa-bars"></i></button>
         <nav>
-          <a href="#">Home</a>
-          <a href="#">Dashboard</a>
-          <a href="#">Listing</a>
-          <a href="#">Explore</a>
-          <a href="#">Template</a>
+             <Link to={'/'} style={{textDecoration:"none"}}>Home </Link>
+             <Link to={'/VazhipadBookings'} style={{textDecoration:"none"}}>Dashboard </Link>
+             <Link to={'/about'} style={{textDecoration:"none"}}>
+          About Us </Link>
+             <Link to={'/contact'} style={{textDecoration:"none"}}>Contact Us </Link>
         </nav>
         <div class="Templedashprofile">
-          <i class="fa fa-expand"></i>
-          <i class="fa fa-moon"></i>
-          <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" />
-          <span>Naeem Khan<br/><small>[email protected]</small></span>
+          
+          <span>{fullName}<br/><small>{email}</small></span>
         </div>
       </header>
 
-      <section class="form-section">
-        <h2>Basic Informations</h2>
-        <div class="form-row">
-          <input type="text" placeholder="Listing Title *" />
-          <select>
-            <option>Category *</option>
-          </select>
-        </div>
-        <input type="text" placeholder="Tags *" />
-        <h2>Location</h2>
-        <div class="form-row">
-          <select>
-            <option>Select City *</option>
-          </select>
-          <input type="text" placeholder="8706 Herrick Ave, Valley..." />
-        </div>
-        <div class="form-row">
-          <select>
-            <option>State *</option>
-          </select>
-          <input type="text" placeholder="Zip-Code *" />
-        </div>
-      </section>
+     
     </main>
   </div>
   

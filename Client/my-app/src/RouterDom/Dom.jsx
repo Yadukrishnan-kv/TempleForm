@@ -42,6 +42,7 @@ import SubscriptionPayment from '../Components/TempleDash/Subscription/Subscript
 import OfflineSubscription from '../Pages/Admin/Offlinesubscription/OfflineSubscription'
 import PaymentSuccess from '../Components/TempleDash/Subscription/PaymentSuccess'
 import PaymentFailed from '../Components/TempleDash/Subscription/PaymentFailed'
+import TemapleDash from '../Components/TempleDash/TemapleDash/TemapleDash'
 
 function Dom() {
   return (
@@ -63,7 +64,8 @@ function Dom() {
         <Route path="/userdashboard" element={ <ProtectedRoute allowedRole="1"> <UserDashboard /></ProtectedRoute>}/>
         <Route  path="/TempleDashboard" element={<ProtectedRoute allowedRole="2"><TemapleDashboard/></ProtectedRoute>}/>
         <Route path="/UserProfile" element={<><UserProfile/></>} />
-        <Route path="/FormDetails" element={<TempleForm />} />
+        <Route path="/TemapleDash" element={<TemapleDash/>} />
+         <Route path="/FormDetails" element={<TempleForm />} />
         <Route path="/PoojaForm" element={<><PoojaForm/></>} />
         <Route path="/VazhipadForm" element={<><VazhipadForm/></>} />
         <Route path="/VazhipadBookings" element={<><VazhipadBookings/></>} />

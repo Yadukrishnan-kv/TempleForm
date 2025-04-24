@@ -1,12 +1,12 @@
 .Subscription-container {
   width: 100%;
-  max-width: 800px;
+  max-width: 1250px;
   padding: 20px;
   margin-left: 50px;
   margin-top: 100px;
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 3px 3px rgba(0, 0, 0, 0.1);
 }
 
 .Subscription-h2 {

@@ -24,9 +24,9 @@ function Header() {
 
       <div className="header-right">
        
-        <div className='header-leftdiv'>
+        {/* <div className='header-leftdiv'>
           <button className="icon-button"><IoIosNotificationsOutline /></button>
-        </div>
+        </div> */}
         <div className="user-menu" onClick={() => document.getElementById('dropdown').classList.toggle('show')}>
         <button className="icon-button" style={{fontSize:"28px"}}><FaUserCircle /></button>
         <div id="dropdown" className="dropdown">

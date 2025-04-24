@@ -1,3 +1,14 @@
+
+.Subscription-container1 {
+  width: 100%;
+  max-width: 1230px;
+  padding: 20px;
+  margin-left: 270px;
+  margin-top: 30px;
+  background-color: #f4f7fb;
+    border-radius: 8px;
+  box-shadow: 0 3px 3px 3px rgba(0, 0, 0, 0.1);}
+
 .subscription-form {
     max-width: 500px;
     margin: 40px auto;
@@ -7,26 +18,26 @@
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
   
-  .form-title {
+  .subscriptionform-title {
     text-align: center;
     color: #2c3e50;
     margin-bottom: 20px;
   }
   
-  .form-group {
+  .subscriptionform-group {
     margin-bottom: 15px;
     display: flex;
     flex-direction: column;
   }
   
-  .form-group label {
+  .subscriptionform-group label {
     font-weight: 600;
     color: #333;
     margin-bottom: 6px;
   }
   
-  .form-group input[type="text"],
-  .form-group input[type="email"] {
+  .subscriptionform-group input[type="text"],
+  .subscriptionform-group input[type="email"] {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 6px;
@@ -34,12 +45,12 @@
     transition: border-color 0.3s ease;
   }
   
-  .form-group input:focus {
+  .subscriptionform-group input:focus {
     border-color: #3498db;
     outline: none;
   }
   
-  .submit-btn {
+  .subscriptionsubmit-btn {
     background-color: #2ecc71;
     color: white;
     padding: 12px 20px;
@@ -50,7 +61,53 @@
     transition: background-color 0.3s ease;
   }
   
-  .submit-btn:hover {
+  .subscriptionsubmit-btn:hover {
     background-color: #27ae60;
   }
-  
+  .subscription-details {
+  margin-top: 20px;
+}
+
+.subscription-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.subscription-table th,
+.subscription-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.subscription-table th {
+  background-color: #f5f5f5;
+}
+.subscriptiontoggle-button-container {
+  margin-bottom: 20px;
+}
+
+.subscriptiontoggle-btn {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.subscription-details-table {
+  margin-top: 30px;
+}
+
+.subscription-details-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.subscription-details-table th,
+.subscription-details-table td {
+  padding: 10px;
+  text-align: center;
+}

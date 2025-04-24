@@ -3,7 +3,9 @@ const crypto = require("crypto");
 require("dotenv").config();
 const moment = require('moment');
 const { v4: uuidv4 } = require('uuid'); 
-const PDFDocument = require("pdfkit")
+const PDFDocument = require("pdfkit");
+const fs = require("fs");
+const path = require("path");
 const SALT = process.env.OMNIWARE_SALT;
 
 const createPaymentHash = (reqData) => {
@@ -45,7 +47,7 @@ const paymentRequest = async (req, res) => {
   const existingSubscription = await Subscription.findOne({ email });
 
   if (existingSubscription && new Date(existingSubscription.endDate) > new Date()) {
-    return res.status(400).json({ error: "You are already subscribed. Please wait until the end of your current subscription." });
+    return res.status(400).json({ error: "Already Subscribed.Come back when it ends" });
   }
   const resultKey = createPaymentHash(reqData);
   return res.json({ data: resultKey });
@@ -105,6 +107,8 @@ const paymentResponse = async (req, res) => {
     return res.redirect(`${process.env.FRONTEND_URL}/subscription-failed`);
   }
 };
+
+
 
 
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import TemapleDashboard from "../TempleDashboard/TemapleDashboard"
 
 const VazhipadForm = () => {
   const ip = process.env.REACT_APP_BACKEND_IP
@@ -107,10 +108,11 @@ const VazhipadForm = () => {
   }
 
   return (
-    <div className="app-container">
+    <div>
+      <TemapleDashboard/>
+    <div >
       <div className="content-container">
         <div className="Vazhipadsubmission-page">
-          <h2>Vazhipad Management for {templeInfo.name}</h2>
 
           {!showForm && (
             <button className="add-button" onClick={() => setShowForm(true)}>
@@ -189,6 +191,8 @@ const VazhipadForm = () => {
         </div>
       </div>
     </div>
+    </div>
+
   )
 }
 

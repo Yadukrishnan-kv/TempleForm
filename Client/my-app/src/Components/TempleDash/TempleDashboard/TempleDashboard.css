@@ -1,8 +1,4 @@
 
-  body {
-    background-color: #fdf9f7;
-    color: #333;
-  }
   
   .Templedashcontainer {
     display: flex;
@@ -35,6 +31,8 @@
     text-decoration: none;
     transition: background 0.3s;
     border-radius: 10px;
+    margin-top: 15px;
+
   }
   .Templedashside-menu a:hover, .Templedashside-menu a.active {
     background: #ffeae5;
@@ -116,3 +114,10 @@
     border-radius: 8px;
   }
   
+
+  .Templedashside-link.active {
+    background-color: #f97316; /* Tailwind orange-500 */
+    color: white;
+    border-radius: 8px;
+    padding: 8px;
+  }

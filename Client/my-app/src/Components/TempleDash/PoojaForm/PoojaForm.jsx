@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import "./Pooja.css"
+import TemapleDashboard from "../TempleDashboard/TemapleDashboard"
 
 const PoojaForm = () => {
   const ip = process.env.REACT_APP_BACKEND_IP
@@ -119,7 +120,10 @@ const PoojaForm = () => {
   }
 
   return (
-    <div className="app-container">
+    <div>
+      <TemapleDashboard/>
+  
+    <div >
       <div className="content-container">
         <div className="Vazhipadsubmission-page">
           {/* <h2>Pooja Management for {templeInfo.name}</h2> */}
@@ -216,6 +220,7 @@ const PoojaForm = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

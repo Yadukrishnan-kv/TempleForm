@@ -154,7 +154,7 @@ function OfflineSubscription() {
                     <td>{sub.paymentStatus}</td>
                     <td>
                       <button onClick={() => downloadInvoice(sub._id)} className="Subscription-button">
-                        Download Invoice
+                        Download 
                       </button>
                     </td>
                   </tr>
