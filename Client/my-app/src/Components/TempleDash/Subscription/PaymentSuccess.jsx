@@ -5,6 +5,7 @@ import "./PaymentSuccess.css"
 const PaymentSuccess = () => {
   const navigate = useNavigate()
   const [countdown, setCountdown] = useState(5)
+  const [confirmationNumber] = useState(() => `TRX${Math.floor(Math.random() * 1000000)}`)
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -45,7 +46,7 @@ const PaymentSuccess = () => {
           <div className="divider"></div>
           <div className="confirmation-number">
             <span>Confirmation #:</span>
-            <span className="confirmation-value">TRX{Math.floor(Math.random() * 1000000)}</span>
+            <span className="confirmation-value">{confirmationNumber}</span>
           </div>
         </div>
 
@@ -61,13 +62,9 @@ const PaymentSuccess = () => {
         </button>
 
         <div className="additional-links">
-          <a href="/account" className="text-link">
-            View Account
-          </a>
+          <a href="/account" className="text-link">View Account</a>
           <span className="separator">•</span>
-          <a href="/support" className="text-link">
-            Need Help?
-          </a>
+          <a href="/support" className="text-link">Need Help?</a>
         </div>
       </div>
     </div>
