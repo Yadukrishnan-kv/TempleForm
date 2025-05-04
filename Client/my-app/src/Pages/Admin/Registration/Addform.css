@@ -1,14 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
 
-body {
-  margin: 0;
-  overflow-x: hidden; /* Prevent horizontal scrollbar */
-  font-family: Arial, sans-serif;
-}
 
 .form-container {
   max-width: 800px;
@@ -17,7 +7,7 @@ body {
   background-color: #f0f0f0;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  margin-top: 90px;
+  margin-top: 50px;
   
 }
 

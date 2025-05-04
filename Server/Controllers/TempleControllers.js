@@ -127,7 +127,7 @@ const sortTemples = async (req, res) => {
 
 const verifyTemple = async (req, res) => {
   const { templeId } = req.params;
-  const { isVerified, verifiedBy, enabled, show } = req.body;
+  const { isVerified, verifiedBy,subscriped, enabled, show } = req.body;
 
   try {
     const temple = await TempleCollection.findByIdAndUpdate(
@@ -136,6 +136,7 @@ const verifyTemple = async (req, res) => {
         isVerified,
         verificationDate: isVerified ? new Date() : null,
         verifiedBy: isVerified ? verifiedBy : null,
+        subscriped,
         enabled,
         show
       },
@@ -151,6 +152,8 @@ const verifyTemple = async (req, res) => {
     res.status(400).send(error);
   }
 };
+
+
 const getTemplesByDistrict = async (req, res) => {
   const { district } = req.params;
   try {

@@ -13,7 +13,7 @@ import { Phone } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="footer-dark main-footer overflow-hidden position-relative pt-5">
+    <footer className="footer-dark main-footer overflow-hidden position-relative pt-5 mt-5">
       <div className="container pt-4">
         {/* App Download Section */}
         <div className="py-5">

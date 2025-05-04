@@ -16,7 +16,16 @@ const TemplePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
   const [districts, setDistricts] = useState([]);
-  
+  const [selectedTempleType, setSelectedTempleType] = useState('');
+ 
+  const [templeTypes, setTempleTypes] = useState([
+                { en: "Madam", ml: "മാഡം" },
+                { en: "Kudumbakshetram", ml: "കുടുംബക്ഷേത്രം" },
+                { en: "Bajanamadam", ml: "ഭജനമാഡം" },
+                { en: "Sevagramam", ml: "സേവാഗ്രാമം" },
+                { en: "Kaavukal", ml: "കാവ്" },
+                { en: "Sarppakaav", ml: "സാർപ്പകാവ്" },
+  ]);
   const ip = process.env.REACT_APP_BACKEND_IP;
 
   useEffect(() => {
@@ -75,10 +84,29 @@ const TemplePage = () => {
     }
   };
 
+  const fetchTemples = async (filters = {}) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${ip}/api/temples/sort`, {
+        params: {
+         
+          templeType: filters.templeType,
+        }
+      });
+      setTemples(response.data || []);
+    } catch (error) {
+      console.error("Error fetching temples:", error);
+      setError('Failed to fetch temples');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const filteredTemples = temples.filter(temple => {
     const matchesSearch = temple.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesLocation = !selectedLocation || temple.district === selectedLocation;
-    return matchesSearch && matchesLocation;
+    const matchesTempleType = !selectedTempleType || temple.templeType === selectedTempleType;
+    return matchesSearch && matchesLocation && matchesTempleType;
   });
 
   return (
@@ -131,6 +159,22 @@ const TemplePage = () => {
                     ))}
                   </select>
                 </div>
+                <div className="divider" />
+
+              <div className="search-field">
+              <select 
+              className="search-select"
+            value={selectedTempleType}
+              onChange={(e) => setSelectedTempleType(e.target.value)}
+  >
+    <option value="">All Temple Types</option>
+    {templeTypes.map(type => (
+      <option key={type.ml} value={type.ml}>
+        {type.en} / {type.ml}
+      </option>
+    ))}
+  </select>
+</div>
 
                 <button type="submit" className="search-button1">
                   Search temples

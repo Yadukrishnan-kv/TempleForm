@@ -27,7 +27,7 @@ const ExploreCities = () => {
       setLoading(true);
       const response = await axios.get(`${ip}/api/temples/sort`);
       const filteredTemples = response.data.filter(temple =>
-        temple.isVerified && temple.enabled && temple.show
+        temple.isVerified &&  temple.subscriped && temple.enabled && temple.show
       );
 
       const templesWithImages = await Promise.all(

@@ -231,7 +231,7 @@ const SortSubmission = () => {
     setExpandedTemple(expandedTemple === templeId ? null : templeId);
   };
 
-  const handleVerification = async (templeId, isVerified, enabled, show) => { // Updated handleVerification function
+  const handleVerification = async (templeId, isVerified,subscriped, enabled, show) => { // Updated handleVerification function
     try {
       setVerifying(true);
       const username = localStorage.getItem('username') || 'Admin';
@@ -239,7 +239,7 @@ const SortSubmission = () => {
       await axios.put(`${ip}/api/temples/${templeId}/verify`, {
         isVerified,
         verifiedBy: username,
-        enabled,
+        enabled,subscriped,
         show
       });
   
@@ -417,7 +417,8 @@ const SortSubmission = () => {
                                     type="radio"
                                     name={`verify-${temple._id}`}
                                     checked={temple.isVerified === true}
-                                    onChange={() => handleVerification(temple._id, true, temple.enabled, temple.show)} // Updated onChange handler
+                                    onChange={() => handleVerification(temple._id, true, temple.subscriped, temple.enabled, temple.show)}
+
                                     disabled={verifying}
                                   />
                                   Verify
@@ -427,10 +428,37 @@ const SortSubmission = () => {
                                     type="radio"
                                     name={`verify-${temple._id}`}
                                     checked={temple.isVerified === false}
-                                    onChange={() => handleVerification(temple._id, false, temple.enabled, temple.show)} // Updated onChange handler
+                                    onChange={() => handleVerification(temple._id, false, temple.subscriped, temple.enabled, temple.show)}
+
                                     disabled={verifying}
                                   />
                                   Reject
+                                </label>
+                              </div>
+
+
+                              <div className="verification-radio-group">
+                                <label>
+                                  <input
+                                    type="radio"
+                                    name={`subscriped-${temple._id}`}
+                                    checked={temple.subscriped === true}
+                                    onChange={() => handleVerification(temple._id, temple.isVerified, true, temple.enabled, temple.show)}
+
+                                    disabled={verifying}
+                                  />
+                                  subscriped
+                                </label>
+                                <label>
+                                  <input
+                                    type="radio"
+                                    name={`subscriped-${temple._id}`}
+                                    checked={temple.subscriped === false}
+                                    onChange={() => handleVerification(temple._id, temple.isVerified, false, temple.enabled, temple.show)}
+
+                                    disabled={verifying}
+                                  />
+                                  Not subscriped
                                 </label>
                               </div>
                               <div className="verification-radio-group"> {/* Added enable/disable radio buttons */}
@@ -439,7 +467,8 @@ const SortSubmission = () => {
                                     type="radio"
                                     name={`enable-${temple._id}`}
                                     checked={temple.enabled === true}
-                                    onChange={() => handleVerification(temple._id, temple.isVerified, true, temple.show)}
+                                    onChange={() => handleVerification(temple._id, temple.isVerified, temple.subscriped, true, temple.show)}
+
                                     disabled={verifying}
                                   />
                                   Enable
@@ -449,7 +478,8 @@ const SortSubmission = () => {
                                     type="radio"
                                     name={`enable-${temple._id}`}
                                     checked={temple.enabled === false}
-                                    onChange={() => handleVerification(temple._id, temple.isVerified, false, temple.show)}
+                                    onChange={() => handleVerification(temple._id, temple.isVerified, temple.subscriped, false, temple.show)}
+
                                     disabled={verifying}
                                   />
                                   Disable
@@ -461,7 +491,8 @@ const SortSubmission = () => {
                                     type="radio"
                                     name={`show-${temple._id}`}
                                     checked={temple.show === true}
-                                    onChange={() => handleVerification(temple._id, temple.isVerified, temple.enabled, true)}
+                                    onChange={() => handleVerification(temple._id, temple.isVerified, temple.subscriped, temple.enabled, true)}
+
                                     disabled={verifying}
                                   />
                                   Show
@@ -471,7 +502,8 @@ const SortSubmission = () => {
                                     type="radio"
                                     name={`show-${temple._id}`}
                                     checked={temple.show === false}
-                                    onChange={() => handleVerification(temple._id, temple.isVerified, temple.enabled, false)}
+                                    onChange={() => handleVerification(temple._id, temple.isVerified, temple.subscriped, temple.enabled, false)}
+
                                     disabled={verifying}
                                   />
                                   Not Show

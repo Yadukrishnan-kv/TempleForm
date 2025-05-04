@@ -18,10 +18,10 @@ function Navbar() {
     const currentPath = location.pathname;
     if (currentPath.includes('about')) {
       setActiveLink('about');
-    } else if (currentPath.includes('TemplePage')) {
-      setActiveLink('temples');
+    
     } else if (currentPath.includes('contact')) {
       setActiveLink('contact');
+   
     } else {
       setActiveLink('home');
     }
@@ -106,7 +106,19 @@ function Navbar() {
                 Home
               </a>
             </li>
-           
+            <li className="nav-item ">
+                    <a className={`nav-link dropdown-toggle ${openDropdowns.TemplePage ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('TemplePage')}>Temples<IoMdArrowDropdown />
+                    </a>
+                    <ul className={`dropdown-menu ${openDropdowns.TemplePage ? 'show' : ''}`}>
+                                <li><a className="dropdown-item" href="#">Madam</a></li>
+                                <li><a className="dropdown-item" href="#">Kudumbakshetram </a></li>
+                                <li><a className="dropdown-item" href="#">Bajanamadam </a></li>
+                                <li><a className="dropdown-item" href="#">Sevagramam </a></li>
+                                <li><a className="dropdown-item" href="#">Kaavukal</a></li>
+                                <li><a className="dropdown-item" href="#">Sarppakaav </a></li>
+
+                            </ul>
+            </li>
             <li className="nav-item ">
                     <a className={`nav-link dropdown-toggle ${openDropdowns.Ritrials ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('Ritrials')}>Ritrials<IoMdArrowDropdown />
                     </a>
@@ -117,15 +129,15 @@ function Navbar() {
                                 <li><a className="dropdown-item" href="#">Kriyas </a></li>
 
                             </ul>
-                    </li>
-                    <li className="nav-item ">
+            </li>
+            <li className="nav-item ">
             <a className={`nav-link dropdown-toggle ${openDropdowns.Padashala ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('Padashala')}>Padashala<IoMdArrowDropdown />
             </a>
             <ul className={`dropdown-menu ${openDropdowns.Padashala ? 'show' : ''}`}>
             <li><a className="dropdown-item" href="#">Youtube</a></li>
             <li><a className="dropdown-item" href="#">Sound Cloud</a></li>
                             </ul>
-                    </li>
+              </li>
             <li className="nav-item ">
             <a className={`nav-link dropdown-toggle ${openDropdowns.wisdom ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('wisdom')}>Wisdom<IoMdArrowDropdown />
             </a>

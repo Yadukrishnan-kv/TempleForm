@@ -22,6 +22,8 @@ app.get('/api/ping', (req, res) => {
 
 const TempleRoutes = require('./Routes/TempleRoutes');
 app.use("/api/temples", TempleRoutes);
+const NewFormRoutes = require('./Routes/NewFormRoutes');
+app.use("/api/newForm", NewFormRoutes);
 const AdminLoginRoutes = require('./Routes/AdminLoginRoutes');
 app.use("/api/adminlogin", AdminLoginRoutes);
 const stateRoutes = require('./Routes/StateRoutes');

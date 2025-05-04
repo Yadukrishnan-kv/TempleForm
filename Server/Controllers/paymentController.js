@@ -155,6 +155,7 @@ const createOfflineSubscription = async (req, res) => {
       gst: 180,
       totalAmount: 1180,
       paymentStatus: "Paid", // ✅ SET TO PAID
+      
     });
 
     await subscription.save();
@@ -179,6 +180,19 @@ const getSubscriptionByEmail = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+const getAllSubscriptions = async (req, res) => {
+  try {
+    const subscriptions = await Subscription.find();
+    if (!subscriptions.length) {
+      return res.status(404).json({ message: 'No subscriptions found' });
+    }
+    res.status(200).json(subscriptions);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 
 
@@ -353,5 +367,5 @@ const getInvoiceNumber = (req, res) => {
 module.exports = {
   paymentRequest,
   paymentResponse,
-  createOfflineSubscription,getSubscriptionByEmail,downloadInvoice,getInvoiceNumber
+  createOfflineSubscription,getSubscriptionByEmail,downloadInvoice,getInvoiceNumber,getAllSubscriptions
 }

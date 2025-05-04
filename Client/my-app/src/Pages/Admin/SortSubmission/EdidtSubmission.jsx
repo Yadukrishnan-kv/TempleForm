@@ -1,8 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
-import Header from '../Header/Header';
-import Sidebar from '../Sidebar/Sidebar';
+
 import { toast } from 'react-toastify';
 
 
@@ -445,23 +444,77 @@ function EditSubmission() {
           />
         </div>
         <div>
-          <label className="form-label">ദേശക്ഷേത്ര വിവരം</label>
-          <div className="form-radio-group">
-            {['ദേശക്ഷേത്രം', 'മഹാക്ഷേത്രം', 'കുടുംബക്ഷേത്രം', 'കാവ്', 'മറ്റ്'].map((option) => (
-              <label key={option} className="form-radio-label">
-                <input 
-                  type="radio" 
-                  name="templeType" 
-                  value={option} 
-                  checked={formData.templeType === option}
-                  onChange={handleInputChange}
-                  className="form-radio" 
-                />
-                <span className="ml-2">{option}</span>
-              </label>
-            ))}
-          </div>
-        </div>
+  <label className="form-label">
+    Temple Type <span className="malayalam-text">(ക്ഷേത്ര വിവരം)</span>
+  </label>
+  <div className="form-radio-group">
+    <label className="form-radio-label flex items-center gap-2 mb-2">
+      <input
+        type="radio"
+        name="templeType"
+        value="Madam"
+        checked={formData.templeType === "Madam"}
+        onChange={handleInputChange}
+      />
+      <span>Madam(മാഡം)</span>
+    </label>
+
+    <label className="form-radio-label flex items-center gap-2 mb-2">
+      <input
+        type="radio"
+        name="templeType"
+        value="Kudumbakshetram"
+        checked={formData.templeType === "Kudumbakshetram"}
+        onChange={handleInputChange}
+      />
+      <span>Kudumbakshetram(കുടുംബക്ഷേത്രം)</span>
+    </label>
+
+    <label className="form-radio-label flex items-center gap-2 mb-2">
+      <input
+        type="radio"
+        name="templeType"
+        value="Bajanamadam"
+        checked={formData.templeType === "Bajanamadam"}
+        onChange={handleInputChange}
+      />
+      <span>Bajanamadam(ഭജനമാഡം)</span>
+    </label>
+
+    <label className="form-radio-label flex items-center gap-2 mb-2">
+      <input
+        type="radio"
+        name="templeType"
+        value="Sevagramam"
+        checked={formData.templeType === "Sevagramam"}
+        onChange={handleInputChange}
+      />
+      <span>Sevagramam(സേവാഗ്രാമം)</span>
+    </label>
+
+    <label className="form-radio-label flex items-center gap-2 mb-2">
+      <input
+        type="radio"
+        name="templeType"
+        value="Kaavukal"
+        checked={formData.templeType === "Kaavukal"}
+        onChange={handleInputChange}
+      />
+      <span>Kaavukal(കാവ്)</span>
+    </label>
+
+    <label className="form-radio-label flex items-center gap-2 mb-2">
+      <input
+        type="radio"
+        name="templeType"
+        value="Sarppakaav"
+        checked={formData.templeType === "Sarppakaav"}
+        onChange={handleInputChange}
+      />
+      <span>Sarppakaav(സാർപ്പകാവ്)</span>
+    </label>
+  </div>
+</div>
         <div>
           <label className="form-label">ലൊക്കേഷൻ സ്കെച്ച്</label>
           <textarea 

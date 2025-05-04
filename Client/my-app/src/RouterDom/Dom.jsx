@@ -43,6 +43,10 @@ import OfflineSubscription from '../Pages/Admin/Offlinesubscription/OfflineSubsc
 import PaymentSuccess from '../Components/TempleDash/Subscription/PaymentSuccess'
 import PaymentFailed from '../Components/TempleDash/Subscription/PaymentFailed'
 import TemapleDash from '../Components/TempleDash/TemapleDash/TemapleDash'
+import NewForm from '../Components/Form/NewForm'
+import NewForms from '../Pages/Admin/NewForm/NewForms'
+import ListNewForm from '../Pages/Admin/NewForm/ListNewForm'
+import SubscriptionDetails from '../Pages/Admin/SubscriptionDetails/SubscriptionDetails'
 
 function Dom() {
   return (
@@ -51,9 +55,11 @@ function Dom() {
         <Route path="/" element={<MainPage />} />
 
         <Route path="/form" element={<Form />} />
+        <Route path="/newForm" element={<NewForm />} />
         <Route path="/AdminLogin" element={<LoginPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/TemplePage" element={<TemplePage />} />
+        <Route path="/TemplePage/:templeType?" element={<TemplePage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/TempleDetails/:templeId" element={<TempleDetails />} />
         <Route path="/Signup" element={<><Signup/></>} />
@@ -72,10 +78,6 @@ function Dom() {
         <Route path="/subscriptionPayment" element={ <><SubscriptionPayment/></>} />
         <Route path="/subscription-success" element={<PaymentSuccess />} />
         <Route path="/subscription-failed" element={<PaymentFailed />} />
-
-
-
-
         <Route path="/TempleDash-Edit/:id" element={<><TempleFormEdit/></>} />
         <Route path="/TempleDash-AboutTemple/:templeId" element={<><TempleFormAbout/></>} />
         <Route path="/TempleDash-gallery/:templeId" element={<><TempleFormGallery/></>} />
@@ -94,6 +96,9 @@ function Dom() {
         <Route element={<ProtectedRoute />}>
           <Route path="/Dashboard" element={<DashBoard />} />
           <Route path="/admin/profile" element={<AdminProfile />} />
+          <Route path="/admin/newForm" element={<ListNewForm />} />
+          <Route path="/admin/newFormrole" element={<NewForms />} />
+
           <Route path="/AddSubmission" element={<Addform />} />
           <Route path="/SortSubmission" element={<SortSubmission />} />
           <Route path="/gallery/:templeId" element={<GalleryPage />} />
@@ -109,6 +114,7 @@ function Dom() {
           <Route path="/usersrole" element={<UserRole/>} />
           <Route path="/log" element={<><Log/></>} />
           <Route path="/AllUsersList" element={<><AllUsersList/></>} />
+          <Route path="admin/subscription" element={<SubscriptionDetails />} />
           <Route path="/subscriptionoffline/:templeId" element={<><OfflineSubscription/></>} />
           
 

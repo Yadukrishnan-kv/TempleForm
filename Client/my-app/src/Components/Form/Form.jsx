@@ -3,6 +3,8 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import "./Form.css"
 import { toast } from "react-toastify"
+import Footer from "../HomePage/Footer"
+import Navbar from "../HomePage/Navbar"
 
 function Form() {
   const navigate = useNavigate()
@@ -15,9 +17,7 @@ function Form() {
   const [selectedDistrict, setSelectedDistrict] = useState("")
   const [selectedTaluk, setSelectedTaluk] = useState("")
   const [loading, setLoading] = useState(false)
-  // Fix 1: Remove unused error state or use it somewhere
-  // const [error, setError] = useState("")
-  const [setError] = useState("") // Changed to only destructure the setter
+  const [setError] = useState("") 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -33,7 +33,7 @@ function Form() {
     email: "",
     password: "",
     role: "2",
-    website: "", // This field is now optional
+    website: "", 
     templeType: "",
     locationSketch: "",
     history: "",
@@ -153,13 +153,10 @@ function Form() {
     }
   }
 
-  // Fix 2: Add fetchStates to the dependency array
+ 
   useEffect(() => {
     fetchStates()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
-  // Alternative fix would be to add fetchStates to the dependency array,
-  // but since it's defined in the component, it would cause an infinite loop
-  // unless wrapped in useCallback. Using the eslint-disable comment is simpler.
+  }, []) 
 
   const handleStateChange = (e) => {
     const stateId = e.target.value
@@ -230,6 +227,7 @@ function Form() {
   }
   return (
     <div>
+            <Navbar />
       <div className="form-container">
         <h1 className="form-title">ക്ഷേത്രേശ്രീ ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
         <p className="form-group">കാലടി - 683 574., ഫോൺ : 9847047963</p>
@@ -455,33 +453,79 @@ function Form() {
             />
           </div>
           <div>
-            <label className="form-label">
-              Temple Type <span className="malayalam-text">(ദേശക്ഷേത്ര വിവരം)</span>
-            </label>
-            <div className="form-radio-group">
-              {[
-                { en: "Regional Temple", ml: "ദേശക്ഷേത്രം" },
-                { en: "Great Temple", ml: "മഹാക്ഷേത്രം" },
-                { en: "Family Temple", ml: "കുടുംബക്ഷേത്രം" },
-                { en: "Sacred Grove", ml: "കാവ്" },
-                { en: "Other", ml: "മറ്റ്" },
-              ].map((option) => (
-                <label key={option.ml} className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="templeType"
-                    value={option.ml}
-                    checked={formData.templeType === option.ml}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">
-                    {option.en} / {option.ml}
-                  </span>
-                </label>
-              ))}
-            </div>
-          </div>
+  <label className="form-label">
+    Temple Type <span className="malayalam-text">(ക്ഷേത്ര വിവരം)</span>
+  </label>
+  <div className="form-radio-group">
+    <label className="form-radio-label flex items-center gap-2 mb-2">
+      <input
+        type="radio"
+        name="templeType"
+        value="Madam"
+        checked={formData.templeType === "Madam"}
+        onChange={handleChange}
+      />
+      <span>Madam(മാഡം)</span>
+    </label>
+
+    <label className="form-radio-label flex items-center gap-2 mb-2">
+      <input
+        type="radio"
+        name="templeType"
+        value="Kudumbakshetram"
+        checked={formData.templeType === "Kudumbakshetram"}
+        onChange={handleChange}
+      />
+      <span>Kudumbakshetram(കുടുംബക്ഷേത്രം)</span>
+    </label>
+
+    <label className="form-radio-label flex items-center gap-2 mb-2">
+      <input
+        type="radio"
+        name="templeType"
+        value="Bajanamadam"
+        checked={formData.templeType === "Bajanamadam"}
+        onChange={handleChange}
+      />
+      <span>Bajanamadam(ഭജനമാഡം)</span>
+    </label>
+
+    <label className="form-radio-label flex items-center gap-2 mb-2">
+      <input
+        type="radio"
+        name="templeType"
+        value="Sevagramam"
+        checked={formData.templeType === "Sevagramam"}
+        onChange={handleChange}
+      />
+      <span>Sevagramam(സേവാഗ്രാമം)</span>
+    </label>
+
+    <label className="form-radio-label flex items-center gap-2 mb-2">
+      <input
+        type="radio"
+        name="templeType"
+        value="Kaavukal"
+        checked={formData.templeType === "Kaavukal"}
+        onChange={handleChange}
+      />
+      <span>Kaavukal(കാവ്)</span>
+    </label>
+
+    <label className="form-radio-label flex items-center gap-2 mb-2">
+      <input
+        type="radio"
+        name="templeType"
+        value="Sarppakaav"
+        checked={formData.templeType === "Sarppakaav"}
+        onChange={handleChange}
+      />
+      <span>Sarppakaav(സാർപ്പകാവ്)</span>
+    </label>
+  </div>
+</div>
+
+
           <div>
             <label className="form-label">
               Location Sketch <span className="malayalam-text">(ലൊക്കേഷൻ സ്കെച്ച്)</span>
@@ -683,7 +727,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">Yes / ഉണ്ട്</span>
+                  <span className="ml-2">Yes </span>
                 </label>
                 <label className="form-radio-label">
                   <input
@@ -694,7 +738,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">No / ഇല്ല</span>
+                  <span className="ml-2">No </span>
                 </label>
               </div>
             </div>
@@ -712,7 +756,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">Yes / ഉണ്ട്</span>
+                  <span className="ml-2">Yes </span>
                 </label>
                 <label className="form-radio-label">
                   <input
@@ -723,7 +767,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">No / ഇല്ല</span>
+                  <span className="ml-2">No </span>
                 </label>
               </div>
             </div>
@@ -741,7 +785,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">Yes / ഉണ്ട്</span>
+                  <span className="ml-2">Yes </span>
                 </label>
                 <label className="form-radio-label">
                   <input
@@ -752,7 +796,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">No / ഇല്ല</span>
+                  <span className="ml-2">No </span>
                 </label>
               </div>
             </div>
@@ -771,7 +815,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">Yes / ഉണ്ട്</span>
+                  <span className="ml-2">Yes </span>
                 </label>
                 <label className="form-radio-label">
                   <input
@@ -782,7 +826,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">No / ഇല്ല</span>
+                  <span className="ml-2">No </span>
                 </label>
               </div>
             </div>
@@ -800,7 +844,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">Yes / ഉണ്ട്</span>
+                  <span className="ml-2">Yes </span>
                 </label>
                 <label className="form-radio-label">
                   <input
@@ -811,7 +855,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">No / ഇല്ല</span>
+                  <span className="ml-2">No </span>
                 </label>
               </div>
             </div>
@@ -959,7 +1003,7 @@ function Form() {
                   onChange={handleChange}
                   className="form-radio"
                 />
-                <span className="ml-2">Permanent / സ്ഥിരം</span>
+                <span className="ml-2">Permanent(സ്ഥിരം)</span>
               </label>
               <label className="form-radio-label">
                 <input
@@ -970,7 +1014,7 @@ function Form() {
                   onChange={handleChange}
                   className="form-radio"
                 />
-                <span className="ml-2">Temporary / അസ്ഥിരം</span>
+                <span >Temporary(അസ്ഥിരം)</span>
               </label>
             </div>
             <div className="mt-2">
@@ -1007,8 +1051,8 @@ function Form() {
                   onChange={handleChange}
                   className="form-radio"
                 />
-                <span className="ml-2">Permanent / സ്ഥിരം</span>
-              </label>
+                <span className="ml-2">Permanent(സ്ഥിരം)</span>
+                </label>
               <label className="form-radio-label">
                 <input
                   type="radio"
@@ -1018,8 +1062,8 @@ function Form() {
                   onChange={handleChange}
                   className="form-radio"
                 />
-                <span className="ml-2">Temporary / അസ്ഥിരം</span>
-              </label>
+                <span >Temporary(അസ്ഥിരം)</span>
+                </label>
             </div>
             <div className="mt-2">
               <label className="form-label">
@@ -1055,8 +1099,8 @@ function Form() {
                   onChange={handleChange}
                   className="form-radio"
                 />
-                <span className="ml-2">Permanent / സ്ഥിരം</span>
-              </label>
+                <span className="ml-2">Permanent(സ്ഥിരം)</span>
+                </label>
               <label className="form-radio-label">
                 <input
                   type="radio"
@@ -1066,8 +1110,8 @@ function Form() {
                   onChange={handleChange}
                   className="form-radio"
                 />
-                <span className="ml-2">Temporary / അസ്ഥിരം</span>
-              </label>
+                <span >Temporary(അസ്ഥിരം)</span>
+                </label>
             </div>
             <div className="mt-2">
               <label className="form-label">
@@ -1103,8 +1147,8 @@ function Form() {
                   onChange={handleChange}
                   className="form-radio"
                 />
-                <span className="ml-2">Permanent / സ്ഥിരം</span>
-              </label>
+                <span className="ml-2">Permanent(സ്ഥിരം)</span>
+                </label>
               <label className="form-radio-label">
                 <input
                   type="radio"
@@ -1114,8 +1158,8 @@ function Form() {
                   onChange={handleChange}
                   className="form-radio"
                 />
-                <span className="ml-2">Temporary / അസ്ഥിരം</span>
-              </label>
+                <span >Temporary(അസ്ഥിരം)</span>
+                </label>
             </div>
             <div className="mt-2">
               <label className="form-label">
@@ -1151,8 +1195,8 @@ function Form() {
                   onChange={handleChange}
                   className="form-radio"
                 />
-                <span className="ml-2">Permanent / സ്ഥിരം</span>
-              </label>
+                <span className="ml-2">Permanent(സ്ഥിരം)</span>
+                </label>
               <label className="form-radio-label">
                 <input
                   type="radio"
@@ -1162,8 +1206,8 @@ function Form() {
                   onChange={handleChange}
                   className="form-radio"
                 />
-                <span className="ml-2">Temporary / അസ്ഥിരം</span>
-              </label>
+                <span >Temporary(അസ്ഥിരം)</span>
+                </label>
             </div>
             <div className="mt-2">
               <label className="form-label">
@@ -1193,7 +1237,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">Yes / ഉണ്ട്</span>
+                  <span className="ml-2">Yes</span>
                 </label>
                 <label className="form-radio-label">
                   <input
@@ -1204,7 +1248,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">No / ഇല്ല</span>
+                  <span className="ml-2">No </span>
                 </label>
               </div>
             </div>
@@ -1222,7 +1266,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">Yes / ഉണ്ട്</span>
+                  <span className="ml-2">Yes</span>
                 </label>
                 <label className="form-radio-label">
                   <input
@@ -1233,7 +1277,7 @@ function Form() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                  <span className="ml-2">No / ഇല്ല</span>
+                  <span className="ml-2">No</span>
                 </label>
               </div>
             </div>
@@ -1353,6 +1397,8 @@ function Form() {
           </button>
         </form>
       </div>
+      <Footer />
+
     </div>
   )
 }

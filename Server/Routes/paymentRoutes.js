@@ -8,6 +8,7 @@ const paymentController = require("../Controllers/paymentController")
 
 router.post("/paymentRequest", paymentController.paymentRequest);
 router.post("/paymentResponse", paymentController.paymentResponse)
+router.get('/getallsubscriptions',paymentController. getAllSubscriptions);
 
 
 

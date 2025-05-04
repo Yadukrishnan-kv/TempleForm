@@ -107,6 +107,10 @@ role: {
   verifiedBy: {
     type: String
   },
+  subscriped: {
+    type: Boolean,
+    default: false
+  },
   enabled: {
     type: Boolean,
     default: true,
