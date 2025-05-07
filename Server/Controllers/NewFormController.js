@@ -47,19 +47,39 @@ const updateFormData = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, address, phone, pincode, role } = req.body;
-    const updatedData = await FormData.findByIdAndUpdate(
-      id,
-      { name, address, phone, pincode, role },
-      { new: true }
-    );
+
+    const updatePayload = {
+      name,
+      address,
+      phone,
+      pincode,
+      role
+    };
+
+    // Check if a new image file is provided
+    if (req.file) {
+      updatePayload.image = {
+        filename: req.file.filename,
+        originalname: req.file.originalname,
+        path: `api/${req.file.path}`
+      };
+    }
+
+    const updatedData = await FormData.findByIdAndUpdate(id, updatePayload, { new: true });
+
     if (!updatedData) {
       return res.status(404).json({ error: 'Form data not found' });
     }
+
     res.status(200).json({ message: 'Form data updated successfully', data: updatedData });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to update form data' });
+  }  catch (error) {
+    console.error('Update Error:', error);
+    res.status(500).json({ error: 'Failed to update form data', details: error.message });
   }
+  
 };
+
+
 
 // Delete FormData
 const deleteFormData = async (req, res) => {

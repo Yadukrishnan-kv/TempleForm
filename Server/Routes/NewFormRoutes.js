@@ -5,7 +5,7 @@ const upload = require('../Config/multer');
 
 router.post('/createnewform', upload.single('image'), createFormData);
 router.get('/getnewform', getAllFormData);
-router.put('/updateform/:id', upload.single('image'),updateFormData);
+router.put('/updateform/:id', upload.single('image'), updateFormData);
 router.delete('/deleteform/:id', deleteFormData);
 
 

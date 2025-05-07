@@ -13,6 +13,7 @@ function ListNewForm() {
     phone: '',
     pincode: '',
     role: '',
+    image: null,
   });
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -63,7 +64,6 @@ function ListNewForm() {
       console.error('Error deleting form:', err);
     }
   };
-
   const handleEdit = (form) => {
     setEditFormId(form._id);
     setFormData({
@@ -72,20 +72,47 @@ function ListNewForm() {
       phone: form.phone,
       pincode: form.pincode,
       role: form.role,
+      image: null,
     });
   };
 
+  
+
   const handleUpdate = async () => {
     try {
-      await axios.put(`${ip}/api/newForm/updateform/${editFormId}`, formData);
+      const data = new FormData();
+      data.append('name', formData.name);
+      data.append('address', formData.address);
+      data.append('phone', formData.phone);
+      data.append('pincode', formData.pincode);
+      data.append('role', formData.role);
+  
+      if (formData.image) {
+        data.append('image', formData.image); // file object
+      }
+  
+      await axios.put(`${ip}/api/newForm/updateform/${editFormId}`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
       setEditFormId(null);
-      await logAction('Update', `Updated Role: ${formData}`);
-      setFormData({ name: '', address: '', phone: '', pincode: '', role: '' });
+      await logAction('Update', `Updated Role: ${formData.name}`);
+      setFormData({
+        name: '',
+        address: '',
+        phone: '',
+        pincode: '',
+        role: '',
+        image: null,
+      });
       fetchForms();
     } catch (err) {
       console.error('Error updating form:', err);
     }
   };
+  
 
   useEffect(() => {
     fetchForms();
@@ -181,6 +208,13 @@ function ListNewForm() {
           {editFormId && (
             <div className="edit-newform-container">
               <h3 className="edit-newformform-title">Edit Form</h3>
+              <input
+  type="file"
+  onChange={(e) =>
+    setFormData({ ...formData, image: e.target.files[0] })
+  }
+/>
+
               <input
                 type="text"
                 placeholder="Name"
