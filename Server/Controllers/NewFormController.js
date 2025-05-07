@@ -19,8 +19,8 @@ const createFormData = async (req, res) => {
       image: {
         filename: req.file.filename,
         originalname: req.file.originalname,
-        path: `uploads/${req.file.filename}`
-      }
+        path: `api/${req.file.path}`
+    }
     });
 
     await newData.save();

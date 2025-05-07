@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose")
 
 
 const Newformschema = new Schema({
-  images: {
+  image: {
     filename: String,
     originalname: String,
     path: String

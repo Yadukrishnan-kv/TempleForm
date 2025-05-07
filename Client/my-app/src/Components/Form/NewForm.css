@@ -1,0 +1,72 @@
+.text-primary {
+    color: #fd7e14 !important;
+  }
+  
+  .NewForm-btn-custom {
+    background-color: #fd7e14;
+    color: #fff;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .NewForm-btn-custom:hover {
+    background-color: #e86d0c;
+  }
+  
+  .NewForm-form-card {
+    border-radius: 10px;
+    background-color: #f8f9fa;
+  }
+  
+  .NewForm-form-title {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .NewForm-cards-container {
+    margin-top: 20px;
+  }
+  
+  .NewForm-card {
+    width: 300px;
+    height: auto;
+    border-radius: 12px;
+    background-color: #ffffff;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+  
+  .NewForm-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .NewForm-card-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .NewForm-card-text {
+    font-size: 0.85rem;
+  }
+  
+
+  .btn-info-custom {
+    background-color: #fd7e14;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-info-custom:hover {
+    background-color: #e86d0c;
+    color: #fff;
+  }
+  

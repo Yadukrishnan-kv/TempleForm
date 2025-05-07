@@ -152,9 +152,10 @@ function ListNewForm() {
                 {filteredForms.map((form) => (
                   <tr key={form._id}>
 <td>
-  {form.image &&  (
-    <img src={`${ip}/${form.image.path}`} alt="uploaded" width="50" height="50" />
-  ) }
+{form.image &&  (
+  <img src={`${ip}/${form.image.path}`} alt={form.name} width="50" height="50" />
+)}
+
 </td>
                     <td>{form.name}</td>
                     <td>{form.address}</td>

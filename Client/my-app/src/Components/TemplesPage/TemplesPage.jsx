@@ -19,12 +19,12 @@ const TemplePage = () => {
   const [selectedTempleType, setSelectedTempleType] = useState('');
  
   const [templeTypes, setTempleTypes] = useState([
-                { en: "Madam", ml: "മാഡം" },
-                { en: "Kudumbakshetram", ml: "കുടുംബക്ഷേത്രം" },
-                { en: "Bajanamadam", ml: "ഭജനമാഡം" },
-                { en: "Sevagramam", ml: "സേവാഗ്രാമം" },
-                { en: "Kaavukal", ml: "കാവ്" },
-                { en: "Sarppakaav", ml: "സാർപ്പകാവ്" },
+                { en: "Madam" },
+                { en: "Kudumbakshetram" },
+                { en: "Bajanamadam" },
+                { en: "Sevagramam" },
+                { en: "Kaavukal"},
+                { en: "Sarppakaav" },
   ]);
   const ip = process.env.REACT_APP_BACKEND_IP;
 
@@ -169,8 +169,8 @@ const TemplePage = () => {
   >
     <option value="">All Temple Types</option>
     {templeTypes.map(type => (
-      <option key={type.ml} value={type.ml}>
-        {type.en} / {type.ml}
+      <option key={type.en} value={type.en}>
+        {type.en} 
       </option>
     ))}
   </select>
