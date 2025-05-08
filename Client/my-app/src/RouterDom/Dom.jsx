@@ -55,7 +55,7 @@ function Dom() {
         <Route path="/" element={<MainPage />} />
 
         <Route path="/form" element={<Form />} />
-        <Route path="/newForm" element={<NewForm />} />
+        <Route path="/templeAcharyas" element={<NewForm />} />
         <Route path="/AdminLogin" element={<LoginPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/TemplePage" element={<TemplePage />} />

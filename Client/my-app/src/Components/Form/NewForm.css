@@ -1,72 +1,138 @@
-.text-primary {
-    color: #fd7e14 !important;
-  }
-  
-  .NewForm-btn-custom {
-    background-color: #fd7e14;
-    color: #fff;
-    padding: 8px 20px;
-    border: none;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .NewForm-btn-custom:hover {
-    background-color: #e86d0c;
-  }
-  
-  .NewForm-form-card {
-    border-radius: 10px;
-    background-color: #f8f9fa;
-  }
-  
-  .NewForm-form-title {
-    font-weight: bold;
-    color: #333;
-  }
-  
-  .NewForm-cards-container {
-    margin-top: 20px;
-  }
-  
-  .NewForm-card {
-    width: 300px;
-    height: auto;
-    border-radius: 12px;
-    background-color: #ffffff;
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-  }
-  
-  .NewForm-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  }
-  
-  .NewForm-card-image {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-  
-  .NewForm-card-text {
-    font-size: 0.85rem;
-  }
-  
+.NewForm-container {
+  margin: 1.5rem;
+}
 
-  .btn-info-custom {
-    background-color: #fd7e14;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-  }
+.NewForm-flex-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.NewForm-flex-between {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.NewForm-mb-3 {
+  margin-bottom: 1rem;
+}
+
+.NewForm-btn-custom {
+  background-color: #FFBD59;
+
+  color: #fff;
   
-  .btn-info-custom:hover {
-    background-color: #e86d0c;
-    color: #fff;
-  }
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.NewForm-btn-custom:hover {
+  background-color: #e5a840;
+}
+
+.NewForm-form-card {
+  border-radius: 10px;
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.NewForm-form-title {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.NewForm-form-group {
+  margin-bottom: 1rem;
+}
+
+.NewForm-form-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.NewForm-input {
+  width: 100%;
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+}
+
+.NewForm-select {
+  width: 100%;
+  padding: 8px 20px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
   
+}
+
+.NewForm-select-auto {
+  width: auto;
+}
+
+.NewForm-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.NewForm-card {
+  width: 300px;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+.NewForm-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.NewForm-card-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+.NewForm-card-content {
+  padding: 0.75rem 1rem;
+}
+
+.NewForm-card-name {
+  font-weight: bold;
+  color: #fd7e14;
+  margin-bottom: 0.5rem;
+}
+
+.NewForm-card-text {
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+  color: #6c757d;
+}
+
+.NewForm-btn-info {
+  background-color: #fd7e14;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.NewForm-btn-info:hover {
+  background-color: #e86d0c;
+  color: #fff;
+}

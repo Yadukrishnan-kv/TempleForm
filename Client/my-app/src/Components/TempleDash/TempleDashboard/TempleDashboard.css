@@ -67,7 +67,6 @@
   .Templedashnavbar {
     background: #fef3ee;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 15px;
     border-radius: 10px;
@@ -121,3 +120,131 @@
     border-radius: 8px;
     padding: 8px;
   }
+
+  /* Base styles remain the same */
+  .Templedashsidebar.collapsed {
+    width: 80px;
+    padding: 20px 10px;
+  }
+
+  .Templedashside-link[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translateX(10px) translateY(-50%);
+    color: black;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  .Templedashside-link {
+    position: relative; /* Make sure the tooltip is positioned correctly */
+  }
+  
+  .Templedashside-link i {
+    margin-right: 10px;
+  }
+  
+  .Templedashside-link.active {
+    background-color: #f97316;
+    color: white;
+    border-radius: 8px;
+    padding: 8px;
+  }
+  .Templedashside-menu a {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.3s;
+    border-radius: 10px;
+    margin-top: 15px;
+  }    
+
+  .Templedashside-menu a:hover, .Templedashside-menu a.active {
+    background: #ffeae5;
+    color: #fc5c35;
+  }
+  .Templedashmain-content {
+    margin-left: 250px;
+    padding: 20px;
+    width: calc(100% - 250px);
+  }
+  
+  .Templedashcontainerrr.collapsed .Templedashmain-content {
+    margin-left: 80px;
+    width: calc(100% - 80px);
+  }
+  
+  /* Ensure tooltip works when the sidebar is collapsed */
+  .Templedashsidebar.collapsed .Templedashside-link {
+    justify-content: center;
+  }
+  
+  .Templedashsidebar.collapsed .Templedashside-link i {
+    margin: 0;
+  }
+  
+  .Templedashsidebar.collapsed .Templedashside-link span,
+  .Templedashsidebar.collapsed .Templedashside-link br,
+  .Templedashsidebar.collapsed .Templedashside-link small {
+    display: none;
+  }
+.Templedashsidebar.collapsed .Templedashside-link {
+  justify-content: center;
+}
+
+.Templedashsidebar.collapsed .Templedashside-link i {
+  margin: 0;
+}
+
+.Templedashsidebar.collapsed .Templedashside-link span,
+.Templedashsidebar.collapsed .Templedashside-link br,
+.Templedashsidebar.collapsed .Templedashside-link small {
+  display: none;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  display: inline-block; /* Always visible */
+}
+/* Adjust header width and padding on smaller screens */
+@media screen and (max-width: 768px) {
+  .Templedashnavbar {
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .Templedashnavbar nav {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .Templedashnavbar nav a {
+    margin: 0;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .Templedashnavbar {
+    padding: 8px;
+  }
+
+  .Templedashnavbar nav a {
+    font-size: 14px;
+    width: 100%;
+
+  }
+}

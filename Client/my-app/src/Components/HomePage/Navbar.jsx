@@ -122,7 +122,7 @@ function Navbar() {
             <li className="nav-item">
               <a
                 className={`nav-link ${activeLink === 'Temple Acharyas' ? 'active' : ''}`}
-                href="/newForm"
+                href="/templeAcharyas"
                 onClick={() => {
                   setActiveLink('Temple Acharyas');
                   setIsMobileMenuOpen(true);

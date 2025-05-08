@@ -3,8 +3,6 @@ import axios from 'axios';
 import Navbar from '../HomePage/Navbar';
 import Footer from '../HomePage/Footer';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './NewForm.css';
 
 const NewForm = () => {
@@ -77,103 +75,153 @@ const NewForm = () => {
     <div>
       <Navbar />
       <div className="container my-4">
-        <div className="d-flex justify-content-end">
-          <button
-            className="NewForm-btn-custom mb-3"
-            onClick={() => setShowForm(!showForm)}
-          >
-            Registration (രജിസ്ട്രേഷൻ)
-          </button>
+  <div className="NewForm-flex-end">
+    <button
+      className="NewForm-btn-custom NewForm-mb-3"
+      onClick={() => setShowForm(!showForm)}
+    >
+      Registration (രജിസ്ട്രേഷൻ)
+    </button>
+  </div>
+
+  {showForm && (
+    <div className="NewForm-form-card">
+      <h2 className="NewForm-form-title">Form</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="file"
+          name="images"
+          onChange={handleFileChange}
+          className="NewForm-input"
+          style={{marginBottom:  "10px"}}
+
+        />
+       
+        <div className="NewForm-form-group">
+          <label className="NewForm-form-label">
+            Name <span className="malayalam-text">(പേര്)</span>
+          </label>
+          <input
+            type="text"
+            className="NewForm-input"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+          />
         </div>
 
-        {showForm && (
-          <div className="NewForm-form-card card p-4 shadow-sm mb-4">
-            <h2 className="NewForm-form-title mb-3">Form</h2>
-            <form onSubmit={handleSubmit}>
-              <input type="file" name="images" onChange={handleFileChange} className="form-control mb-3" />
+        <div className="NewForm-form-group">
+          <label className="NewForm-form-label">
+            Address <span className="malayalam-text">(മേൽവിലാസം)</span>
+          </label>
+          <textarea
+            className="NewForm-input"
+            rows={3}
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+          ></textarea>
+        </div>
 
-              <div className="mb-3">
-                <label className="form-label">
-                  Name <span className="malayalam-text">(പേര്)</span>
-                </label>
-                <input type="text" className="form-control" name="name" value={formData.name} onChange={handleChange} />
-              </div>
+        <div className="NewForm-form-group">
+          <label className="NewForm-form-label">
+            Phone <span className="malayalam-text">(ഫോൺ നമ്പർ)</span>
+          </label>
+          <input
+            type="tel"
+            className="NewForm-input"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+          />
+        </div>
 
-              <div className="mb-3">
-                <label className="form-label">
-                  Address <span className="malayalam-text">(മേൽവിലാസം)</span>
-                </label>
-                <textarea className="form-control" rows={3} name="address" value={formData.address} onChange={handleChange}></textarea>
-              </div>
+        <div className="NewForm-form-group">
+          <label className="NewForm-form-label">
+            Pincode <span className="malayalam-text">(പിൻകോട്)</span>
+          </label>
+          <input
+            type="text"
+            className="NewForm-input"
+            name="pincode"
+            value={formData.pincode}
+            onChange={handleChange}
+          />
+        </div>
 
-              <div className="mb-3">
-                <label className="form-label">
-                  Phone <span className="malayalam-text">(ഫോൺ നമ്പർ)</span>
-                </label>
-                <input type="tel" className="form-control" name="phone" value={formData.phone} onChange={handleChange} />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">
-                  Pincode <span className="malayalam-text">(പിൻകോട്)</span>
-                </label>
-                <input type="text" className="form-control" name="pincode" value={formData.pincode} onChange={handleChange} />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label">Role</label>
-                <select className="form-select" name="role" value={formData.role} onChange={handleChange}>
-                  <option value="">Select a Role</option>
-                  {roles.map((role) => (
-                    <option key={role._id} value={role.name}>{role.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              <button type="submit" className="NewForm-btn-custom">
-                Submit <span className="malayalam-text">(സമർപ്പിക്കുക)</span>
-              </button>
-            </form>
-          </div>
-        )}
-
-        <div className="d-flex justify-content-between mb-4">
-        <button className="btn-info-custom btn-sm"  onClick={() => setFilterRole('')}>
-            Show All
-          </button>
-
-          <select className="form-select w-auto" value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
-            <option value="">Filter by Role</option>
+        <div className="NewForm-form-group">
+          <label className="NewForm-form-label">Role</label>
+          <select
+            className="NewForm-select"
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+          >
+            <option value="">Select a Role</option>
             {roles.map((role) => (
-              <option key={role._id} value={role.name}>{role.name}</option>
+              <option key={role._id} value={role.name}>
+                {role.name}
+              </option>
             ))}
           </select>
         </div>
 
-        <div className="NewForm-cards-container d-flex flex-wrap gap-3 justify-content-start">
-          {filteredForms.map((form, index) => (
-            <div
-              key={index}
-              className="NewForm-card card shadow-sm p-2"
-            >
-              {form.image && form.image.path && (
-                <img
-                  src={`${ip}/${form.image.path}`}
-                  alt="user"
-                  className="NewForm-card-image"
-                />
-              )}
-              <div className="mt-2 px-2">
-              <h6 className="fw-bold text-primary mb-2">{form.name}</h6>
-              <p className="mb-1 text-muted NewForm-card-text"><strong>📍 Address:</strong> {form.address}</p>
-                <p className="mb-1 text-muted NewForm-card-text"><strong>👤 Role:</strong> {form.role}</p>
-                <p className="mb-1 text-muted NewForm-card-text"><strong>📞 Phone:</strong> {form.phone}</p>
-                <p className="mb-1 text-muted NewForm-card-text"><strong>🏷️ Pincode:</strong> {form.pincode}</p>
-              </div>
-            </div>
-          ))}
+        <button type="submit" className="NewForm-btn-custom">
+          Submit <span className="malayalam-text">(സമർപ്പിക്കുക)</span>
+        </button>
+      </form>
+    </div>
+  )}
+
+  <div className="NewForm-flex-between">
+    <button className="NewForm-btn-info" onClick={() => setFilterRole('')}>
+      Show All
+    </button>
+
+    <select
+      className="NewForm-select NewForm-select-auto"
+      value={filterRole}
+      onChange={(e) => setFilterRole(e.target.value)}
+    >
+      <option value="">Filter by Role</option>
+      {roles.map((role) => (
+        <option key={role._id} value={role.name}>
+          {role.name}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  <div className="NewForm-cards-container">
+    {filteredForms.map((form, index) => (
+      <div key={index} className="NewForm-card">
+        {form.image && form.image.path && (
+          <img
+            src={`${ip}/${form.image.path}`}
+            alt="user"
+            className="NewForm-card-image"
+          />
+        )}
+        <div className="NewForm-card-content">
+          <h6 className="NewForm-card-name">{form.name}</h6>
+          <p className="NewForm-card-text">
+            <strong>📍 Address:</strong> {form.address}
+          </p>
+          <p className="NewForm-card-text">
+            <strong>👤 Role:</strong> {form.role}
+          </p>
+          <p className="NewForm-card-text">
+            <strong>📞 Phone:</strong> {form.phone}
+          </p>
+          <p className="NewForm-card-text">
+            <strong>🏷️ Pincode:</strong> {form.pincode}
+          </p>
         </div>
       </div>
+    ))}
+  </div>
+</div>
+
       <Footer />
       <ToastContainer position="top-right" autoClose={3000} />
     </div>
