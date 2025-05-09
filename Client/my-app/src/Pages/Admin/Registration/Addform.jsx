@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
@@ -198,6 +199,31 @@ function Addform() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // Validate mandatory fields
+    const mandatoryFields = {
+      state: "State",
+      district: "District",
+      taluk: "Taluk",
+      name: "Temple Name",
+      address: "Temple Address",
+      phone: "Phone Number",
+      locationUrl: "Location",
+    }
+
+    const missingFields = []
+    for (const [field, label] of Object.entries(mandatoryFields)) {
+      if (!formData[field]) {
+        missingFields.push(label)
+      }
+    }
+
+    if (missingFields.length > 0) {
+      setError(`Please fill in the following mandatory fields: ${missingFields.join(", ")}`)
+      toast.error(`Please fill in the following mandatory fields: ${missingFields.join(", ")}`)
+      return
+    }
+
     try {
       console.log("Submitting form data:", formData)
       const response = await axios.post(`${ip}/api/temples/register`, formData, {
@@ -232,9 +258,15 @@ function Addform() {
       <div className="content-container">
         <Sidebar />
         <div className="form-container">
-          <h1 className="form-title">ക്ഷേത്രേശ്രീ ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
-          <p className="form-group">കാലടി - 683 574., ഫോൺ : 9847047963 </p>
+          <h1 className="form-title">ക്ഷേത്രശ്രീ ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
+          <p className="form-group">കാലടി, ശങ്കരമാർഗ് - 683 574., ഫോൺ : 9847047963</p>
           <p className="form-group">അപേക്ഷാഫോറം</p>
+
+          {error && (
+            <div className="error-message" style={{ color: "red", marginBottom: "15px" }}>
+              {error}
+            </div>
+          )}
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
@@ -246,6 +278,7 @@ function Addform() {
                 value={selectedState}
                 onChange={handleStateChange}
                 disabled={loading}
+                required
               >
                 <option value="">Select a State</option>
                 {states.map((state) => (
@@ -265,6 +298,7 @@ function Addform() {
                 value={selectedDistrict}
                 onChange={handleDistrictChange}
                 disabled={!selectedState || loading}
+                required
               >
                 <option value="">Select a District</option>
                 {districts.map((district) => (
@@ -284,6 +318,7 @@ function Addform() {
                 value={selectedTaluk}
                 onChange={handleTalukChange}
                 disabled={!selectedDistrict || loading}
+                required
               >
                 <option value="">Select a Taluk</option>
                 {taluks.map((taluk) => (
@@ -297,7 +332,14 @@ function Addform() {
               <label className="form-label">
                 Temple Name <span className="malayalam-text">(ക്ഷേത്രത്തിന്റെ പേര്)</span>
               </label>
-              <input type="text" className="form-input" name="name" value={formData.name} onChange={handleChange} />
+              <input
+                type="text"
+                className="form-input"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div>
               <label className="form-label">
@@ -310,19 +352,179 @@ function Addform() {
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
+                required
               ></textarea>
             </div>
             <div>
               <label className="form-label">
                 Phone Number <span className="malayalam-text">(ഫോൺ നമ്പർ)</span>
               </label>
-              <input type="tel" className="form-input" name="phone" value={formData.phone} onChange={handleChange} />
+              <input
+                type="tel"
+                className="form-input"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div>
               <label className="form-label">
                 Location <span className="malayalam-text">(സ്ഥാനം)</span>
               </label>
-              <input className="form-input" name="locationUrl" value={formData.locationUrl} onChange={handleChange} />
+              <input
+                className="form-input"
+                name="locationUrl"
+                value={formData.locationUrl}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label className="form-label">
+                Temple Type <span className="malayalam-text">(ക്ഷേത്ര വിവരം)</span>
+              </label>
+              <div className="form-radio-group">
+                <label className="form-radio-label flex items-center gap-2 mb-2">
+                  <input
+                    type="radio"
+                    name="templeType"
+                    value="Madam"
+                    checked={formData.templeType === "Madam"}
+                    onChange={handleChange}
+                  />
+                  <span>Madam(മഠം)</span>
+                </label>
+
+                <label className="form-radio-label flex items-center gap-2 mb-2">
+                  <input
+                    type="radio"
+                    name="templeType"
+                    value="Kudumbakshetram"
+                    checked={formData.templeType === "Kudumbakshetram"}
+                    onChange={handleChange}
+                  />
+                  <span>Kudumbakshetram(കുടുംബക്ഷേത്രം)</span>
+                </label>
+
+                <label className="form-radio-label flex items-center gap-2 mb-2">
+                  <input
+                    type="radio"
+                    name="templeType"
+                    value="Bajanamadam"
+                    checked={formData.templeType === "Bajanamadam"}
+                    onChange={handleChange}
+                  />
+                  <span>Bajanamadam(ഭജനമാഡം)</span>
+                </label>
+
+                <label className="form-radio-label flex items-center gap-2 mb-2">
+                  <input
+                    type="radio"
+                    name="templeType"
+                    value="Sevagramam"
+                    checked={formData.templeType === "Sevagramam"}
+                    onChange={handleChange}
+                  />
+                  <span>Sevagramam(സേവാഗ്രാമം)</span>
+                </label>
+
+                <label className="form-radio-label flex items-center gap-2 mb-2">
+                  <input
+                    type="radio"
+                    name="templeType"
+                    value="Kaavukal"
+                    checked={formData.templeType === "Kaavukal"}
+                    onChange={handleChange}
+                  />
+                  <span>Kaavukal(കാവ്)</span>
+                </label>
+
+                <label className="form-radio-label flex items-center gap-2 mb-2">
+                  <input
+                    type="radio"
+                    name="templeType"
+                    value="Sarppakaav"
+                    checked={formData.templeType === "Sarppakaav"}
+                    onChange={handleChange}
+                  />
+                  <span>Sarppakaav(സാർപ്പകാവ്)</span>
+                </label>
+              </div>
+            </div>
+            <div>
+              <label className="form-label">
+                Temple Management System <span className="malayalam-text">(ക്ഷേത്ര ഭരണസംവിധാനം)</span>
+              </label>
+              <select
+                className="form-select"
+                name="managementType"
+                value={formData.managementType}
+                onChange={handleChange}
+              >
+                <option value="">Select / തിരഞ്ഞെടുക്കുക</option>
+                <option value="ട്രസ്റ്റ്">Trust / ട്രസ്റ്റ്</option>
+                <option value="സേവാസമിതി">Service Committee / സേവാസമിതി</option>
+                <option value="പൊതു">Public / പൊതു</option>
+              </select>
+            </div>
+            <div>
+              <label className="form-label">
+                WhatsApp Number <span className="malayalam-text">(വാട്സ്ആപ്പ് നമ്പർ)</span>
+              </label>
+              <input
+                type="tel"
+                className="form-input"
+                name="whatsapp"
+                value={formData.whatsapp}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label className="form-label">
+                Email ID <span className="malayalam-text">(മെയിൽ ഐ.ഡി.)</span>
+              </label>
+              <input type="email" className="form-input" name="email" value={formData.email} onChange={handleChange} />
+            </div>
+            <div>
+              <label className="form-label">
+                Password <span className="malayalam-text">(പാസ്‌വേഡ്)</span>
+              </label>
+              <div className="position-relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  className="form-input"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+                <i
+                  className={`fa-regular ${showPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
+                  onClick={() => togglePasswordVisibility("password")}
+                />
+              </div>
+            </div>
+            <div>
+              <label className="form-label">
+                Confirm Password <span className="malayalam-text">(പാസ്‌വേഡ് സ്ഥിരീകരിക്കുക)</span>
+              </label>
+              <div className="position-relative">
+                <input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  className="form-input"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  required
+                />
+                <i
+                  className={`fa-regular ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
+                  onClick={() => togglePasswordVisibility("confirmPassword")}
+                />
+              </div>
             </div>
             <div>
               <label className="form-label">
@@ -387,64 +589,6 @@ function Addform() {
             </div>
             <div>
               <label className="form-label">
-                WhatsApp Number <span className="malayalam-text">(വാട്സ്ആപ്പ് നമ്പർ)</span>
-              </label>
-              <input
-                type="tel"
-                className="form-input"
-                name="whatsapp"
-                value={formData.whatsapp}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label className="form-label">
-                Email ID <span className="malayalam-text">(മെയിൽ ഐ.ഡി.)</span>
-              </label>
-              <input type="email" className="form-input" name="email" value={formData.email} onChange={handleChange} />
-            </div>
-            <div>
-              <label className="form-label">
-                Password <span className="malayalam-text">(പാസ്‌വേഡ്)</span>
-              </label>
-              <div className="position-relative">
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  className="form-input"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
-                <i
-                  className={`fa-regular ${showPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
-                  onClick={() => togglePasswordVisibility("password")}
-                />
-              </div>
-            </div>
-            <div>
-              <label className="form-label">
-                Confirm Password <span className="malayalam-text">(പാസ്‌വേഡ് സ്ഥിരീകരിക്കുക)</span>
-              </label>
-              <div className="position-relative">
-                <input
-                  id="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
-                  className="form-input"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
-                />
-                <i
-                  className={`fa-regular ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
-                  onClick={() => togglePasswordVisibility("confirmPassword")}
-                />
-              </div>
-            </div>
-            <div>
-              <label className="form-label">
                 Website <span className="malayalam-text">(വെബ്സൈറ്റ്)</span> <span className="text-muted">(Optional)</span>
               </label>
               <input
@@ -456,78 +600,7 @@ function Addform() {
                 placeholder="Enter website if available"
               />
             </div>
-            <div>
-  <label className="form-label">
-    Temple Type <span className="malayalam-text">(ക്ഷേത്ര വിവരം)</span>
-  </label>
-  <div className="form-radio-group">
-    <label className="form-radio-label flex items-center gap-2 mb-2">
-      <input
-        type="radio"
-        name="templeType"
-        value="Madam"
-        checked={formData.templeType === "Madam"}
-        onChange={handleChange}
-      />
-      <span>Madam(മാഡം)</span>
-    </label>
-
-    <label className="form-radio-label flex items-center gap-2 mb-2">
-      <input
-        type="radio"
-        name="templeType"
-        value="Kudumbakshetram"
-        checked={formData.templeType === "Kudumbakshetram"}
-        onChange={handleChange}
-      />
-      <span>Kudumbakshetram(കുടുംബക്ഷേത്രം)</span>
-    </label>
-
-    <label className="form-radio-label flex items-center gap-2 mb-2">
-      <input
-        type="radio"
-        name="templeType"
-        value="Bajanamadam"
-        checked={formData.templeType === "Bajanamadam"}
-        onChange={handleChange}
-      />
-      <span>Bajanamadam(ഭജനമാഡം)</span>
-    </label>
-
-    <label className="form-radio-label flex items-center gap-2 mb-2">
-      <input
-        type="radio"
-        name="templeType"
-        value="Sevagramam"
-        checked={formData.templeType === "Sevagramam"}
-        onChange={handleChange}
-      />
-      <span>Sevagramam(സേവാഗ്രാമം)</span>
-    </label>
-
-    <label className="form-radio-label flex items-center gap-2 mb-2">
-      <input
-        type="radio"
-        name="templeType"
-        value="Kaavukal"
-        checked={formData.templeType === "Kaavukal"}
-        onChange={handleChange}
-      />
-      <span>Kaavukal(കാവ്)</span>
-    </label>
-
-    <label className="form-radio-label flex items-center gap-2 mb-2">
-      <input
-        type="radio"
-        name="templeType"
-        value="Sarppakaav"
-        checked={formData.templeType === "Sarppakaav"}
-        onChange={handleChange}
-      />
-      <span>Sarppakaav(സാർപ്പകാവ്)</span>
-    </label>
-  </div>
-</div>
+        
             <div>
               <label className="form-label">
                 Location Sketch <span className="malayalam-text">(ലൊക്കേഷൻ സ്കെച്ച്)</span>
@@ -673,22 +746,7 @@ function Addform() {
                 onChange={handleChange}
               />
             </div>
-            <div>
-              <label className="form-label">
-                Temple Management System <span className="malayalam-text">(ക്ഷേത്ര ഭരണസംവിധാനം)</span>
-              </label>
-              <select
-                className="form-select"
-                name="managementType"
-                value={formData.managementType}
-                onChange={handleChange}
-              >
-                <option value="">Select / തിരഞ്ഞെടുക്കുക</option>
-                <option value="ട്രസ്റ്റ്">Trust / ട്രസ്റ്റ്</option>
-                <option value="സേവാസമിതി">Service Committee / സേവാസമിതി</option>
-                <option value="പൊതു">Public / പൊതു</option>
-              </select>
-            </div>
+            
             <div>
               <label className="form-label">
                 Committee Registration Number and Address{" "}
@@ -1005,7 +1063,7 @@ function Addform() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                <span >Permanent(സ്ഥിരം)</span>
+                  <span>Permanent(സ്ഥിരം)</span>
                 </label>
                 <label className="form-radio-label">
                   <input
@@ -1016,7 +1074,7 @@ function Addform() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                <span >Temporary(അസ്ഥിരം)</span>
+                  <span>Temporary(അസ്ഥിരം)</span>
                 </label>
               </div>
               <div className="mt-2">
@@ -1053,7 +1111,7 @@ function Addform() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                <span >Permanent(സ്ഥിരം)</span>
+                  <span>Permanent(സ്ഥിരം)</span>
                 </label>
                 <label className="form-radio-label">
                   <input
@@ -1064,7 +1122,7 @@ function Addform() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                <span >Temporary(അസ്ഥിരം)</span>
+                  <span>Temporary(അസ്ഥിരം)</span>
                 </label>
               </div>
               <div className="mt-2">
@@ -1101,7 +1159,7 @@ function Addform() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                <span >Permanent(സ്ഥിരം)</span>
+                  <span>Permanent(സ്ഥിരം)</span>
                 </label>
                 <label className="form-radio-label">
                   <input
@@ -1112,7 +1170,7 @@ function Addform() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                <span >Temporary(അസ്ഥിരം)</span>
+                  <span>Temporary(അസ്ഥിരം)</span>
                 </label>
               </div>
               <div className="mt-2">
@@ -1149,7 +1207,7 @@ function Addform() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                <span >Permanent(സ്ഥിരം)</span>
+                  <span>Permanent(സ്ഥിരം)</span>
                 </label>
                 <label className="form-radio-label">
                   <input
@@ -1160,7 +1218,7 @@ function Addform() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                <span >Temporary(അസ്ഥിരം)</span>
+                  <span>Temporary(അസ്ഥിരം)</span>
                 </label>
               </div>
               <div className="mt-2">
@@ -1197,7 +1255,7 @@ function Addform() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                <span >Permanent(സ്ഥിരം)</span>
+                  <span>Permanent(സ്ഥിരം)</span>
                 </label>
                 <label className="form-radio-label">
                   <input
@@ -1208,7 +1266,7 @@ function Addform() {
                     onChange={handleChange}
                     className="form-radio"
                   />
-                <span >Temporary(അസ്ഥിരം)</span>
+                  <span>Temporary(അസ്ഥിരം)</span>
                 </label>
               </div>
               <div className="mt-2">

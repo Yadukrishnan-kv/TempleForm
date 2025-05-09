@@ -32,7 +32,7 @@ role: {
   website: String,
   templeType: {
     type: String,
-    enum: ['ദേശക്ഷേത്രം', 'മഹാക്ഷേത്രം', 'കുടുംബക്ഷേത്രം', 'കാവ്', 'മറ്റ്'],
+    enum: ['Madam','Kudumbakshetram', 'Bajanamadam', 'Sevagramam', 'Kaavukal', 'Sarppakaav'],
     required: true
   },
   locationSketch: String,

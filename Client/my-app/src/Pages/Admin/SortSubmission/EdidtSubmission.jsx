@@ -265,8 +265,10 @@ function EditSubmission() {
   return (
    
       <div className="form-container">
-      <h1 className="form-title">ക്ഷേത്രേശ്രീ   ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
-      <p className="form-group">കാലടി - 683 574., ഫോൺ : 9847047963</p>
+       <h1 className="form-title">ക്ഷേത്രശ്രീ
+        ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
+        <p className="form-group">കാലടി, ശങ്കരമാർഗ്
+        - 683 574., ഫോൺ : 9847047963</p>
       <p className="form-group">അപേക്ഷാഫോറം</p>
      
       <form className="space-y-4" onSubmit={handleSubmit}>

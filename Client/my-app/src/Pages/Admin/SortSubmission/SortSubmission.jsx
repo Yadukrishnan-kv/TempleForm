@@ -294,8 +294,10 @@ const SortSubmission = () => {
       <div className="content-container">
         <Sidebar />
         <div className="submission-page">
-          <h1 className="page-title">ക്ഷേത്രേശ്രീ ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
-          <p className="page-subtitle">കാലടി - 683 574., ഫോൺ : 9847047963</p>
+        <h1 className="form-title">ക്ഷേത്രശ്രീ
+        ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
+        <p className="form-group">കാലടി, ശങ്കരമാർഗ്
+        - 683 574., ഫോൺ : 9847047963</p>
           <p className="page-subtitle">ക്ഷേത്ര വിവരങ്ങൾ</p>
           <div className="filters">
             <select
