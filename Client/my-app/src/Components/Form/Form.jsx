@@ -410,7 +410,7 @@ function Form() {
                   checked={formData.templeType === "Bajanamadam"}
                   onChange={handleChange}
                 />
-                <span>Bajanamadam(ഭജനമാഡം)</span>
+                <span>Bajanamadam(ഭജനമഠം)</span>
               </label>
 
               <label className="form-radio-label flex items-center gap-2 mb-2">
@@ -443,7 +443,7 @@ function Form() {
                   checked={formData.templeType === "Sarppakaav"}
                   onChange={handleChange}
                 />
-                <span>Sarppakaav(സാർപ്പകാവ്)</span>
+                <span>Sarppakaav(സർപ്പക്കാവ്)</span>
               </label>
             </div>
           </div>
@@ -637,7 +637,8 @@ function Form() {
           </div>
           <div>
             <label className="form-label">
-              Sub Deities <span className="malayalam-text">(ഉപദേവതാ)</span>
+              Sub Deities <span className="malayalam-text">(ഉപദേവത
+)</span>
             </label>
             <input
               type="text"
@@ -661,7 +662,8 @@ function Form() {
           </div>
           <div>
             <label className="form-label">
-              Buildings <span className="malayalam-text">(പ്രാസാദങ്ങൾ)</span>
+              Buildings <span className="malayalam-text">(പ്രസാദങ്ങൾ
+)</span>
             </label>
             <input
               type="text"
@@ -981,7 +983,8 @@ function Form() {
           </div>
           <div>
             <label className="form-label">
-              Special Events <span className="malayalam-text">(വിശേഷങ്ങ്ങൾ)</span>
+              Special Events <span className="malayalam-text">(വിശേഷങ്ങൾ
+)</span>
             </label>
             <textarea
               className="form-textarea"
