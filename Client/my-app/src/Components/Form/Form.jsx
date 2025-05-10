@@ -381,78 +381,37 @@ function Form() {
               required
             />
           </div>
-          <div>
-            <label className="form-label">
-              Temple Type <span className="malayalam-text">(ക്ഷേത്ര വിവരം)</span>
-            </label>
-            <div className="form-radio-group">
-              <label className="form-radio-label flex items-center gap-2 mb-2">
-                <input
-                  type="radio"
-                  name="templeType"
-                  value="Madam"
-                  checked={formData.templeType === "Madam"}
-                  onChange={handleChange}
-                />
-                <span>Madam(മഠം)</span>
-              </label>
+          
+        <div className="w-full px-4">
+  <label className="form-label block text-base font-medium mb-2">
+    Temple Type <span className="malayalam-text">(ക്ഷേത്ര വിവരം)</span>
+  </label>
+  <div className="form-radio-group flex flex-wrap gap-4">
+    {[
+      { label: "Madam(മഠം)", value: "Madam" },
+      { label: "Kudumbakshetram(കുടുംബക്ഷേത്രം)", value: "Kudumbakshetram" },
+      { label: "Bajanamadam(ഭജനമഠം)", value: "Bajanamadam" },
+      { label: "Sevagramam(സേവാഗ്രാമം)", value: "Sevagramam" },
+      { label: "Kaavukal(കാവ്)", value: "Kaavukal" },
+      { label: "Sarppakaav(സർപ്പക്കാവ്)", value: "Sarppakaav" },
+    ].map((item) => (
+      <label
+        key={item.value}
+        className="form-radio-label flex items-center gap-2 w-full sm:w-[48%] md:w-[30%] lg:w-[30%] xl:w-[18%]"
+      >
+        <input
+          type="radio"
+          name="templeType"
+          value={item.value}
+          checked={formData.templeType === item.value}
+          onChange={handleChange}
+        />
+        <span>{item.label}</span>
+      </label>
+    ))}
+  </div>
+</div>
 
-              <label className="form-radio-label flex items-center gap-2 mb-2">
-                <input
-                  type="radio"
-                  name="templeType"
-                  value="Kudumbakshetram"
-                  checked={formData.templeType === "Kudumbakshetram"}
-                  onChange={handleChange}
-                />
-                <span>Kudumbakshetram(കുടുംബക്ഷേത്രം)</span>
-              </label>
-
-              <label className="form-radio-label flex items-center gap-2 mb-2">
-                <input
-                  type="radio"
-                  name="templeType"
-                  value="Bajanamadam"
-                  checked={formData.templeType === "Bajanamadam"}
-                  onChange={handleChange}
-                />
-                <span>Bajanamadam(ഭജനമഠം)</span>
-              </label>
-
-              <label className="form-radio-label flex items-center gap-2 mb-2">
-                <input
-                  type="radio"
-                  name="templeType"
-                  value="Sevagramam"
-                  checked={formData.templeType === "Sevagramam"}
-                  onChange={handleChange}
-                />
-                <span>Sevagramam(സേവാഗ്രാമം)</span>
-              </label>
-
-              <label className="form-radio-label flex items-center gap-2 mb-2">
-                <input
-                  type="radio"
-                  name="templeType"
-                  value="Kaavukal"
-                  checked={formData.templeType === "Kaavukal"}
-                  onChange={handleChange}
-                />
-                <span>Kaavukal(കാവ്)</span>
-              </label>
-
-              <label className="form-radio-label flex items-center gap-2 mb-2">
-                <input
-                  type="radio"
-                  name="templeType"
-                  value="Sarppakaav"
-                  checked={formData.templeType === "Sarppakaav"}
-                  onChange={handleChange}
-                />
-                <span>Sarppakaav(സർപ്പക്കാവ്)</span>
-              </label>
-            </div>
-          </div>
           <div>
             <label className="form-label">
               Temple Management System <span className="malayalam-text">(ക്ഷേത്ര ഭരണസംവിധാനം)</span>
