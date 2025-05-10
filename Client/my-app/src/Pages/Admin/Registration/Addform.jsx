@@ -257,7 +257,7 @@ function Addform() {
   }
 
   return (
-    <div className="app-container">
+    <div>
       <Header />
       <div className="content-container">
         <Sidebar />
@@ -384,78 +384,31 @@ function Addform() {
                 required
               />
             </div>
-            <div>
-              <label className="form-label">
-                Temple Type <span className="malayalam-text">(ക്ഷേത്ര വിവരം)</span>
-              </label>
-              <div className="form-radio-group">
-                <label className="form-radio-label flex items-center gap-2 mb-2">
-                  <input
-                    type="radio"
-                    name="templeType"
-                    value="Madam"
-                    checked={formData.templeType === "Madam"}
-                    onChange={handleChange}
-                  />
-                  <span>Madam(മഠം)</span>
-                </label>
-
-                <label className="form-radio-label flex items-center gap-2 mb-2">
-                  <input
-                    type="radio"
-                    name="templeType"
-                    value="Kudumbakshetram"
-                    checked={formData.templeType === "Kudumbakshetram"}
-                    onChange={handleChange}
-                  />
-                  <span>Kudumbakshetram(കുടുംബക്ഷേത്രം)</span>
-                </label>
-
-                <label className="form-radio-label flex items-center gap-2 mb-2">
-                  <input
-                    type="radio"
-                    name="templeType"
-                    value="Bajanamadam"
-                    checked={formData.templeType === "Bajanamadam"}
-                    onChange={handleChange}
-                  />
-                  <span>Bajanamadam(ഭജനമഠം)</span>
-                </label>
-
-                <label className="form-radio-label flex items-center gap-2 mb-2">
-                  <input
-                    type="radio"
-                    name="templeType"
-                    value="Sevagramam"
-                    checked={formData.templeType === "Sevagramam"}
-                    onChange={handleChange}
-                  />
-                  <span>Sevagramam(സേവാഗ്രാമം)</span>
-                </label>
-
-                <label className="form-radio-label flex items-center gap-2 mb-2">
-                  <input
-                    type="radio"
-                    name="templeType"
-                    value="Kaavukal"
-                    checked={formData.templeType === "Kaavukal"}
-                    onChange={handleChange}
-                  />
-                  <span>Kaavukal(കാവ്)</span>
-                </label>
-
-                <label className="form-radio-label flex items-center gap-2 mb-2">
-                  <input
-                    type="radio"
-                    name="templeType"
-                    value="Sarppakaav"
-                    checked={formData.templeType === "Sarppakaav"}
-                    onChange={handleChange}
-                  />
-                  <span>Sarppakaav(സർപ്പക്കാവ്)</span>
-                </label>
-              </div>
-            </div>
+                  <label className="addform-label">
+  Temple Type <span className="malayalam-text">(ക്ഷേത്ര വിവരം)</span>
+</label>
+<div className="addform-radio-group">
+  {[
+    { value: "Madam", label: "Madam(മഠം)" },
+    { value: "Kudumbakshetram", label: "Kudumbakshetram(കുടുംബക്ഷേത്രം)" },
+    { value: "Bajanamadam", label: "Bajanamadam(ഭജനമഠം)" },
+    { value: "Sevagramam", label: "Sevagramam(സേവാഗ്രാമം)" },
+    { value: "Kaavukal", label: "Kaavukal(കാവ്)" },
+    { value: "Sarppakaav", label: "Sarppakaav(സർപ്പക്കാവ്)" }
+  ].map(option => (
+    <label key={option.value} className="addform-radio-label">
+      <input
+        type="radio"
+        name="templeType"
+        value={option.value}
+        checked={formData.templeType === option.value}
+        onChange={handleChange}
+        className="addform-radio-input"
+      />
+      <span className="addform-radio-text">{option.label}</span>
+    </label>
+  ))}
+</div>
             <div>
               <label className="form-label">
                 Temple Management System <span className="malayalam-text">(ക്ഷേത്ര ഭരണസംവിധാനം)</span>
@@ -486,7 +439,7 @@ function Addform() {
             </div>
             <div>
               <label className="form-label">
-    Email ID or Phone Number <span className="malayalam-text">(മെയിൽ ഐ.ഡി./ഫോൺ നമ്പർ)</span>
+             Email ID or Phone Number <span className="malayalam-text">(മെയിൽ ഐ.ഡി./ഫോൺ നമ്പർ)</span>
               </label>
               <input type="email" className="form-input" name="email" value={formData.email} onChange={handleChange} />
             </div>

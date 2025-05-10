@@ -64,21 +64,49 @@
   resize: none;
 }
 
-.form-radio-group {
+.addform-label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.addform-radio-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 0.75rem;
+  margin-top: 10px;
 }
 
-.form-radio-label {
-  display: flex;
+.addform-radio-label {
+  display: inline-flex;
   align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  padding: 6px 10px;
   cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
 }
 
-.form-radio {
-  margin-right: 5px;
+.addform-radio-label:hover {
+  background-color: #e6f0ff;
 }
+
+.addform-radio-input {
+  accent-color: #007bff;
+  transform: scale(1.1);
+  display: inline-block;
+  margin: 0;
+}
+
+.addform-radio-text {
+  font-size: 1rem;
+  margin-left: 4px; /* Optional: adjust or set to 0 if you want no gap at all */
+}
+
+
 
 .form-submit {
   background-color: #4a90e2;

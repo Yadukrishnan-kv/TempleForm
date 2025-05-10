@@ -381,35 +381,30 @@ function Form() {
               required
             />
           </div>
-          
-        <div className="w-full px-4">
-  <label className="form-label block text-base font-medium mb-2">
-    Temple Type <span className="malayalam-text">(ക്ഷേത്ര വിവരം)</span>
-  </label>
-  <div className="form-radio-group flex flex-wrap gap-4">
-    {[
-      { label: "Madam(മഠം)", value: "Madam" },
-      { label: "Kudumbakshetram(കുടുംബക്ഷേത്രം)", value: "Kudumbakshetram" },
-      { label: "Bajanamadam(ഭജനമഠം)", value: "Bajanamadam" },
-      { label: "Sevagramam(സേവാഗ്രാമം)", value: "Sevagramam" },
-      { label: "Kaavukal(കാവ്)", value: "Kaavukal" },
-      { label: "Sarppakaav(സർപ്പക്കാവ്)", value: "Sarppakaav" },
-    ].map((item) => (
-      <label
-        key={item.value}
-        className="form-radio-label flex items-center gap-2 w-full sm:w-[48%] md:w-[30%] lg:w-[30%] xl:w-[18%]"
-      >
-        <input
-          type="radio"
-          name="templeType"
-          value={item.value}
-          checked={formData.templeType === item.value}
-          onChange={handleChange}
-        />
-        <span>{item.label}</span>
-      </label>
-    ))}
-  </div>
+         <label className="addform-label">
+  Temple Type <span className="malayalam-text">(ക്ഷേത്ര വിവരം)</span>
+</label>
+<div className="addform-radio-group">
+  {[
+    { value: "Madam", label: "Madam(മഠം)" },
+    { value: "Kudumbakshetram", label: "Kudumbakshetram(കുടുംബക്ഷേത്രം)" },
+    { value: "Bajanamadam", label: "Bajanamadam(ഭജനമഠം)" },
+    { value: "Sevagramam", label: "Sevagramam(സേവാഗ്രാമം)" },
+    { value: "Kaavukal", label: "Kaavukal(കാവ്)" },
+    { value: "Sarppakaav", label: "Sarppakaav(സർപ്പക്കാവ്)" }
+  ].map(option => (
+    <label key={option.value} className="addform-radio-label">
+      <input
+        type="radio"
+        name="templeType"
+        value={option.value}
+        checked={formData.templeType === option.value}
+        onChange={handleChange}
+        className="addform-radio-input"
+      />
+      <span className="addform-radio-text">{option.label}</span>
+    </label>
+  ))}
 </div>
 
           <div>
@@ -448,7 +443,7 @@ function Form() {
   <input
     type="text"
     className="form-input"
-    name="emilphone"
+    name="email"
     value={formData.email}
     onChange={handleChange}
     placeholder="Enter email or phone number"
