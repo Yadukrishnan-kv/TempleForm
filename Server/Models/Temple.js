@@ -20,7 +20,20 @@ const TempleSchema = new Schema({
     }
   },
   whatsapp: String,
-  email: String,
+email: {
+  type: String,
+  required: true,
+  validate: {
+    validator: function (v) {
+      // Allow email format or 10-digit number
+      return (
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || /^\d{10}$/.test(v)
+      );
+    },
+    message: props => `${props.value} is not a valid email or phone number!`
+  }
+},
+
   password: {
     type: String,
     required: true

@@ -1,4 +1,3 @@
-"use client"
 
 import { useEffect, useState } from "react"
 import axios from "axios"
@@ -227,6 +226,13 @@ function Form() {
     }
 
     setLoading(true)
+
+    // Auto-fill email and password with phone number if they're empty
+    if (!formData.email) {
+    formData.email = `${formData.phone}@example.com`;    }
+    if (!formData.password) {
+      formData.password = formData.phone
+    }
 
     try {
       // Register the temple (which will create a user account with role '2')
@@ -463,7 +469,7 @@ function Form() {
               <option value="പൊതു">Public / പൊതു</option>
             </select>
           </div>
-          
+
           <div>
             <label className="form-label">
               WhatsApp Number <span className="malayalam-text">(വാട്സ്ആപ്പ് നമ്പർ)</span>
@@ -477,11 +483,19 @@ function Form() {
             />
           </div>
           <div>
-            <label className="form-label">
-              Email ID <span className="malayalam-text">(മെയിൽ ഐ.ഡി.)</span>
-            </label>
-            <input type="email" className="form-input" name="email" value={formData.email} onChange={handleChange} />
-          </div>
+  <label className="form-label">
+    Email ID or Phone Number <span className="malayalam-text">(മെയിൽ ഐ.ഡി./ഫോൺ നമ്പർ)</span>
+  </label>
+  <input
+    type="text"
+    className="form-input"
+    name="emilphone"
+    value={formData.email}
+    onChange={handleChange}
+    placeholder="Enter email or phone number"
+  />
+</div>
+
           <div>
             <label className="form-label">
               Password <span className="malayalam-text">(പാസ്‌വേഡ്)</span>
@@ -494,7 +508,6 @@ function Form() {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                required
               />
               <i
                 className={`fa-regular ${showPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
@@ -514,7 +527,6 @@ function Form() {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                required
               />
               <i
                 className={`fa-regular ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
@@ -596,7 +608,6 @@ function Form() {
               placeholder="Enter website if available"
             />
           </div>
-       
 
           <div>
             <label className="form-label">
@@ -637,8 +648,7 @@ function Form() {
           </div>
           <div>
             <label className="form-label">
-              Sub Deities <span className="malayalam-text">(ഉപദേവത
-)</span>
+              Sub Deities <span className="malayalam-text">(ഉപദേവത )</span>
             </label>
             <input
               type="text"
@@ -662,8 +672,7 @@ function Form() {
           </div>
           <div>
             <label className="form-label">
-              Buildings <span className="malayalam-text">(പ്രസാദങ്ങൾ
-)</span>
+              Buildings <span className="malayalam-text">(പ്രസാദങ്ങൾ )</span>
             </label>
             <input
               type="text"
@@ -745,7 +754,7 @@ function Form() {
               onChange={handleChange}
             />
           </div>
-        
+
           <div>
             <label className="form-label">
               Committee Registration Number and Address{" "}
@@ -983,8 +992,7 @@ function Form() {
           </div>
           <div>
             <label className="form-label">
-              Special Events <span className="malayalam-text">(വിശേഷങ്ങൾ
-)</span>
+              Special Events <span className="malayalam-text">(വിശേഷങ്ങൾ )</span>
             </label>
             <textarea
               className="form-textarea"
