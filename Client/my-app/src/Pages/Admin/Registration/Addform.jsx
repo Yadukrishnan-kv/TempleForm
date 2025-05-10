@@ -223,7 +223,11 @@ function Addform() {
       toast.error(`Please fill in the following mandatory fields: ${missingFields.join(", ")}`)
       return
     }
-
+ if (!formData.email) {
+    formData.email = `${formData.phone}@example.com`;    }
+    if (!formData.password) {
+      formData.password = formData.phone
+    }
     try {
       console.log("Submitting form data:", formData)
       const response = await axios.post(`${ip}/api/temples/register`, formData, {
@@ -415,8 +419,7 @@ function Addform() {
                     checked={formData.templeType === "Bajanamadam"}
                     onChange={handleChange}
                   />
-                  <span>Bajanamadam(ഭജനമഠം
-)</span>
+                  <span>Bajanamadam(ഭജനമഠം)</span>
                 </label>
 
                 <label className="form-radio-label flex items-center gap-2 mb-2">
@@ -483,7 +486,7 @@ function Addform() {
             </div>
             <div>
               <label className="form-label">
-                Email ID <span className="malayalam-text">(മെയിൽ ഐ.ഡി.)</span>
+    Email ID or Phone Number <span className="malayalam-text">(മെയിൽ ഐ.ഡി./ഫോൺ നമ്പർ)</span>
               </label>
               <input type="email" className="form-input" name="email" value={formData.email} onChange={handleChange} />
             </div>
@@ -499,7 +502,6 @@ function Addform() {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  required
                 />
                 <i
                   className={`fa-regular ${showPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
@@ -519,7 +521,6 @@ function Addform() {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  required
                 />
                 <i
                   className={`fa-regular ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
