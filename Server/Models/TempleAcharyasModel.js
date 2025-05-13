@@ -1,13 +1,13 @@
 const { Schema, model } = require("mongoose")
 
 
-const Newformschema = new Schema({
+const TempleAcharyasSchema = new Schema({
   image: {
     filename: String,
     originalname: String,
     path: String
 },
-    name: { type: String, required: true },
+  name: { type: String, required: true },
   address: { type: String, required: true },
   phone: { type: String, required: true },
   pincode: { type: String, required: true },
@@ -17,6 +17,6 @@ const Newformschema = new Schema({
 }, { timestamps: true })
 
 
-const NewformCollection = model('Newformschema', Newformschema)
+const TempleAcharyasCollection = model('TempleAcharyasSchema', TempleAcharyasSchema)
 
-module.exports =  NewformCollection
+module.exports =  TempleAcharyasCollection

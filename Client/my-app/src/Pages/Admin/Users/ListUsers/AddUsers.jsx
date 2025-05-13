@@ -15,7 +15,8 @@ function AddUsers() {
     name: '',
     email: '',
     password: '',
-    role: ''
+    role: '',
+    phone:''
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +54,7 @@ function AddUsers() {
           autoClose: 3000,
         });
       }
-      setFormData({ name: '', email: '', password: '', role: '' });
+      setFormData({ name: '', email: '', password: '', role: '', phone:'' });
       setEditingUser(null);
       setIsFormVisible(false);
       fetchUsers();
@@ -67,7 +68,7 @@ function AddUsers() {
 
   const handleEdit = (user) => {
     setEditingUser(user);
-    setFormData({ name: user.name, email: user.email, password: '', role: user.role });
+    setFormData({ name: user.name, email: user.email, password: '', role: user.role, phone: user.phone });
     setIsFormVisible(true);
   };
 
@@ -150,7 +151,7 @@ function AddUsers() {
           <button className="add-button" onClick={() => {
             setIsFormVisible(!isFormVisible);
             setEditingUser(null);
-            setFormData({ name: '', email: '', password: '', role: '' });
+            setFormData({ name: '', email: '', password: '', role: '',phone:'' });
           }}>
             {isFormVisible ? "Cancel" : "Add Subadmin"}
           </button>
@@ -166,6 +167,17 @@ function AddUsers() {
                     id="name"
                     name="name"
                     value={formData.name}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="email">Phone</label>
+                  <input
+                    type="text"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
                     onChange={handleChange}
                     required
                   />
@@ -223,6 +235,7 @@ function AddUsers() {
                 <thead>
                   <tr>
                     <th>Name</th>
+                    <th>phone</th>
                     <th>Email</th>
                     <th>Role</th>
                     <th>Edit</th>
@@ -233,6 +246,8 @@ function AddUsers() {
                   {users.filter(user => user.role !== 'admin').map(user => (
                     <tr key={user._id} className="user-item">
                       <td className="user-name">{user.name}</td>
+                                            <td className="user-email">{user.phone}</td>
+
                       <td className="user-email">{user.email}</td>
                       <td className="user-role">{user.role}</td>
                       <td>

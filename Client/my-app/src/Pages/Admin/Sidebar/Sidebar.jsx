@@ -186,11 +186,40 @@ function Sidebar() {
             )}
 
                
+           {hasPermission("templeAcharyas") && (
+              <li className={`menu-item has-submenu ${activeMenu === "templeAcharyas" ? "active" : ""}`}>
+                <button className="menu-toggle1" onClick={() => toggleSubmenu("templeAcharyas")}>
+                <LuNotepadText style={{ fontSize: "25px", color: "#FFBD59" }} />
+                  <span className="menu-name">TempleAcharyas</span>
+                  {openSubmenus.templeAcharyas ? (
+                    <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
+                  ) : (
+                    <AiOutlineRight style={{ marginLeft: "auto", fontSize: "18px" }} />
+                  )}
+                </button>
+                {openSubmenus.templeAcharyas && (
+                  <ul className="submenu">
+                    <li>
+                      <Link to="/admin/adminTempleAcharyas" onClick={() => handleSubmenuClick("templeAcharyas", "list TempleAcharyas")}>
+                      List TempleAcharyas
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/admin/adminTempleAcharyasRole" onClick={() => handleSubmenuClick("templeAcharyas", "Manage Role")}>
+                       Add Role
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+            )}
+
+
             {hasPermission("newForm") && (
               <li className={`menu-item has-submenu ${activeMenu === "newForm" ? "active" : ""}`}>
                 <button className="menu-toggle1" onClick={() => toggleSubmenu("newForm")}>
                 <LuNotepadText style={{ fontSize: "25px", color: "#FFBD59" }} />
-                  <span className="menu-name">newForm</span>
+                  <span className="menu-name">Temple Staffs</span>
                   {openSubmenus.newForm ? (
                     <AiOutlineDown style={{ marginLeft: "auto", fontSize: "18px" }} />
                   ) : (
@@ -200,12 +229,12 @@ function Sidebar() {
                 {openSubmenus.newForm && (
                   <ul className="submenu">
                     <li>
-                      <Link to="/admin/newForm" onClick={() => handleSubmenuClick("newForm", "list FormData")}>
+                      <Link to="/admin/TempleStaffs" onClick={() => handleSubmenuClick("newForm", "list FormData")}>
                       List FormData
                       </Link>
                     </li>
                     <li>
-                      <Link to="/admin/newFormrole" onClick={() => handleSubmenuClick("newForm", "Manage Role")}>
+                      <Link to="/admin/TempleStaffsrole" onClick={() => handleSubmenuClick("newForm", "Manage Role")}>
                        Add Role
                       </Link>
                     </li>

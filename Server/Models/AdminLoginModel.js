@@ -16,6 +16,7 @@ const Adminschema = new Schema({
         type: String,
         required: true
     },
+phone: { type: String, unique: true, sparse: true },
     role: {
         type: String,
         enum: ['admin', 'subadmin1', 'subadmin2', 'subadmin3', 'subadmin4', 'subadmin5'],

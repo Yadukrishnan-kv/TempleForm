@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
-import './NewForms.css'; 
+import '../NewForm/NewForms.css'; 
 import { toast } from 'react-toastify';
 
-const NewForms = () => {
+const AdminTempleAcharyas = () => {
   const [forms, setForms] = useState([]);
   const [roles, setRoles] = useState([]);
   const [newRole, setNewRole] = useState('');
@@ -22,7 +22,7 @@ const logAction = async (action, details) => {
         `${ip}/api/adminlogin/log-action`,
         {
           action,
-          module: 'newForm',
+          module: 'templeAcharyas',
           subModule: 'Manage Role',
           details
         },
@@ -36,13 +36,13 @@ const logAction = async (action, details) => {
   };
 
   const fetchForms = () => {
-    axios.get(`${ip}/api/newForm/getnewform`)
+    axios.get(`${ip}/api/TempleAcharyas/getnewform`)
       .then((res) => setForms(res.data))
       .catch((err) => console.error('Error fetching forms:', err));
   };
 
   const fetchRoles = () => {
-    axios.get(`${ip}/api/newForm/getnewrole`)
+    axios.get(`${ip}/api/TempleAcharyas/getTempleAcharyasrole`)
       .then((res) => setRoles(res.data))
       .catch((err) => console.error('Error fetching roles:', err));
   };
@@ -54,7 +54,7 @@ const logAction = async (action, details) => {
 
   const handleAddRole = (e) => {
     e.preventDefault();
-    axios.post(`${ip}/api/newForm/createnewrole`, { name: newRole })
+    axios.post(`${ip}/api/TempleAcharyas/createTempleAcharyasrole`, { name: newRole })
       .then(() => {
         toast.success('Role added successfully');
         setNewRole('');
@@ -74,7 +74,7 @@ const logAction = async (action, details) => {
 
   const handleUpdateRole = (e) => {
     e.preventDefault();
-    axios.put(`${ip}/api/newForm/editnewrole/${editingRoleId}`, { name: editingRoleName })
+    axios.put(`${ip}/api/TempleAcharyas/editTempleAcharyasrole/${editingRoleId}`, { name: editingRoleName })
       .then(() => {
         toast.success('Role updated successfully');
          logAction('Update', `Updated Data: ${editingRoleName}`);    
@@ -91,7 +91,7 @@ const logAction = async (action, details) => {
 
   const handleDeleteRole = (id) => {
     if (window.confirm('Are you sure you want to delete this role?')) {
-      axios.delete(`${ip}/api/newForm/deletenewrole/${id}`)
+      axios.delete(`${ip}/api/TempleAcharyas/deleteTempleAcharyasrole/${id}`)
         .then(() => {
           toast.success('Role deleted successfully');
           fetchRoles();
@@ -116,7 +116,7 @@ const logAction = async (action, details) => {
       <div className="content-container">
         <Sidebar />
         <div className="newform-page">
-          <h2>Manage Role for  Temple Staffs</h2>
+          <h2>Manage Role for TempleAcharyas</h2>
           <button className="add-button" onClick={toggleForm}>
             {isFormVisible ? "Cancel" : "Add New Role"}
           </button>
@@ -194,5 +194,4 @@ const logAction = async (action, details) => {
   );
 };
 
-export default NewForms;
-
+export default AdminTempleAcharyas;

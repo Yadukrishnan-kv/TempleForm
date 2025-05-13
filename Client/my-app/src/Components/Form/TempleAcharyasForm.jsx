@@ -5,7 +5,7 @@ import Footer from '../HomePage/Footer';
 import { toast, ToastContainer } from 'react-toastify';
 import './NewForm.css';
 
-const NewForm = () => {
+const TempleAcharyasForm = () => {
   const [formData, setFormData] = useState({
     name: '', address: '', phone: '', pincode: '', role: ''
   });
@@ -18,7 +18,7 @@ const NewForm = () => {
   const ip = process.env.REACT_APP_BACKEND_IP;
 
   useEffect(() => {
-    axios.get(`${ip}/api/newForm/getnewrole`)
+    axios.get(`${ip}/api/TempleAcharyas/getTempleAcharyasrole`)
       .then((res) => setRoles(res.data))
       .catch((err) => console.error('Error fetching roles:', err));
 
@@ -26,7 +26,7 @@ const NewForm = () => {
   }, []);
 
   const fetchForms = () => {
-    axios.get(`${ip}/api/newForm/getnewform`)
+    axios.get(`${ip}/api/TempleAcharyas/getTempleAcharyas`)
       .then((res) => setForms(res.data))
       .catch((err) => console.error('Error fetching forms:', err));
   };
@@ -54,7 +54,7 @@ const NewForm = () => {
     data.append('image', selectedFile);
 
     try {
-      await axios.post(`${ip}/api/newForm/createnewform`, data, {
+      await axios.post(`${ip}/api/TempleAcharyas/createTempleAcharyas`, data, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
@@ -86,7 +86,7 @@ const NewForm = () => {
 
   {showForm && (
     <div className="NewForm-form-card">
-      <h2 className="NewForm-form-title">Temple Staffs</h2>
+      <h2 className="NewForm-form-title">Temple Acharyas</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="file"
@@ -228,4 +228,4 @@ const NewForm = () => {
   );
 };
 
-export default NewForm;
+export default TempleAcharyasForm;

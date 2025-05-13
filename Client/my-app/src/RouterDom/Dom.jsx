@@ -47,6 +47,9 @@ import NewForm from '../Components/Form/NewForm'
 import NewForms from '../Pages/Admin/NewForm/NewForms'
 import ListNewForm from '../Pages/Admin/NewForm/ListNewForm'
 import SubscriptionDetails from '../Pages/Admin/SubscriptionDetails/SubscriptionDetails'
+import TempleAcharyasForm from '../Components/Form/TempleAcharyasForm'
+import AdminTempleAcharyas from '../Pages/Admin/AdminTempleAcharyas/AdminTempleAcharyas'
+import ListTempleAcharyas from '../Pages/Admin/AdminTempleAcharyas/ListTempleAcharyas'
 
 function Dom() {
   return (
@@ -55,7 +58,8 @@ function Dom() {
         <Route path="/" element={<MainPage />} />
 
         <Route path="/form" element={<Form />} />
-        <Route path="/templeAcharyas" element={<NewForm />} />
+        <Route path="/TempleStaffs" element={<NewForm />} />
+        <Route path="/TempleAcharyas" element={<TempleAcharyasForm />} />
         <Route path="/AdminLogin" element={<LoginPage />} />
         <Route path="/about" element={<About />} />
         <Route path="/TemplePage" element={<TemplePage />} />
@@ -96,8 +100,11 @@ function Dom() {
         <Route element={<ProtectedRoute />}>
           <Route path="/Dashboard" element={<DashBoard />} />
           <Route path="/admin/profile" element={<AdminProfile />} />
-          <Route path="/admin/newForm" element={<ListNewForm />} />
-          <Route path="/admin/newFormrole" element={<NewForms />} />
+          <Route path="/admin/TempleStaffs" element={<ListNewForm />} />
+          <Route path="/admin/TempleStaffsrole" element={<NewForms />} />
+          <Route path="/admin/adminTempleAcharyas" element={<ListTempleAcharyas />} />
+          <Route path="/admin/adminTempleAcharyasRole" element={<AdminTempleAcharyas />} />
+
 
           <Route path="/AddSubmission" element={<Addform />} />
           <Route path="/SortSubmission" element={<SortSubmission />} />

@@ -6,7 +6,7 @@ const {AdminCollection,AdminLogCollection} = require("../Models/AdminLoginModel"
 
 const register = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role, } = req.body;
     
     const existingUser = await AdminCollection.findOne({ email });
     if (existingUser) {
@@ -34,41 +34,50 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ message: "Please provide email and password" });
+    const { email, phone, password } = req.body;
+
+    // Check if either email or phone is provided, and password is provided
+    if ((!email && !phone) || !password) {
+      return res.status(400).json({ message: "Please provide email or phone and password" });
     }
-    
-    const user = await AdminCollection.findOne({ email }).select('+password');
+
+    // Find user by email or phone
+    const user = await AdminCollection.findOne({
+      $or: [
+        email ? { email } : null,
+        phone ? { phone } : null
+      ].filter(Boolean) // Remove nulls
+    }).select('+password');
+
     if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password' });
+      return res.status(400).json({ message: 'Invalid email/phone or password' });
     }
-    
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      // Log failed login attempt
-      await createLogEntry(user._id, 'Failed Login', 'Authentication', 'Login',req);
-      return res.status(400).json({ message: "Invalid email or password" });
+      await createLogEntry(user._id, 'Failed Login', 'Authentication', 'Login', req);
+      return res.status(400).json({ message: "Invalid email/phone or password" });
     }
-    
-    // Log successful login
+
     await createLogEntry(user._id, 'Login', 'Authentication', 'Login');
-    
+
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
       process.env.JWT_KEY,
       { expiresIn: "7d" }
     );
-    
+
     return res.status(200).json({
       token,
       user: { id: user._id, name: user.name, email: user.email, role: user.role }
     });
+
   } catch (err) {
     console.error('Login error:', err.message);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 // Add this new method to handle action logging
 const logAction = async (req, res) => {
@@ -242,7 +251,7 @@ const updateProfile = async (req, res) => {
 
 const addSubadmin = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role,phone } = req.body;
     
     const existingUser = await AdminCollection.findOne({ email });
     if (existingUser) {
@@ -253,12 +262,13 @@ const addSubadmin = async (req, res) => {
     const response = await AdminCollection.create({
       name,
       email,
+      phone,
       password: hashedPassword,
       role: role || 'subadmin1'
     });
     
     if (response?._id) {
-      return res.status(200).send({ message: "Subadmin added successfully", user: { id: response._id, name: response.name, email: response.email, role: response.role } });
+      return res.status(200).send({ message: "Subadmin added successfully", user: { id: response._id, name: response.name, email: response.email, role: response.role,phone: response.phone } });
     }
   } catch (err) {
     console.log('Add subadmin error:', err.message);
@@ -290,7 +300,7 @@ const getRoles = async (req, res) => {
 const editSubadmin = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, password } = req.body;
+    const { name, email, password,phone } = req.body;
     
     const subadmin = await AdminCollection.findById(id);
     if (!subadmin) {
@@ -298,6 +308,7 @@ const editSubadmin = async (req, res) => {
     }
     
     if (name) subadmin.name = name;
+    if (phone) subadmin.phone = phone;
     if (email) subadmin.email = email;
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -306,7 +317,7 @@ const editSubadmin = async (req, res) => {
     
     await subadmin.save();
     
-    res.status(200).send({ message: "Subadmin updated successfully", user: { id: subadmin._id, name: subadmin.name, email: subadmin.email, role: subadmin.role } });
+    res.status(200).send({ message: "Subadmin updated successfully", user: { id: subadmin._id, name: subadmin.name, email: subadmin.email, role: subadmin.role, phone: subadmin.phone } });
   } catch (err) {
     console.log('Edit subadmin error:', err.message);
     return res.status(500).send({ message: "Internal server error" });

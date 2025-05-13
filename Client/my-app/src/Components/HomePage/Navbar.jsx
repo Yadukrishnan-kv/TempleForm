@@ -122,7 +122,7 @@ function Navbar() {
             <li className="nav-item">
               <a
                 className={`nav-link ${activeLink === 'Temple Acharyas' ? 'active' : ''}`}
-                href="/templeAcharyas"
+                href="/TempleAcharyas"
                 onClick={() => {
                   setActiveLink('Temple Acharyas');
                   setIsMobileMenuOpen(true);
@@ -131,14 +131,18 @@ function Navbar() {
                 Temple Acharyas
               </a>
             </li>
-            <li className="nav-item ">
-            <a className={`nav-link dropdown-toggle ${openDropdowns.Padashala ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('Padashala')}>Padashala<IoMdArrowDropdown />
-            </a>
-            <ul className={`dropdown-menu ${openDropdowns.Padashala ? 'show' : ''}`}>
-            <li><a className="dropdown-item" href="#">Youtube</a></li>
-            <li><a className="dropdown-item" href="#">Sound Cloud</a></li>
-                            </ul>
-              </li>
+           <li className="nav-item">
+              <a
+                className={`nav-link ${activeLink === ' Temple Staffs' ? 'active' : ''}`}
+                href="/TempleStaffs"
+                onClick={() => {
+                  setActiveLink(' Temple Staffs');
+                  setIsMobileMenuOpen(true);
+                }}
+              >
+                Temple Staffs
+              </a>
+            </li>
             <li className="nav-item ">
             <a className={`nav-link dropdown-toggle ${openDropdowns.wisdom ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('wisdom')}>Wisdom<IoMdArrowDropdown />
             </a>

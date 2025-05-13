@@ -24,6 +24,8 @@ const TempleRoutes = require('./Routes/TempleRoutes');
 app.use("/api/temples", TempleRoutes);
 const NewFormRoutes = require('./Routes/NewFormRoutes');
 app.use("/api/newForm", NewFormRoutes);
+const TempleAcharyasRoutes = require('./Routes/TempleAcharyasRoutes');
+app.use("/api/TempleAcharyas", TempleAcharyasRoutes);
 const AdminLoginRoutes = require('./Routes/AdminLoginRoutes');
 app.use("/api/adminlogin", AdminLoginRoutes);
 const stateRoutes = require('./Routes/StateRoutes');
