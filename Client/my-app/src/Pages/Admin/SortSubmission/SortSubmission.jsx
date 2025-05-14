@@ -289,15 +289,17 @@ const SortSubmission = () => {
   };
 
 
-  const handleDelete = async (id) => {
-  console.log('Deleting temple with ID:', id);  // Add this line for debugging
+  const handleDelete = async (templeId) => {
+  console.log('Deleting temple with ID:', templeId);  // Add this line for debugging
   try {
-    await axios.delete(`${ip}/api/temples/delete/${id}`);
-    setTemples();
+    await axios.delete(`${ip}/api/temples/delete/${templeId}`);
+    fetchTemples();
   } catch (err) {
     console.error('Error deleting temple:', err);
   }
 };
+
+
 
 
   return (
@@ -423,7 +425,7 @@ const SortSubmission = () => {
                             </td>
 
                              <td>
-                      <button className="delete-button1" onClick={() => handleDelete(temples._id)}>
+                      <button className="delete-button1" onClick={() => handleDelete(temple._id)}>
                         Delete
                       </button>
                     </td>

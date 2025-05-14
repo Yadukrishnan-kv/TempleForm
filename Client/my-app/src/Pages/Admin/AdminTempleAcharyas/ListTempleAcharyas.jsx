@@ -64,6 +64,7 @@ function ListTempleAcharyas() {
       console.error('Error deleting form:', err);
     }
   };
+  
   const handleEdit = (form) => {
     setEditFormId(form._id);
     setFormData({
