@@ -95,9 +95,9 @@ const updateTemple = async (req, res) => {
 
 // Delete temple
 const deleteTemple = async (req, res) => {
-  const { templeId } = req.params;
+  const { id } = req.params;
   try {
-    const temple = await TempleCollection.findByIdAndDelete(templeId);
+    const temple = await TempleCollection.findByIdAndDelete(id);
     if (!temple) {
       return res.status(404).send({ message: 'Temple not found' });
     }

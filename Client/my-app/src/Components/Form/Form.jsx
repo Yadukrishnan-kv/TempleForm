@@ -739,147 +739,152 @@ function Form() {
               <label className="form-label">
                 Internet <span className="malayalam-text">(ഇന്റർനെറ്റ് സംവിധാനം)</span>
               </label>
-              <div className="form-radio-group">
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasInternet"
-                    value={true}
-                    checked={formData.hasInternet}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">Yes </span>
-                </label>
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasInternet"
-                    value={false}
-                    checked={!formData.hasInternet}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">No </span>
-                </label>
-              </div>
+           <div className="addform-radio-group">
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasInternet"
+      value={true}
+      checked={formData.hasInternet === true || formData.hasInternet === "true"}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Yes</span>
+  </label>
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasInternet"
+      value={false}
+      checked={formData.hasInternet === false || formData.hasInternet === "false"}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">No</span>
+  </label>
+</div>
+
             </div>
             <div>
               <label className="form-label" style={{ paddingLeft: "10px" }}>
                 Computer <span className="malayalam-text">(കമ്പ്യൂട്ടർ)</span>
               </label>
-              <div className="form-radio-group">
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasComputer"
-                    value={true}
-                    checked={formData.hasComputer}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">Yes </span>
-                </label>
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasComputer"
-                    value={false}
-                    checked={!formData.hasComputer}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">No </span>
-                </label>
-              </div>
+           <div className="addform-radio-group">
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasComputer"
+      value={true}
+      checked={formData.hasComputer}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Yes</span>
+  </label>
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasComputer"
+      value={false}
+      checked={!formData.hasComputer}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">No</span>
+  </label>
+</div>
+
             </div>
             <div>
               <label className="form-label" style={{ paddingLeft: "10px" }}>
                 Printer <span className="malayalam-text">(പ്രിന്റർ)</span>
               </label>
-              <div className="form-radio-group">
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasPrinter"
-                    value={true}
-                    checked={formData.hasPrinter}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">Yes </span>
-                </label>
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasPrinter"
-                    value={false}
-                    checked={!formData.hasPrinter}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">No </span>
-                </label>
-              </div>
+             <div className="addform-radio-group">
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasPrinter"
+      value={true}
+      checked={formData.hasPrinter}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Yes</span>
+  </label>
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasPrinter"
+      value={false}
+      checked={!formData.hasPrinter}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">No</span>
+  </label>
+</div>
+
             </div>
 
             <div>
               <label className="form-label" style={{ paddingLeft: "10px" }}>
                 Camera <span className="malayalam-text">(ക്യാമറ)</span>
               </label>
-              <div className="form-radio-group">
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasCamera"
-                    value={true}
-                    checked={formData.hasCamera}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">Yes </span>
-                </label>
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasCamera"
-                    value={false}
-                    checked={!formData.hasCamera}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">No </span>
-                </label>
-              </div>
+            <div className="addform-radio-group">
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasCamera"
+      value={true}
+      checked={formData.hasCamera}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Yes</span>
+  </label>
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasCamera"
+      value={false}
+      checked={!formData.hasCamera}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">No</span>
+  </label>
+</div>
+
             </div>
             <div>
               <label className="form-label">
                 Digital Banking <span className="malayalam-text">(ഡിജിറ്റൽ ബാങ്കിംഗ്)</span>
               </label>
-              <div className="form-radio-group">
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasDigitalBanking"
-                    value={true}
-                    checked={formData.hasDigitalBanking}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">Yes </span>
-                </label>
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasDigitalBanking"
-                    value={false}
-                    checked={!formData.hasDigitalBanking}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">No </span>
-                </label>
-              </div>
+             <div className="addform-radio-group">
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasDigitalBanking"
+      value={true}
+      checked={formData.hasDigitalBanking}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Yes</span>
+  </label>
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasDigitalBanking"
+      value={false}
+      checked={!formData.hasDigitalBanking}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">No</span>
+  </label>
+</div>
+
             </div>
           </div>
           <div>
@@ -1015,30 +1020,31 @@ function Form() {
               value={formData.emergencyDetails}
               onChange={handleChange}
             />
-            <div className="form-radio-group mt-2">
-              <label className="form-radio-label">
-                <input
-                  type="radio"
-                  name="emergencyDetailsPermanent"
-                  value={true}
-                  checked={formData.emergencyDetailsPermanent}
-                  onChange={handleChange}
-                  className="form-radio"
-                />
-                <span className="ml-2">Permanent(സ്ഥിരം)</span>
-              </label>
-              <label className="form-radio-label">
-                <input
-                  type="radio"
-                  name="emergencyDetailsPermanent"
-                  value={false}
-                  checked={!formData.emergencyDetailsPermanent}
-                  onChange={handleChange}
-                  className="form-radio"
-                />
-                <span>Temporary(അസ്ഥിരം)</span>
-              </label>
-            </div>
+            <div className="addform-radio-group mt-2">
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="emergencyDetailsPermanent"
+      value={true}
+      checked={formData.emergencyDetailsPermanent}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Permanent(സ്ഥിരം)</span>
+  </label>
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="emergencyDetailsPermanent"
+      value={false}
+      checked={!formData.emergencyDetailsPermanent}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Temporary(അസ്ഥിരം)</span>
+  </label>
+</div>
+
             <div className="mt-2">
               <label className="form-label">
                 Phone <span className="malayalam-text">(ഫോൺ)</span>
@@ -1063,30 +1069,31 @@ function Form() {
               value={formData.sreekaaryamDetails}
               onChange={handleChange}
             />
-            <div className="form-radio-group mt-2">
-              <label className="form-radio-label">
-                <input
-                  type="radio"
-                  name="sreekaaryamDetailsPermanent"
-                  value={true}
-                  checked={formData.sreekaaryamDetailsPermanent}
-                  onChange={handleChange}
-                  className="form-radio"
-                />
-                <span className="ml-2">Permanent(സ്ഥിരം)</span>
-              </label>
-              <label className="form-radio-label">
-                <input
-                  type="radio"
-                  name="sreekaaryamDetailsPermanent"
-                  value={false}
-                  checked={!formData.sreekaaryamDetailsPermanent}
-                  onChange={handleChange}
-                  className="form-radio"
-                />
-                <span>Temporary(അസ്ഥിരം)</span>
-              </label>
-            </div>
+         <div className="addform-radio-group mt-2">
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="sreekaaryamDetailsPermanent"
+      value={true}
+      checked={formData.sreekaaryamDetailsPermanent}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Permanent(സ്ഥിരം)</span>
+  </label>
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="sreekaaryamDetailsPermanent"
+      value={false}
+      checked={!formData.sreekaaryamDetailsPermanent}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Temporary(അസ്ഥിരം)</span>
+  </label>
+</div>
+
             <div className="mt-2">
               <label className="form-label">
                 Phone <span className="malayalam-text">(ഫോൺ)</span>
@@ -1111,30 +1118,31 @@ function Form() {
               value={formData.puramDetails}
               onChange={handleChange}
             />
-            <div className="form-radio-group mt-2">
-              <label className="form-radio-label">
-                <input
-                  type="radio"
-                  name="puramDetailsPermanent"
-                  value={true}
-                  checked={formData.puramDetailsPermanent}
-                  onChange={handleChange}
-                  className="form-radio"
-                />
-                <span className="ml-2">Permanent(സ്ഥിരം)</span>
-              </label>
-              <label className="form-radio-label">
-                <input
-                  type="radio"
-                  name="puramDetailsPermanent"
-                  value={false}
-                  checked={!formData.puramDetailsPermanent}
-                  onChange={handleChange}
-                  className="form-radio"
-                />
-                <span>Temporary(അസ്ഥിരം)</span>
-              </label>
-            </div>
+            <div className="addform-radio-group mt-2">
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="puramDetailsPermanent"
+      value={true}
+      checked={formData.puramDetailsPermanent}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Permanent(സ്ഥിരം)</span>
+  </label>
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="puramDetailsPermanent"
+      value={false}
+      checked={!formData.puramDetailsPermanent}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Temporary(അസ്ഥിരം)</span>
+  </label>
+</div>
+
             <div className="mt-2">
               <label className="form-label">
                 Phone <span className="malayalam-text">(ഫോൺ)</span>
@@ -1159,30 +1167,31 @@ function Form() {
               value={formData.securityDetails}
               onChange={handleChange}
             />
-            <div className="form-radio-group mt-2">
-              <label className="form-radio-label">
-                <input
-                  type="radio"
-                  name="securityDetailsPermanent"
-                  value={true}
-                  checked={formData.securityDetailsPermanent}
-                  onChange={handleChange}
-                  className="form-radio"
-                />
-                <span className="ml-2">Permanent(സ്ഥിരം)</span>
-              </label>
-              <label className="form-radio-label">
-                <input
-                  type="radio"
-                  name="securityDetailsPermanent"
-                  value={false}
-                  checked={!formData.securityDetailsPermanent}
-                  onChange={handleChange}
-                  className="form-radio"
-                />
-                <span>Temporary(അസ്ഥിരം)</span>
-              </label>
-            </div>
+          <div className="addform-radio-group mt-2">
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="securityDetailsPermanent"
+      value={true}
+      checked={formData.securityDetailsPermanent}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Permanent(സ്ഥിരം)</span>
+  </label>
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="securityDetailsPermanent"
+      value={false}
+      checked={!formData.securityDetailsPermanent}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Temporary(അസ്ഥിരം)</span>
+  </label>
+</div>
+
             <div className="mt-2">
               <label className="form-label">
                 Phone <span className="malayalam-text">(ഫോൺ)</span>
@@ -1207,30 +1216,31 @@ function Form() {
               value={formData.templeAssets}
               onChange={handleChange}
             ></textarea>
-            <div className="form-radio-group mt-2">
-              <label className="form-radio-label">
-                <input
-                  type="radio"
-                  name="templeAssetsPermanent"
-                  value={true}
-                  checked={formData.templeAssetsPermanent}
-                  onChange={handleChange}
-                  className="form-radio"
-                />
-                <span className="ml-2">Permanent(സ്ഥിരം)</span>
-              </label>
-              <label className="form-radio-label">
-                <input
-                  type="radio"
-                  name="templeAssetsPermanent"
-                  value={false}
-                  checked={!formData.templeAssetsPermanent}
-                  onChange={handleChange}
-                  className="form-radio"
-                />
-                <span>Temporary(അസ്ഥിരം)</span>
-              </label>
-            </div>
+           <div className="addform-radio-group mt-2">
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="templeAssetsPermanent"
+      value={true}
+      checked={formData.templeAssetsPermanent}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Permanent(സ്ഥിരം)</span>
+  </label>
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="templeAssetsPermanent"
+      value={false}
+      checked={!formData.templeAssetsPermanent}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Temporary(അസ്ഥിരം)</span>
+  </label>
+</div>
+
             <div className="mt-2">
               <label className="form-label">
                 Phone <span className="malayalam-text">(ഫോൺ)</span>
@@ -1249,59 +1259,61 @@ function Form() {
               <label className="form-label" style={{ paddingLeft: "10px" }}>
                 Building <span className="malayalam-text">(കെട്ടിടം)</span>
               </label>
-              <div className="form-radio-group">
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasBuilding"
-                    value={true}
-                    checked={formData.hasBuilding}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">Yes</span>
-                </label>
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasBuilding"
-                    value={false}
-                    checked={!formData.hasBuilding}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">No </span>
-                </label>
-              </div>
+             <div className="addform-radio-group">
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasBuilding"
+      value={true}
+      checked={formData.hasBuilding}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Yes</span>
+  </label>
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasBuilding"
+      value={false}
+      checked={!formData.hasBuilding}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">No</span>
+  </label>
+</div>
+
             </div>
             <div>
               <label className="form-label" style={{ paddingLeft: "10px" }}>
                 Safe / Locker <span className="malayalam-text">(സേഫ് / ലോക്കർ)</span>
               </label>
-              <div className="form-radio-group">
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasSafe"
-                    value={true}
-                    checked={formData.hasSafe}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">Yes</span>
-                </label>
-                <label className="form-radio-label">
-                  <input
-                    type="radio"
-                    name="hasSafe"
-                    value={false}
-                    checked={!formData.hasSafe}
-                    onChange={handleChange}
-                    className="form-radio"
-                  />
-                  <span className="ml-2">No</span>
-                </label>
-              </div>
+             <div className="addform-radio-group">
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasSafe"
+      value={true}
+      checked={formData.hasSafe}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">Yes</span>
+  </label>
+  <label className="addform-radio-label">
+    <input
+      type="radio"
+      name="hasSafe"
+      value={false}
+      checked={!formData.hasSafe}
+      onChange={handleChange}
+      className="addform-radio-input"
+    />
+    <span className="addform-radio-text">No</span>
+  </label>
+</div>
+
             </div>
           </div>
           <div>

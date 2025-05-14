@@ -288,6 +288,18 @@ const SortSubmission = () => {
     return <div className="verification-status">Not Verified</div>;
   };
 
+
+  const handleDelete = async (id) => {
+  console.log('Deleting temple with ID:', id);  // Add this line for debugging
+  try {
+    await axios.delete(`${ip}/api/temples/delete/${id}`);
+    setTemples();
+  } catch (err) {
+    console.error('Error deleting temple:', err);
+  }
+};
+
+
   return (
     <div >
       <Header />
@@ -360,6 +372,8 @@ const SortSubmission = () => {
                   <th>About</th>
                   <th>Gallery</th>
                   <th>subscription</th>
+                                    <th>Delete</th>
+
 
                 </tr>
               </thead>
@@ -407,6 +421,12 @@ const SortSubmission = () => {
                                 <button className="gallery-button">Subscription</button>
                               </Link>
                             </td>
+
+                             <td>
+                      <button className="delete-button1" onClick={() => handleDelete(temples._id)}>
+                        Delete
+                      </button>
+                    </td>
 
                       </tr>
                       {expandedTemple === temple._id && (
