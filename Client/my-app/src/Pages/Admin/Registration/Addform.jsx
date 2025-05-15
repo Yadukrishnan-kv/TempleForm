@@ -390,6 +390,8 @@ function Addform() {
 <div className="addform-radio-group">
   {[
     { value: "Madam", label: "Madam(മഠം)" },
+            { value: "Desakshetram", label: "Desakshetram(ദേശക്ഷേത്രം)" },
+
     { value: "Kudumbakshetram", label: "Kudumbakshetram(കുടുംബക്ഷേത്രം)" },
     { value: "Bajanamadam", label: "Bajanamadam(ഭജനമഠം)" },
     { value: "Sevagramam", label: "Sevagramam(സേവാഗ്രാമം)" },

@@ -3,7 +3,9 @@ import axios from 'axios';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
 import './SortSubmission.css';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { TbEdit, TbPremiumRights } from "react-icons/tb";
+
 
 const SortSubmission = () => {
   const ip = process.env.REACT_APP_BACKEND_IP;
@@ -22,14 +24,16 @@ const SortSubmission = () => {
   const [enabling, setEnabling] = useState(false); // Added enabling state
   
   const initialFields = [
-    { key: 'name', label: 'ക്ഷേത്രത്തിന്റെ പേര്' },
-    { key: 'address', label: 'മേൽവിലാസം' },
-    { key: 'whatsapp', label: 'വാട്സ്ആപ്പ് നമ്പർ' },
-    { key: 'email', label: 'മെയിൽ ഐ.ഡി.' },
+    { key: 'name', label: 'Temple name' },
+    { key: 'address', label: 'address' },
     { key: 'isVerified', label: 'Verified' },
   ];
 
   const allFields = [
+      { key: 'email', label: 'മെയിൽ ഐ.ഡി.' },
+
+    { key: 'whatsapp', label: 'വാട്സ്ആപ്പ് നമ്പർ' },
+
     { key: 'darshanaTime', label: 'ദർശന സമയം' },
     { key: 'website', label: 'വെബ്സൈറ്റ്' },
     { key: 'locationUrl', label: 'ലൊക്കേഷൻ' },
@@ -308,7 +312,7 @@ const SortSubmission = () => {
       <div className="content-container">
         <Sidebar />
         <div className="submission-page">
-        <h1 className="form-title">ക്ഷേത്രശ്രീ
+        <h1 className="form-title">ക്ഷേത്രശ്രീ 
         ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
         <p className="form-group">കാലടി, ശങ്കരമാർഗ്
         - 683 574., ഫോൺ : 9847047963</p>
@@ -370,11 +374,13 @@ const SortSubmission = () => {
                     <th key={field.key}>{field.label}</th>
                   ))}
                   <th>Actions</th>
-                  <th>Edit</th>
                   <th>About</th>
                   <th>Gallery</th>
+                  <th>Edit</th>
+                    <th>Delete</th>
                   <th>subscription</th>
-                                    <th>Delete</th>
+                  
+
 
 
                 </tr>
@@ -394,42 +400,45 @@ const SortSubmission = () => {
                         ))}
                         <td>
                           <button 
-                            className='view-button' 
+                            className='gallery-button' 
                             onClick={() => handleViewClick(temple._id)}
                           >
-                            {expandedTemple === temple._id ? 'Hide' : 'View'}
+                            {expandedTemple === temple._id ? <i class="fa-solid fa-eye-slash"></i> : <i class="fa-solid fa-eye"></i>}
                           </button>
                         </td>
-                        <td>
-                          <Link to={`/edit/${temple._id}`}>
-                            <button className='edit-button'>Edit</button>
-                          </Link>
-                        </td>
+                       
                         <td>
                           <Link to={`/AboutTemple/${temple._id}`}>
-                            <button className='view-button'>About</button>
+                            <button className='gallery-button'><i class="fa-solid fa-address-card"></i></button>
                           </Link>
                         </td>
                         <td>
                           <Link to={`/gallery/${temple._id}`}>
-                            <button className='gallery-button'>Gallery</button>
+                            <button className='gallery-button'><i class="fa-solid fa-image"></i></button>
                           </Link>
                         </td>
-                        <td>
+                       
+ <td>
+                          <Link to={`/edit/${temple._id}`}>
+                          
+                            <button className='gallery-button'><i class="fa-solid fa-pen-to-square"></i></button>
+                          </Link>
+                        </td>
+                             <td>
+                      <button className="gallery-button" onClick={() => handleDelete(temple._id)}>
+                        <i class="fa-solid fa-trash"></i>
+
+                      </button>
+                    </td>
+ <td>
                               <Link
                                 to={`/subscriptionoffline/${temple._id}`}
                                 state={{ templeData: temple }} // Correct way to pass state in v6
                               >
-                                <button className="gallery-button">Subscription</button>
+                                <button className="gallery-button"><TbPremiumRights style={{ fontSize: "20px" }} />
+                                </button>
                               </Link>
                             </td>
-
-                             <td>
-                      <button className="delete-button1" onClick={() => handleDelete(temple._id)}>
-                        Delete
-                      </button>
-                    </td>
-
                       </tr>
                       {expandedTemple === temple._id && (
                         <tr>

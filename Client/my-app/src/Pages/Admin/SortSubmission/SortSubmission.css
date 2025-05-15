@@ -50,10 +50,10 @@
   
   .table-container {
     overflow-x: auto;
+    
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-left: 10px;
   }
   
   .temple-table {
@@ -132,7 +132,17 @@
   
 
   .view-button {
-    background-color: #dc3545;
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: backgroundcolor 0.3s ease;
+  }
+  .AboutTemple-button{
+     background-color: #4CAF50;
     color: white;
     padding: 5px 10px;
     border: none;

@@ -192,34 +192,51 @@ const NewForm = () => {
     </select>
   </div>
 
-  <div className="NewForm-cards-container">
-    {filteredForms.map((form, index) => (
-      <div key={index} className="NewForm-card">
-        {form.image && form.image.path && (
-          <img
-            src={`${ip}/${form.image.path}`}
-            alt="user"
-            className="NewForm-card-image"
-          />
-        )}
-        <div className="NewForm-card-content">
-          <h6 className="NewForm-card-name">{form.name}</h6>
-          <p className="NewForm-card-text">
-            <strong>📍 Address:</strong> {form.address}
-          </p>
-          <p className="NewForm-card-text">
-            <strong>👤 Role:</strong> {form.role}
-          </p>
-          <p className="NewForm-card-text">
-            <strong>📞 Phone:</strong> {form.phone}
-          </p>
-          <p className="NewForm-card-text">
-            <strong>🏷️ Pincode:</strong> {form.pincode}
-          </p>
+ <div className="py-5">
+  <div className="container py-4">
+    <div className="row">
+      <div className="col-lg-12 content">
+        <div className="row g-4">
+          {filteredForms.map((form, index) => (
+            <div key={index} className="col-sm-3 d-flex">
+              {/* start listing card */}
+              <div className="card card-hover flex-fill overflow-hidden w-100 card-hover-bg no-border poojarees">
+                {/* start card link */}
+                <a href="#" className="stretched-link" />
+                {/* end /. card link */}
+
+                {/* start card image wrap */}
+                <div className="card-img-wrap card-image-hover overflow-hidden dark-overlay">
+                  <img
+                    src={form.image?.path ? `${ip}/${form.image.path}` : "default.jpg"}
+                    alt="User"
+                    className="temples_thumb"
+                  />
+                </div>
+                {/* end /. card image wrap */}
+
+                <div className="d-flex flex-column h-100 position-relative p-3">
+                  {/* start card title */}
+                  <h3 className="fs-18 fw-semibold mb-0">{form.name}</h3>
+                  <span> {form.role}</span>
+                  <span>{form.address || 'Address not available'}</span>
+                                    <span>{form.phone}</span>
+                                                                        <span>{form.pincode}</span>
+
+
+                  
+                  {/* end /. card title */}
+                </div>
+              </div>
+              {/* end /. listing card */}
+            </div>
+          ))}
         </div>
       </div>
-    ))}
+    </div>
   </div>
+</div>
+
 </div>
 
       <Footer />

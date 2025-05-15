@@ -45,7 +45,7 @@ role: {
   website: String,
   templeType: {
     type: String,
-    enum: ['Madam','Kudumbakshetram', 'Bajanamadam', 'Sevagramam', 'Kaavukal', 'Sarppakaav'],
+    enum: ['Madam','Desakshetram','Kudumbakshetram', 'Bajanamadam', 'Sevagramam', 'Kaavukal', 'Sarppakaav'],
     required: true
   },
   locationSketch: String,
