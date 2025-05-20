@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
@@ -14,6 +13,7 @@ function Form() {
   const [states, setStates] = useState([])
   const [districts, setDistricts] = useState([])
   const [taluks, setTaluks] = useState([])
+  
   const [selectedState, setSelectedState] = useState("")
   const [selectedDistrict, setSelectedDistrict] = useState("")
   const [selectedTaluk, setSelectedTaluk] = useState("")
@@ -21,7 +21,8 @@ function Form() {
   const [error, setError] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-    const [currentStep, setCurrentStep] = useState(1)
+  const [currentStep, setCurrentStep] = useState(1)
+  const [validationErrors, setValidationErrors] = useState({})
 
   const [formData, setFormData] = useState({
     name: "",
@@ -96,7 +97,6 @@ function Form() {
     state: "",
     district: "",
     taluk: "",
-    
     Road: "",
     Landmark: "",
     Pincode: "",
@@ -158,6 +158,14 @@ function Form() {
     }
     setFormData(updatedFormData)
 
+    // Clear validation error for this field when user types
+    if (validationErrors[name]) {
+      setValidationErrors({
+        ...validationErrors,
+        [name]: ""
+      })
+    }
+
     if (name === "state") {
       setFormData((prevState) => ({ ...prevState, district: "", taluk: "" }))
     } else if (name === "district") {
@@ -183,6 +191,14 @@ function Form() {
     setSelectedDistrict("")
     setSelectedTaluk("")
     setTaluks([])
+    
+    // Clear validation error for state
+    if (validationErrors.state) {
+      setValidationErrors({
+        ...validationErrors,
+        state: ""
+      })
+    }
   }
 
   const handleDistrictChange = (e) => {
@@ -196,6 +212,14 @@ function Form() {
     }))
     fetchTaluks(districtId)
     setSelectedTaluk("")
+    
+    // Clear validation error for district
+    if (validationErrors.district) {
+      setValidationErrors({
+        ...validationErrors,
+        district: ""
+      })
+    }
   }
 
   const handleTalukChange = (e) => {
@@ -206,6 +230,14 @@ function Form() {
       ...prevState,
       taluk: talukName,
     }))
+    
+    // Clear validation error for taluk
+    if (validationErrors.taluk) {
+      setValidationErrors({
+        ...validationErrors,
+        taluk: ""
+      })
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -269,10 +301,45 @@ function Form() {
     }
   }
 
-   // Go to next step
+  // Validate fields based on current step
+  const validateStep = (step) => {
+    const errors = {}
+    
+    if (step === 1) {
+      // Validate first page fields
+      if (!formData.name) errors.name = "Temple Name is required"
+      if (!formData.Nation) errors.Nation = "Nation is required"
+      if (!selectedState) errors.state = "State is required"
+      if (!selectedDistrict) errors.district = "District is required"
+      if (!selectedTaluk) errors.taluk = "Taluk is required"
+    } 
+    else if (step === 2) {
+      // Validate second page fields
+      if (!formData.lsg) errors.lsg = "Local self government body is required"
+      if (!formData.address) errors.address = "Locality Name is required"
+      if (!formData.Pincode) errors.Pincode = "Pincode is required"
+    }
+    else if (step === 3) {
+      // Validate third page fields
+      if (!formData.templeType) errors.templeType = "Temple Type is required"
+      if (!formData.managementType) errors.managementType = "Temple Management System is required"
+    }
+    else if (step === 8) {
+      // Validate eighth page fields
+      if (!formData.phone) errors.phone = "Phone Number is required"
+      if (!formData.locationUrl) errors.locationUrl = "Location is required"
+    }
+    
+    setValidationErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
+  // Go to next step
   const nextStep = () => {
-    setCurrentStep(currentStep + 1)
-    window.scrollTo(0, 0)
+    if (validateStep(currentStep)) {
+      setCurrentStep(currentStep + 1)
+      window.scrollTo(0, 0)
+    }
   }
 
   // Go to previous step
@@ -280,6 +347,11 @@ function Form() {
     setCurrentStep(currentStep - 1)
     window.scrollTo(0, 0)
   }
+
+  // Helper function to render required star
+  const requiredStar = () => (
+    <span style={{ color: "red", marginLeft: "3px" }}>*</span>
+  )
 
   // Total number of steps
   const totalSteps = 10
@@ -303,7 +375,7 @@ function Form() {
           <div className="step-content">
             <div>
               <label className="form-label">
-                Temple Name <span className="malayalam-text">(ക്ഷേത്രത്തിന്റെ പേര്)</span>
+                Temple Name <span className="malayalam-text">(ക്ഷേത്രത്തിന്റെ പേര്)</span>{requiredStar()}
               </label>
               <input
                 type="text"
@@ -311,25 +383,39 @@ function Form() {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
+                placeholder="Enter temple name"
                 required
               />
+              {validationErrors.name && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.name}
+                </div>
+              )}
             </div>
             <div>
               <label className="form-label">
-                Nation <span className="malayalam-text">(ദേശം)</span>
+                Nation <span className="malayalam-text">(ദേശം)</span>{requiredStar()}
               </label>
-              <input
-                type="text"
+              <select
                 className="form-input"
                 name="Nation"
                 value={formData.Nation}
                 onChange={handleChange}
                 required
-              />
+              >
+                <option value="">Select Nation</option>
+                <option value="India">India</option>
+                {/* Add more options here if needed */}
+              </select>
+              {validationErrors.Nation && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.Nation}
+                </div>
+              )}
             </div>
-
+         
             <div>
-              <label className="form-label">State</label>
+              <label className="form-label">State{requiredStar()}</label>
               <select
                 className="form-select"
                 id="state"
@@ -346,10 +432,15 @@ function Form() {
                   </option>
                 ))}
               </select>
+              {validationErrors.state && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.state}
+                </div>
+              )}
             </div>
 
             <div>
-              <label className="form-label">District</label>
+              <label className="form-label">District{requiredStar()}</label>
               <select
                 className="form-select"
                 id="district"
@@ -366,10 +457,15 @@ function Form() {
                   </option>
                 ))}
               </select>
+              {validationErrors.district && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.district}
+                </div>
+              )}
             </div>
 
             <div>
-              <label className="form-label">Taluk</label>
+              <label className="form-label">Taluk{requiredStar()}</label>
               <select
                 className="form-select"
                 id="taluk"
@@ -386,6 +482,11 @@ function Form() {
                   </option>
                 ))}
               </select>
+              {validationErrors.taluk && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.taluk}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -393,9 +494,11 @@ function Form() {
         {/* Step 2: Location Details */}
         {currentStep === 2 && (
           <div className="step-content">
+
+
             <div>
               <label className="form-label">
-                Local self government body <span className="malayalam-text">(lsg)</span>
+                Local self government body <span className="malayalam-text">(lsg)</span>{requiredStar()}
               </label>
               <input
                 type="text"
@@ -403,12 +506,19 @@ function Form() {
                 name="lsg"
                 value={formData.lsg}
                 onChange={handleChange}
+                placeholder="Enter local self government body"
                 required
               />
+              {validationErrors.lsg && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.lsg}
+                </div>
+              )}
             </div>
+
             <div>
               <label className="form-label">
-                Locality Name <span className="malayalam-text">(പ്രദേശത്തിന്റെ പേര്)</span>
+                Locality Name <span className="malayalam-text">(പ്രദേശത്തിന്റെ പേര്)</span>{requiredStar()}
               </label>
               <input
                 type="text"
@@ -416,8 +526,14 @@ function Form() {
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
+                placeholder="Enter locality name"
                 required
               />
+              {validationErrors.address && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.address}
+                </div>
+              )}
             </div>
             <div>
               <label className="form-label">
@@ -429,7 +545,7 @@ function Form() {
                 name="Road"
                 value={formData.Road}
                 onChange={handleChange}
-                required
+                placeholder="Enter road name"
               />
             </div>
             <div>
@@ -442,12 +558,12 @@ function Form() {
                 name="Landmark"
                 value={formData.Landmark}
                 onChange={handleChange}
-                required
+                placeholder="Enter landmark"
               />
             </div>
             <div>
               <label className="form-label">
-                Pincode <span className="malayalam-text">(പിൻകോഡ് )</span>
+                Pincode <span className="malayalam-text">(പിൻകോഡ് )</span>{requiredStar()}
               </label>
               <input
                 type="text"
@@ -455,8 +571,14 @@ function Form() {
                 name="Pincode"
                 value={formData.Pincode}
                 onChange={handleChange}
+                placeholder="Enter pincode"
                 required
               />
+              {validationErrors.Pincode && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.Pincode}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -466,7 +588,7 @@ function Form() {
           <div className="step-content">
             <div>
               <label className="addform-label">
-                Temple Type <span className="malayalam-text">(ക്ഷേത്ര വിവരം)</span>
+                Temple Type <span className="malayalam-text">(ക്ഷേത്ര വിവരം)</span>{requiredStar()}
               </label>
               <div className="addform-radio-group">
                 {[
@@ -491,11 +613,16 @@ function Form() {
                   </label>
                 ))}
               </div>
+              {validationErrors.templeType && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.templeType}
+                </div>
+              )}
             </div>
 
             <div>
               <label className="form-label">
-                Temple Management System <span className="malayalam-text">(ക്ഷേത്ര ഭരണസംവിധാനം)</span>
+                Temple Management System <span className="malayalam-text">(ക്ഷേത്ര ഭരണസംവിധാനം)</span>{requiredStar()}
               </label>
               <select
                 className="form-select"
@@ -508,6 +635,11 @@ function Form() {
                 <option value="സേവാസമിതി">Service Committee / സേവാസമിതി</option>
                 <option value="പൊതു">Public / പൊതു</option>
               </select>
+              {validationErrors.managementType && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.managementType}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -525,6 +657,7 @@ function Form() {
                 name="mainDeity"
                 value={formData.mainDeity}
                 onChange={handleChange}
+                placeholder="Enter main deity"
               />
             </div>
             <div>
@@ -537,6 +670,7 @@ function Form() {
                 name="subDeities"
                 value={formData.subDeities}
                 onChange={handleChange}
+                placeholder="Enter sub deities"
               />
             </div>
             <div>
@@ -549,6 +683,7 @@ function Form() {
                 name="otherShrines"
                 value={formData.otherShrines}
                 onChange={handleChange}
+                placeholder="Enter other shrines"
               />
             </div>
           </div>
@@ -573,6 +708,7 @@ function Form() {
                       name="darshanaTime.morning.from"
                       value={formData.darshanaTime.morning.from}
                       onChange={handleChange}
+                      placeholder="From"
                     />
                     <span className="mx-2">
                       to <span className="malayalam-text">(മുതൽ)</span>
@@ -583,6 +719,7 @@ function Form() {
                       name="darshanaTime.morning.to"
                       value={formData.darshanaTime.morning.to}
                       onChange={handleChange}
+                      placeholder="To"
                     />
                     <span className="ml-2">
                       until <span className="malayalam-text">(വരെ)</span>
@@ -600,6 +737,7 @@ function Form() {
                       name="darshanaTime.evening.from"
                       value={formData.darshanaTime.evening.from}
                       onChange={handleChange}
+                      placeholder="From"
                     />
                     <span className="mx-2">
                       to <span className="malayalam-text">(മുതൽ)</span>
@@ -610,6 +748,7 @@ function Form() {
                       name="darshanaTime.evening.to"
                       value={formData.darshanaTime.evening.to}
                       onChange={handleChange}
+                      placeholder="To"
                     />
                     <span className="ml-2">
                       until <span className="malayalam-text">(വരെ)</span>
@@ -629,6 +768,7 @@ function Form() {
                 name="mainFestival"
                 value={formData.mainFestival}
                 onChange={handleChange}
+                placeholder="Enter main festival"
               />
             </div>
 
@@ -642,6 +782,7 @@ function Form() {
                 name="festivals"
                 value={formData.festivals}
                 onChange={handleChange}
+                placeholder="Enter festivals"
               ></textarea>
             </div>
             <div>
@@ -654,6 +795,7 @@ function Form() {
                 name="specialEvents"
                 value={formData.specialEvents}
                 onChange={handleChange}
+                placeholder="Enter special events"
               ></textarea>
             </div>
             <div>
@@ -666,6 +808,7 @@ function Form() {
                 name="ayanaSpecialties"
                 value={formData.ayanaSpecialties}
                 onChange={handleChange}
+                placeholder="Enter ayana specialties"
               />
             </div>
             <div>
@@ -678,6 +821,7 @@ function Form() {
                 name="monthlySpecialties"
                 value={formData.monthlySpecialties}
                 onChange={handleChange}
+                placeholder="Enter monthly specialties"
               />
             </div>
           </div>
@@ -696,6 +840,7 @@ function Form() {
                 name="history"
                 value={formData.history}
                 onChange={handleChange}
+                placeholder="Enter temple history"
               ></textarea>
             </div>
             <div>
@@ -708,6 +853,7 @@ function Form() {
                 name="buildings"
                 value={formData.buildings}
                 onChange={handleChange}
+                placeholder="Enter buildings"
               />
             </div>
             <div>
@@ -720,6 +866,7 @@ function Form() {
                 name="mainOfferings"
                 value={formData.mainOfferings}
                 onChange={handleChange}
+                placeholder="Enter main offerings"
               />
             </div>
           </div>
@@ -738,6 +885,7 @@ function Form() {
                 name="chiefPriest"
                 value={formData.chiefPriest}
                 onChange={handleChange}
+                placeholder="Enter chief priest"
               />
             </div>
             <div>
@@ -750,6 +898,7 @@ function Form() {
                 name="chiefPriestDetails"
                 value={formData.chiefPriestDetails}
                 onChange={handleChange}
+                placeholder="Enter chief priest details"
               />
             </div>
             <div>
@@ -762,12 +911,13 @@ function Form() {
                 name="kazhakamDetails"
                 value={formData.kazhakamDetails}
                 onChange={handleChange}
+                placeholder="Enter temple association"
               />
             </div>
             <div>
               <label className="form-label">
-                President's Name, Address and Phone Number{" "}
-                <span className="malayalam-text">(പ്രസിഡന്റ് പേരും അഡ്രസും ഫോൺ നമ്പറും)</span>
+                President's Name and Phone Number{" "}
+                <span className="malayalam-text">(പ്രസിഡന്റ് പേരും  ഫോൺ നമ്പറും)</span>
               </label>
               <textarea
                 className="form-textarea"
@@ -775,12 +925,13 @@ function Form() {
                 name="presidentDetails"
                 value={formData.presidentDetails}
                 onChange={handleChange}
+                placeholder="Enter president's details"
               ></textarea>
             </div>
             <div>
               <label className="form-label">
-                Secretary's Name, Address and Phone Number{" "}
-                <span className="malayalam-text">(സെക്രട്ടറി പേരും അഡ്രസും ഫോൺ നമ്പറും)</span>
+                Secretary's Name and Phone Number{" "}
+                <span className="malayalam-text">(സെക്രട്ടറി പേരും  ഫോൺ നമ്പറും)</span>
               </label>
               <textarea
                 className="form-textarea"
@@ -788,6 +939,7 @@ function Form() {
                 name="secretaryDetails"
                 value={formData.secretaryDetails}
                 onChange={handleChange}
+                placeholder="Enter secretary's details"
               ></textarea>
             </div>
           </div>
@@ -811,7 +963,7 @@ function Form() {
             </div>
             <div>
               <label className="form-label">
-                Phone Number <span className="malayalam-text">(ഫോൺ നമ്പർ)</span>
+                Phone Number <span className="malayalam-text">(ഫോൺ നമ്പർ)</span>{requiredStar()}
               </label>
               <input
                 type="tel"
@@ -819,8 +971,14 @@ function Form() {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
+                placeholder="Enter phone number"
                 required
               />
+              {validationErrors.phone && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.phone}
+                </div>
+              )}
             </div>
             <div>
               <label className="form-label">
@@ -832,19 +990,26 @@ function Form() {
                 name="whatsapp"
                 value={formData.whatsapp}
                 onChange={handleChange}
+                placeholder="Enter WhatsApp number"
               />
             </div>
             <div>
               <label className="form-label">
-                Location <span className="malayalam-text">(സ്ഥാനം)</span>
+                Location <span className="malayalam-text">(സ്ഥാനം)</span>{requiredStar()}
               </label>
               <input
                 className="form-input"
                 name="locationUrl"
                 value={formData.locationUrl}
                 onChange={handleChange}
+                placeholder="Enter location URL"
                 required
               />
+              {validationErrors.locationUrl && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.locationUrl}
+                </div>
+              )}
             </div>
             <div>
               <label className="form-label">
@@ -857,6 +1022,7 @@ function Form() {
                 name="registrationDetails"
                 value={formData.registrationDetails}
                 onChange={handleChange}
+                placeholder="Enter committee registration details"
               ></textarea>
             </div>
           </div>
@@ -1022,6 +1188,7 @@ function Form() {
                 name="bankDetails"
                 value={formData.bankDetails}
                 onChange={handleChange}
+                placeholder="Enter bank account details"
               ></textarea>
             </div>
           </div>
@@ -1055,6 +1222,7 @@ function Form() {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
+                  placeholder="Enter password"
                 />
                 <i
                   className={`fa-regular ${showPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
@@ -1074,6 +1242,7 @@ function Form() {
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
+                  placeholder="Confirm password"
                 />
                 <i
                   className={`fa-regular ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
@@ -1091,6 +1260,7 @@ function Form() {
                 name="Refferal"
                 value={formData.Refferal}
                 onChange={handleChange}
+                placeholder="Enter referral name"
               />
             </div>
              <div>
@@ -1103,6 +1273,7 @@ function Form() {
                 name="operation"
                 value={formData.operation}
                 onChange={handleChange}
+                placeholder="Enter area of operation"
               />
             </div>
              <div>
@@ -1115,6 +1286,7 @@ function Form() {
                 name="CodeNumber"
                 value={formData.CodeNumber}
                 onChange={handleChange}
+                placeholder="Enter code number"
               />
             </div>
             <div>
@@ -1142,6 +1314,7 @@ function Form() {
                   name="declarationPlace"
                   value={formData.declarationPlace}
                   onChange={handleChange}
+                  placeholder="Enter place"
                 />
               </div>
               <div>

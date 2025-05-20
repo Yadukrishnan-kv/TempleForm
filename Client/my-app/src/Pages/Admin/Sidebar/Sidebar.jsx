@@ -299,6 +299,16 @@ function Sidebar() {
                         Manage Taluks
                       </Link>
                     </li>
+                     <li>
+                      <Link to="/addlsg" onClick={() => handleSubmenuClick("Master", "Manage lsg")}>
+                        Manage Lsg
+                      </Link>
+                    </li>
+                     <li>
+                      <Link to="/selectedLsg" onClick={() => handleSubmenuClick("Master", "Manage SelectedLsg")}>
+                        Manage SelectedLsg
+                      </Link>
+                    </li>
                   </ul>
                 )}
               </li>

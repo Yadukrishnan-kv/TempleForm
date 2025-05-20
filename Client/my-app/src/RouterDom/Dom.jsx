@@ -50,6 +50,8 @@ import SubscriptionDetails from '../Pages/Admin/SubscriptionDetails/Subscription
 import TempleAcharyasForm from '../Components/Form/TempleAcharyasForm'
 import AdminTempleAcharyas from '../Pages/Admin/AdminTempleAcharyas/AdminTempleAcharyas'
 import ListTempleAcharyas from '../Pages/Admin/AdminTempleAcharyas/ListTempleAcharyas'
+import AddLSG from '../Pages/Admin/AddState/AddLSG'
+import AddSelectedLsg from '../Pages/Admin/AddState/AddSelectedLsg'
 
 function Dom() {
   return (
@@ -112,6 +114,10 @@ function Dom() {
           <Route path="/addstate" element={<AddState />} />
           <Route path="/adddistrict" element={<AddDistrict />} />
           <Route path="/addtaluk" element={<AddTaluk />} />
+          <Route path="/addlsg" element={<AddLSG />} />
+          <Route path="/selectedLsg" element={<AddSelectedLsg />} />
+
+
           <Route path="/edit/:id" element={<EdidtSubmission />} />
           <Route path="/EnquiryPage" element={<EnquiryPage />} />
           <Route path="/BookingsPage" element={<BookingsPage />} />
