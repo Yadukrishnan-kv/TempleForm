@@ -9,7 +9,7 @@ function AddSelectedLsg() {
   const ip = process.env.REACT_APP_BACKEND_IP;
 
   const [name, setName] = useState('');
-  const [selectedLsg, setSelectedLsg] = useState('');
+  const [lsg, setSelectedLsg] = useState('');
   const [Taluk, setTaluk] = useState(''); // Capitalized 'Taluk'
 
   const [taluks, setTaluks] = useState([]);
@@ -73,7 +73,7 @@ function AddSelectedLsg() {
 
     const payload = {
       name,
-      selectedLsg,
+      lsg,
       Taluk, // Capitalized as per backend requirement
     };
 
@@ -164,7 +164,7 @@ setSelectedLsg(item.lsg?._id || ''); // ✅ correct
                 required
               />
 
-              <select value={selectedLsg} onChange={e => setSelectedLsg(e.target.value)} required>
+              <select value={lsg} onChange={e => setSelectedLsg(e.target.value)} required>
                 <option value="">Select LSG</option>
                 {lsgs.map(lsg => (
                   <option key={lsg._id} value={lsg._id}>

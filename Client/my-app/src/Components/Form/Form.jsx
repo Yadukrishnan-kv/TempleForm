@@ -13,7 +13,12 @@ function Form() {
   const [states, setStates] = useState([])
   const [districts, setDistricts] = useState([])
   const [taluks, setTaluks] = useState([])
-  
+  const [lsgs, setLsgs] = useState([]);
+  const [localities, setlocalities] = useState([]);
+
+  const [selectedLsg, setSelectedLsg] = useState('');
+  const [listselectedLsg, setlistselectedLsg] = useState([]);
+
   const [selectedState, setSelectedState] = useState("")
   const [selectedDistrict, setSelectedDistrict] = useState("")
   const [selectedTaluk, setSelectedTaluk] = useState("")
@@ -23,6 +28,7 @@ function Form() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
   const [validationErrors, setValidationErrors] = useState({})
+  
 
   const [formData, setFormData] = useState({
     name: "",
@@ -142,6 +148,64 @@ function Form() {
       setLoading(false)
     }
   }
+useEffect(() => {
+  fetchLsgs();
+}, []);
+
+const fetchLsgs = async () => {
+  try {
+    const response = await axios.get(`${ip}/api/lsg/getAllLsgs`);
+    setLsgs(response.data ?? []);
+  } catch (error) {
+    console.error('Error fetching LSGs:', error);
+    setLsgs([]);
+  }
+};
+
+
+const fetchSelectedLsgs = async (e) => {
+  try {
+    const lsgname = lsgs.find((lsg) => lsg._id === e.target.value)?.name || ""
+    setSelectedLsg(e.target.value._id);
+     setFormData((prevState) => ({
+      ...prevState,
+      lsg: lsgname,
+    }))
+    const response = await axios.get(`${ip}/api/SelectedLsg/getAllSelectedLsgs`);
+    console.log("Selected LSGs:", response.data);
+        console.log("Selected :", e.target.value);
+            console.log("Select:", formData.taluk);
+
+
+    
+    
+    const filteredSelectedlsg = response.data.filter((lsg) => ( lsg.Taluk.name === formData.taluk && lsg.lsg._id === e.target.value));
+
+    setlistselectedLsg( filteredSelectedlsg || []);
+    console.log("Filtered Selected LSGs:", filteredSelectedlsg);
+    
+    
+    
+  } catch (error) {
+    console.error('Error fetching LSGs:', error);
+    setlistselectedLsg([]);
+  }
+};
+
+const handlelocalities = async (e) => {
+  try {
+        const localityname = listselectedLsg.find((locality) => locality._id === e.target.value)?.name || ""
+       setFormData((prevState) => ({
+      ...prevState,
+      address: localityname,
+    }))
+    setlocalities(e.target.value);
+   
+    
+  } catch (error) {
+    console.error('Error fetching LSGs:', error);
+  }
+};
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -496,19 +560,26 @@ function Form() {
           <div className="step-content">
 
 
-            <div>
-              <label className="form-label">
-                Local self government body <span className="malayalam-text">(lsg)</span>{requiredStar()}
-              </label>
-              <input
-                type="text"
-                className="form-input"
+                      <div>
+              <label className="form-label">LSG {requiredStar()}</label>
+              <select
+                className="form-select"
+                id="lsg"
                 name="lsg"
-                value={formData.lsg}
-                onChange={handleChange}
-                placeholder="Enter local self government body"
+                value={selectedLsg}
+              //  onChange={(e) => fetchSelectedLsgs(e.target.value)}
+                   onChange={ fetchSelectedLsgs}
+
+                disabled={loading}
                 required
-              />
+              >
+                <option value="">Select an LSG</option>
+                {lsgs.map((lsg) => (
+                  <option key={lsg._id} value={lsg._id}>
+                    {lsg.name}
+                  </option>
+                ))}
+              </select>
               {validationErrors.lsg && (
                 <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
                   {validationErrors.lsg}
@@ -516,25 +587,34 @@ function Form() {
               )}
             </div>
 
+
+          
+
             <div>
-              <label className="form-label">
-                Locality Name <span className="malayalam-text">(പ്രദേശത്തിന്റെ പേര്)</span>{requiredStar()}
-              </label>
-              <input
-                type="text"
-                className="form-input"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                placeholder="Enter locality name"
-                required
-              />
-              {validationErrors.address && (
-                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
-                  {validationErrors.address}
-                </div>
-              )}
-            </div>
+  <label className="form-label">
+    Locality Name <span className="malayalam-text">(പ്രദേശത്തിന്റെ പേര്)</span>{requiredStar()}
+  </label>
+  <select
+    className="form-select"
+    name="address"
+    value={localities}
+    onChange={handlelocalities}
+    required
+  >
+    <option value="">Select a Locality</option>
+    {listselectedLsg.map((locality) => (
+      <option key={locality._id} value={locality._id}>
+        {locality.name}
+      </option>
+    ))}
+  </select>
+  {validationErrors.address && (
+    <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+      {validationErrors.address}
+    </div>
+  )}
+</div>
+
             <div>
               <label className="form-label">
                 Road Name <span className="malayalam-text">(റോഡിന്റെ പേര്)</span>
