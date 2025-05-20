@@ -251,7 +251,7 @@ const updateProfile = async (req, res) => {
 
 const addSubadmin = async (req, res) => {
   try {
-    const { name, email, password, role,phone } = req.body;
+    const { name, email, password, role,phone,state,district,taluk} = req.body;
     
     const existingUser = await AdminCollection.findOne({ email });
     if (existingUser) {
@@ -264,11 +264,14 @@ const addSubadmin = async (req, res) => {
       email,
       phone,
       password: hashedPassword,
+      state,
+      district,
+      taluk,
       role: role || 'subadmin1'
     });
     
     if (response?._id) {
-      return res.status(200).send({ message: "Subadmin added successfully", user: { id: response._id, name: response.name, email: response.email, role: response.role,phone: response.phone } });
+      return res.status(200).send({ message: "Subadmin added successfully", user: { id: response._id, name: response.name, email: response.email, role: response.role,phone: response.phone, state: response.state, district: response.district, taluk: response.taluk } });
     }
   } catch (err) {
     console.log('Add subadmin error:', err.message);
@@ -300,7 +303,7 @@ const getRoles = async (req, res) => {
 const editSubadmin = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, password,phone } = req.body;
+    const { name, email, password,phone,state,district,taluk } = req.body;
     
     const subadmin = await AdminCollection.findById(id);
     if (!subadmin) {
@@ -310,6 +313,9 @@ const editSubadmin = async (req, res) => {
     if (name) subadmin.name = name;
     if (phone) subadmin.phone = phone;
     if (email) subadmin.email = email;
+    if (state) subadmin.state = state;
+    if (district) subadmin.district = district;
+    if (taluk) subadmin.taluk = taluk;
     if (password) {
       const hashedPassword = await bcrypt.hash(password, 10);
       subadmin.password = hashedPassword;
@@ -317,7 +323,7 @@ const editSubadmin = async (req, res) => {
     
     await subadmin.save();
     
-    res.status(200).send({ message: "Subadmin updated successfully", user: { id: subadmin._id, name: subadmin.name, email: subadmin.email, role: subadmin.role, phone: subadmin.phone } });
+    res.status(200).send({ message: "Subadmin updated successfully", user: { id: subadmin._id, name: subadmin.name, email: subadmin.email, role: subadmin.role, phone: subadmin.phone ,state: subadmin.state, district: subadmin.district, taluk: subadmin.taluk  } });
   } catch (err) {
     console.log('Edit subadmin error:', err.message);
     return res.status(500).send({ message: "Internal server error" });

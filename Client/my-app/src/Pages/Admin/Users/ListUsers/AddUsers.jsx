@@ -8,6 +8,12 @@ import Header from '../../Header/Header';
 
 function AddUsers() {
   const ip = process.env.REACT_APP_BACKEND_IP;
+   const [states, setStates] = useState([])
+  const [districts, setDistricts] = useState([])
+  const [taluks, setTaluks] = useState([])
+  const [selectedState, setSelectedState] = useState("")
+  const [selectedDistrict, setSelectedDistrict] = useState("")
+  const [selectedTaluk, setSelectedTaluk] = useState("")
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -16,15 +22,104 @@ function AddUsers() {
     email: '',
     password: '',
     role: '',
-    phone:''
+    phone:'',
+    state: "",
+    district: "",
+    taluk: ""
   });
   const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false)
+
   const [isLoading, setIsLoading] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const fetchStates = async () => {
+    try {
+      setLoading(true)
+      const response = await axios.get(`${ip}/api/states/getAllStates`)
+      setStates(response.data.states || [])
+    } catch (err) {
+      setError("Failed to fetch states")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchDistricts = async (stateId) => {
+    try {
+      setLoading(true)
+      const response = await axios.get(`${ip}/api/districts/getAllDistricts`)
+      const filteredDistricts = response.data.filter((district) => district.state._id === stateId)
+      setDistricts(filteredDistricts || [])
+    } catch (err) {
+      setError("Failed to fetch districts")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchTaluks = async (districtId) => {
+    try {
+      setLoading(true)
+      const response = await axios.get(`${ip}/api/taluks/getAllTaluks`)
+      const filteredTaluks = response.data.filter((taluk) => taluk.district._id === districtId)
+      setTaluks(filteredTaluks || [])
+    } catch (err) {
+      setError("Failed to fetch taluks")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+
+
+  
+
+  useEffect(() => {
+    fetchStates()
+  }, [])
+
+  const handleStateChange = (e) => {
+    const stateId = e.target.value
+    const stateName = states.find((state) => state._id === stateId)?.name || ""
+    setSelectedState(stateId)
+    setFormData((prevState) => ({
+      ...prevState,
+      state: stateName,
+      district: "",
+      taluk: "",
+    }))
+    fetchDistricts(stateId)
+    setSelectedDistrict("")
+    setSelectedTaluk("")
+    setTaluks([])
+  }
+
+  const handleDistrictChange = (e) => {
+    const districtId = e.target.value
+    const districtName = districts.find((district) => district._id === districtId)?.name || ""
+    setSelectedDistrict(districtId)
+    setFormData((prevState) => ({
+      ...prevState,
+      district: districtName,
+      taluk: "",
+    }))
+    fetchTaluks(districtId)
+    setSelectedTaluk("")
+  }
+
+  const handleTalukChange = (e) => {
+    const talukId = e.target.value
+    const talukName = taluks.find((taluk) => taluk._id === talukId)?.name || ""
+    setSelectedTaluk(talukId)
+    setFormData((prevState) => ({
+      ...prevState,
+      taluk: talukName,
+    }))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -160,6 +255,65 @@ function AddUsers() {
             <div className="add-subadmin-container">
               <h2 className="add-subadmin-title">{editingUser ? "Edit Subadmin" : "Add Subadmin"}</h2>
               <form className="add-subadmin-form" onSubmit={handleSubmit}>
+                <div>
+            <label className="form-label">State</label>
+            <select
+              className="form-select"
+              id="state"
+              name="state"
+              value={selectedState}
+              onChange={handleStateChange}
+              disabled={loading}
+              required
+            >
+              <option value="">Select a State</option>
+              {states.map((state) => (
+                <option key={state._id} value={state._id}>
+                  {state.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="form-label">District</label>
+            <select
+              className="form-select"
+              id="district"
+              name="district"
+              value={selectedDistrict}
+              onChange={handleDistrictChange}
+              disabled={!selectedState || loading}
+              required
+            >
+              <option value="">Select a District</option>
+              {districts.map((district) => (
+                <option key={district._id} value={district._id}>
+                  {district.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="form-label">Taluk</label>
+            <select
+              className="form-select"
+              id="taluk"
+              name="taluk"
+              value={selectedTaluk}
+              onChange={handleTalukChange}
+              disabled={!selectedDistrict || loading}
+              required
+            >
+              <option value="">Select a Taluk</option>
+              {taluks.map((taluk) => (
+                <option key={taluk._id} value={taluk._id}>
+                  {taluk.name}
+                </option>
+              ))}
+            </select>
+          </div>
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
                   <input
@@ -235,6 +389,9 @@ function AddUsers() {
                 <thead>
                   <tr>
                     <th>Name</th>
+                    <th>state</th>
+                    <th>district</th>
+                    <th>taluk</th>
                     <th>phone</th>
                     <th>Email</th>
                     <th>Role</th>
@@ -246,8 +403,10 @@ function AddUsers() {
                   {users.filter(user => user.role !== 'admin').map(user => (
                     <tr key={user._id} className="user-item">
                       <td className="user-name">{user.name}</td>
-                                            <td className="user-email">{user.phone}</td>
-
+                        <td className="user-email">{user.state}</td>
+                          <td className="user-email">{user.district}</td>
+                            <td className="user-email">{user.taluk}</td>
+                      <td className="user-email">{user.phone}</td>
                       <td className="user-email">{user.email}</td>
                       <td className="user-role">{user.role}</td>
                       <td>

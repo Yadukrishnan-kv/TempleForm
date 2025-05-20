@@ -2,10 +2,15 @@ const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
 const TempleSchema = new Schema({
+  Nation: { type: String, required: true },
   state: { type: String, required: true },
   district: { type: String, required: true },
   taluk: { type: String, required: true },
   name: { type: String, required: true },
+  lsg: { type: String, required: true },
+  Road: { type: String, required: true },
+    Landmark: { type: String, required: true },
+  Pincode: { type: String, required: true },
   address: { type: String, required: true },
   locationUrl: { type: String, required: true },
   phone: { type: String, required: true },
@@ -110,6 +115,9 @@ role: {
   committeeDecision: String,
   membershipNumber: String,
   decisionDate: Date,
+   CodeNumber: { type: String },
+      operation: { type: String},
+  Refferal: { type: String },
   isVerified: {
     type: Boolean,
     default: false
