@@ -79,6 +79,9 @@ role: {
   hasDigitalBanking: Boolean,
   managers: String,
   bankDetails: String,
+        BankName: String,
+  Bankifsc: String,
+
   presidentDetails: String,
   secretaryDetails: String,
   festivals: String,

@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import "./Form.css"
 import { toast } from "react-toastify"
 import Footer from "../HomePage/Footer"
 import Navbar from "../HomePage/Navbar"
+import '../../Pages/Admin/GalleryPage/GalleryPage.css';
 
 function Form() {
   const navigate = useNavigate()
+  const { templeId } = useParams();
 
   const ip = process.env.REACT_APP_BACKEND_IP
   const [states, setStates] = useState([])
@@ -28,7 +30,7 @@ function Form() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
   const [validationErrors, setValidationErrors] = useState({})
-  
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -109,6 +111,8 @@ function Form() {
     CodeNumber: "",
     operation: "",
     Refferal: "",
+    BankName: "",
+    Bankifsc: "",
   })
 
   const fetchStates = async () => {
@@ -148,64 +152,54 @@ function Form() {
       setLoading(false)
     }
   }
-useEffect(() => {
-  fetchLsgs();
-}, []);
+  
+  useEffect(() => {
+    fetchLsgs();
+  }, []);
 
-const fetchLsgs = async () => {
-  try {
-    const response = await axios.get(`${ip}/api/lsg/getAllLsgs`);
-    setLsgs(response.data ?? []);
-  } catch (error) {
-    console.error('Error fetching LSGs:', error);
-    setLsgs([]);
-  }
-};
+  const fetchLsgs = async () => {
+    try {
+      const response = await axios.get(`${ip}/api/lsg/getAllLsgs`);
+      setLsgs(response.data ?? []);
+    } catch (error) {
+      console.error('Error fetching LSGs:', error);
+      setLsgs([]);
+    }
+  };
 
+  const fetchSelectedLsgs = async (e) => {
+    try {
+      const lsgname = lsgs.find((lsg) => lsg._id === e.target.value)?.name || ""
+      setSelectedLsg(e.target.value._id);
+      setFormData((prevState) => ({
+        ...prevState,
+        lsg: lsgname,
+      }))
+      const response = await axios.get(`${ip}/api/SelectedLsg/getAllSelectedLsgs`);
+      console.log("Selected LSGs:", response.data);
+      console.log("Selected :", e.target.value);
+      console.log("Select:", formData.taluk);
+      const filteredSelectedlsg = response.data.filter((lsg) => ( lsg.Taluk.name === formData.taluk && lsg.lsg._id === e.target.value));
+      setlistselectedLsg( filteredSelectedlsg || []);
+      console.log("Filtered Selected LSGs:", filteredSelectedlsg);
+    } catch (error) {
+      console.error('Error fetching LSGs:', error);
+      setlistselectedLsg([]);
+    }
+  };
 
-const fetchSelectedLsgs = async (e) => {
-  try {
-    const lsgname = lsgs.find((lsg) => lsg._id === e.target.value)?.name || ""
-    setSelectedLsg(e.target.value._id);
-     setFormData((prevState) => ({
-      ...prevState,
-      lsg: lsgname,
-    }))
-    const response = await axios.get(`${ip}/api/SelectedLsg/getAllSelectedLsgs`);
-    console.log("Selected LSGs:", response.data);
-        console.log("Selected :", e.target.value);
-            console.log("Select:", formData.taluk);
-
-
-    
-    
-    const filteredSelectedlsg = response.data.filter((lsg) => ( lsg.Taluk.name === formData.taluk && lsg.lsg._id === e.target.value));
-
-    setlistselectedLsg( filteredSelectedlsg || []);
-    console.log("Filtered Selected LSGs:", filteredSelectedlsg);
-    
-    
-    
-  } catch (error) {
-    console.error('Error fetching LSGs:', error);
-    setlistselectedLsg([]);
-  }
-};
-
-const handlelocalities = async (e) => {
-  try {
-        const localityname = listselectedLsg.find((locality) => locality._id === e.target.value)?.name || ""
-       setFormData((prevState) => ({
-      ...prevState,
-      address: localityname,
-    }))
-    setlocalities(e.target.value);
-   
-    
-  } catch (error) {
-    console.error('Error fetching LSGs:', error);
-  }
-};
+  const handlelocalities = async (e) => {
+    try {
+      const localityname = listselectedLsg.find((locality) => locality._id === e.target.value)?.name || ""
+      setFormData((prevState) => ({
+        ...prevState,
+        address: localityname,
+      }))
+      setlocalities(e.target.value);
+    } catch (error) {
+      console.error('Error fetching LSGs:', error);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -304,6 +298,15 @@ const handlelocalities = async (e) => {
     }
   }
 
+  const handleFileSelect = (event) => {
+    const files = Array.from(event.target.files);
+    if (files.length > 10) {
+      alert('You can only upload up to 10 images at once');
+      return;
+    }
+    setSelectedFiles(files);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
@@ -337,17 +340,32 @@ const handlelocalities = async (e) => {
 
     // Auto-fill email and password with phone number if they're empty
     if (!formData.email) {
-    formData.email = `${formData.phone}@example.com`;    }
+      formData.email = `${formData.phone}@example.com`;
+    }
     if (!formData.password) {
       formData.password = formData.phone
     }
 
     try {
-      // Register the temple (which will create a user account with role '2')
-      await axios.post(`${ip}/api/temples/register`, formData)
-      // Removed the unused templeResponse variable
+      // First register the temple
+      const templeResponse = await axios.post(`${ip}/api/temples/register`, formData);
+      const registeredTempleId = templeResponse.data.temple._id || templeId;
+      
+      // If there are files to upload, upload them
+      if (selectedFiles.length > 0) {
+        const photoFormData = new FormData();
+        selectedFiles.forEach(file => {
+          photoFormData.append('photos', file);
+        });
+        
+        await axios.post(`${ip}/api/Gallery/upload/${registeredTempleId}`, photoFormData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+      }
 
-      toast.success("Temple registered successfully!")
+      toast.success("Temple registered successfully with images!")
       navigate("/signin")
     } catch (error) {
       setError(error.response?.data?.message || "Registration failed")
@@ -419,6 +437,7 @@ const handlelocalities = async (e) => {
 
   // Total number of steps
   const totalSteps = 10
+
   return (
     <div>
       <Navbar />
@@ -558,18 +577,14 @@ const handlelocalities = async (e) => {
         {/* Step 2: Location Details */}
         {currentStep === 2 && (
           <div className="step-content">
-
-
-                      <div>
+            <div>
               <label className="form-label">LSG {requiredStar()}</label>
               <select
                 className="form-select"
                 id="lsg"
                 name="lsg"
                 value={selectedLsg}
-              //  onChange={(e) => fetchSelectedLsgs(e.target.value)}
-                   onChange={ fetchSelectedLsgs}
-
+                onChange={fetchSelectedLsgs}
                 disabled={loading}
                 required
               >
@@ -587,33 +602,30 @@ const handlelocalities = async (e) => {
               )}
             </div>
 
-
-          
-
             <div>
-  <label className="form-label">
-    Locality Name <span className="malayalam-text">(പ്രദേശത്തിന്റെ പേര്)</span>{requiredStar()}
-  </label>
-  <select
-    className="form-select"
-    name="address"
-    value={localities}
-    onChange={handlelocalities}
-    required
-  >
-    <option value="">Select a Locality</option>
-    {listselectedLsg.map((locality) => (
-      <option key={locality._id} value={locality._id}>
-        {locality.name}
-      </option>
-    ))}
-  </select>
-  {validationErrors.address && (
-    <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
-      {validationErrors.address}
-    </div>
-  )}
-</div>
+              <label className="form-label">
+                Locality Name <span className="malayalam-text">(പ്രദേശത്തിന്റെ പേര്)</span>{requiredStar()}
+              </label>
+              <select
+                className="form-select"
+                name="address"
+                value={localities}
+                onChange={handlelocalities}
+                required
+              >
+                <option value="">Select a Locality</option>
+                {listselectedLsg.map((locality) => (
+                  <option key={locality._id} value={locality._id}>
+                    {locality.name}
+                  </option>
+                ))}
+              </select>
+              {validationErrors.address && (
+                <div className="error-message" style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+                  {validationErrors.address}
+                </div>
+              )}
+            </div>
 
             <div>
               <label className="form-label">
@@ -1260,21 +1272,64 @@ const handlelocalities = async (e) => {
             </div>
             <div>
               <label className="form-label">
-                Bank Account Details and QR Code <span className="malayalam-text">(ബാങ്ക് അക്കൗണ്ട് ഡീറ്റെയിൽസും ക്യുആർകോഡും)</span>
+                Bank Account Number <span className="malayalam-text">(ബാങ്ക് അക്കൗണ്ട് നമ്പർ)</span>
               </label>
-              <textarea
-                className="form-textarea"
-                rows={3}
+              <input   className="form-input"
                 name="bankDetails"
                 value={formData.bankDetails}
                 onChange={handleChange}
-                placeholder="Enter bank account details"
-              ></textarea>
+                placeholder="Enter Bank Account Number"
+              ></ input>
             </div>
+             <div>
+              <label className="form-label">
+                Bank Name<span className="malayalam-text">(ബാങ്ക് പേര്)</span>
+              </label>
+              <input   className="form-input"
+                name="BankName"
+                value={formData.BankName}
+                onChange={handleChange}
+                placeholder="Enter Bank Name"
+              ></ input>
+            </div>
+            <div>
+              <label className="form-label">
+                Ifsc Code<span className="malayalam-text">(ഐഎഫ്എസ്എസി കോഡ്)</span>
+              </label>
+              <input   className="form-input"
+                name="Bankifsc"
+                value={formData.Bankifsc}
+                onChange={handleChange}
+                placeholder="Enter Bank  Ifsc Code"
+              ></ input>
+            </div>
+             <div >
+                   <label className="form-label">
+                Add Images <span className="malayalam-text">(Select up to 10 images to upload)</span>
+                    
+                 </label>
+                <div className="upload-controls">
+                  
+                  <input 
+                    type="file" 
+                    multiple 
+                    accept="image/*" 
+                    onChange={handleFileSelect} 
+                    className="file-input" 
+                  />
+                  {selectedFiles.length > 0 && (
+                    <div className="selected-files-info">
+                      {selectedFiles.length} file(s) selected
+                    </div>
+                  )}
+                </div>
+              </div>
           </div>
+
+          
         )}
 
-        {/* Step 10: Account Details */}
+        {/* Step 10: Account Details and Image Upload */}
         {currentStep === 10 && (
           <div className="step-content">
             <div>
@@ -1330,7 +1385,7 @@ const handlelocalities = async (e) => {
                 />
               </div>
             </div>
-             <div>
+            <div>
               <label className="form-label">
                 Refferal Name  <span className="malayalam-text">(പരാമർശിച്ച വ്യക്തിയുടെ പേര്)</span>
               </label>
@@ -1343,7 +1398,7 @@ const handlelocalities = async (e) => {
                 placeholder="Enter referral name"
               />
             </div>
-             <div>
+            <div>
               <label className="form-label">
                 Area of operation Taluk/District  <span className="malayalam-text">( പ്രവർത്തന മേഖലം (താലുക്ക്/ജില്ല))</span>
               </label>
@@ -1356,7 +1411,7 @@ const handlelocalities = async (e) => {
                 placeholder="Enter area of operation"
               />
             </div>
-             <div>
+            <div>
               <label className="form-label">
                 Code Number <span className="malayalam-text">(കോഡ് നമ്പർ)</span>
               </label>
@@ -1369,6 +1424,7 @@ const handlelocalities = async (e) => {
                 placeholder="Enter code number"
               />
             </div>
+           
             <div>
               <label className="form-label">
                 Declaration <span className="malayalam-text">(സത്യവാങ്മൂലം)</span>
@@ -1409,28 +1465,28 @@ const handlelocalities = async (e) => {
                   onChange={handleChange}
                 />
               </div>
+              
             </div>
-            <button type="submit" className="form-submit">
-              Submit <span className="malayalam-text">(സമർപ്പിക്കുക)</span>
+            <button type="submit" className="form-submit" disabled={loading}>
+              {loading ? "Submitting..." : "Submit"} <span className="malayalam-text">(സമർപ്പിക്കുക)</span>
             </button>
           </div>
         )}
 
         {/* Navigation Buttons */}
-       <div className="form-navigation">
-  {currentStep > 1 && (
-    <button type="button" className="prev-button" onClick={prevStep}>
-      Previous
-    </button>
-  )}
+        <div className="form-navigation">
+          {currentStep > 1 && (
+            <button type="button" className="prev-button" onClick={prevStep}>
+              Previous
+            </button>
+          )}
 
-  {currentStep < totalSteps && (
-    <button type="button" className="next-button" onClick={nextStep}>
-      Next
-    </button>
-  )}
-</div>
-
+          {currentStep < totalSteps && (
+            <button type="button" className="next-button" onClick={nextStep}>
+              Next
+            </button>
+          )}
+        </div>
       </form>
       </div>
       <Footer />
