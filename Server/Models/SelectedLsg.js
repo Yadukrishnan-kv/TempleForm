@@ -6,13 +6,11 @@ const selectedLsgSchema = new Schema({
     required: true,
   },
   lsg: {
-  type: Schema.Types.ObjectId,
-  ref: 'lsg'
+  type: Schema.Types.String,
 }
 ,
   Taluk: {
-    type: Schema.Types.ObjectId,
-    ref: 'Taluk',
+    type: Schema.Types.String,
     required: true,
   }
 }, { timestamps: true });
