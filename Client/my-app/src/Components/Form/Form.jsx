@@ -173,7 +173,7 @@ function Form() {
       setSelectedLsg(e.target.value._id);
       setFormData((prevState) => ({
         ...prevState,
-        lsg: lsgname,
+        lsg: e.target.value,
       }))
       const response = await axios.get(`${ip}/api/SelectedLsg/getAllSelectedLsgs`);
       console.log("Selected LSGs:", response.data);
