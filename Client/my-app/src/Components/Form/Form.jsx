@@ -179,7 +179,8 @@ function Form() {
       console.log("Selected LSGs:", response.data);
       console.log("Selected :", e.target.value);
       console.log("Select:", formData.taluk);
-      const filteredSelectedlsg = response.data.filter((lsg) => ( lsg.Taluk.name === formData.taluk && lsg.lsg._id === e.target.value));
+      const filteredSelectedlsg = response.data.filter((lsg) => ( lsg.Taluk === formData.taluk && lsg.lsg === e.target.value));
+      
       setlistselectedLsg( filteredSelectedlsg || []);
       console.log("Filtered Selected LSGs:", filteredSelectedlsg);
     } catch (error) {
@@ -187,6 +188,7 @@ function Form() {
       setlistselectedLsg([]);
     }
   };
+  
 
   const handlelocalities = async (e) => {
     try {
@@ -590,7 +592,7 @@ function Form() {
               >
                 <option value="">Select an LSG</option>
                 {lsgs.map((lsg) => (
-                  <option key={lsg._id} value={lsg._id}>
+                  <option key={lsg._id} value={lsg.name}>
                     {lsg.name}
                   </option>
                 ))}
