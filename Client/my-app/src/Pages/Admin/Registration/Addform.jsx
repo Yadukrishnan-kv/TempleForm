@@ -440,7 +440,7 @@ function Addform() {
       <Header />
       <div className="content-container">
         <Sidebar />
-        <div className="addform-container">
+        <div className="form-container">
           <h1 className="form-title">ക്ഷേത്രശ്രീ ക്ഷേത്രോദ്ധാരണപദ്ധതി</h1>
           <p className="form-group">കാലടി, ശങ്കരമാർഗ് - 683 574., ഫോൺ : 9188910001, 9188910002</p>
           <p className="form-group">അപേക്ഷാഫോറം</p>
