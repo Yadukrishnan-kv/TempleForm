@@ -482,7 +482,7 @@ function Form() {
                 Nation <span className="malayalam-text">(ദേശം)</span>{requiredStar()}
               </label>
               <select
-                className="form-input"
+                className="form-select"
                 name="Nation"
                 value={formData.Nation}
                 onChange={handleChange}
@@ -500,7 +500,7 @@ function Form() {
             </div>
          
             <div>
-              <label className="form-label">State{requiredStar()}</label>
+              <label className="form-label">State<span className="malayalam-text">(സംസ്ഥാനം )</span>{requiredStar()}</label>
               <select
                 className="form-select"
                 id="state"
@@ -525,7 +525,7 @@ function Form() {
             </div>
 
             <div>
-              <label className="form-label">District{requiredStar()}</label>
+              <label className="form-label">District<span className="malayalam-text">(ജില്ല )</span>{requiredStar()}</label>
               <select
                 className="form-select"
                 id="district"
@@ -550,7 +550,7 @@ function Form() {
             </div>
 
             <div>
-              <label className="form-label">Taluk{requiredStar()}</label>
+              <label className="form-label">Taluk<span className="malayalam-text">(താലൂക്ക് )</span>{requiredStar()}</label>
               <select
                 className="form-select"
                 id="taluk"
@@ -1310,7 +1310,7 @@ function Form() {
                 Add Images <span className="malayalam-text">(Select up to 10 images to upload)</span>
                     
                  </label>
-                <div className="upload-controls">
+                <div className="regform-file-input">
                   
                   <input 
                     type="file" 

@@ -493,7 +493,7 @@ function Addform() {
                 </div>
 
                 <div>
-                  <label className="form-label">State{requiredStar()}</label>
+                  <label className="form-label">State<span className="malayalam-text">(സംസ്ഥാനം )</span>{requiredStar()}</label>
                   <select
                     className="form-select"
                     id="state"
@@ -518,7 +518,7 @@ function Addform() {
                 </div>
 
                 <div>
-                  <label className="form-label">District{requiredStar()}</label>
+                  <label className="form-label">DistrictDistrict<span className="malayalam-text">(ജില്ല )</span>{requiredStar()}</label>
                   <select
                     className="form-select"
                     id="district"
@@ -543,7 +543,7 @@ function Addform() {
                 </div>
 
                 <div>
-                  <label className="form-label">Taluk{requiredStar()}</label>
+                  <label className="form-label">Taluk<span className="malayalam-text">(താലൂക്ക് )</span>{requiredStar()}</label>
                   <select
                     className="form-select"
                     id="taluk"
