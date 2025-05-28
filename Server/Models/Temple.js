@@ -118,8 +118,8 @@ role: {
   committeeDecision: String,
   membershipNumber: String,
   decisionDate: Date,
-   CodeNumber: { type: String },
-      operation: { type: String},
+  CodeNumber: { type: String },
+  operation: { type: String},
   Refferal: { type: String },
   isVerified: {
     type: Boolean,
@@ -141,6 +141,9 @@ role: {
   }, show: {
     type: Boolean,
     default: false,
+  },
+  description:{
+    type: String
   }
 }, { timestamps: true });
 

@@ -49,6 +49,7 @@ function Form() {
     Nation: "",
     lsg: "",
     templeType: "",
+    description: "",
     locationSketch: "",
     history: "",
     mainDeity: "",
@@ -734,6 +735,20 @@ function Form() {
                   {validationErrors.managementType}
                 </div>
               )}
+            </div>
+
+               <div>
+              <label className="form-label">
+                Temple description <span className="malayalam-text">(ക്ഷേത്രത്തിന്റെ വിവരണം )</span>
+              </label>
+              <textarea
+                className="form-textarea"
+                rows={3}
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Enter description"
+              ></textarea>
             </div>
           </div>
         )}

@@ -57,6 +57,7 @@ function EditSubmission() {
     mainFestival: "",
     landOwnership: "",
     managementType: "",
+    description: "",
     registrationDetails: "",
     billingSystem: "",
     hasInternet: false,
@@ -565,6 +566,19 @@ function EditSubmission() {
                     <option value="പൊതു">Public / പൊതു</option>
                   </select>
                 </div>
+                 <div>
+              <label className="form-label">
+                Temple description <span className="malayalam-text">(ക്ഷേത്രത്തിന്റെ വിവരണം )</span>
+              </label>
+              <textarea
+                className="form-textarea"
+                rows={3}
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Enter description"
+              ></textarea>
+            </div>
               </div>
             )}
 

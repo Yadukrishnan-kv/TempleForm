@@ -48,6 +48,7 @@ const SortSubmission = () => {
     { key: "Landmark", label: "അടയാളചിഹ്നം" },
     { key: "Pincode", label: "പിൻകോഡ്" },
     { key: "templeType", label: "ക്ഷേത്ര വിവരം" },
+    { key: "description", label: "ക്ഷേത്രത്തിന്റെ വിവരണം " },
     { key: "locationSketch", label: "ലൊക്കേഷൻ സ്കെച്ച്" },
     { key: "history", label: "ക്ഷേത്ര ഐതിഹ്യം" },
     { key: "mainDeity", label: "പ്രതിഷ്ഠ" },
@@ -347,7 +348,6 @@ const SortSubmission = () => {
                     <th key={field.key}>{field.label}</th>
                   ))}
                   <th>Actions</th>
-                  <th>About</th>
                   <th>Gallery</th>
                   <th>Edit</th>
                   <th>Delete</th>
@@ -377,13 +377,7 @@ const SortSubmission = () => {
                           </button>
                         </td>
 
-                        <td>
-                          <Link to={`/AboutTemple/${temple._id}`}>
-                            <button className="gallery-button">
-                              <i className="fa-solid fa-address-card"></i>
-                            </button>
-                          </Link>
-                        </td>
+                      
                         <td>
                           <Link to={`/gallery/${temple._id}`}>
                             <button className="gallery-button">

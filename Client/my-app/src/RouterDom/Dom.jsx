@@ -16,7 +16,6 @@ import TemplePage from '../Components/TemplesPage/TemplesPage'
 import ContactPage from '../ContactPage/ContactPage'
 import GalleryPage from '../Pages/Admin/GalleryPage/GalleryPage'
 import TempleDetails from '../Components/TempleDetails/TempleDetails'
-import AboutTemple from '../Pages/Admin/AboutTemple/AboutTemple'
 import EnquiryPage from '../Pages/Admin/Enquiries/EnquiryPage'
 import BookingsPage from '../Pages/Admin/Bookings/BookingsPage'
 import BlogPage from '../Pages/Admin/BlogPage/BlogPage'
@@ -121,7 +120,6 @@ function Dom() {
           <Route path="/edit/:id" element={<EdidtSubmission />} />
           <Route path="/EnquiryPage" element={<EnquiryPage />} />
           <Route path="/BookingsPage" element={<BookingsPage />} />
-          <Route path="/AboutTemple/:templeId" element={<AboutTemple />} />
           <Route path="/BlogPage" element={<BlogPage />} />
           <Route path="/listusers" element={<AddUsers/>} />
           <Route path="/usersrole" element={<UserRole/>} />

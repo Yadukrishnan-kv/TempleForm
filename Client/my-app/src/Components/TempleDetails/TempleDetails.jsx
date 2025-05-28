@@ -22,7 +22,7 @@ const TempleDetails = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [temple, setTemple] = useState(null);
-  const [descriptions, setDescriptions] = useState([]);
+ 
   const [poojas, setPoojas] = useState([])
   const [vazhipads, setVazhipads] = useState([])
   const [selectedVazhipad, setSelectedVazhipad] = useState(null)
@@ -40,7 +40,6 @@ const TempleDetails = () => {
   useEffect(() => {
     fetchTempleDetails();
     fetchImages();
-    fetchDescriptions();
   }, [templeId]);
 
   const fetchTempleDetails = async () => {
@@ -63,14 +62,7 @@ const TempleDetails = () => {
     }
   };
 
-const fetchDescriptions = async () => {
-    try {
-        const res = await axios.get(`${ip}/api/aboutTemple/getAllaboutTemple/${templeId}`);
-        setDescriptions(res.data);
-    } catch (error) {
-        console.error('Error fetching descriptions', error);
-    }
-};
+
   const fetchImages = async () => {
     try {
       const response = await axios.get(`${ip}/api/Gallery/temple/${templeId}`);
@@ -269,11 +261,11 @@ const fetchDescriptions = async () => {
               <div className="mb-4">
 
                 <h4 className="fw-semibold fs-3 mb-4">About {temple?.name}</h4>
-                {descriptions.map((descs) => (
-                <p key={descs._id}>
-                  {descs.description}
+                
+                <p >
+                  {temple?.description}
                 </p>
-                ))}
+              
               </div>
 
               {/* Nearest Section */}
