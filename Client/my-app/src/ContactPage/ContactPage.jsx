@@ -144,7 +144,6 @@ const ContactPage = () => {
                   type="text"
                   className="form-control"
                   id="fullName"
-                  placeholder="David Hall"
                   required
                   value={formData.fullName}
                   onChange={handleChange}
@@ -156,7 +155,6 @@ const ContactPage = () => {
                   type="email"
                   className="form-control"
                   id="email"
-                  placeholder="hello@email.com"
                   required
                   value={formData.email}
                   onChange={handleChange}

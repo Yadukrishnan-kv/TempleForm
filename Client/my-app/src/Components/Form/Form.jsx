@@ -343,7 +343,7 @@ function Form() {
 
     // Auto-fill email and password with phone number if they're empty
     if (!formData.email) {
-      formData.email = `${formData.phone}@example.com`;
+      formData.email = `${formData.phone}@gmail.com`;
     }
     if (!formData.password) {
       formData.password = formData.phone
