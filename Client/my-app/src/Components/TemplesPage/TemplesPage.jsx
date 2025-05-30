@@ -20,6 +20,7 @@ const TemplePage = () => {
  
   const [templeTypes, setTempleTypes] = useState([
                 { en: "Madam" },
+                  { en: "Desakshetram" },
                 { en: "Kudumbakshetram" },
                 { en: "Bajanamadam" },
                 { en: "Sevagramam" },
