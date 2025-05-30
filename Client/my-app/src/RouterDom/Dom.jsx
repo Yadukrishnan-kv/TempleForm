@@ -51,6 +51,7 @@ import AdminTempleAcharyas from '../Pages/Admin/AdminTempleAcharyas/AdminTempleA
 import ListTempleAcharyas from '../Pages/Admin/AdminTempleAcharyas/ListTempleAcharyas'
 import AddLSG from '../Pages/Admin/AddState/AddLSG'
 import AddSelectedLsg from '../Pages/Admin/AddState/AddSelectedLsg'
+import TempleByType from '../Components/HomePage/TempleByType'
 
 function Dom() {
   return (
@@ -86,6 +87,7 @@ function Dom() {
         <Route path="/TempleDash-Edit/:id" element={<><TempleFormEdit/></>} />
         <Route path="/TempleDash-AboutTemple/:templeId" element={<><TempleFormAbout/></>} />
         <Route path="/TempleDash-gallery/:templeId" element={<><TempleFormGallery/></>} />
+        <Route path="/temples/type/:type" element={<TempleByType />} />
 
 
 

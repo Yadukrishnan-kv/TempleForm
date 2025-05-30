@@ -50,6 +50,17 @@ function Navbar() {
     setOpenDropdowns({});
   };
 
+
+  const templeTypes = [
+    'Madam',
+    'Desakshetram',
+    'Kudumbakshetram',
+    'Bajanamadam',
+    'Sevagramam',
+    'Kaavukal',
+    'Sarppakaav',
+  ];
+
   return (
     <nav className={`navbar navbar-expand-lg navbar-light sticky-top ${isScrolled ? 'shadow-sm' : ''}`}>
       <div className="container">
@@ -110,12 +121,17 @@ function Navbar() {
                     <a className={`nav-link dropdown-toggle ${openDropdowns.TemplePage ? 'show' : ''}`} href="#" role="button" onClick={() => toggleDropdown('TemplePage')}>Temples<IoMdArrowDropdown />
                     </a>
                     <ul className={`dropdown-menu ${openDropdowns.TemplePage ? 'show' : ''}`}>
-                                <li><a className="dropdown-item" href="#">Madam</a></li>
-                                <li><a className="dropdown-item" href="#">Kudumbakshetram </a></li>
-                                <li><a className="dropdown-item" href="#">Bajanamadam </a></li>
-                                <li><a className="dropdown-item" href="#">Sevagramam </a></li>
-                                <li><a className="dropdown-item" href="#">Kaavukal</a></li>
-                                <li><a className="dropdown-item" href="#">Sarppakaav </a></li>
+                                {templeTypes.map((type) => (
+                <li key={type}>
+                  <Link
+                    to={`/temples/type/${type}`}
+                    className="dropdown-item block px-4 py-2 hover:bg-gray-100"
+                    onClick={() => toggleDropdown('TemplePage')}
+                  >
+                    {type}
+                  </Link>
+                </li>
+              ))}
 
                             </ul>
             </li>
