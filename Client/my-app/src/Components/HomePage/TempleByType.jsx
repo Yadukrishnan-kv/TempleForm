@@ -123,6 +123,11 @@ function TempleByType() {
       setLoading(false);
     }
   };
+useEffect(() => {
+   
+    fetchDistricts();
+    fetchVerifiedTemples();
+  }, []);
 
   const filteredTemples = temples.filter(temple => {
     const matchesSearch = temple.name.toLowerCase().includes(searchTerm.toLowerCase());
