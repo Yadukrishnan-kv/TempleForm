@@ -28,6 +28,11 @@ function TempleByType() {
                   { en: "Sarppakaav" },
     ]);
   const ip = process.env.REACT_APP_BACKEND_IP;
+  useEffect(() => {
+   
+    fetchDistricts();
+    fetchVerifiedTemples();
+  }, []);
 
   useEffect(() => {
     console.log('Fetching temples for type:', type);
