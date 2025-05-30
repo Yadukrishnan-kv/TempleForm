@@ -105,16 +105,18 @@ const ExploreCities = () => {
         <div ref={carouselRef} className="owl-carousel temple-carousel">
           {temples.map(temple => (
             <div key={temple._id} className="temple-card">
+                <Link 
+                        to={`/TempleDetails/${temple._id}`} style={{ textDecoration: 'none' }}>
               <div className="temple-card-image">
                 <img src={temple.mainImage} alt={temple.name} />
                 <div className="temple-card-overlay">
                   <div className="temple-card-content">
                     <h2>{temple.name}</h2>
-                    <p>{temple.district}</p>
+                    <p style={{color:"white"}}>{temple.district}</p>
                     <div className="explore-more">
-                      <span>EXPLORE MORE</span>
+                      <span style={{color:"white"}}>EXPLORE MORE</span>
                       <Link 
-                        to={`/TempleDetails/${temple._id}`} 
+                        to={`/TempleDetails/${temple._id}` } style={{ textDecoration: 'none' }}
                         className="explore-button"
                       >
                         <ArrowRight size={16} />
@@ -123,6 +125,7 @@ const ExploreCities = () => {
                   </div>
                 </div>
               </div>
+              </Link>
             </div>
           ))}
         </div>
