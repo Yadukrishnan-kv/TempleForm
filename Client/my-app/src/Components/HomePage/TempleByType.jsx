@@ -1,141 +1,203 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import Navbar from './Navbar';
-import subbanner from '../../assets/images/subbanner.jpg';
-import { Search, MapPin, Heart } from 'lucide-react';
-import Aos from 'aos';
 
-// Fallback image (replace with a real fallback image path or URL)
-const FALLBACK_IMAGE = '/assets/images/default-temple.jpg'; // e.g., a default image in your assets folder
+
+"use client"
+
+import { useEffect, useState } from "react"
+import { Link, useParams } from "react-router-dom"
+import axios from "axios"
+import { toast } from "react-toastify"
+import Navbar from "./Navbar"
+import subbanner from "../../assets/images/subbanner.jpg"
+import { Search, MapPin, Heart } from "lucide-react"
+import Aos from "aos"
 
 function TempleByType() {
-  const { type } = useParams();
-  const navigate = useNavigate();
-  const [temples, setTemples] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState('');
-  const [districts, setDistricts] = useState([]);
-  const [selectedTempleType, setSelectedTempleType] = useState('');
-  const [templeTypes] = useState([
+  const { type } = useParams()
+  const [temples, setTemples] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedLocation, setSelectedLocation] = useState("")
+  const [districts, setDistricts] = useState([])
+  const [selectedTempleType, setSelectedTempleType] = useState("")
+  const [imageCache, setImageCache] = useState({})
+
+  const [templeTypes, setTempleTypes] = useState([
     { en: "Madam" },
+    { en: "Desakshetram" },
     { en: "Kudumbakshetram" },
     { en: "Bajanamadam" },
     { en: "Sevagramam" },
     { en: "Kaavukal" },
     { en: "Sarppakaav" },
-  ]);
-  const ip = process.env.REACT_APP_BACKEND_IP;
+  ])
 
-  // Initialize AOS and fetch districts on mount
+  const ip = process.env.REACT_APP_BACKEND_IP
+
+  // Initialize AOS and fetch districts only once
   useEffect(() => {
     Aos.init({
       duration: 600,
-      easing: 'ease-in-out',
+      easing: "ease-in-out",
       once: true,
-    });
-    fetchDistricts();
-  }, []);
+    })
+    fetchDistricts()
+  }, [])
 
-  // Fetch temples with images when `type` changes
+  // Fetch temples when type parameter changes
   useEffect(() => {
-    console.log('Fetching temples for type:', type);
-    const fetchTemplesWithImages = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(`${ip}/api/temples/all`);
-        console.log('API Response:', response.data);
-        const filteredTemples = Array.isArray(response.data)
-          ? response.data.filter(
-              (temple) => temple.templeType === type && temple.isVerified === true && temple.enabled === true
-            )
-          : [];
-
-        // Fetch gallery images for filtered temples
-        const templesWithImages = await Promise.all(
-          filteredTemples.map(async (temple) => {
-            try {
-              const galleryResponse = await axios.get(`${ip}/api/Gallery/temple/${temple._id}`);
-              const images = galleryResponse.data;
-              return {
-                ...temple,
-                mainImage: images.length > 0 ? `${ip}/${images[0].path}` : FALLBACK_IMAGE,
-              };
-            } catch (error) {
-              console.error(`Error fetching images for temple ${temple._id}:`, error);
-              return {
-                ...temple,
-                mainImage: FALLBACK_IMAGE,
-              };
-            }
-          })
-        );
-
-        setTemples(templesWithImages);
-      } catch (err) {
-        console.error('API Error:', err);
-        setError('Failed to fetch temples');
-        toast.error('Failed to fetch temples');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (ip) {
-      fetchTemplesWithImages();
-    } else {
-      setError('Backend URL is not defined');
-      toast.error('Backend URL is not defined');
-      setLoading(false);
+    if (type && ip) {
+      console.log("Fetching temples for type:", type)
+      setSelectedTempleType(type) // Set the dropdown to match the URL parameter
+      fetchTemplesByType(type)
     }
-  }, [type, ip]);
+  }, [type, ip])
 
   const fetchDistricts = async () => {
     try {
-      const response = await axios.get(`${ip}/api/districts/getAllDistricts`);
-      setDistricts(response.data);
+      const response = await axios.get(`${ip}/api/districts/getAllDistricts`)
+      setDistricts(response.data)
     } catch (error) {
-      console.error('Error fetching districts:', error);
+      console.error("Error fetching districts:", error)
     }
-  };
+  }
 
-  // Handle temple type selection and navigation
+  // Function to fetch images for a specific temple
+  const fetchTempleImages = async (templeId) => {
+    // Check if image is already cached
+    if (imageCache[templeId]) {
+      return imageCache[templeId]
+    }
+
+    try {
+      const galleryResponse = await axios.get(`${ip}/api/Gallery/temple/${templeId}`)
+      const images = galleryResponse.data
+
+      // Try different image indices as fallback
+      let mainImage = null
+      if (images.length > 0) {
+        // Try index 2 first, then 0, then 1
+        if (images[2] && images[2].path) {
+          mainImage = `${ip}/${images[2].path}`
+        } else if (images[0] && images[0].path) {
+          mainImage = `${ip}/${images[0].path}`
+        } else if (images[1] && images[1].path) {
+          mainImage = `${ip}/${images[1].path}`
+        }
+      }
+
+      // Cache the image
+      setImageCache((prev) => ({
+        ...prev,
+        [templeId]: mainImage,
+      }))
+
+      return mainImage
+    } catch (error) {
+      console.error(`Error fetching images for temple ${templeId}:`, error)
+      return null
+    }
+  }
+
+  // Main function to fetch temples by type
+  const fetchTemplesByType = async (templeType) => {
+    setLoading(true)
+    setError("")
+
+    try {
+      // Fetch temples
+      const response = await axios.get(`${ip}/api/temples/sort`)
+      console.log("API Response:", response.data)
+
+      // Filter verified, enabled temples by type
+      const filteredTemples = Array.isArray(response.data)
+        ? response.data.filter(
+            (temple) => temple.templeType === templeType && temple.isVerified === true && temple.enabled === true,
+          )
+        : []
+
+      console.log("Filtered temples:", filteredTemples)
+
+      // Fetch images for each temple
+      const templesWithImages = await Promise.all(
+        filteredTemples.map(async (temple) => {
+          const mainImage = await fetchTempleImages(temple._id)
+          return {
+            ...temple,
+            mainImage,
+          }
+        }),
+      )
+
+      setTemples(templesWithImages)
+    } catch (err) {
+      console.error("API Error:", err)
+      setError("Failed to fetch temples")
+      toast.error("Failed to fetch temples")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Handle temple type change from dropdown
   const handleTempleTypeChange = (e) => {
-    const newType = e.target.value;
-    setSelectedTempleType(newType);
-    if (newType) {
-      navigate(`/TempleByType/${newType}`);
-    }
-  };
+    const newTempleType = e.target.value
+    setSelectedTempleType(newTempleType)
 
+    if (newTempleType) {
+      // Fetch temples for the newly selected type
+      fetchTemplesByType(newTempleType)
+    } else {
+      // If "All Temple Types" is selected, fetch temples for the original type from URL
+      fetchTemplesByType(type)
+    }
+  }
+
+  // Handle image loading errors
+  const handleImageError = async (templeId, event) => {
+    console.log("Image failed to load for temple:", templeId)
+
+    // Remove from cache and try to refetch
+    setImageCache((prev) => {
+      const newCache = { ...prev }
+      delete newCache[templeId]
+      return newCache
+    })
+
+    // Try to fetch image again
+    const newImage = await fetchTempleImages(templeId)
+    if (newImage && event.target) {
+      event.target.src = newImage
+    }
+  }
+
+  // Filter temples based on search and location (but not temple type since we fetch by type)
   const filteredTemples = temples.filter((temple) => {
-    const matchesSearch = temple.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesLocation = !selectedLocation || temple.district === selectedLocation;
-    const matchesTempleType = !selectedTempleType || temple.templeType === selectedTempleType;
-    return matchesSearch && matchesLocation && matchesTempleType;
-  });
+    const matchesSearch = temple.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesLocation = !selectedLocation || temple.district === selectedLocation
+    return matchesSearch && matchesLocation
+  })
 
   return (
     <div>
       <Navbar />
+
       {/* Hero Section */}
       <section className="mx-3 overflow-hidden position-relative py-4 py-lg-5 rounded-4 text-white">
-        <img className="bg-image" src={subbanner} alt="Temple Banner" />
+        <img className="bg-image" src={subbanner || "/placeholder.svg"} alt="Temple Banner" />
         <div className="container overlay-content">
           <div className="row justify-content-center">
             <div className="col-sm-10 col-md-10 col-lg-8 col-xl-7">
               <div className="text-center mb-5" data-aos="fade-down">
                 <h2 className="display-4 fw-semibold mb-3 section-header__title text-capitalize">
-                  <span style={{ color: 'white' }}>Find your</span>
-                  <span className="font-caveat text-primary"> Temple </span>
-                  <span style={{ color: 'white' }}>here</span>
+                  <span style={{ color: "white" }}>Find your</span>
+                  <span className="font-caveat text-primary"> {selectedTempleType || type} </span>
+                  <span style={{ color: "white" }}>temples here</span>
                 </h2>
               </div>
             </div>
           </div>
+
           <div className="row justify-content-center">
             <div className="col-lg-10">
               <div className="search-wrapper">
@@ -149,7 +211,9 @@ function TempleByType() {
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
+
                 <div className="divider" />
+
                 <div className="search-field">
                   <MapPin className="search-icon" />
                   <select
@@ -165,22 +229,25 @@ function TempleByType() {
                     ))}
                   </select>
                 </div>
+
                 <div className="divider" />
+
                 <div className="search-field">
-                  <select
-                    className="search-select"
-                    value={selectedTempleType}
-                    onChange={handleTempleTypeChange}
-                  >
+                  <select className="search-select" value={selectedTempleType} onChange={handleTempleTypeChange}>
                     <option value="">All Temple Types</option>
-                    {templeTypes.map((type) => (
-                      <option key={type.en} value={type.en}>
-                        {type.en}
+                    {templeTypes.map((typeOption) => (
+                      <option key={typeOption.en} value={typeOption.en}>
+                        {typeOption.en}
                       </option>
                     ))}
                   </select>
                 </div>
-                <button type="submit" className="search-button1">
+
+                <button
+                  type="button"
+                  className="search-button1"
+                  onClick={() => fetchTemplesByType(selectedTempleType || type)}
+                >
                   Search temples
                 </button>
               </div>
@@ -204,7 +271,7 @@ function TempleByType() {
                 <div className="text-center text-danger py-5">{error}</div>
               ) : filteredTemples.length === 0 ? (
                 <div className="text-center py-5">
-                  <h3>No verified temples found</h3>
+                  <h3>No {selectedTempleType || type} temples found</h3>
                   <p className="text-muted">Please check back later for updates.</p>
                 </div>
               ) : (
@@ -214,19 +281,25 @@ function TempleByType() {
                       <div className="card card-hover flex-fill overflow-hidden w-100 card-hover-bg no-border bg-light">
                         <Link to={`/TempleDetails/${temple._id}`} className="stretched-link">
                           <div className="card-img-wrap card-image-hover overflow-hidden">
-                            <img
-                              src={temple.mainImage || FALLBACK_IMAGE}
-                              alt={temple.name}
-                              className="temples_thumb"
-                              onError={(e) => {
-                                e.target.src = FALLBACK_IMAGE;
-                              }}
-                            />
+                            {temple.mainImage ? (
+                              <img
+                                src={temple.mainImage || "/placeholder.svg"}
+                                alt={temple.name}
+                                className="temples_thumb"
+                                onError={(e) => handleImageError(temple._id, e)}
+                                key={`${temple._id}-${temple.mainImage}`} // Force re-render when image changes
+                              />
+                            ) : (
+                              <div className="temples_thumb d-flex align-items-center justify-content-center bg-light">
+                                <span className="text-muted">No Image</span>
+                              </div>
+                            )}
+
                             <div className="d-flex end-0 gap-2 me-3 mt-3 position-absolute top-0 z-1">
                               <button
                                 className="align-items-center bg-blur btn-icon d-flex justify-content-center rounded-circle shadow-sm text-white"
                                 onClick={(e) => {
-                                  e.preventDefault();
+                                  e.preventDefault()
                                   // Add favorite functionality here
                                 }}
                               >
@@ -235,6 +308,7 @@ function TempleByType() {
                             </div>
                           </div>
                         </Link>
+
                         <div className="d-flex flex-column position-relative p-3 h-24">
                           <h5 className="text-sm font-semibold mb-0">{temple.name}</h5>
                           <span className="text-xs">{temple.district}</span>
@@ -249,7 +323,7 @@ function TempleByType() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default TempleByType;
+export default TempleByType
