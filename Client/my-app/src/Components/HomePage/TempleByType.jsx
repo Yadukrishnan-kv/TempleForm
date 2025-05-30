@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import Navbar from './Navbar';
 import subbanner from '../../assets/images/subbanner.jpg';
 import { Search, MapPin, Heart } from 'lucide-react';
+import Aos from 'aos';
 
 
 
@@ -29,10 +30,14 @@ function TempleByType() {
     ]);
   const ip = process.env.REACT_APP_BACKEND_IP;
   useEffect(() => {
-   
-    fetchDistricts();
-    fetchVerifiedTemples();
-  }, []);
+     Aos.init({
+       duration: 600,
+       easing: 'ease-in-out',
+       once: true,
+     });
+     fetchDistricts();
+     fetchVerifiedTemples();
+   }, []);
 
   useEffect(() => {
     console.log('Fetching temples for type:', type);
