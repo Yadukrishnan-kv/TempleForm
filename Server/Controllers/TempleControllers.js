@@ -9,6 +9,10 @@ const bcrypt = require("bcrypt");
 const registerTemple =  async (req, res) => {
   try {
     const templeData = req.body;
+    const existingUser = await UserCollection.findOne({ email: templeData.email });
+    if (existingUser) {
+      return res.status(400).send({ message: "Email is already registered. Please use a different email." });
+}
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(templeData.password, 10);

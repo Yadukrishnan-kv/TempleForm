@@ -371,8 +371,17 @@ function Addform() {
       toast.success("Temple registered successfully with images!")
       navigate("/SortSubmission")
     } catch (error) {
-      setError(error.response?.data?.message || "Registration failed")
-      toast.error("Registration failed")
+      // Check if the error is specifically about email already being registered
+      if (error.response?.status === 400 && 
+          error.response?.data?.message === "Email is already registered. Please use a different email.") {
+        toast.error("The email is already used. Please use a different email.")
+        setError("The email is already used. Please use a different email.")
+      } else {
+        // Handle other errors
+        const errorMessage = error.response?.data?.message || "Registration failed"
+        setError(errorMessage)
+        toast.error(errorMessage)
+      }
     } finally {
       setLoading(false)
     }
@@ -519,7 +528,7 @@ function Addform() {
                 </div>
 
                 <div>
-                  <label className="form-label">DistrictDistrict<span className="malayalam-text">(ജില്ല )</span>{requiredStar()}</label>
+                  <label className="form-label">District<span className="malayalam-text">(ജില്ല )</span>{requiredStar()}</label>
                   <select
                     className="form-select"
                     id="district"
