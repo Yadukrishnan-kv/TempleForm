@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
@@ -368,18 +370,20 @@ function Addform() {
         })
       }
 
-      toast.success("Temple registered successfully with images!")
+      toast.success("Temple registered successfully !")
       navigate("/SortSubmission")
     } catch (error) {
-      // Check if the error is specifically about email already being registered
-      if (error.response?.status === 400 && 
-          error.response?.data?.message === "Email is already registered. Please use a different email.") {
-        toast.error("The email is already used. Please use a different email.")
-        setError("The email is already used. Please use a different email.")
+      const errorMessage = error.response?.data?.message || "Registration failed"
+      const errorType = error.response?.data?.type
+
+      setError(errorMessage)
+
+      // Show specific toast messages based on error type
+      if (errorType === "email_exists") {
+        toast.error("This email is already registered. ")
+      } else if (errorType === "phone_exists") {
+        toast.error("This phone number is already registered.")
       } else {
-        // Handle other errors
-        const errorMessage = error.response?.data?.message || "Registration failed"
-        setError(errorMessage)
         toast.error(errorMessage)
       }
     } finally {
@@ -503,7 +507,10 @@ function Addform() {
                 </div>
 
                 <div>
-                  <label className="form-label">State<span className="malayalam-text">(സംസ്ഥാനം )</span>{requiredStar()}</label>
+                  <label className="form-label">
+                    State<span className="malayalam-text">(സംസ്ഥാനം )</span>
+                    {requiredStar()}
+                  </label>
                   <select
                     className="form-select"
                     id="state"
@@ -528,7 +535,10 @@ function Addform() {
                 </div>
 
                 <div>
-                  <label className="form-label">District<span className="malayalam-text">(ജില്ല )</span>{requiredStar()}</label>
+                  <label className="form-label">
+                    District<span className="malayalam-text">(ജില്ല )</span>
+                    {requiredStar()}
+                  </label>
                   <select
                     className="form-select"
                     id="district"
@@ -553,7 +563,10 @@ function Addform() {
                 </div>
 
                 <div>
-                  <label className="form-label">Taluk<span className="malayalam-text">(താലൂക്ക് )</span>{requiredStar()}</label>
+                  <label className="form-label">
+                    Taluk<span className="malayalam-text">(താലൂക്ക് )</span>
+                    {requiredStar()}
+                  </label>
                   <select
                     className="form-select"
                     id="taluk"
@@ -744,18 +757,18 @@ function Addform() {
                 </div>
 
                 <div>
-              <label className="form-label">
-                Temple description <span className="malayalam-text">(ക്ഷേത്രത്തിന്റെ വിവരണം )</span>
-              </label>
-              <textarea
-                className="form-textarea"
-                rows={3}
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Enter description"
-              ></textarea>
-            </div>
+                  <label className="form-label">
+                    Temple description <span className="malayalam-text">(ക്ഷേത്രത്തിന്റെ വിവരണം )</span>
+                  </label>
+                  <textarea
+                    className="form-textarea"
+                    rows={3}
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    placeholder="Enter description"
+                  ></textarea>
+                </div>
               </div>
             )}
 
@@ -1358,6 +1371,8 @@ function Addform() {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Enter email or phone number"
+                    autoComplete="new-email"
+                    data-form-type="other"
                   />
                 </div>
                 <div>
@@ -1373,6 +1388,8 @@ function Addform() {
                       value={formData.password}
                       onChange={handleChange}
                       placeholder="Enter password"
+                      autoComplete="new-password"
+                      data-form-type="other"
                     />
                     <i
                       className={`fa-regular ${showPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}
@@ -1393,6 +1410,8 @@ function Addform() {
                       value={formData.confirmPassword}
                       onChange={handleChange}
                       placeholder="Confirm password"
+                      autoComplete="new-password"
+                      data-form-type="other"
                     />
                     <i
                       className={`fa-regular ${showConfirmPassword ? "fa-eye" : "fa-eye-slash"} toggle-password position-absolute end-0 top-50 translate-middle-y me-3`}

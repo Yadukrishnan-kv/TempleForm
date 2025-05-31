@@ -6,37 +6,54 @@ const bcrypt = require("bcrypt");
 
 
 // Register a new temple
-const registerTemple =  async (req, res) => {
+const registerTemple = async (req, res) => {
   try {
-    const templeData = req.body;
-    const existingUser = await UserCollection.findOne({ email: templeData.email });
-    if (existingUser) {
-      return res.status(400).send({ message: "Email is already registered. Please use a different email." });
-}
+    const templeData = req.body
+
+    // Check for existing email
+    const existingUserByEmail = await UserCollection.findOne({ email: templeData.email })
+    if (existingUserByEmail) {
+      return res.status(400).send({
+        message: "Email is already registered..",
+        type: "email_exists",
+      })
+    }
+
+    // Check for existing phone number
+    const existingUserByPhone = await TempleCollection.findOne({ phone: templeData.phone })
+    if (existingUserByPhone) {
+      return res.status(400).send({
+        message: "Phone number is already registered..",
+        type: "phone_exists",
+      })
+    }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(templeData.password, 10);
+    const hashedPassword = await bcrypt.hash(templeData.password, 10)
 
     // Create user account
     const userResponse = await UserCollection.create({
       fullName: templeData.name,
       email: templeData.email,
+      phone: templeData.phone,
       password: hashedPassword,
       role: "2", // Temple role
-    });
+    })
 
     // Create temple record
     const newTemple = new TempleCollection({
       ...templeData,
       userId: userResponse._id,
-    });
-    await newTemple.save();
+    })
+    await newTemple.save()
 
-    res.status(201).send({ message: "Temple registered successfully", temple: newTemple });
+    res.status(201).send({ message: "Temple registered successfully", temple: newTemple })
   } catch (error) {
-    res.status(400).send({ message: "Error registering temple", error: error.message });
+    res.status(400).send({ message: "Error registering temple", error: error.message })
   }
-};
+}
+
+
 
 // Get all temples
 const getAllTemples = async (req, res) => {
