@@ -230,7 +230,6 @@ function SearchResults() {
                         <div className="d-flex flex-column position-relative p-3 h-24">
                           <h5 className="text-sm font-semibold mb-0">{temple.name}</h5>
                           <span className="text-xs">{temple.district}</span>
-                          <span className="text-xs text-muted">{temple.templeType}</span>
                         </div>
                       </div>
                     </div>
