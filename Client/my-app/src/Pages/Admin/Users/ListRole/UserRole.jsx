@@ -139,7 +139,7 @@ function UserRole() {
     
   if (loading) {
     return (
-      <div className="app-container">
+      <div >
         <Header />
         <div className="content-container">
           <Sidebar />
@@ -151,7 +151,7 @@ function UserRole() {
 
   if (currentUser?.role !== 'admin') {
     return (
-      <div className="app-container">
+      <div >
         <Header />
         <div className="content-container">
           <Sidebar />
@@ -162,7 +162,7 @@ function UserRole() {
   }
 
   return (
-    <div className="app-container">
+    <div >
       <Header />
       <div className="content-container">
         <Sidebar />

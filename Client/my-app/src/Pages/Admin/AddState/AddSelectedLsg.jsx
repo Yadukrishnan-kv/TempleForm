@@ -155,7 +155,7 @@ function AddSelectedLsg() {
   const totalPages = Math.ceil(selectedLsgs.length / itemsPerPage);
 
   return (
-    <div className="app-container">
+    <div >
       <Header />
       <div className="content-container">
         <Sidebar />

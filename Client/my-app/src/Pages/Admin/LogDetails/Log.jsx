@@ -5,7 +5,7 @@ import LogTable from './LogTable';
 
 function Log() {
   return (
-    <div className="app-container">
+    <div >
       <Header />
       <div className="content-container">
         <Sidebar />

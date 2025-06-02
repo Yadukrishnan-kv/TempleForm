@@ -371,7 +371,7 @@ function Form() {
         })
       }
 
-      toast.success("Temple registered successfully with images!")
+      toast.success("Temple registered successfully ")
       navigate("/signin")
     } catch (error) {
       const errorMessage = error.response?.data?.message || "Registration failed"
@@ -381,9 +381,9 @@ function Form() {
 
       // Show specific toast messages based on error type
       if (errorType === "email_exists") {
-        toast.error("This email is already registered. Please use a different email address.")
+        toast.error("This email is already registered")
       } else if (errorType === "phone_exists") {
-        toast.error("This phone number is already registered. Please use a different phone number.")
+        toast.error("This phone number is already registered")
       } else {
         toast.error(errorMessage)
       }

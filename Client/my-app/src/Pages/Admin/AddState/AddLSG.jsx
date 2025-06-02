@@ -97,7 +97,7 @@ const AddLSG = () => {
   };
 
   return (
-    <div className="app-container">
+    <div >
       <Header />
       <div className="content-container">
         <Sidebar />

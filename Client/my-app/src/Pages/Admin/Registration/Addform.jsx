@@ -380,7 +380,7 @@ function Addform() {
 
       // Show specific toast messages based on error type
       if (errorType === "email_exists") {
-        toast.error("This email is already registered. ")
+        toast.error("This email is already registered.")
       } else if (errorType === "phone_exists") {
         toast.error("This phone number is already registered.")
       } else {

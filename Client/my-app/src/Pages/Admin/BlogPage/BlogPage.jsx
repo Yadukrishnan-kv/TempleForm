@@ -128,7 +128,7 @@ const BlogPage = () => {
       await logAction('Delete', `Deleted Blog: ${blogTitle}`);
   
       // Notify the user of success
-      toast.success(`Blog "${blogTitle}" deleted successfully!`);
+      toast.success(`Blog  deleted successfully!`);
     } catch (error) {
       // Handle errors and notify the user
       setError('Failed to delete the blog post');
@@ -150,7 +150,7 @@ const BlogPage = () => {
   };
 
   return (
-    <div className="app-container">
+    <div >
       <Header />
       <div className="content-container">
         <Sidebar />

@@ -58,7 +58,7 @@ const SubscriptionDetails = () => {
                 }, [search, fromDate, toDate, subscriptions]);
 
   return (
-    <div className="app-container">
+    <div >
       <Header />
       <div className="content-container">
         <Sidebar />

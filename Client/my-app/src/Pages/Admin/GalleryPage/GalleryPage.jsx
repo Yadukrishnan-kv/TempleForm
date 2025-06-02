@@ -8,20 +8,32 @@ import Sidebar from '../Sidebar/Sidebar';
 import { toast } from 'react-toastify';
 
 const GalleryPage = () => {
-  const { templeId,photoId } = useParams();
+  const { templeId, photoId } = useParams();
   const [images, setImages] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedFilePreviews, setSelectedFilePreviews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [temple, setTemple] = useState(null);
-  const [editingId, setEditingId] = useState(null)
-  const [updateFile, setUpdateFile] = useState(null)
+  const [editingId, setEditingId] = useState(null);
+  const [updateFile, setUpdateFile] = useState(null);
   const ip = process.env.REACT_APP_BACKEND_IP;
 
   useEffect(() => {
     fetchTempleDetails();
     fetchImages();
   }, [templeId]);
+
+  // Cleanup preview URLs when component unmounts or files change
+  useEffect(() => {
+    return () => {
+      selectedFilePreviews.forEach(preview => {
+        if (preview.url) {
+          URL.revokeObjectURL(preview.url);
+        }
+      });
+    };
+  }, [selectedFilePreviews]);
 
   const fetchTempleDetails = async () => {
     try {
@@ -68,7 +80,57 @@ const GalleryPage = () => {
       alert('You can only upload up to 10 images at once');
       return;
     }
+
+    // Clean up previous preview URLs
+    selectedFilePreviews.forEach(preview => {
+      if (preview.url) {
+        URL.revokeObjectURL(preview.url);
+      }
+    });
+
+    // Create preview objects with URLs and file references
+    const previews = files.map((file, index) => ({
+      id: Date.now() + index,
+      file: file,
+      url: URL.createObjectURL(file),
+      name: file.name
+    }));
+
     setSelectedFiles(files);
+    setSelectedFilePreviews(previews);
+  };
+
+  const removeSelectedImage = (previewId) => {
+    const updatedPreviews = selectedFilePreviews.filter(preview => {
+      if (preview.id === previewId) {
+        // Clean up the URL for the removed image
+        URL.revokeObjectURL(preview.url);
+        return false;
+      }
+      return true;
+    });
+
+    // Update the files array to match the previews
+    const updatedFiles = updatedPreviews.map(preview => preview.file);
+
+    setSelectedFilePreviews(updatedPreviews);
+    setSelectedFiles(updatedFiles);
+  };
+
+  const clearAllSelected = () => {
+    // Clean up all preview URLs
+    selectedFilePreviews.forEach(preview => {
+      URL.revokeObjectURL(preview.url);
+    });
+    
+    setSelectedFiles([]);
+    setSelectedFilePreviews([]);
+    
+    // Reset the file input
+    const fileInput = document.querySelector('.file-input');
+    if (fileInput) {
+      fileInput.value = '';
+    }
   };
 
   const handleUpload = async () => {
@@ -89,17 +151,17 @@ const GalleryPage = () => {
           'Content-Type': 'multipart/form-data'
         }
       });
-      setSelectedFiles([]);
+      
+      // Clear selected files and previews after successful upload
+      clearAllSelected();
       fetchImages();
       await logAction('Create', `Created new Gallery: ${formData}`);
-
-      toast.success(" Image uploaded successfully!");
+      toast.success("Images uploaded successfully!");
       
     } catch (error) {
       setError('Failed to upload images');
       console.error('Error uploading images:', error);
-       toast.error('Error uploading images');
-      
+      toast.error('Error uploading images');
     } finally {
       setLoading(false);
     }
@@ -115,54 +177,50 @@ const GalleryPage = () => {
       fetchImages();
       toast.success("Image deleted successfully!");
       await logAction('Delete', `Deleted photo: ${photoId}`);
-
-      
     } catch (error) {
       setError('Failed to delete image');
       console.error('Error deleting image:', error);
-              toast.error("Error deleting Image!"); 
-      
+      toast.error("Error deleting Image!"); 
     }
   };
 
   const handleUpdateFileSelect = (event) => {
-    const file = event.target.files[0]
+    const file = event.target.files[0];
     if (file) {
-      setUpdateFile(file)
+      setUpdateFile(file);
     }
-  }
-
+  };
 
   const handleUpdate = async (photoId) => {
     if (!updateFile) {
-      toast.error("Please select a file to update")
-      return
+      toast.error("Please select a file to update");
+      return;
     }
 
-    const formData = new FormData()
-    formData.append("photo", updateFile)
+    const formData = new FormData();
+    formData.append("photo", updateFile);
 
     try {
-      setLoading(true)
+      setLoading(true);
       await axios.put(`${ip}/api/Gallery/${photoId}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      })
-      setEditingId(null)
-      setUpdateFile(null)
-      fetchImages()
-      toast.success("Image updated successfully!")
+      });
+      setEditingId(null);
+      setUpdateFile(null);
+      fetchImages();
+      toast.success("Image updated successfully!");
     } catch (error) {
-      console.error("Error updating image:", error)
-      toast.error("Error updating image")
+      console.error("Error updating image:", error);
+      toast.error("Error updating image");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="app-container">
+    <div >
       <Header />
       <div className="content-container">
         <Sidebar />
@@ -176,11 +234,67 @@ const GalleryPage = () => {
               <h3>Add Images</h3>
             </div>
             <div className="upload-controls">
-              <input type="file" multiple accept="image/*" onChange={handleFileSelect} className="file-input" />
-              <button onClick={handleUpload} disabled={loading || selectedFiles.length === 0} className="upload-button">
-                {loading ? "Uploading..." : "Upload Images"}
-              </button>
+              <input 
+                type="file" 
+                multiple 
+                accept="image/*" 
+                onChange={handleFileSelect} 
+                className="file-input" 
+              />
+              <div className="upload-buttons">
+                <button 
+                  onClick={handleUpload} 
+                  disabled={loading || selectedFiles.length === 0} 
+                  className="upload-button"
+                >
+                  {loading ? "Uploading..." : `Upload ${selectedFiles.length} Image${selectedFiles.length !== 1 ? 's' : ''}`}
+                </button>
+                {selectedFiles.length > 0 && (
+                  <button 
+                    onClick={clearAllSelected} 
+                    className="clear-button"
+                    disabled={loading}
+                  >
+                    Clear All
+                  </button>
+                )}
+              </div>
             </div>
+
+            {/* Album-style preview section */}
+            {selectedFilePreviews.length > 0 && (
+              <div className="selected-images-preview">
+                <div className="preview-header">
+                  <h4>Selected Images ({selectedFilePreviews.length})</h4>
+                </div>
+                <div className="preview-grid">
+                  {selectedFilePreviews.map((preview) => (
+                    <div key={preview.id} className="preview-item">
+                      <div className="preview-image-container">
+                        <img 
+                          src={preview.url || "/placeholder.svg"} 
+                          alt={preview.name} 
+                          className="preview-image" 
+                        />
+                        <button 
+                          onClick={() => removeSelectedImage(preview.id)}
+                          className="remove-preview-button"
+                          title="Remove image"
+                        >
+                          ×
+                        </button>
+                      </div>
+                      <div className="preview-filename">
+                        {preview.name.length > 20 
+                          ? `${preview.name.substring(0, 17)}...` 
+                          : preview.name
+                        }
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {error && <div className="error-message">{error}</div>}
@@ -205,8 +319,8 @@ const GalleryPage = () => {
                         </button>
                         <button
                           onClick={() => {
-                            setEditingId(null)
-                            setUpdateFile(null)
+                            setEditingId(null);
+                            setUpdateFile(null);
                           }}
                           className="cancel-button"
                         >
@@ -234,8 +348,7 @@ const GalleryPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default GalleryPage;
-
