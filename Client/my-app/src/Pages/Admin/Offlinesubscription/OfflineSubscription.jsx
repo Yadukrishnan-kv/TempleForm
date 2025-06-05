@@ -1,98 +1,129 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Header from '../Header/Header';
-import Sidebar from '../Sidebar/Sidebar';
-import './Offlinesubscription.css';
-import { useLocation } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify'; // Importing toast and ToastContainer
-import 'react-toastify/dist/ReactToastify.css'; // Import the necessary styles for the toast
+"use client"
+
+import { useState, useEffect } from "react"
+import axios from "axios"
+import Header from "../Header/Header"
+import Sidebar from "../Sidebar/Sidebar"
+import "./Offlinesubscription.css"
+import { useLocation } from "react-router-dom"
+import { toast, ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 function OfflineSubscription() {
-  const ip = process.env.REACT_APP_BACKEND_IP;
-  const [subscriptions, setSubscriptions] = useState([]);
-  const location = useLocation();
-  const { templeData } = location.state || {};
+  const ip = process.env.REACT_APP_BACKEND_IP
+  const [subscriptions, setSubscriptions] = useState([])
+  const [downloadingInvoices, setDownloadingInvoices] = useState(new Set())
+  const location = useLocation()
+  const { templeData } = location.state || {}
 
   const [formData, setFormData] = useState({
-    templeName: '',
-    address: '',
-    templeId: '',
-    email: '',
-    number: '',
-  });
+    templeName: "",
+    address: "",
+    templeId: "",
+    email: "",
+    number: "",
+  })
 
   useEffect(() => {
     if (templeData) {
       setFormData({
-        templeName: templeData.name || '',
-        templeId: templeData._id || '',
-        address: templeData.address || '',
-        email: templeData.email || '',
-        number: templeData.phone || '',
-      });
+        templeName: templeData.name || "",
+        templeId: templeData._id || "",
+        address: templeData.address || "",
+        email: templeData.email || "",
+        number: templeData.phone || "",
+      })
     }
-  }, [templeData]);
+  }, [templeData])
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
 
   const fetchSubscriptions = async () => {
     try {
-      const res = await axios.get(`${ip}/api/payments/temple-subscriptions/${templeData._id}`);
-      setSubscriptions(res.data);
+      const res = await axios.get(`${ip}/api/payments/temple-subscriptions/${templeData._id}`)
+      setSubscriptions(res.data)
     } catch (error) {
-      console.error(error);
+      console.error(error)
+      toast.error("Failed to fetch subscriptions")
     }
-  };
+  }
 
   useEffect(() => {
-    fetchSubscriptions();
-  }, []);
+    if (templeData?._id) {
+      fetchSubscriptions()
+    }
+  }, [templeData])
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-     // Check if the user already has an active subscription
-     const existingSubscription = subscriptions.find(sub => sub.email === formData.email && sub.templeId === formData.templeId && new Date(sub.endDate) > new Date());
+    e.preventDefault()
 
-     if (existingSubscription) {
-       toast.error("You are already subscribed. Please wait until your current subscription ends before subscribing again.");
-       return;
-     }
-    try {
-      await axios.post(`${ip}/api/payments/create-offlinesubscription`, formData);
-      alert('Subscription added successfully!');
-      setFormData({ ...formData }); // reset if needed
-      fetchSubscriptions();
-    } catch (error) {
-      console.error('Error adding subscription:', error);
+    // Check if the user already has an active subscription
+    const existingSubscription = subscriptions.find(
+      (sub) => sub.email === formData.email && sub.templeId === formData.templeId && new Date(sub.endDate) > new Date(),
+    )
+
+    if (existingSubscription) {
+      toast.error(
+        "You are already subscribed. Please wait until your current subscription ends before subscribing again.",
+      )
+      return
     }
-  };
+
+    try {
+      await axios.post(`${ip}/api/payments/create-offlinesubscription`, formData)
+      toast.success("Subscription added successfully!")
+      fetchSubscriptions()
+    } catch (error) {
+      console.error("Error adding subscription:", error)
+      toast.error("Failed to add subscription")
+    }
+  }
 
   const downloadInvoice = async (id) => {
+    // Prevent multiple simultaneous downloads of the same invoice
+    if (downloadingInvoices.has(id)) {
+      toast.warning("Invoice download already in progress")
+      return
+    }
+
+    setDownloadingInvoices((prev) => new Set([...prev, id]))
+
     try {
       const response = await fetch(`${ip}/api/payments/offlineSubscriptions/invoice/${id}`, {
-        method: 'GET',
-      });
+        method: "GET",
+      })
 
-      if (!response.ok) throw new Error('Failed to download invoice');
+      if (!response.ok) {
+        throw new Error(`Failed to download invoice: ${response.status}`)
+      }
 
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `invoice_${id}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `invoice_${id}_${Date.now()}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
+
+      toast.success("Invoice downloaded successfully")
     } catch (error) {
-      console.error('Error downloading invoice:', error);
+      console.error("Error downloading invoice:", error)
+      toast.error("Failed to download invoice")
+    } finally {
+      setDownloadingInvoices((prev) => {
+        const newSet = new Set(prev)
+        newSet.delete(id)
+        return newSet
+      })
     }
-  };
+  }
 
   return (
-    <div >
+    <div>
       <Header />
       <div className="content-container">
         <Sidebar />
@@ -101,19 +132,47 @@ function OfflineSubscription() {
           <form onSubmit={handleSubmit} className="Subscription-form-container">
             <div className="Subscription-form">
               <label className="Subscription-label">Temple Name:</label>
-              <input type="text" name="templeName" value={formData.templeName} onChange={handleChange} className="Subscription-input" required />
+              <input
+                type="text"
+                name="templeName"
+                value={formData.templeName}
+                onChange={handleChange}
+                className="Subscription-input"
+                required
+              />
             </div>
             <div className="Subscription-form">
               <label className="Subscription-label">Temple Address:</label>
-              <input type="text" name="address" value={formData.address} onChange={handleChange} className="Subscription-input" required />
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                className="Subscription-input"
+                required
+              />
             </div>
             <div className="Subscription-form">
               <label className="Subscription-label">Email:</label>
-              <input type="email" name="email" value={formData.email} onChange={handleChange} className="Subscription-input" required />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="Subscription-input"
+                required
+              />
             </div>
             <div className="Subscription-form">
               <label className="Subscription-label">Number:</label>
-              <input type="text" name="number" value={formData.number} onChange={handleChange} className="Subscription-input" required />
+              <input
+                type="text"
+                name="number"
+                value={formData.number}
+                onChange={handleChange}
+                className="Subscription-input"
+                required
+              />
             </div>
             <div className="Subscription-amount-info">
               <p>Start Date: {new Date().toDateString()}</p>
@@ -122,7 +181,9 @@ function OfflineSubscription() {
               <p>GST (18%): ₹180</p>
               <p>Total Amount: ₹1180</p>
             </div>
-            <button type="submit" className="Subscription-button">Add Subscription</button>
+            <button type="submit" className="Subscription-button">
+              Add Subscription
+            </button>
           </form>
 
           <h2>Subscription Details</h2>
@@ -153,8 +214,12 @@ function OfflineSubscription() {
                     <td>₹{sub.totalAmount}</td>
                     <td>{sub.paymentStatus}</td>
                     <td>
-                      <button onClick={() => downloadInvoice(sub._id)} className="Subscription-button">
-                        Download 
+                      <button
+                        onClick={() => downloadInvoice(sub._id)}
+                        className="Subscription-button"
+                        disabled={downloadingInvoices.has(sub._id)}
+                      >
+                        {downloadingInvoices.has(sub._id) ? "Downloading..." : "Download"}
                       </button>
                     </td>
                   </tr>
@@ -162,10 +227,12 @@ function OfflineSubscription() {
               </tbody>
             </table>
           </div>
-
         </div>
       </div>
+      <ToastContainer />
     </div>
-  );
+  )
 }
-export default OfflineSubscription;
+
+export default OfflineSubscription
+

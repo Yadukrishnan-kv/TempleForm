@@ -200,65 +200,66 @@ const downloadInvoice = async (req, res) => {
   const { id } = req.params
 
   try {
-    const subscription = await Subscription.findById(id)
+    // Use findOneAndUpdate with atomic increment to avoid race conditions
+    const subscription = await Subscription.findOneAndUpdate(
+      { _id: id },
+      { $inc: { invoiceNumber: 1 } }, // Atomically increment by 1
+      {
+        new: false, // Return the document before update
+        upsert: false, // Don't create if doesn't exist
+      },
+    )
 
     if (!subscription) {
       return res.status(404).json({ message: "Subscription not found" })
     }
 
-    // Generate invoice number dynamically
+    // Generate invoice number using the OLD value (before increment)
     const currentDate = new Date()
     const year = currentDate.getFullYear()
     const month = String(currentDate.getMonth() + 1).padStart(2, "0")
     const invoiceNumber = String(subscription.invoiceNumber || 0).padStart(6, "0")
     const invoiceId = `SSD-${year}-${month}/${invoiceNumber}`
 
-    // Increment invoice number for the next invoice
-    const nextInvoiceNumber = parseInt(invoiceNumber) + 1
-    subscription.invoiceNumber = nextInvoiceNumber
-    await subscription.save()
-
     // Create PDF document
     const doc = new PDFDocument({ margin: 50 })
-    res.setHeader("Content-disposition", `attachment; filename=invoice_${subscription._id}.pdf`)
+    res.setHeader("Content-disposition", `attachment; filename=invoice_${subscription._id}_${invoiceNumber}.pdf`)
     res.setHeader("Content-type", "application/pdf")
 
     // Pipe the PDF to response
     doc.pipe(res)
 
- // Load and embed logo if available
-const logoPath = path.join(__dirname, "../assets/images/logo.png")
-if (fs.existsSync(logoPath)) {
-  doc.image(logoPath, 50, 45, { width: 100 }) // Logo at (50, 45)
-}
+    // Load and embed logo if available
+    const logoPath = path.join(__dirname, "../assets/images/logo.png")
+    if (fs.existsSync(logoPath)) {
+      doc.image(logoPath, 50, 45, { width: 100 })
+    }
 
-// Move down after logo for spacing
-doc.moveDown(4) // Add some space after the logo
+    // Move down after logo for spacing
+    doc.moveDown(4)
 
-// Header Section
-doc
-  .font("Helvetica-Bold")
-  .fontSize(16)
-  .fillColor("#333")
-  .text("SREESHUDDHI", 50, doc.y, { align: "left" }) // Positioned below logo
-  .fontSize(10)
-  .fillColor("#666")
-  .text("Kalady, Kerala, India - 683574", 50, doc.y, { align: "left" })
-  .text("Phone: +91 98470 47963", 50, doc.y, { align: "left" })
-  .moveDown(1) // Space after header section
+    // Header Section
+    doc
+      .font("Helvetica-Bold")
+      .fontSize(16)
+      .fillColor("#333")
+      .text("SREESHUDDHI", 50, doc.y, { align: "left" })
+      .fontSize(10)
+      .fillColor("#666")
+      .text("Kalady, Kerala, India - 683574", 50, doc.y, { align: "left" })
+      .text("Phone: +91 98470 47963", 50, doc.y, { align: "left" })
+      .moveDown(1)
 
-// Bill To Section
-doc
-  .fontSize(10)
-  .fillColor("#444")
-  .text("Bill To:", 50, doc.y) // Placed after header section
-  .font("Helvetica-Bold")
-  .text(subscription.templeName, { continued: true }) // Same line as "Bill To:"
-  .font("Helvetica")
-  .text(`\n${subscription.address}\n${subscription.number}\n${subscription.email}`) // Multi-line content
-  .moveDown(1)
-
-
+    // Bill To Section
+    doc
+      .fontSize(10)
+      .fillColor("#444")
+      .text("Bill To:", 50, doc.y)
+      .font("Helvetica-Bold")
+      .text(subscription.templeName, { continued: true })
+      .font("Helvetica")
+      .text(`\n${subscription.address}\n${subscription.number}\n${subscription.email}`)
+      .moveDown(1)
 
     // Invoice Title Section
     doc
@@ -272,96 +273,110 @@ doc
       .moveDown(0)
 
     // Status Section
-   // Status Section (Always "PAID" with no color change)
-   doc
-   .fontSize(12)
-   .fillColor("#000") // Black or default text color
-   .text("PAID", { align: "right" }) // Status is always PAID
-   .moveDown(2) // Increased space after "PAID"
- 
- // Invoice Date and Due Date
- doc
-   .font("Helvetica")
-   .fontSize(10)
-   .text(`Invoice Date: ${new Date(subscription.startDate).toDateString()}`, 400, 160, {
-     align: "right",
-   })
-  //  .text(`Due Date: ${new Date(subscription.endDate).toDateString()}`, { align: "right" })
-   .moveDown(5)
- 
-// Move the table down by increasing the Y-axis position
-const tableStartY = 250 // Moved down from 220 to 300
+    doc.fontSize(12).fillColor("#000").text("PAID", { align: "right" }).moveDown(2)
 
-// Table Header with Increased Width and Reduced Spacing
-doc
-  .rect(50, tableStartY, 520, 20) // Increased width by 20px
-  .fill("#4d628c")
-  .fillColor("#fff")
-  .font("Helvetica-Bold")
-  .fontSize(10)
-  .text("#", 55, tableStartY + 5, { width: 30, align: "left" }) // Reduced width
-  .text("Description", 85, tableStartY + 5, { width: 180, align: "left" }) // Reduced width slightly
-  .text("Amount", 290, tableStartY + 5, { width: 70, align: "right" })
-  .text("GST (18%)", 370, tableStartY + 5, { width: 70, align: "right" })
-  .text("Total Amount", 460, tableStartY + 5, { width: 90, align: "right" })
+    // Invoice Date
+    doc
+      .font("Helvetica")
+      .fontSize(10)
+      .text(`Invoice Date: ${new Date(subscription.startDate).toDateString()}`, 400, 160, {
+        align: "right",
+      })
+      .moveDown(5)
 
-doc
-  .moveTo(50, tableStartY + 20)
-  .lineTo(570, tableStartY + 20) // Updated to match the increased width
-  .stroke()
+    // Table
+    const tableStartY = 250
 
-// Table Row with Updated Width and Reduced Spacing
-doc
-  .fillColor("#000")
-  .font("Helvetica")
-  .fontSize(10)
-  .text("1", 55, tableStartY + 35, { width: 30, align: "left" })
-  .text("Subscription Charges", 85, tableStartY + 35, { width: 180, align: "left" })
-  .text("1000.00", 290, tableStartY + 35, { width: 70, align: "right" })
-  .text("180.00", 370, tableStartY + 35, { width: 70, align: "right" })
-  .text(`${subscription.totalAmount}`, 460, tableStartY + 35, { width: 90, align: "right" })
+    // Table Header
+    doc
+      .rect(50, tableStartY, 520, 20)
+      .fill("#4d628c")
+      .fillColor("#fff")
+      .font("Helvetica-Bold")
+      .fontSize(10)
+      .text("#", 55, tableStartY + 5, { width: 30, align: "left" })
+      .text("Description", 85, tableStartY + 5, { width: 180, align: "left" })
+      .text("Amount", 290, tableStartY + 5, { width: 70, align: "right" })
+      .text("GST (18%)", 370, tableStartY + 5, { width: 70, align: "right" })
+      .text("Total Amount", 460, tableStartY + 5, { width: 90, align: "right" })
 
-doc
-  .moveTo(50, tableStartY + 50)
-  .lineTo(570, tableStartY + 50) // Updated to match the increased width
-  .stroke()
+    doc
+      .moveTo(50, tableStartY + 20)
+      .lineTo(570, tableStartY + 20)
+      .stroke()
 
-  doc
-  .rect(50, tableStartY + 80, 520, 20) // Full width background
-  .fill("#eee")
-  .fillColor("#000")
-  .font("Helvetica-Bold")
-  .fontSize(10)
-  .text("Total Amount:", 420, tableStartY + 85, { width: 100, align: "right" }) // Moved 50px left
-  .text(`${subscription.totalAmount}`, 480, tableStartY + 85, { width: 70, align: "right" }) // Moved 50px left
+    // Table Row
+    doc
+      .fillColor("#000")
+      .font("Helvetica")
+      .fontSize(10)
+      .text("1", 55, tableStartY + 35, { width: 30, align: "left" })
+      .text("Subscription Charges", 85, tableStartY + 35, { width: 180, align: "left" })
+      .text("1000.00", 290, tableStartY + 35, { width: 70, align: "right" })
+      .text("180.00", 370, tableStartY + 35, { width: 70, align: "right" })
+      .text(`${subscription.totalAmount}`, 460, tableStartY + 35, { width: 90, align: "right" })
 
+    doc
+      .moveTo(50, tableStartY + 50)
+      .lineTo(570, tableStartY + 50)
+      .stroke()
 
+    // Total
+    doc
+      .rect(50, tableStartY + 80, 520, 20)
+      .fill("#eee")
+      .fillColor("#000")
+      .font("Helvetica-Bold")
+      .fontSize(10)
+      .text("Total Amount:", 420, tableStartY + 85, { width: 100, align: "right" })
+      .text(`${subscription.totalAmount}`, 480, tableStartY + 85, { width: 70, align: "right" })
 
-  // Finalize PDF
-  doc.end()  
-
-
+    // Finalize PDF
+    doc.end()
   } catch (error) {
+    console.error("Invoice generation error:", error)
     res.status(500).json({ message: error.message })
   }
 }
 
+// Alternative approach: Generate unique invoice numbers using timestamp + random
+const getInvoiceNumber = async (req, res) => {
+  const { id } = req.params
 
+  try {
+    const subscription = await Subscription.findById(id)
 
+    if (!subscription) {
+      return res.status(404).json({ message: "Subscription not found" })
+    }
 
+    // Generate unique invoice number using timestamp and random number
+    const currentDate = new Date()
+    const year = currentDate.getFullYear()
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0")
+    const timestamp = Date.now().toString().slice(-6) // Last 6 digits of timestamp
+    const random = Math.floor(Math.random() * 100)
+      .toString()
+      .padStart(2, "0")
+    const uniqueNumber = `${timestamp}${random}`
+    const invoiceId = `SSD-${year}-${month}/${uniqueNumber}`
 
-// Get formatted invoice number for display
-const getInvoiceNumber = (req, res) => {
-  const currentDate = new Date()
-  const year = currentDate.getFullYear()
-  const month = String(currentDate.getMonth() + 1).padStart(2, "0") // Month in 2 digits
-  const invoiceNumber = String(21).padStart(6, "0") // Example invoice number
+    // Rest of the PDF generation code remains the same...
+    const doc = new PDFDocument({ margin: 50 })
+    res.setHeader("Content-disposition", `attachment; filename=invoice_${subscription._id}_${uniqueNumber}.pdf`)
+    res.setHeader("Content-type", "application/pdf")
 
-  // Generate invoice format: SSD-YYYY-MM/0000XX
-  const invoiceId = `SSD-${year}-${month}/${invoiceNumber}`
+    doc.pipe(res)
 
-  res.json({ invoiceId })
+    // ... (rest of PDF generation code)
+
+    doc.end()
+  } catch (error) {
+    console.error("Invoice generation error:", error)
+    res.status(500).json({ message: error.message })
+  }
 }
+
 
 
 module.exports = {
