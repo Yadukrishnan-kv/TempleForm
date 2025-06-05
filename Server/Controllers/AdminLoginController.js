@@ -251,14 +251,32 @@ const updateProfile = async (req, res) => {
 
 const addSubadmin = async (req, res) => {
   try {
-    const { name, email, password, role,phone,state,district,taluk} = req.body;
-    
-    const existingUser = await AdminCollection.findOne({ email });
+    const { name, email, password, role, phone, state, district, taluk } = req.body
+
+    const existingUser = await AdminCollection.findOne({ email })
     if (existingUser) {
-      return res.status(400).send({ message: 'User already exists' });
+      return res.status(400).send({ message: "User already exists" })
     }
-    
-    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Get existing permissions for the role
+    const roleWithPermissions = await AdminCollection.findOne({
+      role: role || "subadmin1",
+      menuPermissions: { $exists: true, $ne: null },
+    })
+
+    // Default permissions if no existing role permissions found
+    const defaultPermissions = roleWithPermissions?.menuPermissions || {
+      dashboard: false,
+      users: false,
+      registration: false,
+      log: false,
+      master: false,
+      blogPage: false,
+      enquiry: false,
+      bookings: false,
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10)
     const response = await AdminCollection.create({
       name,
       email,
@@ -267,17 +285,31 @@ const addSubadmin = async (req, res) => {
       state,
       district,
       taluk,
-      role: role || 'subadmin1'
-    });
-    
+      role: role || "subadmin1",
+      menuPermissions: defaultPermissions, // Assign role permissions to new user
+    })
+
     if (response?._id) {
-      return res.status(200).send({ message: "Subadmin added successfully", user: { id: response._id, name: response.name, email: response.email, role: response.role,phone: response.phone, state: response.state, district: response.district, taluk: response.taluk } });
+      return res.status(200).send({
+        message: "Subadmin added successfully",
+        user: {
+          id: response._id,
+          name: response.name,
+          email: response.email,
+          role: response.role,
+          phone: response.phone,
+          state: response.state,
+          district: response.district,
+          taluk: response.taluk,
+          menuPermissions: response.menuPermissions,
+        },
+      })
     }
   } catch (err) {
-    console.log('Add subadmin error:', err.message);
-    return res.status(500).send({ message: "Internal server error" });
+    console.log("Add subadmin error:", err.message)
+    return res.status(500).send({ message: "Internal server error" })
   }
-};
+}
 
 const getUsers = async (req, res) => {
   try {
@@ -349,43 +381,40 @@ const deleteSubadmin = async (req, res) => {
 // In your AdminController.js
 const updateRolePermissions = async (req, res) => {
   try {
-    const { role, menuPermissions } = req.body;
+    const { role, menuPermissions } = req.body
 
     // Update all users with the specified role
-    const result = await AdminCollection.updateMany(
-      { role: role },
-      { $set: { menuPermissions: menuPermissions } }
-    );
+    const result = await AdminCollection.updateMany({ role: role }, { $set: { menuPermissions: menuPermissions } })
 
     if (result.modifiedCount > 0) {
-      res.status(200).json({ message: 'Role permissions updated successfully', menuPermissions });
+      res.status(200).json({ message: "Role permissions updated successfully", menuPermissions })
     } else {
-      res.status(404).json({ message: 'No users found with the specified role' });
+      res.status(404).json({ message: "No users found with the specified role" })
     }
   } catch (error) {
-    console.error('Error updating role permissions:', error);
-    res.status(500).json({ message: 'Error updating role permissions' });
+    console.error("Error updating role permissions:", error)
+    res.status(500).json({ message: "Error updating role permissions" })
   }
-};
+}
+
 const getRolesWithPermissions = async (req, res) => {
   try {
     const roles = await AdminCollection.aggregate([
-      { $match: { role: { $ne: 'admin' } } },
+      { $match: { role: { $ne: "admin" } } },
       {
         $group: {
-          _id: '$role',
-          menuPermissions: { $first: '$menuPermissions' }
-        }
+          _id: "$role",
+          menuPermissions: { $first: "$menuPermissions" },
+        },
       },
-      { $sort: { _id: 1 } }
-    ]);
-    res.status(200).json(roles);
+      { $sort: { _id: 1 } },
+    ])
+    res.status(200).json(roles)
   } catch (error) {
-    console.error('Error fetching roles with permissions:', error);
-    res.status(500).json({ message: 'Error fetching roles with permissions' });
+    console.error("Error fetching roles with permissions:", error)
+    res.status(500).json({ message: "Error fetching roles with permissions" })
   }
-};
-
+}
 
 const createLogEntry = async (userId, action, module, subModule, req) => {
   try {
