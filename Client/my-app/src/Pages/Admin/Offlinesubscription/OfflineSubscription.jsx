@@ -46,7 +46,6 @@ function OfflineSubscription() {
       setSubscriptions(res.data)
     } catch (error) {
       console.error(error)
-      toast.error("Failed to fetch subscriptions")
     }
   }
 
