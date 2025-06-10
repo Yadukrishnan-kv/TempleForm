@@ -69,7 +69,7 @@ function Dom() {
         <Route path="/TemplePage/:templeType?" element={<TemplePage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/TempleDetails/:templeId" element={<TempleDetails />} />
-                <Route path="/temple/:slug" element={<TempleDetails />} />
+        <Route path="/temple/:slug" element={<TempleDetails />} />
 
         <Route path="/Signup" element={<><Signup/></>} />
         <Route path="/Signin" element={<><Signin/></>} />
