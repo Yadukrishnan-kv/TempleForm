@@ -7,6 +7,8 @@ TempleRoutes.get("/details", authenticateToken, TempleController.getTempleDetail
 TempleRoutes.post("/register", TempleController.registerTemple);
 TempleRoutes.get("/all", TempleController.getAllTemples);
 TempleRoutes.get("/sort", TempleController.sortTemples);
+TempleRoutes.get("/slug/:slug", TempleController.getTempleBySlug);
+
 TempleRoutes.get("/:templeId", TempleController.getTempleById);
 TempleRoutes.put("/update/:templeId", TempleController.updateTemple);
 TempleRoutes.delete("/delete/:templeId", TempleController.deleteTemple);

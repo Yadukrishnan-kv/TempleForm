@@ -47,7 +47,7 @@ const registerTemple = async (req, res) => {
     })
     await newTemple.save()
 
-    res.status(201).send({ message: "Temple registered successfully", temple: newTemple })
+    res.status(201).send({ message: "Temple registered successfully", temple: newTemple , slug: newTemple.slug})
   } catch (error) {
     res.status(400).send({ message: "Error registering temple", error: error.message })
   }
@@ -97,6 +97,21 @@ const getTempleById = async (req, res) => {
     res.status(200).send(temple);
   } catch (error) {
     res.status(400).send(error);
+  }
+};
+
+
+// New controller method to get temple by slug
+const getTempleBySlug = async (req, res) => {
+  const { slug } = req.params;
+  try {
+    const temple = await TempleCollection.findOne({ slug: slug });
+    if (!temple) {
+      return res.status(404).send({ message: 'Temple not found' });
+    }
+    res.status(200).send(temple);
+  } catch (error) {
+    res.status(400).send({ message: 'Error fetching temple', error: error.message });
   }
 };
 
@@ -202,7 +217,7 @@ module.exports = {
   getTempleById,
   updateTemple,
   deleteTemple,
-  sortTemples,verifyTemple,getTemplesByDistrict,getTempleDetails
+  sortTemples,verifyTemple,getTemplesByDistrict,getTempleDetails,getTempleBySlug
 };
 
 

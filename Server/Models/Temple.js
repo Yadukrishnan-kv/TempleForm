@@ -1,15 +1,30 @@
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 
+// Function to generate slug from temple name
+const generateSlug = (name) => {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '') // Remove special characters
+    .replace(/[\s_-]+/g, '-') // Replace spaces and underscores with hyphens
+    .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+};
+
 const TempleSchema = new Schema({
   Nation: { type: String, required: true },
   state: { type: String, required: true },
   district: { type: String, required: true },
   taluk: { type: String, required: true },
   name: { type: String, required: true },
+  slug: { 
+    type: String, 
+    unique: true,
+    index: true
+  },
   lsg: { type: String, required: true },
   Road: { type: String },
-    Landmark: { type: String},
+  Landmark: { type: String},
   Pincode: { type: String, required: true },
   address: { type: String, required: true },
   locationUrl: { type: String, required: true },
@@ -25,28 +40,26 @@ const TempleSchema = new Schema({
     }
   },
   whatsapp: String,
-email: {
-  type: String,
-  required: true,
-  validate: {
-    validator: function (v) {
-      // Allow email format or 10-digit number
-      return (
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || /^\d{10}$/.test(v)
-      );
-    },
-    message: props => `${props.value} is not a valid email or phone number!`
-  }
-},
-
+  email: {
+    type: String,
+    required: true,
+    validate: {
+      validator: function (v) {
+        return (
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || /^\d{10}$/.test(v)
+        );
+      },
+      message: props => `${props.value} is not a valid email or phone number!`
+    }
+  },
   password: {
     type: String,
     required: true
   },
-role: {
+  role: {
     type: String,
     default: '2'
-},
+  },
   website: String,
   templeType: {
     type: String,
@@ -79,9 +92,8 @@ role: {
   hasDigitalBanking: Boolean,
   managers: String,
   bankDetails: String,
-        BankName: String,
+  BankName: String,
   Bankifsc: String,
-
   presidentDetails: String,
   secretaryDetails: String,
   festivals: String,
@@ -138,7 +150,8 @@ role: {
   enabled: {
     type: Boolean,
     default: true,
-  }, show: {
+  }, 
+  show: {
     type: Boolean,
     default: false,
   },
@@ -146,6 +159,24 @@ role: {
     type: String
   }
 }, { timestamps: true });
+
+// Pre-save middleware to generate slug
+TempleSchema.pre('save', async function(next) {
+  if (this.isNew || this.isModified('name')) {
+    let baseSlug = generateSlug(this.name);
+    let slug = baseSlug;
+    let counter = 1;
+    
+    // Check for existing slugs and append number if needed
+    while (await this.constructor.findOne({ slug: slug, _id: { $ne: this._id } })) {
+      slug = `${baseSlug}-${counter}`;
+      counter++;
+    }
+    
+    this.slug = slug;
+  }
+  next();
+});
 
 const TempleCollection = model("Temple", TempleSchema);
 module.exports = TempleCollection;

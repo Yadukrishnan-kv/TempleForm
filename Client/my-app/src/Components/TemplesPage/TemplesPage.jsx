@@ -209,7 +209,7 @@ const TemplePage = () => {
                   {filteredTemples.map((temple) => (
                     <div key={temple._id} className="col-sm-4 d-flex">
                       <div className="card card-hover flex-fill overflow-hidden w-100 card-hover-bg no-border bg-light">
-                        <Link to={`/TempleDetails/${temple._id}`} className="stretched-link">
+                        <Link to={`/TempleDetails/${temple.slug}`} className="stretched-link">
                         <div className="card-img-wrap card-image-hover overflow-hidden">
                         <img
                          src={temple.mainImage }
