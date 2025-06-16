@@ -1,145 +1,183 @@
-const Subscription = require("../Models/Subscription");
-const crypto = require("crypto");
-require("dotenv").config();
-const moment = require('moment');
-const { v4: uuidv4 } = require('uuid'); 
-const PDFDocument = require("pdfkit");
-const fs = require("fs");
-const path = require("path");
-const SALT = process.env.OMNIWARE_SALT;
+const Subscription = require("../Models/Subscription")
+const crypto = require("crypto")
+require("dotenv").config()
+const moment = require("moment")
+const { v4: uuidv4 } = require("uuid")
+const PDFDocument = require("pdfkit")
+const fs = require("fs")
+const path = require("path")
+const SALT = process.env.OMNIWARE_SALT
 
 const createPaymentHash = (reqData) => {
-  const shasum = crypto.createHash('sha512');
-  let hashData = SALT;
+  const shasum = crypto.createHash("sha512")
+  let hashData = SALT
   const hashColumns = [
-    "address_line_1", "address_line_2", "amount", "api_key", "city", "country",
-    "currency", "description", "email", "mode", "name", "order_id", "phone",
-    "return_url", "state", "zip_code"
-  ];
+    "address_line_1",
+    "address_line_2",
+    "amount",
+    "api_key",
+    "city",
+    "country",
+    "currency",
+    "description",
+    "email",
+    "mode",
+    "name",
+    "order_id",
+    "phone",
+    "return_url",
+    "state",
+    "zip_code",
+  ]
 
-  hashColumns.forEach(entry => {
+  hashColumns.forEach((entry) => {
     if (entry in reqData && reqData[entry]) {
       // Trim the value before appending
-      hashData += '|' + String(reqData[entry]).trim();
+      hashData += "|" + String(reqData[entry]).trim()
     }
-  });
+  })
 
-  return shasum.update(hashData).digest('hex').toUpperCase();
-};
+  return shasum.update(hashData).digest("hex").toUpperCase()
+}
 
+// Helper function to get next invoice number
+const getNextInvoiceNumber = async () => {
+  try {
+    // Find the subscription with the highest invoice number
+    const lastSubscription = await Subscription.findOne({}, {}, { sort: { invoiceNumber: -1 } })
+
+    if (!lastSubscription || !lastSubscription.invoiceNumber) {
+      return 1 // Start with 1 if no subscriptions exist
+    }
+
+    return lastSubscription.invoiceNumber + 1
+  } catch (error) {
+    console.error("Error getting next invoice number:", error)
+    return 1 // Default to 1 if there's an error
+  }
+}
 
 const paymentRequest = async (req, res) => {
-  const reqData = req.body;
+  const reqData = req.body
 
-  const {
-    amount, address_line_1, city, name, email, phone,
-    order_id, currency, description, country, return_url
-  } = reqData;
+  const { amount, address_line_1, city, name, email, phone, order_id, currency, description, country, return_url } =
+    reqData
 
-  const apiKey = process.env.OMNIWARE_API_KEY;
+  const apiKey = process.env.OMNIWARE_API_KEY
 
-  if (!amount || !address_line_1 || !city || !name || !email || !phone || !order_id || !currency || !description || !country || !return_url) {
-    return res.status(400).json({ error: "Missing required fields" });
+  if (
+    !amount ||
+    !address_line_1 ||
+    !city ||
+    !name ||
+    !email ||
+    !phone ||
+    !order_id ||
+    !currency ||
+    !description ||
+    !country ||
+    !return_url
+  ) {
+    return res.status(400).json({ error: "Missing required fields" })
   }
 
-  reqData.api_key = apiKey;
+  reqData.api_key = apiKey
 
-  const existingSubscription = await Subscription.findOne({ email });
+  const existingSubscription = await Subscription.findOne({ email })
 
   if (existingSubscription && new Date(existingSubscription.endDate) > new Date()) {
-    return res.status(400).json({ error: "Already Subscribed.Come back when it ends" });
+    return res.status(400).json({ error: "Already Subscribed.Come back when it ends" })
   }
-  const resultKey = createPaymentHash(reqData);
-  return res.json({ data: resultKey });
-};
+  const resultKey = createPaymentHash(reqData)
+  return res.json({ data: resultKey })
+}
 
 const paymentResponse = async (req, res) => {
-  const reqData = req.body;
+  const reqData = req.body
 
-  console.log("Incoming payment response data:", reqData);
+  console.log("Incoming payment response data:", reqData)
 
-  const shasum = crypto.createHash('sha512');
-  let hashData = process.env.OMNIWARE_SALT;
+  const shasum = crypto.createHash("sha512")
+  let hashData = process.env.OMNIWARE_SALT
 
-  const keys = Object.keys(reqData).sort();
-  keys.forEach(k => {
-    if (k !== 'hash' && reqData[k]) {
-      hashData += '|' + reqData[k].toString();
+  const keys = Object.keys(reqData).sort()
+  keys.forEach((k) => {
+    if (k !== "hash" && reqData[k]) {
+      hashData += "|" + reqData[k].toString()
     }
-  });
+  })
 
-  const calculatedHash = shasum.update(hashData).digest('hex').toUpperCase();
-  console.log("Calculated Hash for Response:", calculatedHash);
+  const calculatedHash = shasum.update(hashData).digest("hex").toUpperCase()
+  console.log("Calculated Hash for Response:", calculatedHash)
 
-  if (reqData['hash'] === calculatedHash) {
-    if (reqData['response_code'] === "0") {
+  if (reqData["hash"] === calculatedHash) {
+    if (reqData["response_code"] === "0") {
       // Payment success
-      const endDate = moment().add(365, 'days').toDate();
+      const endDate = moment().add(365, "days").toDate()
+
+      // Get next invoice number
+      const invoiceNumber = await getNextInvoiceNumber()
 
       const subscription = new Subscription({
-        orderId: reqData['order_id'],
-        templeId: reqData['address_line_2'],
-        templeName: reqData['name'],
-        address: reqData['address_line_1'],
-        email: reqData['email'],
-        number: reqData['phone'],
-        amount: parseFloat(reqData['amount']),
-        transactionId: reqData['transaction_id'],
-        paymentStatus: 'Paid',
-        endDate: endDate
-      });
+        orderId: reqData["order_id"],
+        templeId: reqData["address_line_2"],
+        templeName: reqData["name"],
+        address: reqData["address_line_1"],
+        email: reqData["email"],
+        number: reqData["phone"],
+        amount: Number.parseFloat(reqData["amount"]),
+        transactionId: reqData["transaction_id"],
+        paymentStatus: "Paid",
+        endDate: endDate,
+        invoiceNumber: invoiceNumber, // Set invoice number during subscription creation
+      })
 
       try {
-        await subscription.save();
-        console.log("✅ Subscription saved successfully");
-        return res.redirect(`${process.env.FRONTEND_URL}/subscription-success`);
+        await subscription.save()
+        console.log("✅ Subscription saved successfully with invoice number:", invoiceNumber)
+        return res.redirect(`${process.env.FRONTEND_URL}/subscription-success`)
       } catch (error) {
-        console.error("❌ Error saving subscription:", error);
+        console.error("❌ Error saving subscription:", error)
         // If saving fails, redirect to failure page
-        return res.redirect(`${process.env.FRONTEND_URL}/subscription-failed`);
+        return res.redirect(`${process.env.FRONTEND_URL}/subscription-failed`)
       }
     } else {
-      console.error("❌ Payment Failed:", reqData['response_message']);
-      return res.redirect(`${process.env.FRONTEND_URL}/subscription-failed`);
+      console.error("❌ Payment Failed:", reqData["response_message"])
+      return res.redirect(`${process.env.FRONTEND_URL}/subscription-failed`)
     }
   } else {
-    console.error("❌ Hash Mismatch!");
-    return res.redirect(`${process.env.FRONTEND_URL}/subscription-failed`);
+    console.error("❌ Hash Mismatch!")
+    return res.redirect(`${process.env.FRONTEND_URL}/subscription-failed`)
   }
-};
+}
 
-
-
-
-
-
-
-
-//offline payment// 
-
-
+//offline payment//
 const createOfflineSubscription = async (req, res) => {
   try {
-    const { templeName, templeId, address, email, number } = req.body;
+    const { templeName, templeId, address, email, number } = req.body
 
-      // Check if the user already has an active subscription
-      const existingSubscription = await Subscription.findOne({
-        email,
-        templeId,
-        endDate: { $gt: new Date() }, // Check if there is an active subscription (endDate > current date)
-      });
-  
-      if (existingSubscription) {
-        return res.status(400).json({
-          message: "You already have an active subscription. Please renew after the current subscription ends.",
-        });
-      }
-    const startDate = new Date();
-    const endDate = new Date();
-    endDate.setFullYear(endDate.getFullYear() + 1);
+    // Check if the user already has an active subscription
+    const existingSubscription = await Subscription.findOne({
+      email,
+      templeId,
+      endDate: { $gt: new Date() }, // Check if there is an active subscription (endDate > current date)
+    })
 
-    const orderId = `ORD-${Date.now()}`;
-    const transactionId = `TXN-${uuidv4()}`;
+    if (existingSubscription) {
+      return res.status(400).json({
+        message: "You already have an active subscription. Please renew after the current subscription ends.",
+      })
+    }
+
+    const startDate = new Date()
+    const endDate = new Date()
+    endDate.setFullYear(endDate.getFullYear() + 1)
+
+    const orderId = `ORD-${Date.now()}`
+    const transactionId = `TXN-${uuidv4()}`
+
+    // Get next invoice number
+    const invoiceNumber = await getNextInvoiceNumber()
 
     const subscription = new Subscription({
       orderId,
@@ -155,75 +193,68 @@ const createOfflineSubscription = async (req, res) => {
       gst: 180,
       totalAmount: 1180,
       paymentStatus: "Paid", // ✅ SET TO PAID
-      
-    });
+      invoiceNumber: invoiceNumber, // Set invoice number during subscription creation
+    })
 
-    await subscription.save();
+    await subscription.save()
+    console.log("✅ Offline subscription created with invoice number:", invoiceNumber)
 
-    res.status(201).json({ message: "Offline subscription created and marked as Paid", subscription });
+    res.status(201).json({ message: "Offline subscription created and marked as Paid", subscription })
   } catch (error) {
-    console.error("Subscription creation failed:", error.message);
-    res.status(500).json({ message: error.message });
+    console.error("Subscription creation failed:", error.message)
+    res.status(500).json({ message: error.message })
   }
 }
 
-
 const getSubscriptionByEmail = async (req, res) => {
   try {
-    const { templeId } = req.params;
-    const subscriptions = await Subscription.find({ templeId });
+    const { templeId } = req.params
+    const subscriptions = await Subscription.find({ templeId })
     if (!subscriptions.length) {
-      return res.status(404).json({ message: 'No subscription found for this email' });
+      return res.status(404).json({ message: "No subscription found for this email" })
     }
-    res.status(200).json(subscriptions);
+    res.status(200).json(subscriptions)
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message })
   }
-};
+}
 
 const getAllSubscriptions = async (req, res) => {
   try {
-    const subscriptions = await Subscription.find();
+    const subscriptions = await Subscription.find()
     if (!subscriptions.length) {
-      return res.status(404).json({ message: 'No subscriptions found' });
+      return res.status(404).json({ message: "No subscriptions found" })
     }
-    res.status(200).json(subscriptions);
+    res.status(200).json(subscriptions)
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message })
   }
-};
-
-
-
+}
 
 const downloadInvoice = async (req, res) => {
   const { id } = req.params
 
   try {
-    // Use findOneAndUpdate with atomic increment to avoid race conditions
-    const subscription = await Subscription.findOneAndUpdate(
-      { _id: id },
-      { $inc: { invoiceNumber: 1 } }, // Atomically increment by 1
-      {
-        new: false, // Return the document before update
-        upsert: false, // Don't create if doesn't exist
-      },
-    )
+    // Simply find the subscription without incrementing anything
+    const subscription = await Subscription.findById(id)
 
     if (!subscription) {
       return res.status(404).json({ message: "Subscription not found" })
     }
 
-    // Generate invoice number using the OLD value (before increment)
+    // Use the existing invoice number (no increment during download)
     const currentDate = new Date()
     const year = currentDate.getFullYear()
     const month = String(currentDate.getMonth() + 1).padStart(2, "0")
-    const invoiceNumber = String(subscription.invoiceNumber || 0).padStart(6, "0")
+    const invoiceNumber = String(subscription.invoiceNumber || 1).padStart(6, "0")
     const invoiceId = `SSD-${year}-${month}/${invoiceNumber}`
 
     // Create PDF document
     const doc = new PDFDocument({ margin: 50 })
-    res.setHeader("Content-disposition", `attachment; filename=invoice_${subscription._id}_${invoiceNumber}.pdf`)
+    res.setHeader(
+      "Content-disposition",
+      `attachment; filename=invoice_${subscription._id}_${subscription.invoiceNumber}.pdf`,
+    )
     res.setHeader("Content-type", "application/pdf")
 
     // Pipe the PDF to response
@@ -240,15 +271,17 @@ const downloadInvoice = async (req, res) => {
 
     // Header Section
     doc
-      .font("Helvetica-Bold")
-      .fontSize(16)
-      .fillColor("#333")
-      .text("SREESHUDDHI", 50, doc.y, { align: "left" })
-      .fontSize(10)
-      .fillColor("#666")
-      .text("Kalady, Kerala, India - 683574", 50, doc.y, { align: "left" })
-      .text("Phone: +91 98470 47963", 50, doc.y, { align: "left" })
-      .moveDown(1)
+  .font("Helvetica-Bold")
+  .fontSize(16)
+  .fillColor("#333")
+  .text("SREESHUDDHI", 50, doc.y, { align: "left" })
+  .fontSize(10)
+  .fillColor("#666")
+  .text("Kalady, Kerala, India - 683574", 50, doc.y, { align: "left" })
+  .text("Phone: +91 98470 47963", 50, doc.y, { align: "left" })
+  .text("GSTIN/UIN: 32ABMCSO845D1ZK", 50, doc.y, { align: "left" })
+  .moveDown(1);
+
 
     // Bill To Section
     doc
@@ -258,7 +291,7 @@ const downloadInvoice = async (req, res) => {
       .font("Helvetica-Bold")
       .text(subscription.templeName, { continued: true })
       .font("Helvetica")
-      .text(`\n${subscription.address}\n${subscription.number}\n${subscription.email}`)
+      .text(`\n${subscription.address}\n${subscription.number}`)
       .moveDown(1)
 
     // Invoice Title Section
@@ -270,6 +303,7 @@ const downloadInvoice = async (req, res) => {
       .fontSize(12)
       .fillColor("#666")
       .text(`# ${invoiceId}`, { align: "right" })
+      
       .moveDown(0)
 
     // Status Section
@@ -311,7 +345,7 @@ const downloadInvoice = async (req, res) => {
       .font("Helvetica")
       .fontSize(10)
       .text("1", 55, tableStartY + 35, { width: 30, align: "left" })
-      .text("Subscription Charges", 85, tableStartY + 35, { width: 180, align: "left" })
+      .text("Membership For Registration", 85, tableStartY + 35, { width: 180, align: "left" })
       .text("1000.00", 290, tableStartY + 35, { width: 70, align: "right" })
       .text("180.00", 370, tableStartY + 35, { width: 70, align: "right" })
       .text(`${subscription.totalAmount}`, 460, tableStartY + 35, { width: 90, align: "right" })
@@ -339,48 +373,14 @@ const downloadInvoice = async (req, res) => {
   }
 }
 
-// Alternative approach: Generate unique invoice numbers using timestamp + random
-const getInvoiceNumber = async (req, res) => {
-  const { id } = req.params
-
-  try {
-    const subscription = await Subscription.findById(id)
-
-    if (!subscription) {
-      return res.status(404).json({ message: "Subscription not found" })
-    }
-
-    // Generate unique invoice number using timestamp and random number
-    const currentDate = new Date()
-    const year = currentDate.getFullYear()
-    const month = String(currentDate.getMonth() + 1).padStart(2, "0")
-    const timestamp = Date.now().toString().slice(-6) // Last 6 digits of timestamp
-    const random = Math.floor(Math.random() * 100)
-      .toString()
-      .padStart(2, "0")
-    const uniqueNumber = `${timestamp}${random}`
-    const invoiceId = `SSD-${year}-${month}/${uniqueNumber}`
-
-    // Rest of the PDF generation code remains the same...
-    const doc = new PDFDocument({ margin: 50 })
-    res.setHeader("Content-disposition", `attachment; filename=invoice_${subscription._id}_${uniqueNumber}.pdf`)
-    res.setHeader("Content-type", "application/pdf")
-
-    doc.pipe(res)
-
-    // ... (rest of PDF generation code)
-
-    doc.end()
-  } catch (error) {
-    console.error("Invoice generation error:", error)
-    res.status(500).json({ message: error.message })
-  }
-}
-
-
+// Remove the getInvoiceNumber function as it's no longer needed
+// since we're not incrementing during download
 
 module.exports = {
   paymentRequest,
   paymentResponse,
-  createOfflineSubscription,getSubscriptionByEmail,downloadInvoice,getInvoiceNumber,getAllSubscriptions
+  createOfflineSubscription,
+  getSubscriptionByEmail,
+  downloadInvoice,
+  getAllSubscriptions,
 }
